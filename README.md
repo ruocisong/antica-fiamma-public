@@ -52,6 +52,7 @@ The public shell is built around a sequence of reading layers rather than a sing
 For a guided visual walkthrough of these layers, see:
 
 - [`demo/frontend/reading-route.html`](demo/frontend/reading-route.html)
+- [`docs/public/interface-layers.md`](docs/public/interface-layers.md)
 
 ## Repository Map
 
@@ -62,6 +63,7 @@ For a guided visual walkthrough of these layers, see:
 - [`deployment_output/PREPARE_PAGES_SHELL.py`](deployment_output/PREPARE_PAGES_SHELL.py): Cloudflare Pages shell packaging
 - [`.github/workflows/deploy-pages-shell.yml`](.github/workflows/deploy-pages-shell.yml): Pages deployment workflow
 - [`src/ddp_scraper`](src/ddp_scraper): project preparation utilities used in data capture and extraction
+- [`docs/public/interface-layers.md`](docs/public/interface-layers.md): written overview of the public reading surfaces
 - [`docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md`](docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md): notes on the public-facing repository boundary
 
 ## What To Look At In Code First
