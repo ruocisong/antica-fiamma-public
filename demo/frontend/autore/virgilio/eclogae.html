@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Eclogae / Virgilio</title>
+    <meta name="description" content="Eclogae / Virgilio" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../../static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Autore · Opera</p>
+        <div class="ui-language-toggle" aria-label="Eclogae / Virgilio language switch">
+          <button type="button" class="ui-language-chip" data-lang-target="work-virgilio-eclogae" data-lang-value="en">EN</button>
+          <button type="button" class="ui-language-chip" data-lang-target="work-virgilio-eclogae" data-lang-value="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1>Eclogae / Virgilio</h1>
+        <a class="ghost-link-button" id="work-virgilio-eclogae-back-link" href="../virgilio.html">Back</a>
+      </div>
+      <div class="static-page-content" data-static-lang="en">
+        
+      <p class="help-modal-lead">
+        This page isolates <strong>Eclogae</strong> inside the authority room of <strong>Virgilio</strong>.
+        It is part of the new static autore atlas.
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>Work Snapshot</h3>
+          <p class="help-paragraph">
+            Total mentions: <strong>600</strong>. Resolved author+work:
+            <strong>425</strong>. Work-plus-inferred-author:
+            <strong>175</strong>. Passage mentions:
+            <strong>196</strong>.
+          </p>
+          <p class="help-paragraph">This work is shown inside a special-case authority object, so it gets a work room but not a fake branch tree.</p>
+        </section>
+        <section class="help-section">
+          <h3>Available Book / Chapter Links</h3>
+          <ul class="help-list"><li>Eclogae still comes through pastoral pressure and citation memory rather than separate branch pages.</li><li><strong>Eclogue I</strong> · Pastoral exile and political displacement keep the room historically alert.</li><li><strong>Eclogue IV</strong> · Messianic afterlife gives the room its strongest medieval afterglow.</li><li><strong>Eclogue VI</strong> · Mythic-pastoral compression widens the room beyond simple shepherd song.</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>Return Paths</h3>
+          <p class="help-paragraph">
+            Return to <a href="../virgilio.html">Virgilio</a>,
+            <a href="../index.html">autore index</a>, or
+            <a href="../../authority.html">Authority</a>.
+          </p>
+        </section>
+      </div>
+    
+      </div>
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        
+      <p class="help-modal-lead">
+        这页把 <strong>Virgilio</strong> 名下的 <strong>Eclogae</strong> 单独拿出来，作为静态 autore atlas 里的 opera 房间。
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>作品快照</h3>
+          <p class="help-paragraph">
+            总 mentions：<strong>600</strong>。明确 author+work：
+            <strong>425</strong>。work 推断 author：
+            <strong>175</strong>。passage mentions：
+            <strong>196</strong>。
+          </p>
+          <p class="help-paragraph">This work is shown inside a special-case authority object, so it gets a work room but not a fake branch tree.</p>
+        </section>
+        <section class="help-section">
+          <h3>可用的书 / 章节链接</h3>
+          <ul class="help-list"><li>Eclogae 现在主要通过 pastoral pressure 和 citation memory 进入，而不是独立 branch 页。</li><li><strong>Eclogue I</strong> · 田园流放和政治位移，让这间房保持历史敏感。</li><li><strong>Eclogue IV</strong> · 弥赛亚式后效，给这间房最强的 medieval afterglow。</li><li><strong>Eclogue VI</strong> · 神话/田园的压缩，让这间房超过单纯牧歌。</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>返回路径</h3>
+          <p class="help-paragraph">
+            可以回到 <a href="../virgilio.html">Virgilio</a>、
+            <a href="../index.html">autore 索引页</a>，或者
+            <a href="../../authority.html">Authority 页面</a>。
+          </p>
+        </section>
+      </div>
+    
+      </div>
+    </main>
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll('[data-lang-target="work-virgilio-eclogae"]').forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.langValue === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+          }
+          const back = document.getElementById("work-virgilio-eclogae-back-link");
+          const backUrl = new URL(back.getAttribute("href"), window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+        const initial = getLanguage();
+        applyLanguage(initial);
+        document.querySelectorAll('[data-lang-target="work-virgilio-eclogae"]').forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.langValue === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+    </html>

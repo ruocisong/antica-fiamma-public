@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tusculanae Disputationes / Cicerone</title>
+    <meta name="description" content="Tusculanae Disputationes / Cicerone" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../../static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Autore · Opera</p>
+        <div class="ui-language-toggle" aria-label="Tusculanae Disputationes / Cicerone language switch">
+          <button type="button" class="ui-language-chip" data-lang-target="work-cicerone-tusculanae_disputationes" data-lang-value="en">EN</button>
+          <button type="button" class="ui-language-chip" data-lang-target="work-cicerone-tusculanae_disputationes" data-lang-value="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1>Tusculanae Disputationes / Cicerone</h1>
+        <a class="ghost-link-button" id="work-cicerone-tusculanae_disputationes-back-link" href="../cicerone.html">Back</a>
+      </div>
+      <div class="static-page-content" data-static-lang="en">
+        
+      <p class="help-modal-lead">
+        This page isolates <strong>Tusculanae Disputationes</strong> inside the authority room of <strong>Cicerone</strong>.
+        It is part of the new static autore atlas.
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>Work Snapshot</h3>
+          <p class="help-paragraph">
+            Total mentions: <strong>18</strong>. Resolved author+work:
+            <strong>18</strong>. Work-plus-inferred-author:
+            <strong>0</strong>. Passage mentions:
+            <strong>0</strong>.
+          </p>
+          <p class="help-paragraph">This work belongs to a flat-work overview object, so branch pages are surfaced only where book or chapter structure is already real.</p>
+        </section>
+        <section class="help-section">
+          <h3>Available Book / Chapter Links</h3>
+          <ul class="help-list"><li>Tusculanae Disputationes reads through philosophical loci rather than mounted branch pages.</li><li><strong>Death</strong> · Meditation on death gives the room its most reusable moral spine.</li><li><strong>Pain</strong> · Stoic handling of suffering keeps the room active in ethical commentary.</li><li><strong>Virtue and happiness</strong> · The moral architecture of flourishing gives the work its durable afterlife.</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>Return Paths</h3>
+          <p class="help-paragraph">
+            Return to <a href="../cicerone.html">Cicerone</a>,
+            <a href="../index.html">autore index</a>, or
+            <a href="../../authority.html">Authority</a>.
+          </p>
+        </section>
+      </div>
+    
+      </div>
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        
+      <p class="help-modal-lead">
+        这页把 <strong>Cicerone</strong> 名下的 <strong>Tusculanae Disputationes</strong> 单独拿出来，作为静态 autore atlas 里的 opera 房间。
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>作品快照</h3>
+          <p class="help-paragraph">
+            总 mentions：<strong>18</strong>。明确 author+work：
+            <strong>18</strong>。work 推断 author：
+            <strong>0</strong>。passage mentions：
+            <strong>0</strong>。
+          </p>
+          <p class="help-paragraph">This work belongs to a flat-work overview object, so branch pages are surfaced only where book or chapter structure is already real.</p>
+        </section>
+        <section class="help-section">
+          <h3>可用的书 / 章节链接</h3>
+          <ul class="help-list"><li>Tusculanae Disputationes 现在主要通过哲学 loci 进入，而不是本地 branch 页。</li><li><strong>Death</strong> · 关于死亡的沉思，给这间房最可复用的 moral spine。</li><li><strong>Pain</strong> · 对痛苦的斯多葛处理，让这间房在伦理 commentary 中继续活着。</li><li><strong>Virtue and happiness</strong> · 关于幸福与德性的结构，让这部作品有持久后效。</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>返回路径</h3>
+          <p class="help-paragraph">
+            可以回到 <a href="../cicerone.html">Cicerone</a>、
+            <a href="../index.html">autore 索引页</a>，或者
+            <a href="../../authority.html">Authority 页面</a>。
+          </p>
+        </section>
+      </div>
+    
+      </div>
+    </main>
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll('[data-lang-target="work-cicerone-tusculanae_disputationes"]').forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.langValue === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+          }
+          const back = document.getElementById("work-cicerone-tusculanae_disputationes-back-link");
+          const backUrl = new URL(back.getAttribute("href"), window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+        const initial = getLanguage();
+        applyLanguage(initial);
+        document.querySelectorAll('[data-lang-target="work-cicerone-tusculanae_disputationes"]').forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.langValue === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+    </html>

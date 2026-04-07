@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chapter 11 / De amicitia</title>
+    <meta name="description" content="Chapter 11 / De amicitia" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Autore · Branch</p>
+        <div class="ui-language-toggle" aria-label="Chapter 11 / De amicitia language switch">
+          <button type="button" class="ui-language-chip" data-lang-target="branch-cicerone-de_amicitia-chapter_11" data-lang-value="en">EN</button>
+          <button type="button" class="ui-language-chip" data-lang-target="branch-cicerone-de_amicitia-chapter_11" data-lang-value="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1>Chapter 11 / De amicitia</h1>
+        <a class="ghost-link-button" id="branch-cicerone-de_amicitia-chapter_11-back-link" href="../de_amicitia.html">Back</a>
+      </div>
+      <div class="static-page-content" data-static-lang="en">
+        
+      <p class="help-modal-lead">
+        This page isolates <strong>Chapter 11</strong> inside <strong>De amicitia</strong> for
+        <strong>Cicerone</strong>. It only exists where the authority data already exposes a real branch.
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>Branch Snapshot</h3>
+          <p class="help-paragraph">
+            Source kind: <strong>normalized_cluster</strong>. Status: <strong>normalized_cluster</strong>.
+            Count: <strong>14</strong>. Child nodes: <strong>0</strong>.
+          </p>
+          <p class="help-paragraph">No extra branch summary attached.</p>
+        </section>
+        <section class="help-section">
+          <h3>Sample Occurrences</h3>
+          <ul class="help-list"><li>No sample occurrences exposed here yet.</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>Return Paths</h3>
+          <p class="help-paragraph">
+            Return to <a href="../de_amicitia.html">De amicitia</a>,
+            <a href="../../cicerone.html">Cicerone</a>, or
+            <a href="/authority.html">Authority</a>.
+          </p>
+        </section>
+      </div>
+    
+      </div>
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        
+      <p class="help-modal-lead">
+        这页把 <strong>De amicitia</strong> 里的 <strong>Chapter 11</strong> 单独拎出来。只有 authority 数据里已经长出真实 branch 的地方，才会有这种页面。
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>分支快照</h3>
+          <p class="help-paragraph">
+            来源类型：<strong>normalized_cluster</strong>。状态：<strong>normalized_cluster</strong>。
+            计数：<strong>14</strong>。下层节点数：<strong>0</strong>。
+          </p>
+          <p class="help-paragraph">当前还没有额外 branch summary。</p>
+        </section>
+        <section class="help-section">
+          <h3>样本出处</h3>
+          <ul class="help-list"><li>No sample occurrences exposed here yet.</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>返回路径</h3>
+          <p class="help-paragraph">
+            可以回到 <a href="../de_amicitia.html">De amicitia</a>、
+            <a href="../../cicerone.html">Cicerone</a>，或者
+            <a href="/authority.html">Authority 页面</a>。
+          </p>
+        </section>
+      </div>
+    
+      </div>
+    </main>
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll('[data-lang-target="branch-cicerone-de_amicitia-chapter_11"]').forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.langValue === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+          }
+          const back = document.getElementById("branch-cicerone-de_amicitia-chapter_11-back-link");
+          const backUrl = new URL(back.getAttribute("href"), window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+        const initial = getLanguage();
+        applyLanguage(initial);
+        document.querySelectorAll('[data-lang-target="branch-cicerone-de_amicitia-chapter_11"]').forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.langValue === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+    </html>

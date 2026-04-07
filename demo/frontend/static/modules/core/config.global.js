@@ -1,0 +1,304 @@
+(function attachDDPConfig(global) {
+  const R2_BASE = "https://pub-ca10c83a3feb457b98e90eeaf6898d8d.r2.dev";
+
+  const DATA_BASE = (() => {
+    const h = global.location.hostname;
+    if (h === "localhost" || h === "127.0.0.1") return "/data";
+    if (R2_BASE) return R2_BASE;
+    console.warn("R2_BASE is not set. Data may not load in production.");
+    return "/data";
+  })();
+
+  const SEARCH_LAYER_PRIORITY = {
+    line_text: 0,
+    commentary: 1,
+  };
+
+  const SEARCH_LAYER_CODE_MAP = {
+    0: "line_text",
+    1: "commentary",
+  };
+
+  const CANTICA_SHELLS = [
+    { key: "inferno", label: "Inferno", total: 34, aliases: ["inferno", "inf", "i"] },
+    { key: "purgatorio", label: "Purgatorio", total: 33, aliases: ["purgatorio", "purg", "p"] },
+    { key: "paradiso", label: "Paradiso", total: 33, aliases: ["paradiso", "par"] },
+  ];
+
+  const CANTICA_ORDER = new Map(CANTICA_SHELLS.map((shell, index) => [shell.key, index]));
+  const CANTICA_SHORT_LABELS = {
+    inferno: "Inf.",
+    purgatorio: "Purg.",
+    paradiso: "Par.",
+  };
+
+  const SEMANTIC_STOPWORDS = new Set([
+    "about", "agli", "alla", "alle", "allora", "altri", "altro", "anche", "ancora", "anzi", "apud",
+    "author", "autore", "che", "chi", "cioe", "come", "con", "contra", "cosa", "cosi", "cui", "cum",
+    "dalla", "dalle", "dallo", "dante", "della", "delle", "dello", "dentro", "detto", "dice", "dicit",
+    "dove", "dunque", "egli", "era", "essere", "et", "etiam", "eum", "ex", "fuit", "gia", "gli", "hoc",
+    "huius", "idem", "illa", "ille", "inde", "intende", "ipse", "ipsa", "italia", "loro", "molto", "nella",
+    "nelle", "nello", "nostra", "nostro", "nulla", "ogni", "onde", "pero", "piu", "poi", "prima",
+    "proemio", "quae", "quale", "quali", "quam", "quando", "quasi", "quello", "questa", "queste",
+    "questi", "questo", "quia", "quod", "sciendum", "secondo", "sed", "selva", "sempre", "siccome",
+    "significa", "sive", "sono", "sopra", "sua", "sue", "suo", "tale", "tamen", "tanto", "testo", "tutta", "usque",
+    "tutte", "tutti", "tutto", "unde", "uno", "uomo", "via", "vita", "where",
+    "adunque", "enim", "idest", "nobis", "perche", "qual", "quella", "quelle", "quelli",
+    "quivi", "scilicet",
+  ]);
+
+  const DANTE_STOPWORDS = new Set([
+    "a", "ad", "al", "alla", "alle", "allo", "all", "coi", "col", "con", "da", "dal", "dalla", "dalle",
+    "de", "dei", "del", "della", "delle", "dello", "di", "e", "ed", "fra", "gli", "i", "il", "in",
+    "io", "la", "le", "li", "lo", "ma", "mi", "mio", "ne", "nel", "nella", "nelle", "nello", "noi",
+    "non", "o", "per", "poi", "se", "si", "su", "tra", "tu", "un", "una", "uno", "voi", "vostra",
+    "vostro", "che", "chi", "cui", "come", "cosi", "questa", "queste", "questi", "questo", "quella",
+    "quelle", "quelli", "quello", "qual", "quale", "quali", "era", "eran", "fui", "fu", "son", "sono",
+    "sia", "sue", "suo", "nostra", "nostro", "m", "t", "d",
+  ]);
+
+  const CANONICAL_SEMANTIC_TERMS = new Map([
+    ["mons", "monte"],
+    ["montem", "monte"],
+    ["montis", "monte"],
+    ["collem", "colle"],
+    ["collis", "colle"],
+    ["solem", "sole"],
+    ["solis", "sole"],
+  ]);
+
+  const RESIDUAL_FUNCTION_PATTERNS = ["dell", "nell", "all", "sull", "quest", "quell", "sicut"];
+
+  const WORD_PROFILE_NOISE = new Set([
+    "altore", "auctor", "autor", "capitulo", "canto", "cetera", "dicat", "dicendo", "dicie",
+    "dicitur", "disse", "ebbe", "elli", "essa", "esso", "item", "lezione", "modo", "parole",
+    "quel", "quomodo", "seconda",
+  ]);
+
+  const CORPUS_DRIFT_TERMS = new Set([
+    "auttore", "avea", "beatrice", "beatricie", "biatrice", "cato", "catone", "chiaro",
+    "chome", "dicens", "dicta", "eius", "ella", "erat", "finge", "interlineari",
+    "messer", "michi", "poema", "poeta", "posteriori", "propter", "rosini", "sibi",
+    "statius", "stazio", "ulisse", "ulixe", "ulixes", "vergilio", "virgilio", "virgilius",
+  ]);
+
+  const LOW_SEMANTIC_CONCURRENCE = new Set(["ben", "cio", "pur"]);
+  const TOP_COMMENTARY_TERM_NOISE = new Set([
+    "ancor", "apparve", "aver", "cotal", "dall",
+    "elli", "ella", "elle", "esso", "essa", "essi", "quelle", "quella", "quello", "quelli",
+    "quel", "questa", "queste", "questo", "questi", "tale", "tali", "esser", "ester", "fece", "inter",
+    "mentr", "quidam", "quorum", "siam", "sovr", "their", "vide", "vidi", "vieni", "vuole", "vuol", "onde", "dunque",
+  ]);
+  const PROPER_TERM_LABELS = new Map([
+    ["virgilio", "Virgilio"],
+    ["enea", "Enea"],
+    ["aeneas", "Aeneas"],
+    ["arno", "Arno"],
+    ["cristo", "Cristo"],
+    ["firenze", "Firenze"],
+    ["bernardo", "Bernardo"],
+    ["sordello", "Sordello"],
+    ["lucifero", "Lucifero"],
+    ["adamo", "Adamo"],
+    ["cacciaguida", "Cacciaguida"],
+    ["cesare", "Cesare"],
+    ["iacopo", "Iacopo"],
+    ["giovanni", "Giovanni"],
+    ["francesco", "Francesco"],
+    ["saturno", "Saturno"],
+    ["brunetto", "Brunetto"],
+    ["piccarda", "Piccarda"],
+    ["forese", "Forese"],
+    ["piero", "Piero"],
+    ["siena", "Siena"],
+    ["pisa", "Pisa"],
+    ["italia", "Italia"],
+    ["francia", "Francia"],
+    ["papa", "Papa"],
+    ["beatrice", "Beatrice"],
+    ["dante", "Dante"],
+    ["francesca", "Francesca"],
+    ["ulisse", "Ulisse"],
+    ["lucia", "Lucia"],
+    ["matelda", "Matelda"],
+    ["catone", "Catone"],
+    ["guido", "Guido"],
+    ["ciacco", "Ciacco"],
+    ["caron", "Caronte"],
+    ["farinata", "Farinata"],
+    ["maria", "Maria"],
+    ["costantino", "Costantino"],
+    ["giustiniano", "Giustiniano"],
+    ["venere", "Venere"],
+    ["carlo", "Carlo"],
+    ["roma", "Roma"],
+  ]);
+
+  const WORD_FAMILY_PILOT = [
+    { head: "cielo", label: "cielo / cieli / ciel", members: ["cielo", "cieli", "ciel"], review: "safe" },
+    { head: "mondo", label: "mondo / mondi", members: ["mondo", "mondi"], review: "safe" },
+    { head: "terra", label: "terra / terre", members: ["terra", "terre"], review: "safe" },
+    { head: "parte", label: "parte / parti", members: ["parte", "parti"], review: "review" },
+    { head: "maestro", label: "maestro / maestri", members: ["maestro", "maestri"], review: "safe" },
+    { head: "amore", label: "amore / amor", members: ["amore", "amor"], review: "safe" },
+    { head: "viso", label: "viso / visi", members: ["viso", "visi"], review: "safe" },
+    { head: "donna", label: "donna / donne", members: ["donna", "donne"], review: "safe" },
+    { head: "duca", label: "duca / duchi", members: ["duca", "duchi"], review: "review" },
+    { head: "lume", label: "lume / lumi", members: ["lume", "lumi"], review: "safe" },
+    { head: "luce", label: "luce / luci", members: ["luce", "luci"], review: "safe" },
+    { head: "stella", label: "stella / stelle", members: ["stella", "stelle"], review: "safe" },
+    { head: "mano", label: "mano / mani", members: ["mano", "mani"], review: "review" },
+    { head: "segno", label: "segno / segni", members: ["segno", "segni"], review: "safe" },
+    { head: "anima", label: "anima / anime", members: ["anima", "anime"], review: "safe" },
+    { head: "fiamma", label: "fiamma / fiamme", members: ["fiamma", "fiamme"], review: "safe" },
+    { head: "spirito", label: "spirito / spiriti", members: ["spirito", "spiriti"], review: "safe" },
+    { head: "ombra", label: "ombra / ombre", members: ["ombra", "ombre"], review: "safe" },
+    { head: "occhio", label: "occhio / occhi", members: ["occhio", "occhi"], review: "safe" },
+    { head: "fuoco", label: "fuoco / fuochi", members: ["fuoco", "fuochi"], review: "safe" },
+  ];
+
+  const WORD_FAMILY_LOOKUP = new Map(
+    WORD_FAMILY_PILOT.flatMap((family) =>
+      family.members.map((member) => [member, family])
+    )
+  );
+
+  const UI_COPY = {
+    bilingual: {
+      "hero.eyebrow": "Digital Humanities Demo",
+      "hero.guide": "→ 页面说明 / Guide",
+      "hero.about": "→ 关于 / About",
+      "hero.route": "→ 功能导览 / Interface Tour",
+      "nav.coverage": "正文入口 / Entry",
+      "nav.records": "注释细读 / Close Reading",
+      "nav.compare": "比较区 / Compare",
+      "nav.authority": "人物层 / Authority",
+      "quick.label": "Quick Jump / Search",
+      "quick.placeholder": "Purg. 30, 48 / Purg 30 48 / fiamma",
+      "quick.submit": "Vai!",
+      "browser.kicker": "Divine Comedy Map",
+      "browser.title": "Canto Browser",
+      "coverage.kicker": "主入口 / Main Entry",
+      "coverage.title": "正文入口 / Entry",
+      "coverage.note": "颜色和横条长度都对应每行的 commentary record 数量。",
+      "coverage.legend.low": "较少",
+      "coverage.legend.high": "较多",
+      "records.kicker": "细读区 / Close Reading",
+      "records.title.idle": "选择一行 / Select A Line",
+      "records.sort.label": "排序",
+      "records.sort.chronological": "按年代",
+      "records.sort.commentary": "按 commentary 名称",
+      "records.sort.span": "按 line span",
+      "records.sort.length": "按摘要长度",
+      "records.sort.asc": "升序",
+      "records.sort.desc": "降序",
+      "records.context.idle": "先在 Entry 中选择一行，再打开覆盖到该行的 commentary records。",
+      "compare.kicker": "比较区 / Compare",
+      "compare.title": "比较区 / Comparison Workspace",
+      "compare.clear": "清空已 pin",
+      "compare.summary.empty": "还没有 pin 的 cards。",
+      "compare.future": "预留接口",
+      "authority.kicker": "人物层 / Authority Layer",
+      "authority.title": "人物层 / Authorities as cited in the commentary tradition",
+      "authority.note": "把人物与 authority 导航从比较区里拎出来，作为独立入口。",
+    },
+    en: {
+      "hero.eyebrow": "Digital Humanities Demo",
+      "hero.guide": "→ Guide",
+      "hero.about": "→ About",
+      "hero.route": "→ Interface Tour",
+      "nav.coverage": "Entry",
+      "nav.records": "Close Reading",
+      "nav.compare": "Compare",
+      "nav.authority": "Authority",
+      "quick.label": "Quick Jump / Search",
+      "quick.placeholder": "Purg. 30, 48 / Purg 30 48 / fiamma",
+      "quick.submit": "Vai!",
+      "browser.kicker": "Divine Comedy Map",
+      "browser.title": "Canto Browser",
+      "coverage.kicker": "Main Entry",
+      "coverage.title": "Entry",
+      "coverage.note": "Color and bar length both reflect how many commentary records touch each line.",
+      "coverage.legend.low": "Lighter",
+      "coverage.legend.high": "Denser",
+      "records.kicker": "Close Reading",
+      "records.title.idle": "Select a line",
+      "records.sort.label": "Sort",
+      "records.sort.chronological": "By date",
+      "records.sort.commentary": "By commentary",
+      "records.sort.span": "By line span",
+      "records.sort.length": "By excerpt length",
+      "records.sort.asc": "Ascending",
+      "records.sort.desc": "Descending",
+      "records.context.idle": "Select a line in Entry to open the commentary that reaches it.",
+      "compare.kicker": "Compare",
+      "compare.title": "Comparison Workspace",
+      "compare.clear": "Clear pins",
+      "compare.summary.empty": "No pinned cards yet.",
+      "compare.future": "Reserved Hooks",
+      "authority.kicker": "Authority Layer",
+      "authority.title": "Authorities as cited in the commentary tradition",
+      "authority.note": "This panel keeps figure navigation and authority reading on their own path, instead of burying them inside Compare.",
+    },
+    zh: {
+      "hero.eyebrow": "数字人文演示",
+      "hero.guide": "→ 说明",
+      "hero.about": "→ 关于",
+      "hero.route": "→ 功能导览",
+      "nav.coverage": "正文入口",
+      "nav.records": "注释细读",
+      "nav.compare": "比较区",
+      "nav.authority": "人物层",
+      "quick.label": "快速跳转 / 搜索",
+      "quick.placeholder": "Purg. 30, 48 / Purg 30 48 / fiamma",
+      "quick.submit": "Vai!",
+      "browser.kicker": "神曲总图",
+      "browser.title": "Canto 浏览",
+      "coverage.kicker": "主入口",
+      "coverage.title": "正文入口",
+      "coverage.note": "颜色和横条长度都对应每行的 commentary record 数量。",
+      "coverage.legend.low": "较少",
+      "coverage.legend.high": "较多",
+      "records.kicker": "细读区",
+      "records.title.idle": "选择一行",
+      "records.sort.label": "排序",
+      "records.sort.chronological": "按年代",
+      "records.sort.commentary": "按注释名称",
+      "records.sort.span": "按跨行范围",
+      "records.sort.length": "按摘要长度",
+      "records.sort.asc": "升序",
+      "records.sort.desc": "降序",
+      "records.context.idle": "先在 Entry 中选择一行，再打开覆盖到该行的 commentary records。",
+      "compare.kicker": "比较区",
+      "compare.title": "比较区",
+      "compare.clear": "清空已 pin",
+      "compare.summary.empty": "还没有 pin 的 cards。",
+      "compare.future": "预留接口",
+      "authority.kicker": "人物层",
+      "authority.title": "评论传统中的 authority",
+      "authority.note": "把人物与 authority 导航从比较区里拎出来，作为独立入口。",
+    },
+  };
+
+  global.DDPConfig = Object.freeze({
+    R2_BASE,
+    DATA_BASE,
+    SEARCH_LAYER_PRIORITY,
+    SEARCH_LAYER_CODE_MAP,
+    CANTICA_SHELLS,
+    CANTICA_ORDER,
+    CANTICA_SHORT_LABELS,
+    SEMANTIC_STOPWORDS,
+    DANTE_STOPWORDS,
+    CANONICAL_SEMANTIC_TERMS,
+    RESIDUAL_FUNCTION_PATTERNS,
+    WORD_PROFILE_NOISE,
+    CORPUS_DRIFT_TERMS,
+    LOW_SEMANTIC_CONCURRENCE,
+    TOP_COMMENTARY_TERM_NOISE,
+    PROPER_TERM_LABELS,
+    WORD_FAMILY_PILOT,
+    WORD_FAMILY_LOOKUP,
+    UI_COPY,
+  });
+})(window);

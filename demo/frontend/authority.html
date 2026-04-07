@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Authority Layer / Reading Page</title>
+    <meta
+      name="description"
+      content="A standalone reading page for the DDP Authority Layer: tracked authors, personaggi, work layers, source texts, and the current authority-reading contract." />
+    <meta property="og:title" content="Authority Layer / Reading Page" />
+    <meta
+      property="og:description"
+      content="Read what the Authority Layer is, how to enter it, what it currently covers, and how tracked authors, personaggi, and work layers now fit together." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ddpcommentary.com/authority.html" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://ddpcommentary.com/authority.html" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Authority</p>
+        <div class="ui-language-toggle" aria-label="Authority page language switch">
+          <button type="button" class="ui-language-chip" data-authority-lang="en">EN</button>
+          <button type="button" class="ui-language-chip" data-authority-lang="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1 id="authority-title">Authority Layer</h1>
+        <a class="ghost-link-button" id="authority-back-link" href="/">Back to workbench</a>
+      </div>
+
+      <div class="static-page-content" data-static-lang="en">
+        <p class="help-modal-lead">
+          This page treats Authority as a reading environment in its own right, not just as an auxiliary panel. It
+          explains what kinds of objects are currently inside the layer, how tracked authors, personaggi, and work
+          layers now fit together, and what sort of authority-reading the current build actually supports.
+        </p>
+        <div class="compare-chip-row" style="margin-bottom: 16px;">
+          <a class="guide-button guide-button-inline" href="/autore/index.html">→ Autori</a>
+          <a class="guide-button guide-button-inline" href="/personaggio/index.html">→ Personaggi</a>
+        </div>
+        <nav class="static-page-nav" aria-label="Authority page contents">
+          <a href="#authority-what">What This Layer Is</a>
+          <a href="#authority-snapshot">Current Build Snapshot</a>
+          <a href="#authority-atlas">Atlas</a>
+          <a href="#authority-personaggi">Personaggi</a>
+          <a href="#authority-entry">How To Enter It</a>
+          <a href="#authority-object-types">Object Types</a>
+          <a href="#authority-boundaries">Boundaries</a>
+        </nav>
+        <div class="help-modal-body">
+          <section class="help-group" id="authority-what">
+            <section class="help-section">
+              <h2>What This Layer Is</h2>
+              <p class="help-paragraph">
+                The Authority Layer does not simply collect cited names. It reorganises commentary use into local
+                authority profiles, work-level entry lanes, personaggio rooms, and commentary-source bridges.
+                Its job is to make authority usage readable as a navigable tradition rather than as a residue hidden
+                inside record cards.
+              </p>
+              <p class="help-paragraph">
+                In practical terms, that means the layer now supports multiple levels of objecthood: fully shaped
+                objects such as Aristotle or Virgil, a full tracked author universe, and personaggi that can now be
+                entered through poem hits, commentary aliases, and local figure bands.
+              </p>
+            </section>
+          </section>
+
+          <section class="help-group" id="authority-snapshot">
+            <section class="help-section">
+              <h2>Current Build Snapshot</h2>
+              <p class="help-paragraph">
+                The public-facing local build currently exposes <strong id="authority-author-count-en">…</strong>
+                tracked authority authors, <strong id="authority-source-count-en">…</strong> bridged commentary
+                source texts, and <strong id="authority-highlight-author-count-en">…</strong> stable highlightable
+                author lexicon entries.
+              </p>
+              <p class="help-paragraph">
+                The point of these numbers is not display. They mark that Authority is no longer a thin experiment:
+                it now has enough mass to justify a distinct reading page and a distinct entry logic.
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Tracked Authors</h3>
+                <p class="help-paragraph">
+                  These are the tracked authors that the current build has already accepted into the canonical
+                  authority layer. Some are deeper than others, but all of them now enter as ready objects.
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Source Bridges</h3>
+                <p class="help-paragraph">
+                  Commentary-source bridges matter because Authority should not stop at names alone. When the bridge is
+                  present, the layer can open local source text rather than stopping at a bare occurrence.
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Highlight Lexicon</h3>
+                <p class="help-paragraph">
+                  Authority is now also present inside commentary reading itself. Author, work, and personaggio
+                  highlights let the text page begin to glow with the same universe that the Authority Lens already
+                  knows.
+                </p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-atlas">
+            <section class="help-section">
+              <h2>Authority Atlas</h2>
+              <p class="help-paragraph">
+                The Authority universe is no longer one undifferentiated list. It now contains mature trees, flat work
+                overviews, special-case objects, and a wider field of ready work layers. This section keeps those
+                strata visible as a map, not just as a total count.
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Mature Works Trees</h3>
+                <p class="help-paragraph">
+                  <strong id="authority-works-tree-count-en">…</strong> authors currently expose a real works-tree
+                  layer.
+                </p>
+                <p class="help-paragraph" id="authority-works-tree-samples-en">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Flat Work Overviews</h3>
+                <p class="help-paragraph">
+                  <strong id="authority-flat-work-count-en">…</strong> authors currently enter through a flat work
+                  overview rather than a full tree.
+                </p>
+                <p class="help-paragraph" id="authority-flat-work-samples-en">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Special-Case Objects</h3>
+                <p class="help-paragraph">
+                  <strong id="authority-special-case-count-en">…</strong> authors currently remain special-case and
+                  should not be flattened into ordinary work trees.
+                </p>
+                <p class="help-paragraph" id="authority-special-case-samples-en">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Ready Work Layers</h3>
+                <p class="help-paragraph">
+                  <strong id="authority-ready-count-en">…</strong> authors currently enter as ready objects across
+                  the authority layer, even when they do not all grow into the same kind of work structure.
+                </p>
+                <p class="help-paragraph" id="authority-ready-samples-en">…</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-personaggi">
+            <section class="help-section">
+              <h2>Personaggi</h2>
+              <p class="help-paragraph">
+                Authority no longer ends with authors. Some tracked authors also stand inside the poem as real
+                dramatic figures, and some figure-lanes deserve direct character-space instead of being forced back
+                into autore intake.
+              </p>
+              <p class="help-paragraph">
+                The current build recognises <strong id="authority-personaggio-author-count-en">…</strong>
+                Autore-Personaggio entries and <strong id="authority-personaggio-standalone-count-en">…</strong>
+                standalone personaggi.
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Autore-Personaggio</h3>
+                <p class="help-paragraph" id="authority-personaggio-author-samples-en">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Standalone Personaggi</h3>
+                <p class="help-paragraph" id="authority-personaggio-standalone-samples-en">…</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-entry">
+            <section class="help-section">
+              <h2>How To Enter It</h2>
+              <p class="help-paragraph">
+                There are now three honest entry routes. One begins from the Authority panel itself. One begins from
+                the Compare workspace, where shared authority usage appears between pinned cards. One begins inside the
+                commentary text, where highlighted author and work surfaces now start to signal the same authority
+                universe directly in the reading flow.
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Authority Lens</h3>
+                <p class="help-paragraph">
+                  The Lens should be read as a staged entry, not as a flat filter. The contract banner, drilldown
+                  lane, and bucket notes now explain what kind of object you are entering and which layer of the
+                  completed authority universe you are opening.
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Author Entry</h3>
+                <p class="help-paragraph">
+                  Readiness no longer depends on pretending every author has the same structure. Some enter through
+                  fuller work layers, some through flatter objects, and some remain deliberately special-case.
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Commentary Highlights</h3>
+                <p class="help-paragraph">
+                  Authority highlights now keep authority-reading close to the page. This matters because the
+                  Authority universe should not live only in a side panel; it should also become visible where the
+                  commentary language itself starts invoking it.
+                </p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-object-types">
+            <section class="help-section">
+              <h2>Object Types</h2>
+              <p class="help-paragraph">
+                The current layer does not flatten every author into one model. Some are work trees. Some are flat
+                objects. Some stay special-case. That plurality is intentional.
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Mature Structures</h3>
+                <p class="help-paragraph">
+                  Authors such as Aristotle, Paul, Augustine, Virgil, Ovid, or Cicero already support deeper
+                  drilldown, pressure/frontline metadata, and more explicit entry contracts.
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Broader Ready Objects</h3>
+                <p class="help-paragraph">
+                  Newer entrants such as Avicenna, Averroè, Ugo di San Vittore, San Pietro, and the second-universe
+                  historical lanes belong here. They already deserve presence, but they should still be read through
+                  the object they currently expose, not through a fake uniform work tree.
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Still Uneven</h3>
+                <p class="help-paragraph">
+                  The point is not to suppress internal unevenness but to avoid pretending every object is deep in the
+                  same way. That honesty is part of the layer’s design.
+                </p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-boundaries">
+            <section class="help-section">
+              <h2>Boundaries</h2>
+              <p class="help-paragraph">
+                This page does not claim that every cited name is already solved. It claims something more useful: the
+                layer now has enough scale, discipline, and entry logic to deserve a page of its own.
+              </p>
+              <p class="help-paragraph">
+                The next frontier is therefore not blind expansion. It is to keep thickening reading contracts,
+                clickable entry routes, work-level drilldown, and commentary-integrated authority paths for the
+                universe that already exists.
+              </p>
+            </section>
+          </section>
+        </div>
+      </div>
+
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        <p class="help-modal-lead">
+          这页把 Authority 当成一张独立阅读页来看，而不只是 workbench 旁边的一个附属 panel。它解释这一层现在到底装了什么对象、author、personaggi、work layer 现在怎么接到一起，以及当前 build 已经支持到什么程度的 authority 阅读。
+        </p>
+        <div class="compare-chip-row" style="margin-bottom: 16px;">
+          <a class="guide-button guide-button-inline" href="/autore/index.html">→ Autori</a>
+          <a class="guide-button guide-button-inline" href="/personaggio/index.html">→ Personaggi</a>
+        </div>
+        <nav class="static-page-nav" aria-label="Authority page contents">
+          <a href="#authority-what-bi">这层到底是什么</a>
+          <a href="#authority-snapshot-bi">当前快照</a>
+          <a href="#authority-atlas-bi">地图</a>
+          <a href="#authority-personaggi-bi">角色层</a>
+          <a href="#authority-entry-bi">怎么进入</a>
+          <a href="#authority-object-types-bi">对象类型</a>
+          <a href="#authority-boundaries-bi">边界</a>
+        </nav>
+        <div class="help-modal-body">
+          <section class="help-group" id="authority-what-bi">
+            <section class="help-section">
+              <h2>这层到底是什么</h2>
+              <p class="help-paragraph">
+                Authority Layer 不是简单地把被引用的人名堆在一起。它把 commentary 里的 authority 使用重新组织成 author profile、work-level entry、personaggio rooms 和 commentary-source bridge，让 authority tradition 可以被走、被读、被分层，而不只是 cards 里的残余。
+              </p>
+              <p class="help-paragraph">
+                所以这里现在已经有多种对象形态：像 Aristotele、Virgilio 这种更成熟的对象；完整的 tracked author universe；以及可以通过 poem hits、commentary aliases 和本地 bands 被打开的 personaggi。
+              </p>
+            </section>
+          </section>
+
+          <section class="help-group" id="authority-snapshot-bi">
+            <section class="help-section">
+              <h2>当前快照</h2>
+              <p class="help-paragraph">
+                当前本地 build 已经暴露出 <strong id="authority-author-count-bi">…</strong> 位 tracked authority authors、<strong id="authority-source-count-bi">…</strong> 条 bridged commentary source texts，以及 <strong id="authority-highlight-author-count-bi">…</strong> 组稳定 author highlight entries。
+              </p>
+              <p class="help-paragraph">
+                这些数字写在这里，不是为了展示，而是为了说明 Authority 已经不是薄薄一层试验；它现在已经长到值得拥有一页自己的程度。
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Tracked Authors</h3>
+                <p class="help-paragraph">
+                  这些是当前 build 已经正式承认进 canonical authority layer 的 tracked authors。它们深浅不一，但都已经是真正可进入的对象。
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Source Bridges</h3>
+                <p class="help-paragraph">
+                  Authority 不该只停在名字上。source bridge 的意义在于：当 bridge 存在时，它能真的打开本地 source text，而不是只停在一个 bare occurrence 上。
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Highlight Lexicon</h3>
+                <p class="help-paragraph">
+                  Authority 现在也开始回到正文里发光了。author / work / personaggio 高亮，让 Authority universe 不再只活在旁边的 Lens 里，也开始活在 commentary 自己的语言里。
+                </p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-atlas-bi">
+            <section class="help-section">
+              <h2>Authority 地图</h2>
+              <p class="help-paragraph">
+                Authority universe 现在已经不是一张平面名单了。它里面同时有成熟 works-tree、flat work overview、special-case 对象，以及更宽的一层 ready work layers。这里把这些地层显出来，让这一页更像地图，不只是说明文。
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>成熟 works-tree</h3>
+                <p class="help-paragraph">
+                  当前有 <strong id="authority-works-tree-count-bi">…</strong> 位 author 已经长出真实 works-tree。
+                </p>
+                <p class="help-paragraph" id="authority-works-tree-samples-bi">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Flat work overview</h3>
+                <p class="help-paragraph">
+                  当前有 <strong id="authority-flat-work-count-bi">…</strong> 位 author 通过 flat work overview 进入，而不是完整树。
+                </p>
+                <p class="help-paragraph" id="authority-flat-work-samples-bi">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Special-case 对象</h3>
+                <p class="help-paragraph">
+                  当前有 <strong id="authority-special-case-count-bi">…</strong> 位 author 仍然必须保持 special-case，不该硬压成普通 works-tree。
+                </p>
+                <p class="help-paragraph" id="authority-special-case-samples-bi">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Ready Work Layers</h3>
+                <p class="help-paragraph">
+                  当前有 <strong id="authority-ready-count-bi">…</strong> 位 author 已经以 ready 对象进入 authority layer，哪怕它们并不都长成同一种 work 结构。
+                </p>
+                <p class="help-paragraph" id="authority-ready-samples-bi">…</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-personaggi-bi">
+            <section class="help-section">
+              <h2>Personaggi</h2>
+              <p class="help-paragraph">
+                Authority 现在已经不只到 author 为止。有些 tracked author 在诗里也会长成真正的角色，还有一些 lane 本来就该直接进入角色层，而不是被硬拖回 autore intake。
+              </p>
+              <p class="help-paragraph">
+                当前 build 已经承认 <strong id="authority-personaggio-author-count-bi">…</strong> 位 Autore-Personaggio，
+                以及 <strong id="authority-personaggio-standalone-count-bi">…</strong> 位 standalone personaggi。
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Autore-Personaggio</h3>
+                <p class="help-paragraph" id="authority-personaggio-author-samples-bi">…</p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Standalone Personaggi</h3>
+                <p class="help-paragraph" id="authority-personaggio-standalone-samples-bi">…</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-entry-bi">
+            <section class="help-section">
+              <h2>怎么进入</h2>
+              <p class="help-paragraph">
+                现在有三条诚实入口：一条是从 Authority panel 自己进去，一条是从 Compare 里共享 authority 使用进去，一条是从 commentary 正文里的高亮 surface 进去。
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>Authority Lens</h3>
+                <p class="help-paragraph">
+                  Lens 现在不该被读成一个平铺 filter，而该被读成 staged entry。contract banner、drilldown lane 和 bucket note 都在说明：你现在进入的是哪种对象，以及你打开的是 authority universe 的哪一层。
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Author Entry</h3>
+                <p class="help-paragraph">
+                  现在的 ready 不再意味着每个 author 都必须长成同一种结构。有的人通过更厚的 work layer 进入，有的人通过更平的 object 进入，有的人则保持 special-case，但它们都已经属于完成态 authority layer。
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>Commentary Highlights</h3>
+                <p class="help-paragraph">
+                  Authority 高亮现在让 authority 阅读贴回正文。这很重要，因为 Authority universe 不该只活在侧栏，也应该开始成为评论语言本身的一层可见结构。
+                </p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-object-types-bi">
+            <section class="help-section">
+              <h2>对象类型</h2>
+              <p class="help-paragraph">
+                当前这层并没有把所有 author 硬压成同一种模型。有的已经是 works tree，有的是 flat object，有的应当保持 special-case。这种不整齐是故意保留的。
+              </p>
+            </section>
+            <div class="help-group-children">
+              <section class="help-section help-subsection">
+                <h3>成熟结构</h3>
+                <p class="help-paragraph">
+                  像 Aristotele、Paolo Apostolo、Agostino、Virgilio、Ovidio、Cicerone 这些对象，现在已经支持更深的 drilldown、pressure/frontline metadata 和更清楚的 entry contract。
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>更广的一层 Ready 对象</h3>
+                <p class="help-paragraph">
+                  像 Avicenna、Averroè、Ugo di San Vittore、San Pietro，以及第二轮 universe 扩出来的一批 historical / patristic / astronomical lanes，都在这里：它们已经值得出现，但仍然应该按自己现在真实暴露出来的对象结构去读，而不是伪装成统一的 work tree。
+                </p>
+              </section>
+              <section class="help-section help-subsection">
+                <h3>仍然不均匀</h3>
+                <p class="help-paragraph">
+                  这里要保留的不是“延后”本身，而是对象深度之间的真实不均匀。目的不是把它们抹掉，而是不假装它们已经比实际更整齐。这种诚实是这层设计的一部分。
+                </p>
+              </section>
+            </div>
+          </section>
+
+          <section class="help-group" id="authority-boundaries-bi">
+            <section class="help-section">
+              <h2>边界</h2>
+              <p class="help-paragraph">
+                这页不声称每一个被提到的名字都已经被解决。它声称的是另一件更有用的事：Authority 这一层现在已经长到足以拥有自己的页面、自己的入口逻辑、自己的阅读契约。
+              </p>
+              <p class="help-paragraph">
+                所以下一步最值的，不再是盲扩，而是继续把已经存在的 universe 做厚：clickable 路径、更深的 work drilldown、commentary-integrated authority path、以及更稳定的前端 entry copy。
+              </p>
+            </section>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll("[data-authority-lang]").forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.authorityLang === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+            // noop
+          }
+          const back = document.getElementById("authority-back-link");
+          const backUrl = new URL("/", window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+
+        function setText(id, value) {
+          const node = document.getElementById(id);
+          if (node) node.textContent = value;
+        }
+
+        const AUTHOR_DISPLAY_OVERRIDES = {
+          aristotle: "Aristotele",
+          paul_the_apostle: "Paolo Apostolo",
+          psalmist: "Salmista",
+          augustine: "Agostino",
+          boethius: "Boezio",
+          cicero: "Cicerone",
+          ovid: "Ovidio",
+          virgil: "Virgilio",
+          statius: "Stazio",
+          hugo_of_st_victor: "Ugo di San Vittore",
+          plinius: "Plinio",
+          orosius: "Orosio",
+          gratianus: "Graziano",
+          averroe: "Averroè",
+          girolamo: "Girolamo",
+          salomone: "Salomone",
+          valerio_massimo: "Valerio Massimo",
+          san_pietro: "San Pietro",
+        };
+
+        function getAuthorDisplayName(author) {
+          const authorId = String(author?.author_id || "").trim();
+          return AUTHOR_DISPLAY_OVERRIDES[authorId] || author?.canonical_name || authorId || "unknown";
+        }
+
+        function summariseGroup(authors) {
+          return authors.slice(0, 6).map(getAuthorDisplayName).join(", ") || "none yet";
+        }
+
+        async function hydrateSnapshot() {
+          try {
+            const [authorityIndex, authorityLayer, authoritySources, highlightLexicon, personaggioScan] = await Promise.all([
+              fetch("/data/authority_index.json").then((r) => r.json()),
+              fetch("/data/authority_layer.json").then((r) => r.json()),
+              fetch("/data/authority_commentary_sources.json").then((r) => r.json()),
+              fetch("/data/authority_highlight_lexicon.json").then((r) => r.json()),
+              fetch("/data/authority_personaggio_full_scan.json").then((r) => r.json()).catch(() => null),
+            ]);
+            const authorCount = Array.isArray(authorityIndex?.authors) ? authorityIndex.authors.length : 0;
+            const sourceCount = Number(authoritySources?.source_count || 0);
+            const highlightAuthorCount = Array.isArray(highlightLexicon?.stable_authors)
+              ? highlightLexicon.stable_authors.length
+              : 0;
+            const authors = Array.isArray(authorityLayer?.authors) ? authorityLayer.authors : [];
+            const worksTreeAuthors = authors.filter((author) => author?.works_layer_mode === "works_tree");
+            const flatWorkAuthors = authors.filter((author) => author?.works_layer_mode === "flat_work_overview");
+            const specialCaseAuthors = authors.filter((author) => String(author?.entry_mode || "").includes("special_case"));
+            const readyAuthors = authors.filter((author) => author?.frontend_status === "ready");
+            const authorPersonaggi = Array.isArray(personaggioScan?.autore_personaggio_rows)
+              ? personaggioScan.autore_personaggio_rows
+              : (Array.isArray(personaggioScan?.autore_personaggi)
+              ? personaggioScan.autore_personaggi
+              : (Array.isArray(personaggioScan?.author_personaggi) ? personaggioScan.author_personaggi : []);
+            const standalonePersonaggi = Array.isArray(personaggioScan?.standalone_personaggi) ? personaggioScan.standalone_personaggi : [];
+            [
+              ["authority-author-count-en", authorCount],
+              ["authority-author-count-bi", authorCount],
+              ["authority-source-count-en", sourceCount],
+              ["authority-source-count-bi", sourceCount],
+              ["authority-highlight-author-count-en", highlightAuthorCount],
+              ["authority-highlight-author-count-bi", highlightAuthorCount],
+              ["authority-works-tree-count-en", worksTreeAuthors.length],
+              ["authority-works-tree-count-bi", worksTreeAuthors.length],
+              ["authority-flat-work-count-en", flatWorkAuthors.length],
+              ["authority-flat-work-count-bi", flatWorkAuthors.length],
+              ["authority-special-case-count-en", specialCaseAuthors.length],
+              ["authority-special-case-count-bi", specialCaseAuthors.length],
+              ["authority-ready-count-en", readyAuthors.length],
+              ["authority-ready-count-bi", readyAuthors.length],
+              ["authority-personaggio-author-count-en", authorPersonaggi.length],
+              ["authority-personaggio-author-count-bi", authorPersonaggi.length],
+              ["authority-personaggio-standalone-count-en", standalonePersonaggi.length],
+              ["authority-personaggio-standalone-count-bi", standalonePersonaggi.length],
+              ["authority-works-tree-samples-en", summariseGroup(worksTreeAuthors)],
+              ["authority-works-tree-samples-bi", summariseGroup(worksTreeAuthors)],
+              ["authority-flat-work-samples-en", summariseGroup(flatWorkAuthors)],
+              ["authority-flat-work-samples-bi", summariseGroup(flatWorkAuthors)],
+              ["authority-special-case-samples-en", summariseGroup(specialCaseAuthors)],
+              ["authority-special-case-samples-bi", summariseGroup(specialCaseAuthors)],
+              ["authority-ready-samples-en", summariseGroup(readyAuthors)],
+              ["authority-ready-samples-bi", summariseGroup(readyAuthors)],
+              ["authority-personaggio-author-samples-en", authorPersonaggi.slice(0, 8).map((row) => row.display_name).join(", ") || "none yet"],
+              ["authority-personaggio-author-samples-bi", authorPersonaggi.slice(0, 8).map((row) => row.display_name).join("、") || "当前还没有"],
+              ["authority-personaggio-standalone-samples-en", standalonePersonaggi.slice(0, 8).map((row) => row.display_name).join(", ") || "none yet"],
+              ["authority-personaggio-standalone-samples-bi", standalonePersonaggi.slice(0, 8).map((row) => row.display_name).join("、") || "当前还没有"],
+            ].forEach(([id, value]) => setText(id, String(value)));
+          } catch (error) {
+            [
+              "authority-author-count-en",
+              "authority-author-count-bi",
+              "authority-source-count-en",
+              "authority-source-count-bi",
+              "authority-highlight-author-count-en",
+              "authority-highlight-author-count-bi",
+              "authority-works-tree-count-en",
+              "authority-works-tree-count-bi",
+              "authority-flat-work-count-en",
+              "authority-flat-work-count-bi",
+              "authority-special-case-count-en",
+              "authority-special-case-count-bi",
+              "authority-ready-count-en",
+              "authority-ready-count-bi",
+              "authority-personaggio-author-count-en",
+              "authority-personaggio-author-count-bi",
+              "authority-personaggio-standalone-count-en",
+              "authority-personaggio-standalone-count-bi",
+              "authority-works-tree-samples-en",
+              "authority-works-tree-samples-bi",
+              "authority-flat-work-samples-en",
+              "authority-flat-work-samples-bi",
+              "authority-special-case-samples-en",
+              "authority-special-case-samples-bi",
+              "authority-ready-samples-en",
+              "authority-ready-samples-bi",
+              "authority-personaggio-author-samples-en",
+              "authority-personaggio-author-samples-bi",
+              "authority-personaggio-standalone-samples-en",
+              "authority-personaggio-standalone-samples-bi",
+            ].forEach((id) => setText(id, "unavailable"));
+          }
+        }
+
+        const initialLanguage = getLanguage();
+        applyLanguage(initialLanguage);
+        document.querySelectorAll("[data-authority-lang]").forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.authorityLang === "bilingual" ? "bilingual" : "en"));
+        });
+        hydrateSnapshot();
+      })();
+    </script>
+  </body>
+</html>

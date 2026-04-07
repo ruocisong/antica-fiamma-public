@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interface Tour</title>
+    <meta
+      name="description"
+      content="A panel-by-panel tour of the DDP Commentary Workbench showing how each major surface is used." />
+    <meta property="og:title" content="Interface Tour" />
+    <meta
+      property="og:description"
+      content="See the DDP Commentary Workbench panel by panel: entry, close reading, loci, interpretive fields, compare, and authority." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ddpcommentary.com/reading-route.html" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://ddpcommentary.com/reading-route.html" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Interface Tour</p>
+        <div class="ui-language-toggle" aria-label="Interface Tour language switch">
+          <button type="button" class="ui-language-chip" data-route-lang="en">EN</button>
+          <button type="button" class="ui-language-chip" data-route-lang="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1 id="route-title">Workbench Interface Tour</h1>
+        <a class="ghost-link-button" id="route-back-link" href="/">Back to workbench</a>
+      </div>
+
+      <div class="static-page-content" data-static-lang="en">
+        <p class="help-modal-lead">
+          This page walks through the workbench one surface at a time.
+        </p>
+        <nav class="static-page-nav" aria-label="Interface Tour contents">
+          <a href="#tour-main-entry">Main Entry</a>
+          <a href="#tour-analysis-layer">Analysis Layer</a>
+          <a href="#tour-close-reading">Close Reading</a>
+          <a href="#tour-commentary">Commentary</a>
+          <a href="#tour-locus">Word Locus</a>
+          <a href="#tour-occurrence">Occurrence</a>
+          <a href="#tour-micro-context">Micro-Context</a>
+          <a href="#tour-phrase">Phrase Expansions</a>
+          <a href="#tour-contrastive">Contrastive Vocabulary</a>
+          <a href="#tour-fields">Interpretive Fields</a>
+          <a href="#tour-echoes">Cross-Canto Echoes</a>
+          <a href="#tour-compare">Compare</a>
+          <a href="#tour-authority">Authority</a>
+        </nav>
+        <div class="help-modal-body">
+          <section class="route-stage" id="tour-main-entry">
+            <section class="help-section">
+              <h2>MAIN ENTRY</h2>
+              <p class="help-paragraph">
+                Start here after choosing a canto. Each row is a line of Dante, and the bar immediately shows where
+                commentary density is lighter or denser.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-main-entry.png" alt="Main Entry panel." />
+                <figcaption>Choose a line here to open the rest of the workbench downward.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Scan the canto vertically, find a line worth opening, then click once to move into line-first reading.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-analysis-layer">
+            <section class="help-section">
+              <h2>ANALYSIS LAYER</h2>
+              <p class="help-paragraph">
+                The Line Snapshot appears as soon as a line is selected. It gives the local contour before you begin
+                reading commentary cards in detail.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-analysis-layer.png" alt="Analysis Layer / Line Snapshot." />
+                <figcaption>Read this snapshot first for density, granularity, terms, and temporal span.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>Line 1 Snapshot</h3>
+                  <p>This panel is the fast orientation layer between the chosen line and the deeper reading surfaces below.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-close-reading">
+            <section class="help-section">
+              <h2>CLOSE READING</h2>
+              <p class="help-paragraph">
+                This is the top of the commentary-reading zone. It keeps the selected line visible and prepares the
+                card stack that follows.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-close-reading.png" alt="Close Reading section." />
+                <figcaption>The selected line stays on the table while the commentary opens underneath.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Sort the reading stream here, keep the line context in view, and decide whether you want cards, word routes, or comparison next.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-commentary">
+            <section class="help-section">
+              <h2>COMMENTARY</h2>
+              <p class="help-paragraph">
+                This is the commentary body itself: the cards you sort, expand, pin, and compare.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-commentary-cards.png" alt="Commentary cards." />
+                <figcaption>Open full text, sort the cards, and pin records you want to keep in play.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Read card by card, expand the text when needed, and pin records whenever a line of interpretation needs to stay visible.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-locus">
+            <section class="help-section">
+              <h2>DANTE WORD LOCUS LAYER</h2>
+              <p class="help-paragraph">
+                This route opens when you click a selectable content word in the chosen line.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-dante-word-locus.png" alt="Dante Word Locus Layer." />
+                <figcaption>Use this layer when the question narrows from the whole line to one lexical point.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Click one word, then read the word-centered panels in order rather than jumping straight back to cards.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-occurrence">
+            <section class="help-section">
+              <h2>Occurrence Explorer</h2>
+              <p class="help-paragraph">
+                This panel shows where the chosen word comes back elsewhere in the poem.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-occurrence-explorer.png" alt="Occurrence Explorer." />
+                <figcaption>Use it to follow recurrence before widening into more interpretive comparisons.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Start with recurrence: where else does this word appear, and how does that change what the current line is doing?</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-micro-context">
+            <section class="help-section">
+              <h2>Weighted Micro-Context Concurrence</h2>
+              <p class="help-paragraph">
+                This panel asks what other words tend to gather near the chosen word in local contexts.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-weighted-micro-context.png" alt="Weighted Micro-Context Concurrence." />
+                <figcaption>Read this for the local lexical neighborhood, not for the whole canto at once.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Use it when you want to know what tends to cluster beside the chosen word in nearby poetic space.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-phrase">
+            <section class="help-section">
+              <h2>Exact Local Phrase Expansions</h2>
+              <p class="help-paragraph">
+                This panel tests whether the chosen word grows into a short phrase that reappears elsewhere.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-exact-local-phrase-expansions.png" alt="Exact Local Phrase Expansions." />
+                <figcaption>Use this panel when single-word recurrence is not enough and phrase growth begins to matter.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Look here when the interpretive pressure seems to come from a short repeating expression rather than one isolated word.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-contrastive">
+            <section class="help-section">
+              <h2>Contrastive Interpretive Vocabulary</h2>
+              <p class="help-paragraph">
+                This panel highlights interpretive vocabulary around the selected lexical focus and its nearby alternatives.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-contrastive-interpretive-vocabulary.png" alt="Contrastive Interpretive Vocabulary." />
+                <figcaption>Use it to see how commentary language gathers differently around nearby lexical options.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Read this when you want a word-centered interpretive contrast, not just recurrence counts.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-fields">
+            <section class="help-section">
+              <h2>INTERPRETIVE FIELDS</h2>
+              <p class="help-paragraph">
+                The semantic panel groups the current line’s commentary into local semantic fields.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-interpretive-fields.png" alt="Local Semantic Fields for Line." />
+                <figcaption>Use this panel to regroup the current line’s commentary pressure before returning to individual cards.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>Local Semantic Fields for Line</h3>
+                  <p>This is still line-local. It does not replace the cards; it gives you another way to enter them.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-echoes">
+            <section class="help-section">
+              <h2>CROSS-CANTO ECHOES</h2>
+              <p class="help-paragraph">
+                This panel follows the current line outward across the poem when echoes begin to matter.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-cross-canto-echoes.png" alt="Cross-Canto Echoes." />
+                <figcaption>Use this when the present line seems to resonate with another place in the poem.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>Cross-Canto Echoes for Line</h3>
+                  <p>Read this after the local line is already clear; it is the widening move, not the opening move.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-compare">
+            <section class="help-section">
+              <h2>COMPARE</h2>
+              <p class="help-paragraph">
+                Compare becomes useful after you pin commentary cards and need them to stay visible side by side.
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-compare.png" alt="Compare workspace." />
+                <figcaption>Pin first in commentary, then use Compare to hold several interpretive lines at once.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>This is the place for parallel reading: several records, one workspace, and less dependence on memory alone.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-authority">
+            <section class="help-section">
+              <h2>AUTHORITY</h2>
+              <p class="help-paragraph">
+                Authority is the separate desk for author-, work-, and figure-centered reading.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/authority.html" target="_blank" rel="noreferrer">Open the Authority page</a>
+                <a class="ghost-link-button" href="/autore/index.html" target="_blank" rel="noreferrer">Browse authors</a>
+                <a class="ghost-link-button" href="/personaggio/index.html" target="_blank" rel="noreferrer">Browse personaggi</a>
+              </div>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-authority.png" alt="Authority section." />
+                <figcaption>Use this when the reading question is organized by authority structure rather than by one selected line.</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>How to use it</h3>
+                  <p>Move here when you want personaggi, works, and cited authorities to become the main path through the material.</p>
+                </section>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        <p class="help-modal-lead">
+          这页按面板逐块导览。
+        </p>
+        <nav class="static-page-nav" aria-label="Interface Tour contents">
+          <a href="#tour-main-entry-bi">Main Entry</a>
+          <a href="#tour-analysis-layer-bi">Analysis Layer</a>
+          <a href="#tour-close-reading-bi">Close Reading</a>
+          <a href="#tour-commentary-bi">commentary</a>
+          <a href="#tour-locus-bi">Word Locus</a>
+          <a href="#tour-occurrence-bi">Occurrence</a>
+          <a href="#tour-micro-context-bi">Micro-Context</a>
+          <a href="#tour-phrase-bi">Phrase Expansions</a>
+          <a href="#tour-contrastive-bi">Contrastive Vocabulary</a>
+          <a href="#tour-fields-bi">Interpretive Fields</a>
+          <a href="#tour-echoes-bi">Cross-Canto Echoes</a>
+          <a href="#tour-compare-bi">Compare</a>
+          <a href="#tour-authority-bi">Authority</a>
+        </nav>
+        <div class="help-modal-body">
+          <section class="route-stage" id="tour-main-entry-bi">
+            <section class="help-section">
+              <h2>MAIN ENTRY</h2>
+              <p class="help-paragraph">
+                选定 canto 之后，先从这里看。每一行都是 Dante 原文，色条立刻告诉你这一行周围的 commentary density 是轻还是重。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-main-entry.png" alt="Main Entry 面板。" />
+                <figcaption>先在这里选一行，下面的工作台才会真正展开。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>先纵向扫一遍这个 canto，找到值得打开的行，再点进去进入 line-first reading。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-analysis-layer-bi">
+            <section class="help-section">
+              <h2>ANALYSIS LAYER</h2>
+              <p class="help-paragraph">
+                选中某一行之后，Line Snapshot 会立刻出现。它让你在进入 commentary cards 之前先看到局部轮廓。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-analysis-layer.png" alt="Analysis Layer / Line Snapshot。" />
+                <figcaption>先读这一层，再往下读更细的 commentary。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>Line 1 Snapshot</h3>
+                  <p>这一层负责在“选中某一行”和“深读 cards”之间给你一个快速定向：density、granularity、terms、时间跨度。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-close-reading-bi">
+            <section class="help-section">
+              <h2>CLOSE READING</h2>
+              <p class="help-paragraph">
+                这是 commentary 阅读区的上沿。它把所选诗行留在台面上，然后把 card stack 接出来。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-close-reading.png" alt="Close Reading 区域。" />
+                <figcaption>诗行仍然可见，commentary 会在它下面展开。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>在这里决定排序方式，保留 line context，然后再决定是继续看 cards、切到词位路线，还是进入 compare。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-commentary-bi">
+            <section class="help-section">
+              <h2>commentary 本体</h2>
+              <p class="help-paragraph">
+                这里就是 commentary 本体：你排序、展开、pin 卡片、并排比较的地方。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-commentary-cards.png" alt="Commentary cards。" />
+                <figcaption>展开全文、排序卡片、pin 你想一直留在台面上的记录。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>逐张阅读，必要时展开全文；一旦某条解释线要持续保留，就先 pin 起来。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-locus-bi">
+            <section class="help-section">
+              <h2>DANTE WORD LOCUS LAYER</h2>
+              <p class="help-paragraph">
+                当你在所选诗行里点一个可选 content word，这条词位路线就会打开。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-dante-word-locus.png" alt="Dante Word Locus Layer。" />
+                <figcaption>当问题从整行缩到一个 lexical point 时，就从这里开始。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>点一个词以后，先顺着词位面板往下读，不要立刻跳回 cards。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-occurrence-bi">
+            <section class="help-section">
+              <h2>Occurrence Explorer</h2>
+              <p class="help-paragraph">
+                这一层看的是：这个词在诗里其他地方怎样回来。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-occurrence-explorer.png" alt="Occurrence Explorer。" />
+                <figcaption>先看 recurrence，再决定要不要继续往更解释性的面板扩。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>先回答“这个词还在哪里出现”，再去问它周围的解释性语言怎样变化。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-micro-context-bi">
+            <section class="help-section">
+              <h2>Weighted Micro-Context Concurrence</h2>
+              <p class="help-paragraph">
+                这一层看的是：哪些词倾向于在局部语境里和它聚在一起。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-weighted-micro-context.png" alt="Weighted Micro-Context Concurrence。" />
+                <figcaption>读这一层时，重点是局部词语邻域，不是整支 canto 的总图。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>当你想知道“这个词旁边通常会站着哪些词”时，就看这里。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-phrase-bi">
+            <section class="help-section">
+              <h2>Exact Local Phrase Expansions</h2>
+              <p class="help-paragraph">
+                这一层测试的是：这个词会不会长成一个更短的 recurring phrase。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-exact-local-phrase-expansions.png" alt="Exact Local Phrase Expansions。" />
+                <figcaption>当单词本身已经不够，需要看短语级别的增长时，就看这里。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>如果解释压力来自短语而不是单词，这一层会比 occurrence 更有用。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-contrastive-bi">
+            <section class="help-section">
+              <h2>Contrastive Interpretive Vocabulary</h2>
+              <p class="help-paragraph">
+                这一层会把所选词周围的 interpretive vocabulary 和邻近替代项拉出来做对照。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-contrastive-interpretive-vocabulary.png" alt="Contrastive Interpretive Vocabulary。" />
+                <figcaption>这一层看的不是 recurrence，而是 commentary 语言怎样围绕词位发生偏移。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>当你想看词位周围的解释性词汇怎样形成对照，而不只是统计出现次数时，就看这里。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-fields-bi">
+            <section class="help-section">
+              <h2>INTERPRETIVE FIELDS</h2>
+              <p class="help-paragraph">
+                semantic panel 会把当前行的 commentary 重组为 local semantic fields。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-interpretive-fields.png" alt="Local Semantic Fields for Line。" />
+                <figcaption>这一层仍然是 line-local；它不是为了替代 cards，而是给你另一种回到 cards 的入口。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>Local Semantic Fields for Line</h3>
+                  <p>先看这一层如何把本行 commentary 分组，再回去决定下一张该读哪张卡。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-echoes-bi">
+            <section class="help-section">
+              <h2>CROSS-CANTO ECHOES</h2>
+              <p class="help-paragraph">
+                当当前诗行和别处发生回声关系时，就从这里把阅读向整部诗扩开。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-cross-canto-echoes.png" alt="Cross-Canto Echoes。" />
+                <figcaption>这一层适合在本行已经清楚以后再读；它是 widening move，不是 opening move。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>Cross-Canto Echoes for Line</h3>
+                  <p>用它来追踪“这一行在整部诗里还和哪里互相照亮”。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-compare-bi">
+            <section class="help-section">
+              <h2>compare</h2>
+              <p class="help-paragraph">
+                先 pin commentary cards，再来 Compare 让它们并排停住。
+              </p>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-compare.png" alt="Compare workspace。" />
+                <figcaption>先在 commentary 区 pin，再用 Compare 把几条解释线同时留在眼前。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>它适合并排阅读：多张记录、一个工作台，不必只靠记忆在脑子里搬运。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="route-stage" id="tour-authority-bi">
+            <section class="help-section">
+              <h2>authority</h2>
+              <p class="help-paragraph">
+                Authority 是 author、work、figure 导向的独立阅读桌面。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/authority.html" target="_blank" rel="noreferrer">打开 Authority 页面</a>
+                <a class="ghost-link-button" href="/autore/index.html" target="_blank" rel="noreferrer">浏览作者</a>
+                <a class="ghost-link-button" href="/personaggio/index.html" target="_blank" rel="noreferrer">浏览人物</a>
+              </div>
+            </section>
+            <div class="route-stage-grid">
+              <figure class="route-figure">
+                <img src="/static/route-tour/tour-authority.png" alt="Authority 区域。" />
+                <figcaption>当问题不再由一条诗行组织，而开始由 authority 结构组织时，就转到这里。</figcaption>
+              </figure>
+              <div class="route-panel-list">
+                <section class="route-panel-card">
+                  <h3>怎么用</h3>
+                  <p>当你要让 personaggi、works、cited authorities 变成主路径，而不是只做 line 的附属说明时，就进入这一桌。</p>
+                </section>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (_error) {
+            return "en";
+          }
+        }
+
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll("[data-route-lang]").forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.routeLang === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (_error) {
+            // noop
+          }
+          const back = document.getElementById("route-back-link");
+          const backUrl = new URL("/", window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+
+        const initialLanguage = getLanguage();
+        applyLanguage(initialLanguage);
+        document.querySelectorAll("[data-route-lang]").forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.routeLang === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+</html>

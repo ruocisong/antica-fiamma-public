@@ -1,0 +1,45 @@
+(function attachDDPDom(global) {
+  function getElements(doc = document) {
+    return {
+      pageLoadingOverlay: doc.getElementById("page-loading-overlay"),
+      helpOverlay: doc.getElementById("help-overlay"),
+      helpOverlayBackdrop: doc.getElementById("help-overlay-backdrop"),
+      helpOverlayClose: doc.getElementById("help-overlay-close"),
+      helpOverlayTitle: doc.getElementById("help-overlay-title"),
+      helpOverlayLead: doc.getElementById("help-overlay-lead"),
+      helpOverlayBody: doc.getElementById("help-overlay-body"),
+      quickJumpForm: doc.getElementById("quick-jump-form"),
+      quickJumpInput: doc.getElementById("quick-jump-input"),
+      searchResultsShell: doc.getElementById("search-results-shell"),
+      searchResultsList: doc.getElementById("search-results-list"),
+      sampleBrowser: doc.getElementById("sample-browser"),
+      sampleLegend: doc.getElementById("sample-legend"),
+      browserSummary: doc.getElementById("browser-summary"),
+      coverageList: doc.getElementById("coverage-list"),
+      recordsSection: doc.getElementById("records-section"),
+      lineTitle: doc.getElementById("line-title"),
+      lineContext: doc.getElementById("line-context"),
+      locusPanel: doc.getElementById("locus-panel"),
+      vocabularyPanel: doc.getElementById("vocabulary-panel"),
+      semanticPanel: doc.getElementById("semantic-panel"),
+      recordsList: doc.getElementById("records-list"),
+      compareSummary: doc.getElementById("compare-summary"),
+      compareList: doc.getElementById("compare-list"),
+      figurePanel: doc.getElementById("figure-panel"),
+      recurrencePanel: doc.getElementById("recurrence-panel"),
+      futureHooks: doc.getElementById("future-hooks"),
+      uiLanguageToggle: doc.getElementById("ui-language-toggle"),
+      sortMode: doc.getElementById("sort-mode"),
+      sortDirection: doc.getElementById("sort-direction"),
+      clearPins: doc.getElementById("clear-pins"),
+      openCompareLine: doc.getElementById("open-compare-line"),
+      backNavButton: doc.getElementById("back-nav-button"),
+      anchorLinks: doc.querySelectorAll(".anchor-link"),
+      anchorSections: doc.querySelectorAll("[data-anchor-section]"),
+    };
+  }
+
+  global.DDPDom = Object.freeze({
+    getElements,
+  });
+})(window);

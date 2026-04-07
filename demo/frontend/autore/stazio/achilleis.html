@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Achilleis / Stazio</title>
+    <meta name="description" content="Achilleis / Stazio" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../../static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Autore · Opera</p>
+        <div class="ui-language-toggle" aria-label="Achilleis / Stazio language switch">
+          <button type="button" class="ui-language-chip" data-lang-target="work-stazio-achilleis" data-lang-value="en">EN</button>
+          <button type="button" class="ui-language-chip" data-lang-target="work-stazio-achilleis" data-lang-value="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1>Achilleis / Stazio</h1>
+        <a class="ghost-link-button" id="work-stazio-achilleis-back-link" href="../stazio.html">Back</a>
+      </div>
+      <div class="static-page-content" data-static-lang="en">
+        
+      <p class="help-modal-lead">
+        This page isolates <strong>Achilleis</strong> inside the authority room of <strong>Stazio</strong>.
+        It is part of the new static autore atlas.
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>Work Snapshot</h3>
+          <p class="help-paragraph">
+            Total mentions: <strong>381</strong>. Resolved author+work:
+            <strong>311</strong>. Work-plus-inferred-author:
+            <strong>70</strong>. Passage mentions:
+            <strong>0</strong>.
+          </p>
+          <p class="help-paragraph">This work is shown inside a special-case authority object, so it gets a work room but not a fake branch tree.</p>
+        </section>
+        <section class="help-section">
+          <h3>Available Book / Chapter Links</h3>
+          <ul class="help-list"><li>Achilleis is still thin locally, but the room already opens through Achilles’ concealment and emergence.</li><li><strong>Scyros episode</strong> · Disguise and delayed heroism keep the room structurally memorable.</li><li><strong>Achilles revealed</strong> · The exposure of the hero gives the room its clearest hinge.</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>Return Paths</h3>
+          <p class="help-paragraph">
+            Return to <a href="../stazio.html">Stazio</a>,
+            <a href="../index.html">autore index</a>, or
+            <a href="../../authority.html">Authority</a>.
+          </p>
+        </section>
+      </div>
+    
+      </div>
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        
+      <p class="help-modal-lead">
+        这页把 <strong>Stazio</strong> 名下的 <strong>Achilleis</strong> 单独拿出来，作为静态 autore atlas 里的 opera 房间。
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>作品快照</h3>
+          <p class="help-paragraph">
+            总 mentions：<strong>381</strong>。明确 author+work：
+            <strong>311</strong>。work 推断 author：
+            <strong>70</strong>。passage mentions：
+            <strong>0</strong>。
+          </p>
+          <p class="help-paragraph">This work is shown inside a special-case authority object, so it gets a work room but not a fake branch tree.</p>
+        </section>
+        <section class="help-section">
+          <h3>可用的书 / 章节链接</h3>
+          <ul class="help-list"><li>Achilleis 的本地结构还薄，但这间房已经能通过 Achilles 的隐藏与现身进入。</li><li><strong>Scyros episode</strong> · 伪装与延迟的英雄性，让这间房有清楚的记忆点。</li><li><strong>Achilles revealed</strong> · 英雄现身，给这间房最清楚的转轴。</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>返回路径</h3>
+          <p class="help-paragraph">
+            可以回到 <a href="../stazio.html">Stazio</a>、
+            <a href="../index.html">autore 索引页</a>，或者
+            <a href="../../authority.html">Authority 页面</a>。
+          </p>
+        </section>
+      </div>
+    
+      </div>
+    </main>
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll('[data-lang-target="work-stazio-achilleis"]').forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.langValue === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+          }
+          const back = document.getElementById("work-stazio-achilleis-back-link");
+          const backUrl = new URL(back.getAttribute("href"), window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+        const initial = getLanguage();
+        applyLanguage(initial);
+        document.querySelectorAll('[data-lang-target="work-stazio-achilleis"]').forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.langValue === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+    </html>

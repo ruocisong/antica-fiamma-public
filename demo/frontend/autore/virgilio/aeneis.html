@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aeneis / Virgilio</title>
+    <meta name="description" content="Aeneis / Virgilio" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../../static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Autore · Opera</p>
+        <div class="ui-language-toggle" aria-label="Aeneis / Virgilio language switch">
+          <button type="button" class="ui-language-chip" data-lang-target="work-virgilio-aeneis" data-lang-value="en">EN</button>
+          <button type="button" class="ui-language-chip" data-lang-target="work-virgilio-aeneis" data-lang-value="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1>Aeneis / Virgilio</h1>
+        <a class="ghost-link-button" id="work-virgilio-aeneis-back-link" href="../virgilio.html">Back</a>
+      </div>
+      <div class="static-page-content" data-static-lang="en">
+        
+      <p class="help-modal-lead">
+        This page isolates <strong>Aeneis</strong> inside the authority room of <strong>Virgilio</strong>.
+        It is part of the new static autore atlas.
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>Work Snapshot</h3>
+          <p class="help-paragraph">
+            Total mentions: <strong>8299</strong>. Resolved author+work:
+            <strong>4093</strong>. Work-plus-inferred-author:
+            <strong>4206</strong>. Passage mentions:
+            <strong>4933</strong>.
+          </p>
+          <p class="help-paragraph">This work is shown inside a special-case authority object, so it gets a work room but not a fake branch tree.</p>
+        </section>
+        <section class="help-section">
+          <h3>Available Book / Chapter Links</h3>
+          <ul class="help-list"><li>Aeneis still has no mounted local branch pages, but the room already opens through its strongest narrative corridors.</li><li><strong>Book I</strong> · Storm, landing, and first epic orientation keep the room immediately readable.</li><li><strong>Book VI</strong> · Katabasis and underworld memory are the deepest authority bridge into Dante.</li><li><strong>Book XII</strong> · The final duel gives the room its terminal political-epic pressure.</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>Return Paths</h3>
+          <p class="help-paragraph">
+            Return to <a href="../virgilio.html">Virgilio</a>,
+            <a href="../index.html">autore index</a>, or
+            <a href="../../authority.html">Authority</a>.
+          </p>
+        </section>
+      </div>
+    
+      </div>
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        
+      <p class="help-modal-lead">
+        这页把 <strong>Virgilio</strong> 名下的 <strong>Aeneis</strong> 单独拿出来，作为静态 autore atlas 里的 opera 房间。
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>作品快照</h3>
+          <p class="help-paragraph">
+            总 mentions：<strong>8299</strong>。明确 author+work：
+            <strong>4093</strong>。work 推断 author：
+            <strong>4206</strong>。passage mentions：
+            <strong>4933</strong>。
+          </p>
+          <p class="help-paragraph">This work is shown inside a special-case authority object, so it gets a work room but not a fake branch tree.</p>
+        </section>
+        <section class="help-section">
+          <h3>可用的书 / 章节链接</h3>
+          <ul class="help-list"><li>Aeneis 还没有正式挂出的本地 branch 页，但这间房已经能通过最强的叙事走廊进入。</li><li><strong>Book I</strong> · 风暴、登陆和开场史诗取向，让这间房一开始就可读。</li><li><strong>Book VI</strong> · 下界之行和冥府记忆，是这间房通往 Dante 的最深 authority bridge。</li><li><strong>Book XII</strong> · 终局决斗给这间房最后的政治/史诗压力。</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>返回路径</h3>
+          <p class="help-paragraph">
+            可以回到 <a href="../virgilio.html">Virgilio</a>、
+            <a href="../index.html">autore 索引页</a>，或者
+            <a href="../../authority.html">Authority 页面</a>。
+          </p>
+        </section>
+      </div>
+    
+      </div>
+    </main>
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll('[data-lang-target="work-virgilio-aeneis"]').forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.langValue === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+          }
+          const back = document.getElementById("work-virgilio-aeneis-back-link");
+          const backUrl = new URL(back.getAttribute("href"), window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+        const initial = getLanguage();
+        applyLanguage(initial);
+        document.querySelectorAll('[data-lang-target="work-virgilio-aeneis"]').forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.langValue === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+    </html>

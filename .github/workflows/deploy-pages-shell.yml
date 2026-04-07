@@ -1,0 +1,50 @@
+name: Deploy Pages Shell
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "demo/frontend/index.html"
+      - "demo/frontend/guide.html"
+      - "demo/frontend/about.html"
+      - "demo/frontend/authority.html"
+      - "demo/frontend/robots.txt"
+      - "demo/frontend/sitemap.xml"
+      - "demo/frontend/favicon.svg"
+      - "demo/frontend/_redirects"
+      - "demo/frontend/static/**"
+      - "deployment_output/PREPARE_PAGES_SHELL.py"
+      - ".github/workflows/deploy-pages-shell.yml"
+
+jobs:
+  deploy-pages-shell:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build Pages shell folder
+        run: python deployment_output/PREPARE_PAGES_SHELL.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler@latest pages deploy deployment_output/pages_shell_build \
+            --project-name="${{ secrets.CLOUDFLARE_PAGES_PROJECT_NAME }}"

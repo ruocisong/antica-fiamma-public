@@ -1,0 +1,10 @@
+data/
+demo/frontend/data/
+demo/frontend/reports/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.DS_Store

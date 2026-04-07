@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aeneid / Virgilio</title>
+    <meta name="description" content="Aeneid / Virgilio" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../../static/styles.css" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Autore · Opera alias</p>
+        <div class="ui-language-toggle" aria-label="Aeneid / Virgilio language switch">
+          <button type="button" class="ui-language-chip" data-lang-target="work-alias-virgilio-aeneid" data-lang-value="en">EN</button>
+          <button type="button" class="ui-language-chip" data-lang-target="work-alias-virgilio-aeneid" data-lang-value="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1>Aeneid / Virgilio</h1>
+        <a class="ghost-link-button" id="work-alias-virgilio-aeneid-back-link" href="../virgilio.html">Back</a>
+      </div>
+      <div class="static-page-content" data-static-lang="en">
+        
+                      <p class="help-modal-lead">
+                        This legacy work slug now redirects to the current canonical room for <strong>Aeneis</strong>.
+                      </p>
+                      <div class="help-modal-body">
+                        <section class="help-section">
+                          <h3>Canonical Path</h3>
+                          <p class="help-paragraph">
+                            Continue to <a href="./aeneis.html">Aeneis</a>.
+                          </p>
+                        </section>
+                      </div>
+                    
+      <script>
+        window.addEventListener("DOMContentLoaded", function () {
+          const next = new URL("./aeneis.html", window.location.href);
+          const params = new URLSearchParams(window.location.search);
+          const lang = params.get("ui_lang");
+          if (lang && !next.searchParams.has("ui_lang")) next.searchParams.set("ui_lang", lang);
+          window.location.replace(next.pathname + next.search + next.hash);
+        });
+      </script>
+    
+      </div>
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+        
+                      <p class="help-modal-lead">
+                        这个旧作品 slug 现在会跳到 <strong>Aeneis</strong> 的当前 canonical 房间。
+                      </p>
+                      <div class="help-modal-body">
+                        <section class="help-section">
+                          <h3>当前路径</h3>
+                          <p class="help-paragraph">
+                            继续前往 <a href="./aeneis.html">Aeneis</a>。
+                          </p>
+                        </section>
+                      </div>
+                    
+      <script>
+        window.addEventListener("DOMContentLoaded", function () {
+          const next = new URL("./aeneis.html", window.location.href);
+          const params = new URLSearchParams(window.location.search);
+          const lang = params.get("ui_lang");
+          if (lang && !next.searchParams.has("ui_lang")) next.searchParams.set("ui_lang", lang);
+          window.location.replace(next.pathname + next.search + next.hash);
+        });
+      </script>
+    
+      </div>
+    </main>
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll('[data-lang-target="work-alias-virgilio-aeneid"]').forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.langValue === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+          }
+          const back = document.getElementById("work-alias-virgilio-aeneid-back-link");
+          const backUrl = new URL(back.getAttribute("href"), window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+        const initial = getLanguage();
+        applyLanguage(initial);
+        document.querySelectorAll('[data-lang-target="work-alias-virgilio-aeneid"]').forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.langValue === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+    </html>
