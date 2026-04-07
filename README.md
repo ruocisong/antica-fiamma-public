@@ -6,26 +6,33 @@ Live site:
 - [ddpcommentary.com](https://ddpcommentary.com)
 - [ddp-workbench.pages.dev](https://ddp-workbench.pages.dev)
 
-Key public pages:
-- [reading-route.html](https://ddpcommentary.com/reading-route.html): panel-by-panel interface tour with screenshots and usage notes
-- [guide.html](https://ddpcommentary.com/guide.html): user-facing reading guide explaining how to move through the workbench
-- [about.html](https://ddpcommentary.com/about.html): project framing, data statement, rights note, and colophon
+## First-Time Visitor Path
 
-## Start Here
+If you are arriving here from outside the codebase, the most useful order is:
 
-If you are arriving from the live site, the most useful entry points are:
+- [About](https://ddpcommentary.com/about.html): what the project is, how it is framed, and how the source archive is credited
+- [Reading Route](https://ddpcommentary.com/reading-route.html): a screenshot-based tour of the interface, panel by panel
+- [Guide](https://ddpcommentary.com/guide.html): how to move through the workbench as a reader
+- [Live Workbench](https://ddpcommentary.com): the public site itself
 
-- [`demo/frontend`](demo/frontend): the website shell, static pages, styles, and client-side modules
-- [`demo/frontend/reading-route.html`](demo/frontend/reading-route.html): the interface tour, organized panel by panel
-- [`demo/frontend/about.html`](demo/frontend/about.html): project framing, data statement, and colophon
-- [`docs/public/repository-guide.md`](docs/public/repository-guide.md): repository guide for first-time visitors
-- [`docs/public/data-boundary.md`](docs/public/data-boundary.md): what is and is not included in the public repository
+If you want the repository-facing explanation after that, go next to:
 
-## What This Public Repository Contains
+- [`docs/public/repository-guide.md`](docs/public/repository-guide.md)
+- [`docs/public/interface-layers.md`](docs/public/interface-layers.md)
+- [`docs/public/data-boundary.md`](docs/public/data-boundary.md)
 
-This public repository focuses on the interface shell, selected build scripts, deployment helpers, and project-facing documentation.
+## What This Public Repository Is
 
-It is meant to show what the workbench is, how the interface is organized, and how the public shell is prepared for deployment. It does **not** version the heavy runtime data payloads under `demo/frontend/data/`, which are delivered separately.
+This repository is a public-facing shell for the DDP Commentary Workbench.
+
+It is designed to show:
+
+- what the project is
+- how the interface is organized
+- how the public shell is deployed
+- where the boundary lies between the public interface layer and the heavier runtime data layer
+
+It does **not** version the heavy runtime payloads under `demo/frontend/data/`, which are delivered separately.
 
 ## Project Scope
 
@@ -56,26 +63,22 @@ The public shell is built around a sequence of reading layers rather than a sing
 - **Compare**: side-by-side reading surfaces for commentary comparison
 - **Authority**: author, work, and source-oriented navigation layered on top of the commentary archive
 
-For a guided visual walkthrough of these layers, see:
+For a guided visual walkthrough of these layers, start with:
 
-- [`demo/frontend/reading-route.html`](demo/frontend/reading-route.html)
+- [Reading Route](https://ddpcommentary.com/reading-route.html)
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md)
 
-## Public Pages At A Glance
+## Public / Data Boundary
 
-The live site has three pages that are especially useful for first-time visitors:
+The workbench is built on top of the Dartmouth Dante Project as its source archive.
 
-- [reading-route.html](https://ddpcommentary.com/reading-route.html): a visual tour of the interface, organized by panel, with screenshots and short explanations of what each surface does
-- [guide.html](https://ddpcommentary.com/guide.html): a reading guide that explains how to use the workbench without assuming software vocabulary
-- [about.html](https://ddpcommentary.com/about.html): the project statement, scope, data framing, rights note, and colophon
+This repository presents an additional interface layer around that source archive. It keeps the public shell, selected build logic, and project-facing documentation visible, while leaving the heavy runtime payloads outside version control.
 
-If you want the shortest possible route into the project, the most natural order is:
+For the explicit repository boundary, see:
 
-- read the [About page](https://ddpcommentary.com/about.html) for scope and framing
-- skim the [Interface Tour](https://ddpcommentary.com/reading-route.html) for structure
-- use the [Guide](https://ddpcommentary.com/guide.html) when you want help moving through the live workbench
+- [`docs/public/data-boundary.md`](docs/public/data-boundary.md)
 
-## Repository Map
+## For Technical Readers
 
 - [`demo/frontend`](demo/frontend): website shell, static pages, interface tour, and screenshots
 - [`demo/build_demo_data.py`](demo/build_demo_data.py): frontend-data build entrypoint with layered build profiles
@@ -83,11 +86,11 @@ If you want the shortest possible route into the project, the most natural order
 - [`demo/runtime_checks`](demo/runtime_checks): smoke tests used to sanity-check the public shell
 - [`deployment_output/PREPARE_PAGES_SHELL.py`](deployment_output/PREPARE_PAGES_SHELL.py): Cloudflare Pages shell packaging
 - [`.github/workflows/deploy-pages-shell.yml`](.github/workflows/deploy-pages-shell.yml): Pages deployment workflow
-- [`src/ddp_scraper`](src/ddp_scraper): project preparation utilities used in data capture and extraction
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md): written overview of the public reading surfaces
 - [`docs/public/repository-guide.md`](docs/public/repository-guide.md): guide to what is included in this public repository and where to look first
 - [`docs/public/data-boundary.md`](docs/public/data-boundary.md): explanation of the public repository's data boundary
 - [`docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md`](docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md): notes on the public-facing repository boundary
+- [`src/ddp_scraper`](src/ddp_scraper): supporting project-preparation utilities included for methodological transparency
 
 ## What To Look At In Code First
 
@@ -141,4 +144,4 @@ The interface treats the Dartmouth Dante Project as the source archive and build
 
 ## Status
 
-This repository is a public-facing project shell rather than a complete internal workbench dump. It is intended to support live demonstration, interface review, and method-facing documentation while keeping the heavy runtime payloads outside version control.
+This repository is meant to function as a public-facing project shell: enough to understand the interface, review the main public layers, and follow the deployment path, without exposing the full heavier internal workspace as the primary story.
