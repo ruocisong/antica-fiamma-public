@@ -6,6 +6,11 @@ Live site:
 - [ddpcommentary.com](https://ddpcommentary.com)
 - [ddp-workbench.pages.dev](https://ddp-workbench.pages.dev)
 
+Key public pages:
+- [reading-route.html](https://ddpcommentary.com/reading-route.html): panel-by-panel interface tour with screenshots and usage notes
+- [guide.html](https://ddpcommentary.com/guide.html): user-facing reading guide explaining how to move through the workbench
+- [about.html](https://ddpcommentary.com/about.html): project framing, data statement, rights note, and colophon
+
 ## Start Here
 
 If you are arriving from the live site, the most useful entry points are:
@@ -13,6 +18,8 @@ If you are arriving from the live site, the most useful entry points are:
 - [`demo/frontend`](demo/frontend): the website shell, static pages, styles, and client-side modules
 - [`demo/frontend/reading-route.html`](demo/frontend/reading-route.html): the interface tour, organized panel by panel
 - [`demo/frontend/about.html`](demo/frontend/about.html): project framing, data statement, and colophon
+- [`docs/public/repository-guide.md`](docs/public/repository-guide.md): repository guide for first-time visitors
+- [`docs/public/data-boundary.md`](docs/public/data-boundary.md): what is and is not included in the public repository
 
 ## What This Public Repository Contains
 
@@ -54,6 +61,20 @@ For a guided visual walkthrough of these layers, see:
 - [`demo/frontend/reading-route.html`](demo/frontend/reading-route.html)
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md)
 
+## Public Pages At A Glance
+
+The live site has three pages that are especially useful for first-time visitors:
+
+- [reading-route.html](https://ddpcommentary.com/reading-route.html): a visual tour of the interface, organized by panel, with screenshots and short explanations of what each surface does
+- [guide.html](https://ddpcommentary.com/guide.html): a reading guide that explains how to use the workbench without assuming software vocabulary
+- [about.html](https://ddpcommentary.com/about.html): the project statement, scope, data framing, rights note, and colophon
+
+If you want the shortest possible route into the project, the most natural order is:
+
+- read the [About page](https://ddpcommentary.com/about.html) for scope and framing
+- skim the [Interface Tour](https://ddpcommentary.com/reading-route.html) for structure
+- use the [Guide](https://ddpcommentary.com/guide.html) when you want help moving through the live workbench
+
 ## Repository Map
 
 - [`demo/frontend`](demo/frontend): website shell, static pages, interface tour, and screenshots
@@ -64,6 +85,8 @@ For a guided visual walkthrough of these layers, see:
 - [`.github/workflows/deploy-pages-shell.yml`](.github/workflows/deploy-pages-shell.yml): Pages deployment workflow
 - [`src/ddp_scraper`](src/ddp_scraper): project preparation utilities used in data capture and extraction
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md): written overview of the public reading surfaces
+- [`docs/public/repository-guide.md`](docs/public/repository-guide.md): guide to what is included in this public repository and where to look first
+- [`docs/public/data-boundary.md`](docs/public/data-boundary.md): explanation of the public repository's data boundary
 - [`docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md`](docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md): notes on the public-facing repository boundary
 
 ## What To Look At In Code First
