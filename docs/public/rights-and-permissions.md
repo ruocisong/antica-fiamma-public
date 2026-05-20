@@ -34,13 +34,15 @@ The rights-sensitive layer is the commentary record payload, especially where fu
 
 The interface architecture separates this layer from the public shell. This means the project can preserve its main public structure even if the commentary payload is reduced, replaced, or removed under future permission conditions.
 
-A reduced version can still preserve:
+A reduced version is defined as a public version that removes modern commentary material while retaining the line-first interface and public-domain commentary layers where available.
+
+Such a version can still preserve:
 
 - the line-first reading shell
 - the guide, tour, and methodological documentation
 - the authority-page structure where public data allows
 - the Fiamma research room and its own research assets
-- selected demo paths using a smaller or rights-cleared corpus
+- selected demo paths using public-domain commentary material or another rights-cleared corpus
 
 This distinction matters because the project has a durable interface layer as well as a data layer. The core scholarly contribution is the reading interface and its method of organizing line, commentary, word, comparison, and authority paths.
 
@@ -59,4 +61,4 @@ The current public safeguards are:
 - heavy runtime commentary payloads are excluded from GitHub
 - public shell and rights-sensitive data are separated
 - the permission status is recorded rather than hidden
-- the interface can be reduced if future permission conditions require it
+- the interface has a defined reduced path: remove modern commentary material and retain public-domain commentary layers where available

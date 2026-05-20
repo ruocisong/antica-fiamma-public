@@ -10,10 +10,10 @@ Antica Fiamma is currently maintained by Ruoci Song as an autonomous research pr
 
 The public infrastructure currently includes:
 
-- a primary public domain: [anticafiamma.it](https://anticafiamma.it)
-- a mirror / transition domain: [ddpcommentary.com](https://ddpcommentary.com)
+- a primary public domain, [anticafiamma.it](https://anticafiamma.it), registered and paid for by the project author
+- a mirror / transition domain, [ddpcommentary.com](https://ddpcommentary.com), registered and paid for by the project author
 - a public GitHub repository for the inspectable shell
-- a Cloudflare Pages deployment path
+- a Cloudflare Pages deployment path currently maintained under the author's Cloudflare account on the free tier
 - an external runtime data layer for heavy payloads
 - local build scripts for generated interface data and authority pages
 - public smoke checks for selected interface paths
@@ -23,7 +23,7 @@ This arrangement keeps the working prototype public, inspectable, and maintainab
 
 ## Hosting And Stewardship
 
-The current site operation remains with the project author.
+The current site operation remains with the project author. Domain registration, domain payment, Cloudflare account management, deployment configuration, and repository maintenance are all author-maintained at this stage.
 
 This keeps day-to-day infrastructure, domains, deployment, and repository maintenance in a clearly documented author-maintained frame. Scholarly advice, public discussion, or future collaboration can be added without blurring the current operational responsibility.
 
@@ -82,7 +82,7 @@ The current consolidation path is staged:
 
 - keep the public shell and runtime data clearly separated
 - maintain source attribution and rights documentation
-- preserve a reduced public path if source permissions require it
+- preserve a reduced public path if source permissions require it, by removing modern commentary material while retaining public-domain commentary layers where available
 - keep generated pages and deployment output distinguishable
 - expand documentation where new public rooms or interface layers are added
 - record any future institutional roles through explicit agreements

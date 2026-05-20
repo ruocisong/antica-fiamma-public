@@ -59,7 +59,7 @@ The commentary source relationship is central. Antica Fiamma uses the Dartmouth 
 
 The project author has contacted the Dartmouth Dante Project team about formal reuse permission. While the response process is ongoing, the public repository keeps the heavy commentary payloads outside GitHub and documents the source relationship clearly.
 
-The public shell, research rooms, static authority pages, build scripts, and documentation remain structurally separable from any single full-text payload. If formal reuse conditions call for a reduced public version, the rights-sensitive commentary layer can be reduced, replaced, or removed while preserving the core line-first interface.
+The public shell, research rooms, static authority pages, build scripts, and documentation remain structurally separable from any single full-text payload. If formal reuse conditions call for a reduced public version, modern commentary material can be removed while retaining the core line-first interface and public-domain commentary layers where available.
 
 See also:
 
@@ -69,6 +69,8 @@ See also:
 ## Technological Shape
 
 The public shell is a static front-end deployed through Cloudflare Pages. The current browser interface is built with HTML, CSS, and JavaScript. A Python build layer prepares front-end data structures and generated authority pages. Heavy runtime data is excluded from the public repository and delivered separately to the live interface.
+
+The current domains are registered and paid for by the project author. Cloudflare Pages is currently maintained under the author's account on the free tier.
 
 The implementation has been developed autonomously with AI-assisted coding support, source control, smoke testing, and manual review. The current documentation records the implementation choices so that the project is inspectable beyond the author's local working environment.
 
