@@ -1,6 +1,9 @@
 data/
 demo/frontend/data/
 demo/frontend/reports/
+demo/frontend/data_snapshots/
+demo/frontend/data_legacy_pre_page_state_v2/
+deployment_output/pages_shell_build/
 __pycache__/
 *.pyc
 *.pyo

@@ -1,113 +1,74 @@
-# DDP Commentary Workbench
+# Antica Fiamma
 
-A public-facing research interface built on top of the Dartmouth Dante Project for line-first reading, commentary comparison, authority navigation, and word-level exploratory routes across the *Commedia*.
+**Antica Fiamma** is a public-facing Dante research interface by Ruoci Song. It is built with the Dartmouth Dante Project as its commentary source and reorganizes that material into a line-first reading environment for the *Commedia*.
 
 Live site:
+
 - [ddpcommentary.com](https://ddpcommentary.com)
 - [ddp-workbench.pages.dev](https://ddp-workbench.pages.dev)
 
-## First-Time Visitor Path
+## Start Here
 
-If you are arriving here from outside the codebase, the most useful order is:
+If you are arriving from outside the codebase, these public pages are the best entrance:
 
-- [About](https://ddpcommentary.com/about.html): what the project is, how it is framed, and how the source archive is credited
-- [Reading Route](https://ddpcommentary.com/reading-route.html): a screenshot-based tour of the interface, panel by panel
-- [Guide](https://ddpcommentary.com/guide.html): how to move through the workbench as a reader
-- [Live Workbench](https://ddpcommentary.com): the public site itself
+- [About](https://ddpcommentary.com/about.html): project framing, source map, data statement, rights posture, and colophon
+- [Guide](https://ddpcommentary.com/guide.html): how to move through Antica Fiamma as a reader
+- [Interface Tour](https://ddpcommentary.com/reading-route.html): panel-by-panel visual walkthrough of the reading surfaces
+- [Authority Layer](https://ddpcommentary.com/authority.html): standalone explanation of the author, work, personaggio, and source-facing layer
+- [Fiamma Research Room](https://ddpcommentary.com/research/fiamma.html): a public research room for Dante's fire vocabulary and the wider fire motif
 
-If you want the repository-facing explanation after that, go next to:
+Repository-facing notes:
 
 - [`docs/public/repository-guide.md`](docs/public/repository-guide.md)
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md)
 - [`docs/public/data-boundary.md`](docs/public/data-boundary.md)
+- [`docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md`](docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md)
 
-## What This Public Repository Is
+## What This Repository Is
 
-This repository is a public-facing shell for the DDP Commentary Workbench.
+This repository is the public shell for Antica Fiamma. It is meant to show the site, the public reading surfaces, selected build logic, deployment wiring, and outward-facing documentation without exposing the full internal research workspace.
 
-It is designed to show:
+It includes enough code and documentation to understand how the public interface is organized. It does not ship the heavy runtime data payloads that power the live site.
 
-- what the project is
-- how the interface is organized
-- how the public shell is deployed
-- where the boundary lies between the public interface layer and the heavier runtime data layer
+## What Antica Fiamma Does
 
-It does **not** version the heavy runtime payloads under `demo/frontend/data/`, which are delivered separately.
+Antica Fiamma begins from Dante's poem rather than from a detached search form. A reader enters through canto, line, word, commentary card, comparison, or authority path, while the interface keeps the source archive and the added reading layer conceptually separate.
 
-## Project Scope
+Major public layers include:
 
-The workbench is organized around a set of linked reading surfaces:
+- **Main Entry**: canto and line entry into the poem
+- **Analysis Layer / Line Snapshot**: local orientation after a line is selected
+- **Close Reading**: commentary cards, dates, sorting, ranges, and full text
+- **Commentary**: source-aware record reading around the selected line
+- **Dante Word Locus Layer**: word-level routes through recurrence, micro-context, phrase growth, and contrastive vocabulary
+- **Interpretive Fields**: local commentary-side semantic groupings around a line
+- **Cross-Canto Echoes**: text-first line relations elsewhere in the *Commedia*
+- **Compare**: side-by-side reading of commentary records
+- **Authority**: authors, works, personaggi, commentary sources, and authority rooms
+- **Research Rooms**: public case-study pages such as the fire motif room at `/research/fiamma.html`
 
-- a canto-level main entry for line-first reading
-- an analysis layer with the Line Snapshot
-- close reading surfaces for commentary cards
-- Dante Word Locus panels for word-level routes
-- cross-canto echoes and interpretive fields
-- compare surfaces
-- authority views for authors, works, and related navigation
+## Repository Map
 
-If you want to see the shape of the interface before reading code, start with the live site or the panel-by-panel tour:
-
-- [ddpcommentary.com/reading-route.html](https://ddpcommentary.com/reading-route.html)
-
-## Interface Layers
-
-The public shell is built around a sequence of reading layers rather than a single search box.
-
-- **Main Entry**: the canto-level opening surface where a reader enters through a specific line
-- **Analysis Layer / Line Snapshot**: the first orientation layer after line selection, showing local pressure, density, and terms before card-by-card reading
-- **Close Reading**: the commentary-card surface where dates, ordering, and record-level comparison begin to matter
-- **Dante Word Locus Layer**: the word-level route through occurrence tracking, weighted local context, exact phrase expansion, and contrastive vocabulary
-- **Interpretive Fields**: local semantic clustering around the selected line
-- **Cross-Canto Echoes**: line-to-line resonance elsewhere in the poem
-- **Compare**: side-by-side reading surfaces for commentary comparison
-- **Authority**: author, work, and source-oriented navigation layered on top of the commentary archive
-
-For a guided visual walkthrough of these layers, start with:
-
-- [Reading Route](https://ddpcommentary.com/reading-route.html)
-- [`docs/public/interface-layers.md`](docs/public/interface-layers.md)
+- [`demo/frontend`](demo/frontend): public website shell, static pages, styles, modules, authority pages, and research room pages
+- [`demo/build_demo_data.py`](demo/build_demo_data.py): layered frontend-data build entrypoint retained for method transparency
+- [`demo/build_authority_static_pages.py`](demo/build_authority_static_pages.py): static authority page generator
+- [`demo/runtime_checks`](demo/runtime_checks): smoke tests for the public shell
+- [`deployment_output/PREPARE_PAGES_SHELL.py`](deployment_output/PREPARE_PAGES_SHELL.py): Cloudflare Pages shell packaging
+- [`.github/workflows/deploy-pages-shell.yml`](.github/workflows/deploy-pages-shell.yml): public shell deployment workflow
+- [`src/ddp_scraper`](src/ddp_scraper): selected source-capture utilities retained for lineage transparency
+- [`docs/public`](docs/public): public-facing repository, interface, and data-boundary notes
 
 ## Public / Data Boundary
 
-The workbench is built on top of the Dartmouth Dante Project as its source archive.
+This repository does not version the heavy frontend runtime payloads under `demo/frontend/data/`. Those payloads are delivered separately to the live site.
 
-This repository presents an additional interface layer around that source archive. It keeps the public shell, selected build logic, and project-facing documentation visible, while leaving the heavy runtime payloads outside version control.
+The public repository also intentionally excludes internal planning threads, overnight reports, publication drafting workspaces, large experimental outputs, and local operating materials. It is a public project shell, not the full studio floor.
 
-For the explicit repository boundary, see:
+For details, see [`docs/public/data-boundary.md`](docs/public/data-boundary.md).
 
-- [`docs/public/data-boundary.md`](docs/public/data-boundary.md)
+## Local Preview
 
-## For Technical Readers
-
-- [`demo/frontend`](demo/frontend): website shell, static pages, interface tour, and screenshots
-- [`demo/build_demo_data.py`](demo/build_demo_data.py): frontend-data build entrypoint with layered build profiles
-- [`demo/build_authority_static_pages.py`](demo/build_authority_static_pages.py): static author and personaggio page generation
-- [`demo/runtime_checks`](demo/runtime_checks): smoke tests used to sanity-check the public shell
-- [`deployment_output/PREPARE_PAGES_SHELL.py`](deployment_output/PREPARE_PAGES_SHELL.py): Cloudflare Pages shell packaging
-- [`.github/workflows/deploy-pages-shell.yml`](.github/workflows/deploy-pages-shell.yml): Pages deployment workflow
-- [`docs/public/interface-layers.md`](docs/public/interface-layers.md): written overview of the public reading surfaces
-- [`docs/public/repository-guide.md`](docs/public/repository-guide.md): guide to what is included in this public repository and where to look first
-- [`docs/public/data-boundary.md`](docs/public/data-boundary.md): explanation of the public repository's data boundary
-- [`docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md`](docs/public/DDP_WORKBENCH_PUBLIC_MINIMUM.md): notes on the public-facing repository boundary
-- [`src/ddp_scraper`](src/ddp_scraper): supporting project-preparation utilities included for methodological transparency
-
-## What To Look At In Code First
-
-If you are reviewing this repository for the first time, the fastest path is:
-
-- [`demo/frontend/index.html`](demo/frontend/index.html): shell entrypoint
-- [`demo/frontend/about.html`](demo/frontend/about.html): project framing, rights, and colophon
-- [`demo/frontend/guide.html`](demo/frontend/guide.html): user-facing guide to the interface
-- [`demo/frontend/reading-route.html`](demo/frontend/reading-route.html): panel-by-panel visual tour
-- [`demo/frontend/static/app.js`](demo/frontend/static/app.js): high-level client bootstrapping
-- [`demo/frontend/static/modules`](demo/frontend/static/modules): panel and routing modules
-- [`demo/build_demo_data.py`](demo/build_demo_data.py): layered data build entrypoint
-- [`demo/build_authority_static_pages.py`](demo/build_authority_static_pages.py): static authority page generation
-
-## Local Development
-
-Serve the frontend locally:
+Serve the public shell locally:
 
 ```bash
 cd <repo-root>
@@ -136,12 +97,10 @@ Relevant files:
 - [`deployment_output/PREPARE_PAGES_SHELL.py`](deployment_output/PREPARE_PAGES_SHELL.py)
 - [`.github/workflows/deploy-pages-shell.yml`](.github/workflows/deploy-pages-shell.yml)
 
-## Data And Rights
+## Source And Attribution
 
-This repository does not ship the heavy frontend data payloads under `demo/frontend/data/`. Those are delivered separately at runtime.
-
-The interface treats the Dartmouth Dante Project as the source archive and builds an additional reading layer around that source. Public presentation should therefore continue to credit the DDP explicitly and preserve a clear distinction between source archive and interface layer.
+Antica Fiamma uses the Dartmouth Dante Project as its commentary source. The project does not present itself as a replacement archive. It builds an added scholarly interface layer around DDP-derived commentary material and keeps that source relationship visible in the public site.
 
 ## Status
 
-This repository is meant to function as a public-facing project shell: enough to understand the interface, review the main public layers, and follow the deployment path, without exposing the full heavier internal workspace as the primary story.
+Antica Fiamma is an active research interface. This public repository is intended to be readable, stable, and externally shareable, while the heavier internal research and build workspace remains outside the public repository boundary.

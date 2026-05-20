@@ -8,6 +8,7 @@
       fetchJson,
       getPayloadLoci,
       isLocusSelectableInWorkbench,
+      renderSelectableLineMarkup,
       renderLineContext,
       renderAnalysisSummary,
       getSemanticStateForPayload,
@@ -51,6 +52,42 @@
       return String(text || "")
         .replace(/\s+/g, " ")
         .trim();
+    }
+
+    function normalizeAuthorityDisplayTerm(term) {
+      return String(term || "")
+        .replace(/\s+([,.;:!?])/g, "$1")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+    }
+
+    const VIRGILIO_DISPLAY_TERMS = new Set([
+      "virgilio",
+      "vergilio",
+      "virgile",
+      "virgilius",
+      "virgil",
+    ]);
+
+    function buildAuthorityDisplayHighlightGroups(terms = []) {
+      const virgilioTerms = [];
+      const otherTerms = [];
+      for (const term of terms || []) {
+        if (VIRGILIO_DISPLAY_TERMS.has(normalizeAuthorityDisplayTerm(term))) {
+          virgilioTerms.push(term);
+        } else {
+          otherTerms.push(term);
+        }
+      }
+      return [
+        ...(virgilioTerms.length
+          ? [{ terms: virgilioTerms, className: "authority-hit-personaggio authority-hit-personaggio-virgilio" }]
+          : []),
+        ...(otherTerms.length
+          ? [{ terms: otherTerms, className: "authority-citation-highlight" }]
+          : []),
+      ];
     }
 
     function dedupeRecordsForDisplay(records) {
@@ -462,7 +499,7 @@
       const currentStart = Number(item.record?.line_start || item.activeLineNumber || 0);
       const currentEnd = Number(item.record?.line_end || item.activeLineNumber || currentStart);
 
-      const cantoRegex = /\b(?:Dante\s+)?(Inferno|Inf\.?|Purgatorio|Purg\.?|Paradiso|Par\.?)\s*([IVXLCDM]+|\d{1,2})(?:[.,]\s*|\s+)(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?/giu;
+      const cantoRegex = /\b(?:Dante\s+)?(Inferno|Inf\.?|Purgatorio|Purg\.?|Paradiso|Par\.?)\s*(?:[,.;:)\]]\s*|\s+)+([IVXLCDM]+|\d{1,2})\s*(?:[,.;:)\]]\s*|\s+)+(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?/giu;
       for (const match of compareText.matchAll(cantoRegex)) {
         const cantica = String(match[1] || "").toLowerCase().replace(/\./g, "");
         const alias = cantica.startsWith("inf")
@@ -909,23 +946,47 @@
           record,
           isExpanded,
           highlightTerms,
-          authorityHighlightTerms.length
-            ? [{ terms: authorityHighlightTerms, className: "authority-citation-highlight" }]
-            : []
+          buildAuthorityDisplayHighlightGroups(authorityHighlightTerms)
         )}</div>
         <div class="record-actions"></div>
       `;
 
       card.querySelector(".record-top").appendChild(pinButton);
       if (canToggleExpand) {
+        const actionsRow = card.querySelector(".record-actions");
         const expandButton = documentRef.createElement("button");
         expandButton.type = "button";
         expandButton.className = "inline-text-button";
         expandButton.textContent = isExpanded
           ? chooseText("↑ Collapse", "↑ Collapse")
           : chooseText("↘ Expand full text", "↘ Expand full text");
-        expandButton.addEventListener("click", () => toggleExpanded(record.id));
-        card.querySelector(".record-actions").appendChild(expandButton);
+        expandButton.addEventListener("click", (event) => {
+          event.stopPropagation();
+          toggleExpanded(record.id);
+        });
+        actionsRow?.appendChild(expandButton);
+
+        // Make the whole disclosure row clickable so users can hit the whitespace,
+        // not just the small inline text label.
+        if (actionsRow) {
+          actionsRow.classList.add("is-expand-toggle-row");
+          actionsRow.setAttribute("role", "button");
+          actionsRow.setAttribute("tabindex", "0");
+          actionsRow.setAttribute("aria-expanded", isExpanded ? "true" : "false");
+          actionsRow.setAttribute(
+            "aria-label",
+            isExpanded
+              ? chooseText("Collapse full text", "收起全文")
+              : chooseText("Expand full text", "展开全文")
+          );
+          actionsRow.addEventListener("click", () => toggleExpanded(record.id));
+          actionsRow.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              toggleExpanded(record.id);
+            }
+          });
+        }
       } else {
         card.querySelector(".record-actions")?.remove();
       }
@@ -944,8 +1005,18 @@
         state.activeInterpretiveTerm = null;
       }
 
-      const lineLabel = payload.line_text ? `Line ${payload.line_number}: ${payload.line_text}` : `Line ${payload.line_number}`;
-      elements.lineTitle.textContent = lineLabel;
+      const lineLabel = formatShortCommediaLocation(
+        state.currentSampleEntry?.cantica,
+        state.currentSampleEntry?.canto,
+        payload.line_number
+      ) || `Line ${payload.line_number}`;
+      const lineMarkup = payload.line_text
+        ? renderSelectableLineMarkup(payload, { markInitialLetter: true })
+        : escapeHtml(chooseText("No base text captured for this line.", "这一行暂时没有原文。"));
+      elements.lineTitle.innerHTML = `
+        <span class="line-title-location">${escapeHtml(lineLabel)}:</span>
+        <span class="line-title-text line-locus-stream">${lineMarkup}</span>
+      `;
       renderLineContext(payload);
       renderAnalysisSummary(payload);
       deps.renderLocusPanel(payload);
@@ -1082,9 +1153,7 @@
           { chunkLongParagraphs: true, maxParagraphs: 3 },
           cardModel?.highlightTerms || [],
           [
-            ...(cardModel?.authorityHighlightTerms?.length
-              ? [{ terms: cardModel.authorityHighlightTerms, className: "authority-citation-highlight" }]
-              : []),
+            ...buildAuthorityDisplayHighlightGroups(cardModel?.authorityHighlightTerms || []),
             ...(buildAuthorityLexiconHighlightGroupsForText
               ? buildAuthorityLexiconHighlightGroupsForText(record.record_text_preview || record.record_summary || "", record)
               : []),
@@ -1103,7 +1172,7 @@
 
       if (count === 0) {
         elements.compareSummary.textContent = chooseText("No pinned cards yet.", "还没有 pin 的 cards。");
-        elements.compareList.innerHTML = `<div class="empty-state">${escapeHtml(chooseText('Pin a commentary card from Close Reading to begin comparison.', '从 Close Reading 里 pin 一张 commentary card，再开始比较。'))}</div>`;
+        elements.compareList.innerHTML = `<div class="empty-state">${escapeHtml(chooseText('Pin a commentary card from Commentary to begin comparison.', '从 Commentary 里 pin 一张 commentary card，再开始比较。'))}</div>`;
         return;
       }
 

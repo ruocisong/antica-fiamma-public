@@ -6,20 +6,82 @@
     <title>Interface Tour</title>
     <meta
       name="description"
-      content="A panel-by-panel tour of the DDP Commentary Workbench showing how each major surface is used." />
+      content="A panel-by-panel tour of Segni de l’antica fiamma showing how each major reading surface is used." />
     <meta property="og:title" content="Interface Tour" />
     <meta
       property="og:description"
-      content="See the DDP Commentary Workbench panel by panel: entry, close reading, loci, interpretive fields, compare, and authority." />
+      content="See Segni de l’antica fiamma panel by panel: entry, close reading, loci, interpretive fields, compare, and authority." />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://ddpcommentary.com/reading-route.html" />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://ddpcommentary.com/reading-route.html" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/styles.css?v=20260512c" />
+    <style>
+      .route-link-row {
+        display: none !important;
+      }
+
+      .route-clickable {
+        cursor: pointer;
+      }
+
+      .route-clickable h2,
+      .route-clickable h3 {
+        color: #8a4a28;
+        text-decoration: underline;
+        text-decoration-thickness: 0.08em;
+        text-underline-offset: 0.12em;
+        transition: color 140ms ease, text-decoration-color 140ms ease;
+      }
+
+      .route-clickable figcaption {
+        color: #8a4a28;
+        text-decoration: underline;
+        text-decoration-thickness: 0.06em;
+        text-underline-offset: 0.14em;
+        text-decoration-color: rgba(138, 74, 40, 0.45);
+        transition: color 140ms ease, text-decoration-color 140ms ease;
+      }
+
+      .route-clickable:hover h2,
+      .route-clickable:hover h3,
+      .route-clickable:hover figcaption,
+      .route-clickable:focus-visible h2,
+      .route-clickable:focus-visible h3,
+      .route-clickable:focus-visible figcaption {
+        color: #6d3417;
+        text-decoration-color: currentColor;
+      }
+
+      .route-clickable:hover img,
+      .route-clickable:focus-visible img {
+        filter: saturate(1.02) contrast(1.01);
+      }
+
+      .route-clickable:focus-visible {
+        outline: 2px solid rgba(133, 72, 38, 0.45);
+        outline-offset: 4px;
+      }
+    </style>
   </head>
   <body class="help-popup-page">
     <main class="help-popup-shell">
+      <nav class="page-anchors route-page-anchors" aria-label="Interface Tour section navigation">
+        <a class="anchor-link" href="#tour-main-entry" data-route-nav-target="tour-main-entry">Entry</a>
+        <a class="anchor-link" href="#tour-analysis-layer" data-route-nav-target="tour-analysis-layer">Analysis</a>
+        <a class="anchor-link" href="#tour-close-reading" data-route-nav-target="tour-close-reading">Close Reading</a>
+        <a class="anchor-link" href="#tour-commentary" data-route-nav-target="tour-commentary">Commentary</a>
+        <a class="anchor-link" href="#tour-locus" data-route-nav-target="tour-locus">Word Locus</a>
+        <a class="anchor-link" href="#tour-occurrence" data-route-nav-target="tour-occurrence">Occurrence</a>
+        <a class="anchor-link" href="#tour-micro-context" data-route-nav-target="tour-micro-context">Micro-Context</a>
+        <a class="anchor-link" href="#tour-phrase" data-route-nav-target="tour-phrase">Phrase</a>
+        <a class="anchor-link" href="#tour-contrastive" data-route-nav-target="tour-contrastive">Vocabulary</a>
+        <a class="anchor-link" href="#tour-fields" data-route-nav-target="tour-fields">Fields</a>
+        <a class="anchor-link" href="#tour-echoes" data-route-nav-target="tour-echoes">Echoes</a>
+        <a class="anchor-link" href="#tour-compare" data-route-nav-target="tour-compare">Compare</a>
+        <a class="anchor-link" href="#tour-authority" data-route-nav-target="tour-authority">Authority</a>
+      </nav>
       <div class="quick-jump-card-head" style="margin-bottom: 12px;">
         <p class="panel-kicker">Interface Tour</p>
         <div class="ui-language-toggle" aria-label="Interface Tour language switch">
@@ -28,13 +90,13 @@
         </div>
       </div>
       <div class="help-popup-head">
-        <h1 id="route-title">Workbench Interface Tour</h1>
-        <a class="ghost-link-button" id="route-back-link" href="/">Back to workbench</a>
+        <h1 id="route-title">Segni de l’antica fiamma Interface Tour</h1>
+        <a class="ghost-link-button" id="route-back-link" href="/">Back to Segni de l’antica fiamma</a>
       </div>
 
       <div class="static-page-content" data-static-lang="en">
         <p class="help-modal-lead">
-          This page walks through the workbench one surface at a time.
+          This page walks through Segni de l’antica fiamma one surface at a time. It is not just a captioned screenshot strip: each stop tries to explain what that surface is for, what kind of reading move it supports, and what should come next.
         </p>
         <nav class="static-page-nav" aria-label="Interface Tour contents">
           <a href="#tour-main-entry">Main Entry</a>
@@ -59,16 +121,23 @@
                 Start here after choosing a canto. Each row is a line of Dante, and the bar immediately shows where
                 commentary density is lighter or denser.
               </p>
+              <p class="help-paragraph">
+                This is the page’s first real reading surface. You are still on the poem itself, but the commentary
+                tradition is already visible as a pressure map across the canto.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=en#coverage-section" target="_blank" rel="noreferrer">Open Main Entry at Inf. 1, 1</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
                 <img src="/static/route-tour/tour-main-entry.png" alt="Main Entry panel." />
-                <figcaption>Choose a line here to open the rest of the workbench downward.</figcaption>
+                <figcaption>Choose a line here to open the rest of Segni de l’antica fiamma downward.</figcaption>
               </figure>
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>How to use it</h3>
-                  <p>Scan the canto vertically, find a line worth opening, then click once to move into line-first reading.</p>
+                  <p>Scan the canto vertically, notice where commentary gathers or thins out, then choose a line deliberately. This is where you decide whether to start from a dense knot, a hinge line, or a quieter transition.</p>
                 </section>
               </div>
             </div>
@@ -81,6 +150,13 @@
                 The Line Snapshot appears as soon as a line is selected. It gives the local contour before you begin
                 reading commentary cards in detail.
               </p>
+              <p class="help-paragraph">
+                Read it as orientation rather than interpretation: its job is to tell you how thick, how spread out,
+                and how historically layered the line’s reception is before you commit to the deeper stack below.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=en#analysis-summary" target="_blank" rel="noreferrer">Open Line Snapshot at Inf. 1, 1</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -90,7 +166,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>Line 1 Snapshot</h3>
-                  <p>This panel is the fast orientation layer between the chosen line and the deeper reading surfaces below.</p>
+                  <p>This panel is the fast orientation layer between the chosen line and the deeper reading surfaces below. It helps you decide whether the line calls for immediate card-reading, thematic clustering, or diachronic comparison.</p>
                 </section>
               </div>
             </div>
@@ -103,6 +179,13 @@
                 This is the top of the commentary-reading zone. It keeps the selected line visible and prepares the
                 card stack that follows.
               </p>
+              <p class="help-paragraph">
+                The point is to keep the poem and the records on the same table. You should still feel the current line
+                while dates, spans, summaries, and full commentary texts begin to open underneath it.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=en#records-section" target="_blank" rel="noreferrer">Open Close Reading at Inf. 1, 1</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -112,7 +195,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>How to use it</h3>
-                  <p>Sort the reading stream here, keep the line context in view, and decide whether you want cards, word routes, or comparison next.</p>
+                  <p>Sort the reading stream here, keep the line context in view, and decide whether you want to stay with full cards, branch into a word route, or pin a comparison set. This is the hinge between orientation and sustained reading.</p>
                 </section>
               </div>
             </div>
@@ -124,6 +207,13 @@
               <p class="help-paragraph">
                 This is the commentary body itself: the cards you sort, expand, pin, and compare.
               </p>
+              <p class="help-paragraph">
+                It is also where metadata stops being abstract. Commentary name, date, line span, preview, and full
+                text all matter together because interpretation depends on provenance as well as wording.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=en#records-list" target="_blank" rel="noreferrer">Open commentary cards at Inf. 1, 1</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -133,7 +223,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>How to use it</h3>
-                  <p>Read card by card, expand the text when needed, and pin records whenever a line of interpretation needs to stay visible.</p>
+                  <p>Read card by card, expand the text when the wording matters, and pin records whenever a line of interpretation needs to stay visible beside another. The panel is designed for sustained scholarly handling, not quick skimming.</p>
                 </section>
               </div>
             </div>
@@ -145,6 +235,13 @@
               <p class="help-paragraph">
                 This route opens when you click a selectable content word in the chosen line.
               </p>
+              <p class="help-paragraph">
+                Once it opens, the scale of reading changes. You are no longer asking only what happens around the
+                line, but what can be learned by following one lexical point outward.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=en#locus-panel" target="_blank" rel="noreferrer">Open word locus for “vita”</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -154,7 +251,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>How to use it</h3>
-                  <p>Click one word, then read the word-centered panels in order rather than jumping straight back to cards.</p>
+                  <p>Click one word, then read the word-centered panels in order rather than jumping straight back to cards. The route works best when recurrence, local context, phrase growth, and commentary uptake are allowed to accumulate step by step.</p>
                 </section>
               </div>
             </div>
@@ -166,6 +263,13 @@
               <p class="help-paragraph">
                 This panel shows where the chosen word comes back elsewhere in the poem.
               </p>
+              <p class="help-paragraph">
+                It therefore begins with the most factual lexical question: does this form return, where, and in what
+                distribution across the poem?
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=en#occurrence-explorer-panel" target="_blank" rel="noreferrer">Open Occurrence Explorer for “vita”</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -175,7 +279,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>How to use it</h3>
-                  <p>Start with recurrence: where else does this word appear, and how does that change what the current line is doing?</p>
+                  <p>Start with recurrence: where else does this word appear, and how does that change what the current line is doing? Exact return should usually come before broader family speculation.</p>
                 </section>
               </div>
             </div>
@@ -187,6 +291,13 @@
               <p class="help-paragraph">
                 This panel asks what other words tend to gather near the chosen word in local contexts.
               </p>
+              <p class="help-paragraph">
+                It stays deliberately local. The goal is to preserve neighborhood and pressure, not to dissolve the poem
+                into a free-floating semantic cloud.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=en#micro-context-panel" target="_blank" rel="noreferrer">Open Micro-Context for “vita”</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -208,6 +319,13 @@
               <p class="help-paragraph">
                 This panel tests whether the chosen word grows into a short phrase that reappears elsewhere.
               </p>
+              <p class="help-paragraph">
+                It matters when one isolated token is not enough to carry the local structure. A recurring short phrase
+                can often preserve a more stable poetic unit than the word alone.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=en#phrase-expansions-panel" target="_blank" rel="noreferrer">Open Phrase Expansions for “vita”</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -229,6 +347,13 @@
               <p class="help-paragraph">
                 This panel highlights interpretive vocabulary around the selected lexical focus and its nearby alternatives.
               </p>
+              <p class="help-paragraph">
+                Its question is not merely which words are frequent, but which commentary-side terms become more
+                meaningful around this lexical locus than around nearby alternatives.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=en#contrastive-vocabulary-panel" target="_blank" rel="noreferrer">Open Contrastive Vocabulary for “vita”</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -250,6 +375,13 @@
               <p class="help-paragraph">
                 The semantic panel groups the current line’s commentary into local semantic fields.
               </p>
+              <p class="help-paragraph">
+                Read these fields as commentary-side groupings rather than as final names for Dante’s meaning. They are
+                meant to help you re-enter the card stack through a more stable local pattern.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=en#semantic-panel" target="_blank" rel="noreferrer">Open Interpretive Fields at Inf. 1, 1</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -271,6 +403,13 @@
               <p class="help-paragraph">
                 This panel follows the current line outward across the poem when echoes begin to matter.
               </p>
+              <p class="help-paragraph">
+                In Segni de l’antica fiamma it remains a text-first widening move. Shared wording and nearby poetic context
+                come before commentary support, so the echoed line still has to earn interpretive attention.
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=en#recurrence-panel" target="_blank" rel="noreferrer">Open Cross-Canto Echoes at Inf. 1, 1</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -292,6 +431,9 @@
               <p class="help-paragraph">
                 Compare becomes useful after you pin commentary cards and need them to stay visible side by side.
               </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=en#compare-section" target="_blank" rel="noreferrer">Open Compare at Inf. 1, 1</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -312,6 +454,10 @@
               <h2>AUTHORITY</h2>
               <p class="help-paragraph">
                 Authority is the separate desk for author-, work-, and figure-centered reading.
+              </p>
+              <p class="help-paragraph">
+                Use it when the main scholarly question has shifted from “what is happening on this line?” to “which
+                cited traditions, figures, and source pathways are structuring the reading scene?”
               </p>
               <div class="route-link-row">
                 <a class="ghost-link-button" href="/authority.html" target="_blank" rel="noreferrer">Open the Authority page</a>
@@ -337,13 +483,13 @@
 
       <div class="static-page-content" data-static-lang="bilingual" hidden>
         <p class="help-modal-lead">
-          这页按面板逐块导览。
+          这页按面板逐块导览。它不只是加说明文字的截图长页，而是尽量解释每一站到底支持哪种阅读动作、为什么要在这里停一下、以及下一步最自然该往哪里走。
         </p>
         <nav class="static-page-nav" aria-label="Interface Tour contents">
           <a href="#tour-main-entry-bi">Main Entry</a>
           <a href="#tour-analysis-layer-bi">Analysis Layer</a>
           <a href="#tour-close-reading-bi">Close Reading</a>
-          <a href="#tour-commentary-bi">commentary</a>
+          <a href="#tour-commentary-bi">Commentary</a>
           <a href="#tour-locus-bi">Word Locus</a>
           <a href="#tour-occurrence-bi">Occurrence</a>
           <a href="#tour-micro-context-bi">Micro-Context</a>
@@ -361,6 +507,12 @@
               <p class="help-paragraph">
                 选定 canto 之后，先从这里看。每一行都是 Dante 原文，色条立刻告诉你这一行周围的 commentary density 是轻还是重。
               </p>
+              <p class="help-paragraph">
+                这是页面真正意义上的第一张阅读表面。你仍然站在诗本身上，但 commentary tradition 已经开始以 pressure map 的方式沿着整支 canto 显形。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=bilingual#coverage-section" target="_blank" rel="noreferrer">打开 Inf. 1, 1 的 Main Entry</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -370,7 +522,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>怎么用</h3>
-                  <p>先纵向扫一遍这个 canto，找到值得打开的行，再点进去进入 line-first reading。</p>
+                  <p>先纵向扫一遍这个 canto，注意 commentary 是在哪里聚起来、又在哪里变薄，然后有意识地选一行。这里决定的是：你要从高密度结点、过渡铰链，还是较安静的地方开始。</p>
                 </section>
               </div>
             </div>
@@ -382,6 +534,12 @@
               <p class="help-paragraph">
                 选中某一行之后，Line Snapshot 会立刻出现。它让你在进入 commentary cards 之前先看到局部轮廓。
               </p>
+              <p class="help-paragraph">
+                最稳的读法是把它当作定向层，而不是解释层。它先回答的是这行的 reception 到底有多厚、多散、跨了多久，而不是替你先把意义说完。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=bilingual#analysis-summary" target="_blank" rel="noreferrer">打开 Inf. 1, 1 的 Line Snapshot</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -391,7 +549,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>Line 1 Snapshot</h3>
-                  <p>这一层负责在“选中某一行”和“深读 cards”之间给你一个快速定向：density、granularity、terms、时间跨度。</p>
+                  <p>这一层负责在“选中某一行”和“深读 cards”之间给你一个快速定向：density、granularity、terms、时间跨度。它会帮助你判断这行更适合立刻下潜到 cards，还是先走 thematic clustering 或 diachronic comparison。</p>
                 </section>
               </div>
             </div>
@@ -403,6 +561,12 @@
               <p class="help-paragraph">
                 这是 commentary 阅读区的上沿。它把所选诗行留在台面上，然后把 card stack 接出来。
               </p>
+              <p class="help-paragraph">
+                这一层的关键是：诗和 records 要始终留在同一张桌面上。你应该在仍然明显感到当前诗行在场的状态里，看着 dates、spans、summaries 和 full commentary texts 一起往下展开。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=bilingual#records-section" target="_blank" rel="noreferrer">打开 Inf. 1, 1 的 Close Reading</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -412,7 +576,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>怎么用</h3>
-                  <p>在这里决定排序方式，保留 line context，然后再决定是继续看 cards、切到词位路线，还是进入 compare。</p>
+                  <p>在这里决定排序方式，保留 line context，然后再决定是继续看完整 cards、切到词位路线，还是先 pin 出一组比较材料。它是“定向”与“持续阅读”之间的铰链。</p>
                 </section>
               </div>
             </div>
@@ -420,10 +584,16 @@
 
           <section class="route-stage" id="tour-commentary-bi">
             <section class="help-section">
-              <h2>commentary 本体</h2>
+              <h2>COMMENTARY</h2>
               <p class="help-paragraph">
-                这里就是 commentary 本体：你排序、展开、pin 卡片、并排比较的地方。
+                这里就是 commentary 主阅读区：你排序、展开、pin 卡片、并排比较的地方。
               </p>
+              <p class="help-paragraph">
+                也是 metadata 不再抽象的地方。commentary 名称、日期、line span、preview 和 full text 要一起读，因为解释判断既依赖 provenance，也依赖 wording。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=bilingual#records-list" target="_blank" rel="noreferrer">打开 Inf. 1, 1 的 commentary cards</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -433,7 +603,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>怎么用</h3>
-                  <p>逐张阅读，必要时展开全文；一旦某条解释线要持续保留，就先 pin 起来。</p>
+                  <p>逐张阅读，措辞重要时就展开全文；一旦某条解释线需要和别的记录一起持续留在眼前，就立刻 pin。这个 panel 更适合持续性的学术处理，而不是快扫一眼就过去。</p>
                 </section>
               </div>
             </div>
@@ -445,6 +615,12 @@
               <p class="help-paragraph">
                 当你在所选诗行里点一个可选 content word，这条词位路线就会打开。
               </p>
+              <p class="help-paragraph">
+                一旦它打开，阅读尺度就变了。你不再只是在问“围绕这一行发生什么”，而是在问：沿着一个 lexical point 往外走，还能长出什么可检查的阅读路径。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=bilingual#locus-panel" target="_blank" rel="noreferrer">打开 “vita” 的词位层</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -454,7 +630,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>怎么用</h3>
-                  <p>点一个词以后，先顺着词位面板往下读，不要立刻跳回 cards。</p>
+                  <p>点一个词以后，先顺着词位面板往下读，不要立刻跳回 cards。最自然的路径是让 recurrence、local context、phrase growth 和 commentary uptake 一层层积起来。</p>
                 </section>
               </div>
             </div>
@@ -466,6 +642,12 @@
               <p class="help-paragraph">
                 这一层看的是：这个词在诗里其他地方怎样回来。
               </p>
+              <p class="help-paragraph">
+                所以它先问的是一个最事实性的词汇问题：这个 form 到底会不会回来，会在哪里回来，以及它在整部诗里的分布是什么样。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=bilingual#occurrence-explorer-panel" target="_blank" rel="noreferrer">打开 “vita” 的 Occurrence Explorer</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -475,7 +657,7 @@
               <div class="route-panel-list">
                 <section class="route-panel-card">
                   <h3>怎么用</h3>
-                  <p>先回答“这个词还在哪里出现”，再去问它周围的解释性语言怎样变化。</p>
+                  <p>先回答“这个词还在哪里出现”，再去问它周围的解释性语言怎样变化。一般最好先信 exact return，再考虑更宽的 family speculation。</p>
                 </section>
               </div>
             </div>
@@ -487,6 +669,12 @@
               <p class="help-paragraph">
                 这一层看的是：哪些词倾向于在局部语境里和它聚在一起。
               </p>
+              <p class="help-paragraph">
+                它故意保持局部尺度。目标是把 neighborhood 和 pressure 保住，而不是把诗句稀释成一片漂浮的 semantic cloud。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=bilingual#micro-context-panel" target="_blank" rel="noreferrer">打开 “vita” 的 Micro-Context</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -508,6 +696,12 @@
               <p class="help-paragraph">
                 这一层测试的是：这个词会不会长成一个更短的 recurring phrase。
               </p>
+              <p class="help-paragraph">
+                当单个 token 已经不足以承载局部结构时，这层就变得重要。一个会回返的短语，往往比单词本身更能保住诗的局部组织。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=bilingual#phrase-expansions-panel" target="_blank" rel="noreferrer">打开 “vita” 的 Phrase Expansions</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -529,6 +723,12 @@
               <p class="help-paragraph">
                 这一层会把所选词周围的 interpretive vocabulary 和邻近替代项拉出来做对照。
               </p>
+              <p class="help-paragraph">
+                它真正问的不是“哪些词更常见”，而是：围绕这个 lexical locus，哪些 commentary 侧的解释词会比周边替代项显得更有分量。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?locus=vita&ui_lang=bilingual#contrastive-vocabulary-panel" target="_blank" rel="noreferrer">打开 “vita” 的 Contrastive Vocabulary</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -550,6 +750,12 @@
               <p class="help-paragraph">
                 semantic panel 会把当前行的 commentary 重组为 local semantic fields。
               </p>
+              <p class="help-paragraph">
+                最稳的读法，是把这些 fields 当成 commentary 侧的局部分组，而不是 Dante 意义的最终命名。它们是把你重新送回 cards 的更稳入口。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=bilingual#semantic-panel" target="_blank" rel="noreferrer">打开 Inf. 1, 1 的 Interpretive Fields</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -558,7 +764,7 @@
               </figure>
               <div class="route-panel-list">
                 <section class="route-panel-card">
-                  <h3>Local Semantic Fields for Line</h3>
+                  <h3>怎么用</h3>
                   <p>先看这一层如何把本行 commentary 分组，再回去决定下一张该读哪张卡。</p>
                 </section>
               </div>
@@ -571,6 +777,12 @@
               <p class="help-paragraph">
                 当当前诗行和别处发生回声关系时，就从这里把阅读向整部诗扩开。
               </p>
+              <p class="help-paragraph">
+                在 Segni de l’antica fiamma 里，这仍然是一种 text-first 的 widening move。shared wording 和附近诗歌上下文先站住，commentary support 才作为后续补强加入。
+              </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=bilingual#recurrence-panel" target="_blank" rel="noreferrer">打开 Inf. 1, 1 的 Cross-Canto Echoes</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -579,7 +791,7 @@
               </figure>
               <div class="route-panel-list">
                 <section class="route-panel-card">
-                  <h3>Cross-Canto Echoes for Line</h3>
+                  <h3>怎么用</h3>
                   <p>用它来追踪“这一行在整部诗里还和哪里互相照亮”。</p>
                 </section>
               </div>
@@ -588,10 +800,13 @@
 
           <section class="route-stage" id="tour-compare-bi">
             <section class="help-section">
-              <h2>compare</h2>
+              <h2>COMPARE</h2>
               <p class="help-paragraph">
                 先 pin commentary cards，再来 Compare 让它们并排停住。
               </p>
+              <div class="route-link-row">
+                <a class="ghost-link-button" href="/inferno/1/1?ui_lang=bilingual#compare-section" target="_blank" rel="noreferrer">打开 Inf. 1, 1 的 Compare</a>
+              </div>
             </section>
             <div class="route-stage-grid">
               <figure class="route-figure">
@@ -609,9 +824,12 @@
 
           <section class="route-stage" id="tour-authority-bi">
             <section class="help-section">
-              <h2>authority</h2>
+              <h2>AUTHORITY</h2>
               <p class="help-paragraph">
                 Authority 是 author、work、figure 导向的独立阅读桌面。
+              </p>
+              <p class="help-paragraph">
+                当你的主要学术问题已经从“这行在发生什么”转向“哪些被引用的 tradition、人物与 source path 正在组织这个阅读现场”时，就该转到这里。
               </p>
               <div class="route-link-row">
                 <a class="ghost-link-button" href="/authority.html" target="_blank" rel="noreferrer">打开 Authority 页面</a>
@@ -638,6 +856,43 @@
 
     <script>
       (function () {
+        function openRouteTarget(href, target) {
+          if (!href) return;
+          if (target === "_blank") {
+            window.open(href, "_blank", "noopener,noreferrer");
+            return;
+          }
+          window.location.href = href;
+        }
+
+        function decorateStageCards() {
+          document.querySelectorAll(".route-stage").forEach((stage) => {
+            const primaryLink = stage.querySelector(".route-link-row .ghost-link-button");
+            if (!primaryLink) return;
+            const href = primaryLink.getAttribute("href");
+            const target = primaryLink.getAttribute("target") || "_self";
+            const label = primaryLink.textContent?.trim() || "Open linked Segni de l’antica fiamma view";
+            stage.querySelectorAll(".help-section, .route-figure, .route-panel-card").forEach((block) => {
+              if (block.dataset.routeLinked === "true") return;
+              block.dataset.routeLinked = "true";
+              block.classList.add("route-clickable");
+              block.setAttribute("role", "link");
+              block.setAttribute("tabindex", "0");
+              block.setAttribute("aria-label", label);
+              block.addEventListener("click", (event) => {
+                if (event.target.closest("a, button")) return;
+                openRouteTarget(href, target);
+              });
+              block.addEventListener("keydown", (event) => {
+                if (event.key !== "Enter" && event.key !== " ") return;
+                if (event.target !== block) return;
+                event.preventDefault();
+                openRouteTarget(href, target);
+              });
+            });
+          });
+        }
+
         function getLanguage() {
           const params = new URLSearchParams(window.location.search);
           const requested = params.get("ui_lang");
@@ -671,10 +926,15 @@
           const backUrl = new URL("/", window.location.href);
           backUrl.searchParams.set("ui_lang", language);
           back.href = backUrl.pathname + backUrl.search;
+          const anchorSuffix = language === "bilingual" ? "-bi" : "";
+          document.querySelectorAll("[data-route-nav-target]").forEach((link) => {
+            link.setAttribute("href", `#${link.dataset.routeNavTarget}${anchorSuffix}`);
+          });
         }
 
         const initialLanguage = getLanguage();
         applyLanguage(initialLanguage);
+        decorateStageCards();
         document.querySelectorAll("[data-route-lang]").forEach((button) => {
           button.addEventListener("click", () => applyLanguage(button.dataset.routeLang === "bilingual" ? "bilingual" : "en"));
         });

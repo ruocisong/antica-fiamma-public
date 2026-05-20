@@ -9,6 +9,7 @@ import hashlib
 import html
 import json
 import math
+import os
 import re
 import shutil
 import time
@@ -28,6 +29,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import normalize
 
+from citation_normalization import ROMAN_CITATION_TOKEN_SOURCE
+
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE_DATA_DIR = ROOT / "data"
@@ -39,9 +42,15 @@ CROSS_CANTO_BASELINE_PATH = ROOT / "semantic_thread" / "cross_canto_line_similar
 CROSS_CANTO_MAINLINE_PATH = ROOT / "semantic_thread" / "cross_canto_echoes_mainline.json"
 LINE_ECHO_AXIS_PROFILE_PATH = ROOT / "semantic_thread" / "line_echo_axis_profile" / "line_echo_axis_profile.json"
 AUTHORITY_FRONTEND_READY_DIR = ROOT / "authority" / "authority_extraction" / "output" / "frontend_ready"
+AUTHORITY_AUTHORS_REGISTRY_PATH = ROOT / "authority" / "authority_extraction" / "registry" / "authors.json"
+AUTHORITY_WORKS_REGISTRY_PATH = ROOT / "authority" / "authority_extraction" / "registry" / "works.json"
 AUTHORITY_COMMENTARY_SOURCES_PATH = DEMO_DATA_DIR / "authority_commentary_sources.json"
 AUTHORITY_COMMENTARY_SOURCES_DIR = DEMO_DATA_DIR / "authority_commentary_sources"
 AUTHORITY_COMMENTARY_LINE_INDEX_DIR = DEMO_DATA_DIR / "authority_commentary_lines"
+COMMENTARY_PAGE_DATA_DIR = DEMO_DATA_DIR / "commentary_pages"
+COMMENTARY_PAGE_CANTO_DIR = COMMENTARY_PAGE_DATA_DIR / "cantos"
+COMMENTARY_PAGE_LINE_DIR = COMMENTARY_PAGE_DATA_DIR / "lines"
+COMMENTARY_PAGE_MANIFEST_PATH = COMMENTARY_PAGE_DATA_DIR / "index.json"
 AUTHORITY_NAVIGATION_MANIFEST_PATH = DEMO_DATA_DIR / "authority_navigation_manifest.json"
 AUTHORITY_INDEX_PATH = DEMO_DATA_DIR / "authority_index.json"
 AUTHORITY_AUTHOR_DETAIL_DIR = DEMO_DATA_DIR / "authority_authors"
@@ -49,13 +58,23 @@ AUTHORITY_FLAT_OBJECT_DATA_DIR = DEMO_DATA_DIR / "authority_flat_objects"
 AUTHORITY_SPECIAL_OBJECT_DATA_DIR = DEMO_DATA_DIR / "authority_special_objects"
 AUTHORITY_OCCURRENCE_SAMPLE_DIR = DEMO_DATA_DIR / "authority_occurrence_samples"
 AUTHORITY_PARTIAL_TREE_DATA_DIR = DEMO_DATA_DIR / "authority_partial_trees"
+AUTHORITY_CURATED_ROOM_ANCHORS_PATH = DEMO_DATA_DIR / "authority_curated_room_anchors.json"
 DANTE_WORD_LOCI_LAYER_PATH = ROOT / "dante_loci" / "output" / "intermediate" / "dante_word_loci_layer.json"
 DANTE_WORD_LOCI_SHARD_DIR = DEMO_DATA_DIR / "dante_word_loci"
 AUTHORITY_WORKS_TREE_DATA_DIR = DEMO_DATA_DIR / "authority_works_trees"
+DATA_SOURCE_LINEAGE_MANIFEST_PATH = DEMO_DATA_DIR / "data_source_lineage_manifest.json"
 CANONICAL_TEXT_BASE_PATH = ROOT / "dante_loci" / "source_texts" / "ddp_canonical_text_base.json"
 AUTHORITY_TEXT_ALIAS_LEARNING_PATH = (
     ROOT / "authority" / "authority_extraction" / "output" / "alias_learning" / "commentary_alias_candidates_current10.json"
 )
+# Local-source audit suppressions: these records were search-result carryovers
+# whose mounted commentary text contains no visible authority surface.
+AUTHORITY_COMMENTARY_LINE_FALSE_POSITIVE_KEYS = {
+    ("aristotle", "paradiso2", "paradiso2-r45", "Arist."),
+    ("aristotle", "paradiso2", "paradiso2-r25", "Arist."),
+    ("aristotle", "paradiso2", "paradiso2-r65", "Arist."),
+    ("aristotle", "paradiso2", "paradiso2-r24", "Philosophus"),
+}
 AUTHORITY_WORKS_TREE_DIR = ROOT / "authority" / "authority_extraction" / "output" / "frontend_ready"
 PLATONE_WORK_CONTEXT_REVIEW_PATH = AUTHORITY_FRONTEND_READY_DIR / "platone_work_context_review.json"
 PLATONE_TIMEO_LEGGI_CALIBRATION_PATH = AUTHORITY_FRONTEND_READY_DIR / "platone_timeo_leggi_calibration.json"
@@ -109,9 +128,14 @@ PLATONE_WAVE5_REPUBLIC_PATH = AUTHORITY_FRONTEND_READY_DIR / "platone_wave5_repu
 
 AUTHORITY_TEXT_MATCH_POLICY = {
     "virgil": {
-        "extra_aliases": ["virgilio", "virgil", "vergilio", "vergilius"],
+        "extra_aliases": ["virgilio", "virgil", "virgilius", "vergilio", "vergilius"],
         "exclude_aliases": ["maro", "virg.", "verg."],
         "fuzzy_roots": ["virgil", "vergili"],
+    },
+    "omero": {
+        "extra_aliases": ["omero", "omerus", "homer", "homerus"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["homer"],
     },
     "aristotle": {
         "extra_aliases": ["aristotile", "aristotele", "aristoteles", "aristotle"],
@@ -143,6 +167,11 @@ AUTHORITY_TEXT_MATCH_POLICY = {
         "exclude_aliases": ["aug."],
         "fuzzy_roots": ["augustin", "agostin"],
     },
+    "orazio": {
+        "extra_aliases": ["orazio", "horatius", "horatio", "oratio"],
+        "exclude_aliases": ["hor.", "horat."],
+        "fuzzy_roots": ["orat", "horat"],
+    },
     "psalmist": {
         "extra_aliases": ["psalmista", "salmo", "salmi", "psalmo", "psalmi", "david"],
         "exclude_aliases": [],
@@ -154,9 +183,9 @@ AUTHORITY_TEXT_MATCH_POLICY = {
         "fuzzy_roots": ["mos", "moys"],
     },
     "isaiah": {
-        "extra_aliases": ["isaia", "esaias", "isaia propheta"],
+        "extra_aliases": ["isaia", "esaias", "isaias", "ysaias", "ysaie", "isaia propheta"],
         "exclude_aliases": [],
-        "fuzzy_roots": ["isai", "esai"],
+        "fuzzy_roots": ["isai", "esai", "ysai"],
     },
     "matthew": {
         "extra_aliases": ["matteo evangelista", "matthaeus", "evangelista matteo"],
@@ -174,9 +203,154 @@ AUTHORITY_TEXT_MATCH_POLICY = {
         "fuzzy_roots": ["lucas"],
     },
     "john_the_evangelist": {
-        "extra_aliases": ["giovanni evangelista", "ioannes evangelista", "evangelista giovanni"],
+        "extra_aliases": [
+            "giovanni evangelista",
+            "gioanni evangelista",
+            "san giovanni evangelista",
+            "santo giovanni evangelista",
+            "san gioanni evangelista",
+            "santo gioanni evangelista",
+            "san joanni evangelista",
+            "santo joanni evangelista",
+            "ioannes evangelista",
+            "iohannes evangelista",
+            "joannes evangelista",
+            "san giovanni",
+            "santo giovanni",
+            "san gioanni",
+            "santo gioanni",
+            "san joanni",
+            "santo joanni",
+            "s. gio.",
+            "evangelista giovanni",
+        ],
         "exclude_aliases": ["giovanni"],
-        "fuzzy_roots": ["ioann", "johann", "evangelist"],
+        "fuzzy_roots": ["ioann", "johann", "joann", "evangelist", "gioann"],
+    },
+    "cinonio": {
+        "extra_aliases": ["cinonio", "cinon.", "il cinonio", "'l cinonio"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["cinon"],
+    },
+    "samuel": {
+        "extra_aliases": ["samuele", "samuel propheta"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["samuel", "samuelis"],
+    },
+    "ezekiel": {
+        "extra_aliases": ["ezechiele", "hiezechiel", "ezechiel"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["ezech", "hiez"],
+    },
+    "daniel": {
+        "extra_aliases": ["daniele", "danihel"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["daniel", "danihel"],
+    },
+    "zechariah": {
+        "extra_aliases": ["zaccaria", "zacharias"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["zachar", "zaccar"],
+    },
+    "joshua": {
+        "extra_aliases": ["giosuè", "iosue"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["giosu", "iosu"],
+    },
+    "graziolo_bambaglioli": {
+        "extra_aliases": ["graziolo", "graziolo bambaglioli", "graziolus"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["graziol"],
+    },
+    "petrus_comestor": {
+        "extra_aliases": ["pietro comestore", "petrus comestor", "petr. comest.", "petr. comestor"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["comestor", "comest"],
+    },
+    "fulgentius_planciades": {
+        "extra_aliases": ["fulgentius planciades", "fulgenzio planciade", "fulg. planc."],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["fulgent", "planciad", "planc"],
+    },
+    "cassiodorus": {
+        "extra_aliases": ["cassiodoro", "cassiodorus", "cassiod."],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["cassiod"],
+    },
+    "thomas_of_celano": {
+        "extra_aliases": ["tommaso da celano", "thomas of celano", "thomas celanus", "thom. cel."],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["celan", "thom cel"],
+    },
+    "sirach": {
+        "extra_aliases": ["sirach", "siracide", "jesus sirach"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["sirach", "siracid", "eccli"],
+    },
+    "jeremiah": {
+        "extra_aliases": ["geremia", "ieremias"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["jerem", "ierem"],
+    },
+    "baruch": {
+        "extra_aliases": ["baruc"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["baruc", "baruch"],
+    },
+    "hosea": {
+        "extra_aliases": ["osea", "osee"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["hose", "ose"],
+    },
+    "job": {
+        "extra_aliases": ["giobbe", "iob"],
+        "exclude_aliases": ["job"],
+        "fuzzy_roots": ["giobb", "iob"],
+    },
+    "tobit": {
+        "extra_aliases": ["tobia"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["tobi", "tobit"],
+    },
+    "judith": {
+        "extra_aliases": ["giuditta"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["judith", "giuditt"],
+    },
+    "jonah": {
+        "extra_aliases": ["giona"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["jonah", "gion"],
+    },
+    "micah": {
+        "extra_aliases": ["michea"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["micah", "miche"],
+    },
+    "habakkuk": {
+        "extra_aliases": ["abacuc"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["habak", "abac"],
+    },
+    "zephaniah": {
+        "extra_aliases": ["sofonia"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["zephan", "sofon"],
+    },
+    "amos": {
+        "extra_aliases": [],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["amos"],
+    },
+    "joel": {
+        "extra_aliases": ["gioele", "ioel"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["joel", "gioel", "ioel"],
+    },
+    "malachi": {
+        "extra_aliases": ["malachia"],
+        "exclude_aliases": [],
+        "fuzzy_roots": ["malach"],
     },
     "seneca": {
         "extra_aliases": ["seneca"],
@@ -205,6 +379,276 @@ AUTHORITY_TEXT_MATCH_POLICY = {
     },
 }
 
+_CURATED_AUTHOR_WORK_ANCHOR_CACHE: dict[str, Any] | None = None
+_CURATED_WORK_EVIDENCE_CACHE: dict[str, dict[str, Any]] | None = None
+
+CURATED_WORK_EVIDENCE_HINTS = {
+    "albumasar": {
+        "Introductorium maius": [
+            r"\bintroductor(?:ium|io)?\b.{0,40}\bmai(?:us|or)\b",
+            r"\balbumas[ae]r\b.{0,80}\bintroductor",
+        ],
+        "De magnis coniunctionibus": [
+            r"\bmagnis\s+coniunction",
+            r"\balbumas[ae]r\b.{0,80}\bconiunction",
+        ],
+        "Flores astrologiae": [
+            r"\bflores?\s+astrolog",
+        ],
+    },
+    "alfragano": {
+        "Elements of Astronomy": [
+            r"\balfragan",
+            r"\belement[a-z]*\b.{0,30}\bastronom",
+        ],
+        "Compendium of the Almagest": [
+            r"\bcompend[a-z]*\b.{0,40}\balmag",
+            r"\balfragan[a-z]*\b.{0,80}\balmag",
+        ],
+    },
+    "averroe": {
+        "Commentary on De anima": [
+            r"\baverro(?:e|is|em|es)?\b.{0,80}\bde\s+anima\b",
+            r"\baverro(?:e|is|em|es)?\b.{0,80}\banima\b",
+        ],
+        "Commentary on Metaphysics": [
+            r"\baverro(?:e|is|em|es)?\b.{0,80}\bmetaph",
+        ],
+        "Commentary on Physics": [
+            r"\baverro(?:e|is|em|es)?\b.{0,80}\bphysic",
+        ],
+    },
+    "avicenna": {
+        "Canon of Medicine": [
+            r"\bavicenn(?:a|e)?\b.{0,80}\bcanon\b",
+        ],
+        "Kitab al-Shifa'": [
+            r"\bavicenn(?:a|e)?\b.{0,80}\bshifa\b",
+        ],
+        "De anima": [
+            r"\bavicenn(?:a|e)?\b.{0,80}\bde\s+anima\b",
+        ],
+    },
+    "beda": {
+        "Historia ecclesiastica gentis Anglorum": [
+            r"\bhistoria\s+ecclesiast",
+            r"\bbeda\b.{0,80}\bhistoria\s+ecclesiast",
+        ],
+        "De temporum ratione": [
+            r"\btemporum\s+ratione\b",
+        ],
+        "De natura rerum": [
+            r"\bde\s+natura\s+rerum\b",
+        ],
+    },
+    "giovanni_damasceno": {
+        "De fide orthodoxa": [
+            r"\bdamascen(?:o|us|i)?\b.{0,120}\b(?:de orth\.?\s*fid\.?|orthodox(?:ae)?\s*fidei|fide orthodoxa)\b",
+            r"\b(?:de orth\.?\s*fid\.?|orthodox(?:ae)?\s*fidei|fide orthodoxa)\b.{0,120}\bdamascen(?:o|us|i)?\b",
+        ],
+    },
+    "bernardo_di_chiaravalle": {
+        "De consideratione": [
+            r"\bde consideratione\b",
+        ],
+        "Sermones super Cantica Canticorum": [
+            r"\bsuper\s+cantic",
+            r"\bsermon[a-z]*\b.{0,20}\bcantic",
+        ],
+    },
+    "cassiodorus": {
+        "Expositio Psalmorum": [
+            r"\bcassiodor(?:us)?\b.{0,80}\bpsalm",
+            r"\bexpositio psalmorum\b",
+        ],
+        "Institutiones": [
+            r"\binstitution(?:es|ibus|um)?\b",
+            r"\bcassiodor(?:us)?\b.{0,80}\binstitution",
+        ],
+    },
+    "claudiano": {
+        "De raptu Proserpinae": [
+            r"\brapt[a-z]*\b.{0,20}\bproserp",
+        ],
+        "In Rufinum": [
+            r"\bin\s+rufin",
+        ],
+    },
+    "galeno": {
+        "Ars parva": [
+            r"\bars\s+parva\b",
+        ],
+        "De usu partium": [
+            r"\busu\s+part",
+        ],
+        "De complexionibus": [
+            r"\bcomplexion",
+        ],
+    },
+    "giovanni_crisostomo": {
+        "Homilies on Matthew": [
+            r"\bchrysost[a-z]*\b.{0,80}\bmatth",
+        ],
+        "De sacerdotio": [
+            r"\bde\s+sacerdotio\b",
+        ],
+        "Homilies on John": [
+            r"\bchrysost[a-z]*\b.{0,80}\bioann",
+        ],
+    },
+    "girolamo": {
+        "Vulgate": [
+            r"\bhieronym[a-z]*\b.{0,80}\bvulgat",
+        ],
+        "Epistulae": [
+            r"\bhieronym[a-z]*\b.{0,80}\bepist",
+        ],
+        "De viris illustribus": [
+            r"\bhieronym[a-z]*\b.{0,80}\bviris\s+illustr",
+        ],
+    },
+    "gratianus": {
+        "Decretum": [
+            r"\bdecret[a-z]*\b.{0,20}\bgratian",
+            r"\bgratian[a-z]*\b.{0,20}\bdecret",
+        ],
+    },
+    "gregorio_magno": {
+        "Moralia in Iob": [
+            r"\bmoralia\s+in\s+iob\b",
+            r"\bgregor[a-z]*\b.{0,80}\bmoralia\b",
+        ],
+        "Regula pastoralis": [
+            r"\bregula\s+pastoral",
+        ],
+        "Dialogi": [
+            r"\bgregor[a-z]*\b.{0,80}\bdialog",
+        ],
+    },
+    "hugo_of_st_victor": {
+        "Didascalicon": [
+            r"\bdidascal",
+        ],
+        "De sacramentis": [
+            r"\bde\s+sacramentis\b",
+        ],
+        "De arrha animae": [
+            r"\barrha\s+animae\b",
+        ],
+    },
+    "papia": {
+        "Elementarium doctrinae erudimentum": [
+            r"\bpapia\b.{0,80}\belementar",
+            r"\belementar[a-z]*\b.{0,80}\bpapia\b",
+            r"\but\s+ait\s+papia\b",
+            r"\bpapia\b.{0,160}\bpoete\s+dicti\s+sunt\s+loici\b",
+        ],
+    },
+    "jonah": {
+        "Book of Jonah": [
+            r"\bgiona\b",
+            r"\bjonah\b",
+            rf"\bion\.\s*(?:{ROMAN_CITATION_TOKEN_SOURCE}|cap(?:itulo|\.?)?)",
+        ],
+    },
+    "judith": {
+        "Book of Judith": [
+            r"\bgiuditta\b",
+            r"\bjudith\b",
+            r"\biudith\b",
+        ],
+    },
+    "zephaniah": {
+        "Book of Zephaniah": [
+            r"\bsofonia\b",
+            r"\bzephaniah\b",
+            rf"\bsoph\.\s*(?:{ROMAN_CITATION_TOKEN_SOURCE}|cap(?:itulo|\.?)?)",
+        ],
+    },
+    "graziolo_bambaglioli": {
+        "Commentary on the Inferno": [
+            r"\bgraziolo\b",
+            r"\bgraziolus\b",
+            r"\bbambaglioli\b",
+            r"\bgraziolo\b.{0,80}\bchios",
+            r"\bgraziolo\b.{0,80}\bcomment",
+        ],
+    },
+    "plinius": {
+        "Naturalis historia": [
+            r"\bplin[a-z]*\b.{0,80}\bnaturalis\s+hist",
+            r"\bnaturalis\s+historia\b",
+        ],
+    },
+    "orosius": {
+        "Historiarum adversus paganos libri VII": [
+            r"\boros[a-z]*\b.{0,80}\bpagan",
+            r"\badversus\s+pagan",
+        ],
+    },
+    "salustio": {
+        "Bellum Catilinae": [
+            r"\bcatilin",
+        ],
+        "Bellum Iugurthinum": [
+            r"\biugurth",
+        ],
+    },
+    "san_pietro": {
+        "Matthew 16": [
+            r"\bmatth[a-z\.\s]{0,20}16\b",
+        ],
+        "First Epistle of Peter": [
+            r"\bi\s*petr",
+        ],
+        "Second Epistle of Peter": [
+            r"\bii\s*petr",
+        ],
+    },
+    "svetonio": {
+        "De vita Caesarum": [
+            r"\bvita\s+caesarum\b",
+        ],
+        "De viris illustribus": [
+            r"\bviris\s+illustribus\b",
+        ],
+    },
+    "tolomeo": {
+        "Almagest": [
+            r"\b(?:ptol\.?|ptolom\.?|ptolem[a-z]*)\b.{0,80}\balmag",
+            r"\balmagest(?:um)?\b",
+        ],
+        "Tetrabiblos": [
+            r"\b(?:ptol\.?|ptolom\.?|ptolem[a-z]*)\b.{0,80}\btetrabib",
+            r"\btetrabib(?:los|l(?:i|o)s?)\b",
+        ],
+        "Geography": [
+            r"\b(?:ptol\.?|ptolom\.?|ptolem[a-z]*)\b.{0,80}\bgeograph",
+            r"\bgeographia\b.{0,80}\bptol",
+        ],
+    },
+    "valerio_massimo": {
+        "Facta et dicta memorabilia": [
+            r"\bfacta\s+et\s+dicta\b",
+            r"\bvaler[a-z]*\b.{0,20}\bmaxim",
+        ],
+    },
+}
+
+
+def regex_prefilter_needle(pattern: str) -> str | None:
+    pieces = [
+        piece.casefold()
+        for piece in re.findall(r"[A-Za-zÀ-ÿ]{4,}", str(pattern or ""))
+        if len(piece) >= 4
+    ]
+    if not pieces:
+        return None
+    weak_pieces = {"from", "that", "text", "this", "with"}
+    strong_pieces = [piece for piece in pieces if piece not in weak_pieces]
+    return max(strong_pieces or pieces, key=len)
+
+
 AUTHORITY_OBJECT_ROLLOUT_POLICY = {
     "aristotle": {
         "object_rollout_status": "ready",
@@ -227,50 +671,250 @@ AUTHORITY_OBJECT_ROLLOUT_POLICY = {
     "moses": {
         "frontend_status_override": "ready",
         "object_rollout_status": "ready",
-        "entry_mode": "author_commentary_entry",
-        "works_layer_mode": "no_work_layer",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
         "frontend_notes_override": "Mosè 现在进入完成态 authority 宇宙：注释里的 Pentateuch citations 已经足够频繁，Genesis / Exodus / Leviticus / Numbers / Deuteronomy 应该作为 scriptural work surfaces 可见，而不是继续留在宇宙外。",
         "works_layer_note": "Mosè 当前以前台 completed scriptural authority room 打开：先让 Pentateuch 的 citation traffic 和 doctrine-history pressure 站住，再慢慢决定是否 productize 成更细的 scriptural branch tree。",
     },
     "isaiah": {
         "frontend_status_override": "ready",
         "object_rollout_status": "ready",
-        "entry_mode": "author_commentary_entry",
-        "works_layer_mode": "no_work_layer",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
         "frontend_notes_override": "Isaia 现在进入完成态 authority 宇宙：prophetic citations 已经足够常见，Book of Isaiah 不该继续留在 authority 外部。",
         "works_layer_note": "Isaia 当前以前台 completed prophetic authority room 打开：先让 prophetic citation traffic 站住，再慢慢细化到更具体的 chapter/vision lanes。",
     },
     "matthew": {
         "frontend_status_override": "ready",
         "object_rollout_status": "ready",
-        "entry_mode": "author_commentary_entry",
-        "works_layer_mode": "no_work_layer",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
         "frontend_notes_override": "Matteo Evangelista 现在进入完成态 authority 宇宙：Matt./Matth. 这类 gospel citations 已经足够频繁，不应继续留在 authority 外部。",
         "works_layer_note": "Matteo Evangelista 当前以前台 completed gospel authority room 打开：先让 Gospel of Matthew 的 citation traffic 可见，再决定是否做更细的 pericope tree。",
     },
     "mark": {
         "frontend_status_override": "ready",
         "object_rollout_status": "ready",
-        "entry_mode": "author_commentary_entry",
-        "works_layer_mode": "no_work_layer",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
         "frontend_notes_override": "Marco Evangelista 现在进入完成态 authority 宇宙：Marc. 这类 gospel citations 已经足够频繁，不应继续留在 authority 外部。",
         "works_layer_note": "Marco Evangelista 当前以前台 completed gospel authority room 打开：先让 Gospel of Mark 的 citation traffic 可见，再决定是否做更细的 pericope tree。",
     },
     "luke": {
         "frontend_status_override": "ready",
         "object_rollout_status": "ready",
-        "entry_mode": "author_commentary_entry",
-        "works_layer_mode": "no_work_layer",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
         "frontend_notes_override": "Luca Evangelista 现在进入完成态 authority 宇宙：Luc./Lk. citations 已经足够稳定，Gospel of Luke 与 Acts 不该继续留在 authority 外部。",
         "works_layer_note": "Luca Evangelista 当前以前台 completed gospel authority room 打开：先让 Gospel of Luke / Acts 的 citation traffic 可见，再决定是否做更细的 scriptural branch tree。",
     },
     "john_the_evangelist": {
         "frontend_status_override": "ready",
         "object_rollout_status": "ready",
-        "entry_mode": "author_commentary_entry",
-        "works_layer_mode": "no_work_layer",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
         "frontend_notes_override": "Giovanni Evangelista 现在进入完成态 authority 宇宙：Ioan./Joh./Jn. 这类 Johannine citations 已经足够频繁，Gospel of John 与 Apocalypse 不该继续留在 authority 外部。",
         "works_layer_note": "Giovanni Evangelista 当前以前台 completed Johannine authority room 打开：先让 Gospel of John / Apocalypse 的 citation traffic 可见，再决定是否做更细的 scriptural branch tree。",
+    },
+    "cinonio": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Cinonio 现在进入 authority 主宇宙：注释里反复出现的 Partic. / Particelle 引用已经足够稳定，不该继续停在高亮外或对象外。",
+        "works_layer_note": "Cinonio 当前以前台 lexical-grammatical authority room 打开：先让 Particelle 的引用压力、语法说明和可回源 commentary records 站住，再决定是否需要更细的条目树。",
+    },
+    "samuel": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Samuele 现在进入完成态 authority 宇宙：I Sm. / II Sm. 的 scriptural citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Samuele 当前以前台 completed scriptural authority room 打开：先让 First / Second Samuel 的 citation traffic 可见，再决定是否需要更细的 historical scriptural tree。",
+    },
+    "ezekiel": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Ezechiele 现在进入完成态 authority 宇宙：Hiez. 这类 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Ezechiele 当前以前台 completed prophetic authority room 打开：先让 Book of Ezekiel 的 citation traffic 可见，再决定是否细化到 vision / chapter lanes。",
+    },
+    "daniel": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Daniele 现在进入完成态 authority 宇宙：Dan. 的 prophetic-apocalyptic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Daniele 当前以前台 completed scriptural authority room 打开：先让 Book of Daniel 的 prophetic / apocalyptic traffic 可见。",
+    },
+    "zechariah": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Zaccaria 现在进入完成态 authority 宇宙：Zach. 这类 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Zaccaria 当前以前台 completed prophetic authority room 打开：先让 Book of Zechariah 的 citation traffic 可见。",
+    },
+    "joshua": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Giosuè 现在进入完成态 authority 宇宙：Ios. 这类 scriptural citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Giosuè 当前以前台 completed scriptural authority room 打开：先让 Book of Joshua 的 conquest / passage traffic 可见。",
+    },
+    "sirach": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Siracide 现在进入完成态 authority 宇宙：Eccli. 这类 sapiential citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Siracide 当前以前台 completed sapiential authority room 打开：先让 Ecclesiasticus / Sirach 的 citation traffic 可见。",
+    },
+    "jeremiah": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Geremia 现在进入完成态 authority 宇宙：Jer./Ier. 与 Thren. 这类 prophetic-lament citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Geremia 当前以前台 completed prophetic authority room 打开：先让 Book of Jeremiah / Lamentations 的 citation traffic 可见。",
+    },
+    "baruch": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Baruc 现在进入完成态 authority 宇宙：Bar. 的 scriptural citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Baruc 当前以前台 completed scriptural authority room 打开：先让 Book of Baruch 的 citation traffic 可见。",
+    },
+    "hosea": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Osea 现在进入完成态 authority 宇宙：Os./Osee. 的 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Osea 当前以前台 completed prophetic authority room 打开：先让 Book of Hosea 的 citation traffic 可见。",
+    },
+    "job": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Giobbe 现在进入完成态 authority 宇宙：Iob. 的 sapiential citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Giobbe 当前以前台 completed sapiential authority room 打开：先让 Book of Job 的 citation traffic 可见。",
+    },
+    "tobit": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Tobia 现在进入完成态 authority 宇宙：Tob. 的 scriptural citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Tobia 当前以前台 completed scriptural authority room 打开：先让 Book of Tobit 的 citation traffic 可见。",
+    },
+    "judith": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Giuditta 现在进入完成态 authority 宇宙：Judith. 的 scriptural citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Giuditta 当前以前台 completed scriptural authority room 打开：先让 Book of Judith 的 citation traffic 可见。",
+    },
+    "jonah": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Giona 现在进入完成态 authority 宇宙：Ion. 的 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Giona 当前以前台 completed prophetic authority room 打开：先让 Book of Jonah 的 citation traffic 可见。",
+    },
+    "micah": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Michea 现在进入完成态 authority 宇宙：Mich. 的 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Michea 当前以前台 completed prophetic authority room 打开：先让 Book of Micah 的 citation traffic 可见。",
+    },
+    "habakkuk": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Abacuc 现在进入完成态 authority 宇宙：Hab. 的 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Abacuc 当前以前台 completed prophetic authority room 打开：先让 Book of Habakkuk 的 citation traffic 可见。",
+    },
+    "zephaniah": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Sofonia 现在进入完成态 authority 宇宙：Soph. 的 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Sofonia 当前以前台 completed prophetic authority room 打开：先让 Book of Zephaniah 的 citation traffic 可见。",
+    },
+    "amos": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Amos 现在进入完成态 authority 宇宙：Amos citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Amos 当前以前台 completed prophetic authority room 打开：先让 Book of Amos 的 citation traffic 可见。",
+    },
+    "joel": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Gioele 现在进入完成态 authority 宇宙：Ioel. 的 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Gioele 当前以前台 completed prophetic authority room 打开：先让 Book of Joel 的 citation traffic 可见。",
+    },
+    "malachi": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Malachia 现在进入完成态 authority 宇宙：Mal. 的 prophetic citations 已经足够常见，不该继续留在 authority 外部。",
+        "works_layer_note": "Malachia 当前以前台 completed prophetic authority room 打开：先让 Book of Malachi 的 citation traffic 可见。",
+    },
+    "graziolo_bambaglioli": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Graziolo Bambaglioli 现在进入完成态 authority 宇宙：早期 commentarial citation 已经足够形成独立房间，不该继续留在外部版本学比较区。",
+        "works_layer_note": "Graziolo Bambaglioli 当前以前台 completed commentary authority room 打开：先让 early Inferno commentary pressure 可见，再慢慢决定是否 productize 更细的 commentary-work tree。",
+    },
+    "petrus_comestor": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Pietro Comestore 现在进入完成态 authority 宇宙：Historia scholastica 这条 scriptural-historiographic lane 不该继续留在 authority 外部。",
+        "works_layer_note": "Pietro Comestore 当前以前台 completed commentary authority room 打开：先让 Historia scholastica 的 citation traffic 可见。",
+    },
+    "fulgentius_planciades": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Fulgenzio Planciade 现在进入完成态 authority 宇宙：mythographic citations 已经足够形成独立房间，不该继续留在 authority 外部。",
+        "works_layer_note": "Fulgenzio Planciade 当前以前台 completed mythographic authority room 打开：先让 Mythologiae / Expositio Virgilianae 的 traffic 可见。",
+    },
+    "cassiodorus": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Cassiodoro 现在进入完成态 authority 宇宙：Cassiod. 这条 patristic-exegetical lane 不该继续留在 authority 外部。",
+        "works_layer_note": "Cassiodoro 当前以前台 completed patristic authority room 打开：先让 Expositio Psalmorum / Institutiones 的 citation traffic 可见。",
+    },
+    "thomas_of_celano": {
+        "frontend_status_override": "ready",
+        "object_rollout_status": "ready",
+        "entry_mode": "author_commentary_work_overview",
+        "works_layer_mode": "flat_work_overview",
+        "frontend_notes_override": "Tommaso da Celano 现在进入完成态 authority 宇宙：Franciscan devotional citations 已经足够形成独立房间，不该继续留在 authority 外部。",
+        "works_layer_note": "Tommaso da Celano 当前以前台 completed devotional authority room 打开：先让 Vita prima Sancti Francisci / Dies irae 的 pressure 可见。",
     },
     "virgil": {
         "object_rollout_status": "ready_with_caveat",
@@ -664,6 +1308,25 @@ AUTHORITY_DISPLAY_NAME_OVERRIDES = {
     "mark": "Marco Evangelista",
     "luke": "Luca Evangelista",
     "john_the_evangelist": "Giovanni Evangelista",
+    "samuel": "Samuele",
+    "ezekiel": "Ezechiele",
+    "daniel": "Daniele",
+    "zechariah": "Zaccaria",
+    "joshua": "Giosuè",
+    "sirach": "Siracide",
+    "jeremiah": "Geremia",
+    "baruch": "Baruc",
+    "hosea": "Osea",
+    "job": "Giobbe",
+    "tobit": "Tobia",
+    "judith": "Giuditta",
+    "jonah": "Giona",
+    "micah": "Michea",
+    "habakkuk": "Abacuc",
+    "zephaniah": "Sofonia",
+    "amos": "Amos",
+    "joel": "Gioele",
+    "malachi": "Malachia",
     "augustine": "Agostino",
     "boethius": "Boezio",
     "cicero": "Cicerone",
@@ -704,6 +1367,11 @@ AUTHORITY_DISPLAY_NAME_OVERRIDES = {
     "galeno": "Galeno",
     "giovanni_crisostomo": "Giovanni Crisostomo",
     "gregorio_magno": "Gregorio Magno",
+    "graziolo_bambaglioli": "Graziolo Bambaglioli",
+    "petrus_comestor": "Pietro Comestore",
+    "fulgentius_planciades": "Fulgenzio Planciade",
+    "cassiodorus": "Cassiodoro",
+    "thomas_of_celano": "Tommaso da Celano",
     "dante": "Dante",
 }
 
@@ -738,6 +1406,18 @@ DANTE_SUPPLEMENTAL_WORKS = [
         "canonical_work": "Commedia",
         "aliases": ["Commedia", "Divina Commedia"],
     },
+    {
+        "canonical_work": "Inferno",
+        "aliases": ["Inferno", "Inf."],
+    },
+    {
+        "canonical_work": "Purgatorio",
+        "aliases": ["Purgatorio", "Purg."],
+    },
+    {
+        "canonical_work": "Paradiso",
+        "aliases": ["Paradiso", "Par."],
+    },
 ]
 
 DANTE_SUPPLEMENTAL_MARKERS = (
@@ -750,6 +1430,32 @@ DANTE_SUPPLEMENTAL_MARKERS = (
     "vulgari",
     "aqua et terra",
     "commedia",
+    "inferno",
+    "purgatorio",
+    "paradiso",
+)
+
+CINONIO_SUPPLEMENTAL_AUTHOR = {
+    "author_id": "cinonio",
+    "canonical_name": "Cinonio",
+    "aliases": ["Cinonio", "Cinon.", "il Cinonio", "'l Cinonio", "’l Cinonio"],
+}
+
+CINONIO_SUPPLEMENTAL_WORKS = [
+    {
+        "canonical_work": "Particelle",
+        "aliases": ["Particelle", "Partic.", "Part.", "Osservaz. Partic.", "Osserv. Part."],
+    },
+]
+
+CINONIO_SUPPLEMENTAL_MARKERS = (
+    "cinonio",
+    "cinon.",
+    "cin. partic",
+    "cin. part",
+    "particelle cap.",
+    "osservaz. partic",
+    "osserv. part",
 )
 
 
@@ -767,6 +1473,42 @@ def authority_public_slug(author_id: str | None, canonical_name: str | None) -> 
     ascii_text = re.sub(r"[^a-z0-9]+", "_", ascii_text)
     ascii_text = re.sub(r"_+", "_", ascii_text).strip("_")
     return ascii_text or "autore"
+
+
+def authority_work_display_label(row: dict[str, Any]) -> str | None:
+    label = str(row.get("display_label") or "").strip()
+    if label:
+        return label
+    canonical = str(row.get("canonical_work") or row.get("canonical_name") or "").strip()
+    if canonical:
+        return canonical
+    for alias in row.get("aliases") or []:
+        if isinstance(alias, str) and alias.strip():
+            return alias.strip()
+        if isinstance(alias, dict):
+            text = str(alias.get("text") or "").strip()
+            if text:
+                return text
+    return None
+
+
+def authority_work_public_slug(row: dict[str, Any]) -> str:
+    display = authority_work_display_label(row) or row.get("canonical_work") or row.get("canonical_name") or "opera"
+    normalized = unicodedata.normalize("NFKD", str(display))
+    ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
+    ascii_text = ascii_text.lower().replace("'", "").replace(".", " ")
+    ascii_text = re.sub(r"[^a-z0-9]+", "_", ascii_text)
+    ascii_text = re.sub(r"_+", "_", ascii_text).strip("_")
+    return ascii_text or "opera"
+
+
+def authority_work_attribution_fields(row: dict[str, Any]) -> dict[str, Any]:
+    payload: dict[str, Any] = {}
+    for key in ("attribution_status", "attribution_model", "attribution_note_en"):
+        value = row.get(key)
+        if value not in (None, "", [], {}):
+            payload[key] = value
+    return payload
 
 
 def normalize_ready_status_text(value: str | None) -> str | None:
@@ -789,12 +1531,614 @@ def promote_author_ready_status(author: dict[str, Any]) -> None:
     if author.get("works_layer_note"):
         author["works_layer_note"] = normalize_ready_status_text(author.get("works_layer_note"))
 
+
+def summarize_author_works_tree_payload(payload: dict[str, Any] | None) -> dict[str, int]:
+    summary = {
+        "work_count": 0,
+        "total_mentions": 0,
+        "locator_mentions": 0,
+        "locator_branch_count": 0,
+        "work_only_mentions": 0,
+    }
+    if not payload:
+        return summary
+    works = payload.get("works") or []
+    summary["work_count"] = len(works)
+    for work in works:
+        summary["total_mentions"] += int(work.get("total_mentions") or 0)
+        bucket_counts = work.get("locator_bucket_counts") or {}
+        summary["work_only_mentions"] += int(bucket_counts.get("work_only") or 0)
+        summary["locator_mentions"] += sum(
+            int(bucket_counts.get(key) or 0)
+            for key in ("structured_passage", "prose_locator", "pseudo_passage")
+        )
+        summary["locator_branch_count"] += len(work.get("structured_locator_tree") or [])
+        summary["locator_branch_count"] += len(work.get("prose_locator_tree") or [])
+    return summary
+
+
+def build_live_works_tree_note(
+    author: dict[str, Any],
+    works_tree_payload: dict[str, Any] | None,
+) -> str | None:
+    if not works_tree_payload:
+        return author.get("works_layer_note")
+    display_name = author.get("display_name") or author.get("canonical_name") or author.get("author_id")
+    summary = summarize_author_works_tree_payload(works_tree_payload)
+    work_count = summary["work_count"]
+    branch_count = summary["locator_branch_count"]
+    total_mentions = summary["total_mentions"]
+    work_only_mentions = summary["work_only_mentions"]
+    locator_mentions = summary["locator_mentions"]
+
+    if author.get("special_case"):
+        return (
+            f"{display_name} 当前以 special-case backbone 打开；works room 已可见，"
+            "但作者 / personaggio 双重身份仍必须保留为前台 caveat，不能按普通 author 无差别推进。"
+        )
+
+    if branch_count:
+        return (
+            f"{display_name} 当前已接入本地 works tree：{work_count} 个 work room、"
+            f"{branch_count} 个 locator branch、{total_mentions} 条 mounted work mentions。"
+            "可从 work room 进入，再沿本地 branch card 回到 commentary source。"
+        )
+
+    if total_mentions:
+        return (
+            f"{display_name} 当前已接入本地 work room：{work_count} 个 work anchor、"
+            f"{work_only_mentions or total_mentions} 条 work-level mentions。"
+            "目前证据主要停在 work-level 层，不外推成更深的 locator tree。"
+        )
+
+    if locator_mentions:
+        return (
+            f"{display_name} 当前已有 curated work room 和 {locator_mentions} 条待继续校准的 locator signals；"
+            "前台先显示 work anchors，不把未稳定的 locator signal 外推成 branch tree。"
+        )
+
+    return (
+        f"{display_name} 当前以前台 curated work room 打开：作品边界已可见，"
+        "但本地 commentary evidence 仍在等待继续长厚。"
+    )
+
+
+def build_authority_reading_contract_meta(author: dict[str, Any]) -> dict[str, Any] | None:
+    works_layer_mode = str(author.get("works_layer_mode") or "").strip()
+    total_mentions = int(author.get("total_mentions") or 0)
+    total_work_mentions = int(author.get("total_work_mentions") or 0)
+    text_occurrence_total = int(author.get("text_occurrence_total") or 0)
+    commentary_canto_total = len(author.get("by_canto_density") or [])
+    visible_work_count = len(author.get("works") or [])
+
+    if author.get("special_case") or author.get("special_case_object", {}).get("available"):
+        return {
+            "available": True,
+            "entry_contract_type": "special_case_entry",
+            "entry_contract_headline_en": "Open this author through special-case backbones and scoped commentary zones, not through a fake ordinary works tree.",
+            "entry_contract_headline_zh": "这个 author 应通过 special-case backbone 和受控 commentary zone 进入，而不是被伪装成普通 works tree。",
+            "maturity_band_en": "special-case backbone",
+            "maturity_band_zh": "special-case backbone",
+            "drilldown_status_en": "scoped backbone live",
+            "drilldown_status_zh": "受控 backbone 已接通",
+            "focus_work_count": visible_work_count,
+            "frontline_status_en": f"{commentary_canto_total} commentary cantos mounted",
+            "frontline_status_zh": f"{commentary_canto_total} 个 commentary canto 已挂出",
+            "pressure_band_en": f"{text_occurrence_total} direct text hits",
+            "pressure_band_zh": f"{text_occurrence_total} 个正文命中",
+        }
+
+    if works_layer_mode == "works_tree":
+        tree_summary = author.get("works_tree", {}).get("branch_summary") or {}
+        locator_branch_count = int(tree_summary.get("locator_branch_count") or 0)
+        total_tree_mentions = int(tree_summary.get("total_mentions") or total_work_mentions or 0)
+        work_count = int(tree_summary.get("work_count") or visible_work_count or 0)
+        if locator_branch_count:
+            headline_en = "Open this author through local work rooms and branch cards. This object already carries an evidence-backed works tree."
+            headline_zh = "这个 author 应从本地 work room 和 branch cards 进入；当前对象已经挂出 evidence-backed works tree。"
+            maturity_en = "mounted works tree"
+            maturity_zh = "已挂载 works tree"
+            drilldown_en = "local tree live"
+            drilldown_zh = "本地 tree 已接通"
+        else:
+            headline_en = "Open this author through local work rooms. The branch layer remains work-level until stronger local locators appear."
+            headline_zh = "这个 author 应从本地 work room 进入；branch 层目前保持 work-level，等待更强的本地 locator 再下钻。"
+            maturity_en = "mounted work room"
+            maturity_zh = "已挂载 work room"
+            drilldown_en = "work room live"
+            drilldown_zh = "work room 已接通"
+        return {
+            "available": True,
+            "entry_contract_type": "works_tree_entry",
+            "entry_contract_headline_en": headline_en,
+            "entry_contract_headline_zh": headline_zh,
+            "maturity_band_en": maturity_en,
+            "maturity_band_zh": maturity_zh,
+            "drilldown_status_en": drilldown_en,
+            "drilldown_status_zh": drilldown_zh,
+            "focus_work_count": work_count,
+            "frontline_status_en": f"{commentary_canto_total} commentary cantos mounted",
+            "frontline_status_zh": f"{commentary_canto_total} 个 commentary canto 已挂出",
+            "pressure_band_en": f"{total_tree_mentions} work mentions mounted",
+            "pressure_band_zh": f"{total_tree_mentions} 个 work mention 已挂出",
+        }
+
+    if works_layer_mode == "flat_work_overview":
+        focus_count = int(author.get("flat_work_object", {}).get("work_count") or visible_work_count or 0)
+        return {
+            "available": True,
+            "entry_contract_type": "flat_overview_entry",
+            "entry_contract_headline_en": "Open this author through a flat work overview: the room already exposes stable work cards and sampled occurrences, even where the branch layer stays lighter than a full works tree.",
+            "entry_contract_headline_zh": "这个 author 现在应通过 flat work overview 进入：work cards 和 sampled occurrences 已可用，即便 branch 层仍比完整 works tree 更轻。",
+            "maturity_band_en": "flat overview",
+            "maturity_band_zh": "flat overview",
+            "drilldown_status_en": "cards and samples live",
+            "drilldown_status_zh": "cards 与 samples 已接通",
+            "focus_work_count": focus_count,
+            "frontline_status_en": f"{total_work_mentions} work mentions mounted",
+            "frontline_status_zh": f"{total_work_mentions} 个 work mention 已挂出",
+            "pressure_band_en": f"{text_occurrence_total} direct text hits",
+            "pressure_band_zh": f"{text_occurrence_total} 个正文命中",
+        }
+
+    if works_layer_mode == "no_work_layer":
+        return {
+            "available": True,
+            "entry_contract_type": "commentary_first_entry",
+            "entry_contract_headline_en": "Start from text or commentary evidence, then continue through the curated room path. This object still has no mounted local work room.",
+            "entry_contract_headline_zh": "先从正文或 commentary 证据进入，再沿 curated room path 继续；当前对象还没有挂出的本地 work room。",
+            "maturity_band_en": "commentary-first room",
+            "maturity_band_zh": "commentary-first 房间",
+            "drilldown_status_en": "no local work room",
+            "drilldown_status_zh": "没有本地 work room",
+            "frontline_status_en": f"{total_mentions} total mentions mounted",
+            "frontline_status_zh": f"{total_mentions} 个总 mention 已挂出",
+            "pressure_band_en": f"{text_occurrence_total} direct text hits",
+            "pressure_band_zh": f"{text_occurrence_total} 个正文命中",
+        }
+
+    if works_layer_mode == "no_works_tree":
+        return {
+            "available": True,
+            "entry_contract_type": "special_backbone_entry",
+            "entry_contract_headline_en": "Open this object through a controlled special-case backbone, not through an ordinary work tree.",
+            "entry_contract_headline_zh": "这个对象应通过受控的 special-case backbone 进入，而不是按普通 work tree 进入。",
+            "maturity_band_en": "special-case backbone",
+            "maturity_band_zh": "special-case backbone",
+            "drilldown_status_en": "scoped backbone live",
+            "drilldown_status_zh": "受控 backbone 已接通",
+            "frontline_status_en": f"{commentary_canto_total} commentary cantos mounted",
+            "frontline_status_zh": f"{commentary_canto_total} 个 commentary canto 已挂出",
+            "pressure_band_en": f"{text_occurrence_total} direct text hits",
+            "pressure_band_zh": f"{text_occurrence_total} 个正文命中",
+        }
+
+    return None
+
+
+AUTHOR_WORK_EXCLUSIONS: dict[str, set[str]] = {
+    "platone": {"De immortalitate anime", "De immortalitate animae"},
+}
+
+AUTHOR_WORK_CANONICAL_REWRITES: dict[str, dict[str, str]] = {
+    "orazio": {
+        "Ars poetica": "Ars Poetica",
+        "Epistulae": "Epistles",
+    },
+}
+
+AUTHOR_MANUAL_WORK_ADDITIONS: dict[str, list[dict[str, Any]]] = {
+    "augustine": [
+        {
+            "canonical_work": "De immortalitate animae",
+            "count": 0,
+            "resolved_author_and_work": 0,
+            "resolved_work_plus_inferred_author": 0,
+            "passage_mentions": 0,
+        }
+    ],
+}
+
+
+def normalize_author_work_entries(author_id: str, works: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
+    normalized: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    excluded = AUTHOR_WORK_EXCLUSIONS.get(author_id, set())
+    rewrites = AUTHOR_WORK_CANONICAL_REWRITES.get(author_id, {})
+    for work in works or []:
+        canonical = str(work.get("canonical_work") or work.get("canonical_name") or "").strip()
+        canonical = rewrites.get(canonical, canonical)
+        if not canonical or canonical in excluded:
+            continue
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        enriched = dict(work)
+        enriched["canonical_work"] = canonical
+        enriched["display_label"] = authority_work_display_label(enriched) or canonical
+        enriched["public_slug_it"] = str(enriched.get("public_slug_it") or authority_work_public_slug(enriched)).strip() or authority_work_public_slug(enriched)
+        enriched.update(authority_work_attribution_fields(enriched))
+        normalized.append(enriched)
+    for extra in AUTHOR_MANUAL_WORK_ADDITIONS.get(author_id, []):
+        canonical = str(extra.get("canonical_work") or "").strip()
+        if not canonical or canonical in seen:
+            continue
+        seen.add(canonical)
+        enriched = dict(extra)
+        enriched["display_label"] = authority_work_display_label(enriched) or canonical
+        enriched["public_slug_it"] = str(enriched.get("public_slug_it") or authority_work_public_slug(enriched)).strip() or authority_work_public_slug(enriched)
+        enriched.update(authority_work_attribution_fields(enriched))
+        normalized.append(enriched)
+    return normalized
+
+
+def load_authority_fulltext_eligible_sample_ids() -> set[str] | None:
+    if not DATA_SOURCE_LINEAGE_MANIFEST_PATH.exists():
+        return None
+    try:
+        payload = json.loads(DATA_SOURCE_LINEAGE_MANIFEST_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    sample_ids = {
+        str(row.get("sample") or "").strip()
+        for row in payload.get("samples", [])
+        if row.get("authority_fulltext_eligible") is True
+    }
+    return {sample_id for sample_id in sample_ids if sample_id}
+
+
+def collect_mounted_author_work_stats(
+    allowed_samples: set[str] | None = None,
+) -> dict[str, dict[str, dict[str, int]]]:
+    stats: dict[str, dict[str, dict[str, int]]] = defaultdict(lambda: defaultdict(lambda: {
+        "count": 0,
+        "resolved_author_and_work": 0,
+        "resolved_work_plus_inferred_author": 0,
+        "passage_mentions": 0,
+    }))
+    for mentions_path in DEMO_DATA_DIR.glob("*/records/work_mentions.json"):
+        sample_name = mentions_path.parent.parent.name
+        if allowed_samples is not None and sample_name not in allowed_samples:
+            continue
+        try:
+            payload = json.loads(mentions_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        for record in (payload.get("records") or {}).values():
+            for mention in record.get("raw_work_mentions", []) or []:
+                author_id = str(mention.get("author_id") or "").strip()
+                canonical_work = str(mention.get("canonical_work") or "").strip()
+                if not author_id or not canonical_work:
+                    continue
+                bucket = stats[author_id][canonical_work]
+                bucket["count"] += 1
+                statuses = {str(status).strip() for status in (mention.get("work_statuses") or []) if str(status).strip()}
+                if "owner_alignment" in statuses:
+                    bucket["resolved_author_and_work"] += 1
+                else:
+                    bucket["resolved_work_plus_inferred_author"] += 1
+                if "passage_present" in statuses:
+                    bucket["passage_mentions"] += 1
+    return {
+        author_id: {canonical_work: dict(metrics) for canonical_work, metrics in works.items()}
+        for author_id, works in stats.items()
+    }
+
+
+def build_mounted_author_work_rows(
+    author_id: str,
+    mounted_stats: dict[str, dict[str, int]] | None,
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for canonical_work, metrics in sorted((mounted_stats or {}).items(), key=lambda item: item[0].casefold()):
+        row = {
+            "canonical_work": canonical_work,
+            "count": int(metrics.get("count", 0) or 0),
+            "resolved_author_and_work": int(metrics.get("resolved_author_and_work", 0) or 0),
+            "resolved_work_plus_inferred_author": int(metrics.get("resolved_work_plus_inferred_author", 0) or 0),
+            "passage_mentions": int(metrics.get("passage_mentions", 0) or 0),
+        }
+        row["display_label"] = authority_work_display_label(row) or canonical_work
+        row["public_slug_it"] = str(
+            row.get("public_slug_it")
+            or authority_work_public_slug(
+                {
+                    **row,
+                    "author_id": author_id,
+                    "display_label": row["display_label"],
+                }
+            )
+        ).strip() or authority_work_public_slug(
+            {
+                **row,
+                "author_id": author_id,
+                "display_label": row["display_label"],
+            }
+        )
+        row.update(authority_work_attribution_fields({"author_id": author_id, **row}))
+        rows.append(row)
+    return rows
+
+
+def collect_mounted_author_work_occurrences(
+    allowed_samples: set[str] | None = None,
+) -> dict[str, list[dict[str, Any]]]:
+    occurrences: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for store_path in DEMO_DATA_DIR.glob("*/records/store.json"):
+        sample_name = store_path.parent.parent.name
+        if allowed_samples is not None and sample_name not in allowed_samples:
+            continue
+        records_dir = store_path.parent
+        work_mentions_path = records_dir / "work_mentions.json"
+        if not work_mentions_path.exists():
+            continue
+        try:
+            store_payload = json.loads(store_path.read_text(encoding="utf-8"))
+            work_mentions_payload = json.loads(work_mentions_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        store_records = store_payload.get("records") or {}
+        work_mentions_records = work_mentions_payload.get("records") or {}
+        if not isinstance(store_records, dict) or not isinstance(work_mentions_records, dict):
+            continue
+        for record_id, record in store_records.items():
+            if not isinstance(record, dict):
+                continue
+            mentions = (work_mentions_records.get(record_id) or {}).get("raw_work_mentions") or []
+            if not mentions:
+                continue
+            cantica = str(record.get("cantica") or "").strip()
+            canto_raw = record.get("canto")
+            try:
+                canto = int(canto_raw) if canto_raw not in (None, "") else None
+            except (TypeError, ValueError):
+                canto = None
+            line_info = str(record.get("line_info") or "").strip()
+            line_number = infer_authority_jump_line_number(record.get("line_start"))
+            if line_number is None:
+                line_number = infer_authority_jump_line_number(line_info)
+            commentary_name = str(record.get("commentary_name") or "").strip()
+            commentary_abbr = build_commentary_abbr(commentary_name)
+            canto_label = format_canto_label(sample_name)
+            for mention in mentions:
+                author_id = str(mention.get("author_id") or "").strip()
+                canonical_work = str(mention.get("canonical_work") or "").strip()
+                if not author_id or not canonical_work:
+                    continue
+                statuses = {
+                    str(status).strip()
+                    for status in (mention.get("work_statuses") or [])
+                    if str(status).strip()
+                }
+                raw_surfaces = [str(item).strip() for item in (mention.get("raw_surfaces") or []) if str(item).strip()]
+                occurrences[author_id].append(
+                    {
+                        "author_id": author_id,
+                        "work": canonical_work,
+                        "cantica": cantica,
+                        "canto": canto,
+                        "canto_label": canto_label,
+                        "line_info": line_info,
+                        "commentary_name": commentary_name,
+                        "commentary_abbr": commentary_abbr,
+                        "raw_mention": raw_surfaces[0] if raw_surfaces else canonical_work,
+                        "resolution_status": (
+                            "resolved_author_and_work"
+                            if "owner_alignment" in statuses
+                            else "resolved_work_plus_inferred_author"
+                        ),
+                        "confidence": 0.92 if "owner_alignment" in statuses else 0.78,
+                        "raw_passage": None,
+                        "commentary_record_id": record_id,
+                        "result_url": None,
+                        "mention_role": None,
+                        "mention_role_confidence": None,
+                        "sample_name": sample_name,
+                        "line_number": line_number,
+                        "sample_available": True,
+                    }
+                )
+    return dict(occurrences)
+
+
+def merge_author_occurrence_rows(
+    primary_rows: list[dict[str, Any]] | None,
+    supplemental_rows: list[dict[str, Any]] | None,
+) -> list[dict[str, Any]]:
+    merged: list[dict[str, Any]] = []
+    keyed: dict[tuple[Any, ...], dict[str, Any]] = {}
+
+    def row_key(row: dict[str, Any]) -> tuple[Any, ...]:
+        return (
+            str(row.get("commentary_record_id") or "").strip(),
+            str(row.get("sample_name") or "").strip(),
+            str(row.get("commentary_name") or "").strip(),
+            str(row.get("line_info") or "").strip(),
+            str(row.get("work") or "").strip(),
+        )
+
+    def structural_key(row: dict[str, Any]) -> tuple[Any, ...]:
+        return (
+            str(row.get("commentary_record_id") or "").strip(),
+            str(row.get("sample_name") or "").strip(),
+            str(row.get("commentary_name") or "").strip(),
+            str(row.get("line_info") or "").strip(),
+        )
+
+    supplemental_structural_keys = {
+        structural_key(row)
+        for row in (supplemental_rows or [])
+        if str(row.get("work") or "").strip()
+    }
+
+    for row in primary_rows or []:
+        if not isinstance(row, dict):
+            continue
+        if not str(row.get("work") or "").strip() and structural_key(row) in supplemental_structural_keys:
+            continue
+        key = row_key(row)
+        if key in keyed:
+            continue
+        normalized = dict(row)
+        keyed[key] = normalized
+        merged.append(normalized)
+
+    for row in supplemental_rows or []:
+        if not isinstance(row, dict):
+            continue
+        key = row_key(row)
+        existing = keyed.get(key)
+        if existing is None:
+            normalized = dict(row)
+            keyed[key] = normalized
+            merged.append(normalized)
+            continue
+        for field, value in row.items():
+            if value in (None, "", [], {}):
+                continue
+            if existing.get(field) in (None, "", [], {}):
+                existing[field] = value
+
+    return merged
+
+
+def merge_author_work_entries(
+    author_id: str,
+    primary_works: list[dict[str, Any]] | None,
+    supplemental_works: list[dict[str, Any]] | None,
+) -> list[dict[str, Any]]:
+    merged: dict[str, dict[str, Any]] = {}
+
+    def _upsert(row: dict[str, Any]) -> None:
+        canonical = str(row.get("canonical_work") or "").strip()
+        if not canonical:
+            return
+        existing = merged.get(canonical)
+        if existing is None:
+            merged[canonical] = dict(row)
+            return
+        for key in ("count", "resolved_author_and_work", "resolved_work_plus_inferred_author", "passage_mentions"):
+            existing[key] = max(int(existing.get(key, 0) or 0), int(row.get(key, 0) or 0))
+        for key, value in row.items():
+            if key == "canonical_work":
+                continue
+            if value in (None, "", [], {}):
+                continue
+            if existing.get(key) in (None, "", [], {}):
+                existing[key] = value
+
+    for work in normalize_author_work_entries(author_id, list(primary_works or [])):
+        _upsert(work)
+    for work in normalize_author_work_entries(author_id, list(supplemental_works or [])):
+        _upsert(work)
+
+    return sorted(
+        merged.values(),
+        key=lambda item: (
+            -int(item.get("count", 0) or 0),
+            -int(item.get("resolved_author_and_work", 0) or 0),
+            -int(item.get("resolved_work_plus_inferred_author", 0) or 0),
+            str(item.get("canonical_work") or "").casefold(),
+        ),
+    )
+
+
+def reconcile_author_work_entries(
+    author_id: str,
+    primary_works: list[dict[str, Any]] | None,
+    metadata_works: list[dict[str, Any]] | None,
+    mounted_works: list[dict[str, Any]] | None,
+) -> list[dict[str, Any]]:
+    metric_keys = ("count", "resolved_author_and_work", "resolved_work_plus_inferred_author", "passage_mentions")
+    merged: dict[str, dict[str, Any]] = {}
+    order: list[str] = []
+
+    def ensure_row(row: dict[str, Any]) -> dict[str, Any]:
+        canonical = str(row.get("canonical_work") or "").strip()
+        existing = merged.get(canonical)
+        if existing is None:
+            existing = dict(row)
+            merged[canonical] = existing
+            order.append(canonical)
+            return existing
+        for key, value in row.items():
+            if key == "canonical_work" or key in metric_keys:
+                continue
+            if value in (None, "", [], {}):
+                continue
+            if existing.get(key) in (None, "", [], {}):
+                existing[key] = value
+        return existing
+
+    primary_rows = normalize_author_work_entries(author_id, list(primary_works or []))
+    metadata_rows = normalize_author_work_entries(author_id, list(metadata_works or []))
+    mounted_rows = normalize_author_work_entries(author_id, list(mounted_works or []))
+
+    for row in primary_rows:
+        ensure_row(row)
+    for row in metadata_rows:
+        ensure_row(row)
+
+    mounted_by_canonical: dict[str, dict[str, Any]] = {}
+    for row in mounted_rows:
+        canonical = str(row.get("canonical_work") or "").strip()
+        if not canonical:
+            continue
+        mounted_by_canonical[canonical] = dict(row)
+        ensure_row(row)
+
+    for canonical in order:
+        existing = merged[canonical]
+        mounted = mounted_by_canonical.get(canonical)
+        if mounted is None:
+            for key in metric_keys:
+                existing[key] = 0
+            continue
+        for key in metric_keys:
+            existing[key] = int(mounted.get(key, 0) or 0)
+
+    return sorted(
+        merged.values(),
+        key=lambda item: (
+            -int(item.get("count", 0) or 0),
+            -int(item.get("resolved_author_and_work", 0) or 0),
+            -int(item.get("resolved_work_plus_inferred_author", 0) or 0),
+            str(item.get("canonical_work") or "").casefold(),
+        ),
+    )
+
+
+def filter_visible_author_work_entries(works: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
+    rows = [dict(work) for work in (works or [])]
+    if not rows:
+        return []
+    if any(
+        int(work.get("count", 0) or 0) > 0
+        or int(work.get("resolved_author_and_work", 0) or 0) > 0
+        or int(work.get("resolved_work_plus_inferred_author", 0) or 0) > 0
+        or int(work.get("passage_mentions", 0) or 0) > 0
+        for work in rows
+    ):
+        filtered = [
+            work
+            for work in rows
+            if (
+                int(work.get("count", 0) or 0) > 0
+                or int(work.get("resolved_author_and_work", 0) or 0) > 0
+                or int(work.get("resolved_work_plus_inferred_author", 0) or 0) > 0
+                or int(work.get("passage_mentions", 0) or 0) > 0
+            )
+        ]
+        if filtered:
+            return filtered
+    return rows
+
 REVIEW_FIRST_FLAT_WORK_SPECS = {
     "platone": {
         "review_path": PLATONE_WORK_CONTEXT_REVIEW_PATH,
         "bundle_review_path": PLATONE_WORK_BUNDLE_REVIEW_PATH,
         "anchor_labels": {"Timaeus / Timeo", "Laws / Leggi"},
-        "secondary_labels": {"Republic / Repubblica", "Phaedo / Fedone", "Symposium / Simposio", "De immortalitate anime"},
+        "secondary_labels": {"Republic / Repubblica", "Phaedo / Fedone", "Symposium / Simposio"},
         "local_source_policy": (
             "Platone is now a partial flat-work object: open local commentary source text first, "
             "treat Timaeus / Timeo as the primary anchor, keep Laws / Leggi as a caveated second anchor, "
@@ -856,10 +2200,6 @@ FIGURE_REGISTRY = {
     "francesca": {
         "display_label": "Francesca",
         "aliases": ["francesca"],
-    },
-    "ulysses": {
-        "display_label": "Ulysses",
-        "aliases": ["ulisse", "ulixes", "ulixe"],
     },
     "cato": {
         "display_label": "Cato",
@@ -1254,11 +2594,16 @@ USER_CONFIRMED_INCOMPLETE_SAMPLES = {}
 # Human review remains advisory for now; do not hard-bind line-level keeps/drops into generation.
 LOCAL_SEMANTIC_FIELD_REVIEW_OVERRIDES: dict[str, dict[str, Any]] = {}
 CANONICAL_LINE_CACHE: dict[str, dict[int, str]] | None = None
+NORMALIZED_CANONICAL_LINE_CACHE: list[dict[str, Any]] | None = None
 COMMENTARY_ALIAS_LEARNING_CACHE: dict[str, dict[str, Any]] | None = None
 AUTHORITY_WORKS_TREE_CACHE: dict[str, dict[str, Any]] | None = None
 AUTHORITY_COMMENTARY_LINE_INDEX_CACHE: dict[str, dict[str, Any]] | None = None
 AUTHORITY_SOURCE_TEXT_CACHE: dict[str, dict[str, dict[str, Any]]] = {}
+AUTHORITY_SOURCE_TEXT_BY_RECORD_ID_CACHE: dict[str, dict[str, dict[str, Any]]] = {}
+AUTHORITY_SOURCE_RECORD_ID_BY_RESULT_URL_CACHE: dict[str, dict[str, str]] = {}
 AUTHORITY_SOURCE_TIMEOUT_SAMPLES: set[str] = set()
+AUTHORITY_STORE_RECORD_CACHE: dict[str, dict[str, dict[str, Any]]] = {}
+AUTHORITY_FULLTEXT_RECORD_CACHE: dict[str, dict[str, dict[str, Any]]] = {}
 FIELD_LABEL_PRIOR_CACHE: dict[str, dict[str, float]] | None = None
 LOCAL_SEMANTIC_FIELD_INTEGRATION_QUEUE_CACHE: dict[str, Any] | None = None
 
@@ -1477,6 +2822,33 @@ def load_canonical_line_cache() -> dict[str, dict[int, str]]:
     return CANONICAL_LINE_CACHE
 
 
+def load_normalized_canonical_line_cache() -> list[dict[str, Any]]:
+    global NORMALIZED_CANONICAL_LINE_CACHE
+    if NORMALIZED_CANONICAL_LINE_CACHE is not None:
+        return NORMALIZED_CANONICAL_LINE_CACHE
+
+    rows: list[dict[str, Any]] = []
+    for sample_id, lines in load_canonical_line_cache().items():
+        cantica, canto = parse_sample_id(sample_id)
+        if not cantica or canto is None:
+            continue
+        for line_number, line_text in sorted(lines.items()):
+            normalized_line = re.sub(r"\s+", " ", normalize_semantic_text(line_text))
+            rows.append(
+                {
+                    "sample_id": sample_id,
+                    "cantica": cantica,
+                    "canto": canto,
+                    "line_number": line_number,
+                    "line_text": line_text,
+                    "normalized_line": normalized_line,
+                    "compact_line": re.sub(r"[^a-z ]", "", normalized_line),
+                }
+            )
+    NORMALIZED_CANONICAL_LINE_CACHE = rows
+    return NORMALIZED_CANONICAL_LINE_CACHE
+
+
 def load_commentary_alias_learning() -> dict[str, dict[str, Any]]:
     global COMMENTARY_ALIAS_LEARNING_CACHE
     if COMMENTARY_ALIAS_LEARNING_CACHE is not None:
@@ -1529,6 +2901,11 @@ def write_demo_authority_works_tree_shards(works_trees: dict[str, dict[str, Any]
 def write_demo_authority_commentary_line_shards(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
     ensure_dir(AUTHORITY_COMMENTARY_LINE_INDEX_DIR)
     shard_paths: dict[str, dict[str, Any]] = {}
+    desired_author_ids = {
+        str(author.get("author_id") or "").strip()
+        for author in payload.get("authors", [])
+        if str(author.get("author_id") or "").strip()
+    }
     for author in payload.get("authors", []):
         author_id = author.get("author_id")
         if not author_id:
@@ -1626,6 +3003,15 @@ def write_demo_authority_commentary_line_shards(payload: dict[str, Any]) -> dict
             "index_path": f"./data/authority_commentary_lines/{author_id}/index.json",
             "sample_count": len(sample_index_rows),
         }
+
+    for stale_path in AUTHORITY_COMMENTARY_LINE_INDEX_DIR.iterdir():
+        stale_author_id = stale_path.stem if stale_path.is_file() else stale_path.name
+        if stale_author_id in desired_author_ids:
+            continue
+        if stale_path.is_dir():
+            shutil.rmtree(stale_path)
+        elif stale_path.suffix == ".json":
+            stale_path.unlink()
     return shard_paths
 
 
@@ -1679,12 +3065,119 @@ def annotate_authority_occurrence(
         line_number = infer_authority_jump_line_number(occurrence.get("line_info"))
     if line_number is None:
         line_number = fallback_line_number
+    result_url = resolve_local_commentary_result_url(sample_name, occurrence)
+    occurrence_with_result_url = {**occurrence, "result_url": result_url} if result_url else occurrence
+    commentary_record_id = (
+        resolve_local_commentary_record_id(sample_name, occurrence_with_result_url)
+        or occurrence.get("commentary_record_id")
+    )
+    if not result_url and commentary_record_id:
+        result_url = resolve_local_commentary_result_url(
+            sample_name,
+            {**occurrence, "commentary_record_id": commentary_record_id},
+        )
     return {
         **occurrence,
         "sample_name": sample_name,
         "line_number": line_number,
+        "commentary_record_id": commentary_record_id,
+        "result_url": result_url,
         "jump_target": build_authority_jump_target(sample_name, line_number),
         "source_open_mode": "local_commentary_source_only",
+    }
+
+
+def is_suppressed_authority_commentary_line_occurrence(
+    author_id: str | None,
+    sample_name: str | None,
+    occurrence: dict[str, Any],
+) -> bool:
+    key = (
+        str(author_id or "").strip(),
+        str(sample_name or occurrence.get("sample_name") or "").strip(),
+        str(occurrence.get("commentary_record_id") or "").strip(),
+        str(occurrence.get("raw_mention") or "").strip(),
+    )
+    return key in AUTHORITY_COMMENTARY_LINE_FALSE_POSITIVE_KEYS
+
+
+def summarize_authority_commentary_line_group(group: dict[str, Any]) -> dict[str, Any]:
+    occurrences = group.get("occurrences") or []
+    commentary_index: dict[str, dict[str, Any]] = {}
+    for occurrence in occurrences:
+        label = str(occurrence.get("commentary_name") or occurrence.get("commentary_abbr") or "").strip()
+        if not label:
+            continue
+        entry = commentary_index.setdefault(
+            label,
+            {
+                "abbr": occurrence.get("commentary_abbr"),
+                "commentary_name": label,
+                "mention_count": 0,
+            },
+        )
+        entry["mention_count"] += int(occurrence.get("mention_count") or 1)
+    return {
+        **group,
+        "occurrences": occurrences,
+        "commentary_index": sorted(
+            commentary_index.values(),
+            key=lambda item: (-int(item.get("mention_count") or 0), str(item.get("commentary_name") or "")),
+        ),
+        "commentary_count": len(commentary_index),
+        "total_mentions": sum(int(item.get("mention_count") or 1) for item in occurrences),
+    }
+
+
+def normalize_authority_commentary_line_index_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    normalized_authors: list[dict[str, Any]] = []
+    for author in payload.get("authors", []) or []:
+        author_id = author.get("author_id")
+        normalized_samples: list[dict[str, Any]] = []
+        for sample in author.get("samples", []) or []:
+            sample_name = sample.get("sample_name")
+            normalized_groups: list[dict[str, Any]] = []
+            for group in sample.get("line_groups", []) or []:
+                group_line_number = infer_authority_jump_line_number(group.get("line_start"))
+                if group_line_number is None:
+                    group_line_number = infer_authority_jump_line_number(group.get("line_info"))
+                normalized_occurrences = [
+                    annotate_authority_occurrence(
+                        item,
+                        fallback_sample_name=sample_name,
+                        fallback_line_number=group_line_number,
+                    )
+                    for item in (group.get("occurrences") or [])
+                    if not is_suppressed_authority_commentary_line_occurrence(author_id, sample_name, item)
+                ]
+                if not normalized_occurrences:
+                    continue
+                normalized_groups.append(
+                    summarize_authority_commentary_line_group({
+                        **group,
+                        "occurrences": normalized_occurrences,
+                    })
+                )
+            sample_total_mentions = sum(int(group.get("total_mentions") or 0) for group in normalized_groups)
+            normalized_samples.append(
+                {
+                    **sample,
+                    "line_groups": normalized_groups,
+                    "line_group_count": len(normalized_groups),
+                    "total_mentions": sample_total_mentions,
+                }
+            )
+        author_sample_count = len(normalized_samples)
+        normalized_authors.append(
+            {
+                **author,
+                "samples": normalized_samples,
+                "sample_count": author_sample_count,
+            }
+        )
+    return {
+        **payload,
+        "authors": normalized_authors,
     }
 
 
@@ -2869,7 +4362,7 @@ def build_authority_flat_work_payload(
         else:
             unresolved_occurrences.append(annotated)
 
-    for work in work_entry.get("works", []) or []:
+    for work in normalize_author_work_entries(author_id, list(work_entry.get("works", []) or [])):
         work_name = work.get("canonical_work")
         grouped = grouped_occurrences.get(work_name, [])
         resolved = int(work.get("resolved_author_and_work", 0) or 0)
@@ -3478,12 +4971,8 @@ def write_demo_authority_flat_object_shards(
 ) -> dict[str, dict[str, Any]]:
     ensure_dir(AUTHORITY_FLAT_OBJECT_DATA_DIR)
     shard_meta: dict[str, dict[str, Any]] = {}
-    supported_flat_object_authors = {"cicero", "augustine", "platone", "tommaso_daquino", "ovid", "boethius", "seneca"}
-
     for author in author_entries:
         author_id = author.get("author_id")
-        if author_id not in supported_flat_object_authors:
-            continue
         if author.get("works_layer_mode") != "flat_work_overview":
             continue
 
@@ -3538,6 +5027,259 @@ def write_demo_authority_flat_object_shards(
         }
 
     return shard_meta
+
+
+def load_existing_flat_object_meta(author_id: str | None) -> dict[str, Any] | None:
+    if not author_id:
+        return None
+    shard_path = AUTHORITY_FLAT_OBJECT_DATA_DIR / f"{author_id}.json"
+    if not shard_path.exists():
+        return None
+    try:
+        payload = json.loads(shard_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    overview = payload.get("overview") or {}
+    display_contract = payload.get("display_contract") or {}
+    branches_contract = payload.get("work_branches_contract") or {}
+    return {
+        "available": True,
+        "author_id": author_id,
+        "path": f"./data/authority_flat_objects/{author_id}.json",
+        "rollout_kind": payload.get("rollout_kind", "stable_flat_work_object"),
+        "source_open_mode": "local_commentary_source_only",
+        "root_display_mode": display_contract.get("root_display_mode"),
+        "hide_internal_schema_node": display_contract.get("hide_internal_schema_node"),
+        "branch_mode": branches_contract.get("branch_mode"),
+        "visible_children": branches_contract.get("visible_children", []),
+        "work_count": overview.get("work_count", 0),
+        "sample_occurrence_count": overview.get("sample_occurrence_count", 0),
+        "anchor_work_count": overview.get("anchor_work_count", 0),
+        "secondary_work_count": overview.get("secondary_work_count", 0),
+        "tier_counts": overview.get("tier_counts", {}),
+        "partial_tree_count": overview.get("partial_tree_count", 0),
+        "pattern_bundle_available": overview.get("pattern_bundle_available", False),
+        "candidate_locator_cluster_count": overview.get("candidate_locator_cluster_count", 0),
+        "branch_bundle_available": overview.get("branch_bundle_available", False),
+        "branch_candidate_count": overview.get("branch_candidate_count", 0),
+        "work_hardening_available": overview.get("work_hardening_available", False),
+        "hardening_focus_work_count": overview.get("hardening_focus_work_count", 0),
+        "stable_branch_candidate_count": overview.get("stable_branch_candidate_count", 0),
+        "promotion_ready_branch_count": overview.get("promotion_ready_branch_count", 0),
+        "normalized_backbone_book_count": overview.get("normalized_backbone_book_count", 0),
+        "normalized_branch_cluster_count": overview.get("normalized_branch_cluster_count", 0),
+        "primary_letter_spine_count": overview.get("primary_letter_spine_count", 0),
+        "clean_book_spine_count": overview.get("clean_book_spine_count", 0),
+        "locator_calibration_available": overview.get("locator_calibration_available", False),
+        "locator_question_node_count": overview.get("locator_question_node_count", 0),
+        "locator_article_node_count": overview.get("locator_article_node_count", 0),
+        "evidence_backed_part_count": overview.get("evidence_backed_part_count", 0),
+        "active_part_spine_count": overview.get("active_part_spine_count", 0),
+        "secondary_work_hold_count": overview.get("secondary_work_hold_count", 0),
+        "wave4_focus_work_count": overview.get("wave4_focus_work_count", 0),
+        "wave5_focus_work_count": overview.get("wave5_focus_work_count", 0),
+    }
+
+
+def load_author_curated_work_anchors() -> dict[str, Any]:
+    global _CURATED_AUTHOR_WORK_ANCHOR_CACHE
+    if _CURATED_AUTHOR_WORK_ANCHOR_CACHE is not None:
+        return _CURATED_AUTHOR_WORK_ANCHOR_CACHE
+    if not AUTHORITY_CURATED_ROOM_ANCHORS_PATH.exists():
+        _CURATED_AUTHOR_WORK_ANCHOR_CACHE = {}
+        return _CURATED_AUTHOR_WORK_ANCHOR_CACHE
+    try:
+        payload = json.loads(AUTHORITY_CURATED_ROOM_ANCHORS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        _CURATED_AUTHOR_WORK_ANCHOR_CACHE = {}
+        return _CURATED_AUTHOR_WORK_ANCHOR_CACHE
+    _CURATED_AUTHOR_WORK_ANCHOR_CACHE = payload.get("author_work_anchors") or {}
+    return _CURATED_AUTHOR_WORK_ANCHOR_CACHE
+
+
+def load_curated_work_evidence() -> dict[str, dict[str, Any]]:
+    global _CURATED_WORK_EVIDENCE_CACHE
+    if _CURATED_WORK_EVIDENCE_CACHE is not None:
+        return _CURATED_WORK_EVIDENCE_CACHE
+
+    compiled_hints = {
+        author_id: {
+            canonical_work: [
+                {
+                    "regex": re.compile(pattern, re.IGNORECASE),
+                    "prefilter_needle": regex_prefilter_needle(pattern),
+                }
+                for pattern in patterns
+            ]
+            for canonical_work, patterns in work_map.items()
+        }
+        for author_id, work_map in CURATED_WORK_EVIDENCE_HINTS.items()
+    }
+    payload: dict[str, dict[str, Any]] = {
+        author_id: {
+            canonical_work: {"count": 0, "occurrences": []}
+            for canonical_work in work_map
+        }
+        for author_id, work_map in CURATED_WORK_EVIDENCE_HINTS.items()
+    }
+    seen_keys: set[tuple[str, str, str]] = set()
+
+    for fulltext_path in DEMO_DATA_DIR.glob("*/records/fulltext.json"):
+        records_dir = fulltext_path.parent
+        store_path = records_dir / "store.json"
+        if not store_path.exists():
+            continue
+        try:
+            fulltext_payload = json.loads(fulltext_path.read_text(encoding="utf-8"))
+            store_payload = json.loads(store_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+
+        sample_name = str(fulltext_payload.get("sample") or records_dir.parent.name)
+        fulltext_records = fulltext_payload.get("records") or {}
+        store_records = store_payload.get("records") or {}
+
+        for record_id, record in fulltext_records.items():
+            text = str((record or {}).get("record_text") or "")
+            if not text.strip():
+                continue
+            normalized_text = " ".join(text.split())
+            folded_text = normalized_text.casefold()
+            for author_id, work_map in compiled_hints.items():
+                for canonical_work, patterns in work_map.items():
+                    match = None
+                    for pattern in patterns:
+                        needle = pattern.get("prefilter_needle")
+                        if needle and needle not in folded_text:
+                            continue
+                        match = pattern["regex"].search(normalized_text)
+                        if match:
+                            break
+                    if not match:
+                        continue
+                    dedupe_key = (author_id, canonical_work, str(record_id))
+                    if dedupe_key in seen_keys:
+                        continue
+                    seen_keys.add(dedupe_key)
+                    store_record = store_records.get(record_id) or {}
+                    raw_mention = match.group(0).strip(" \t\n\r;:,.()[]{}") or canonical_work
+                    occurrence = {
+                        "commentary_record_id": record_id,
+                        "commentary_name": store_record.get("commentary_name"),
+                        "cantica": store_record.get("cantica"),
+                        "canto": store_record.get("canto"),
+                        "line_info": store_record.get("line_info"),
+                        "line_number": store_record.get("line_start"),
+                        "sample_name": sample_name,
+                        "work": canonical_work,
+                        "raw_mention": raw_mention[:160],
+                        "mention_role": "curated_work_surface",
+                        "confidence": 0.66,
+                        "resolution_status": "resolved_author_and_work",
+                    }
+                    bucket = payload[author_id][canonical_work]
+                    bucket["count"] += 1
+                    bucket["occurrences"].append(occurrence)
+
+    _CURATED_WORK_EVIDENCE_CACHE = payload
+    return _CURATED_WORK_EVIDENCE_CACHE
+
+
+def merge_curated_work_occurrence_rows(
+    occurrence_rows: list[dict[str, Any]],
+    curated_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    merged = list(occurrence_rows or [])
+    seen = {
+        (
+            str(row.get("commentary_record_id") or ""),
+            str(row.get("work") or ""),
+            str(row.get("line_info") or ""),
+            str(row.get("commentary_name") or ""),
+        )
+        for row in merged
+    }
+    for row in curated_rows or []:
+        key = (
+            str(row.get("commentary_record_id") or ""),
+            str(row.get("work") or ""),
+            str(row.get("line_info") or ""),
+            str(row.get("commentary_name") or ""),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(row)
+    return merged
+
+
+def apply_curated_work_evidence(
+    author_id: str,
+    works: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    evidence_map = load_curated_work_evidence().get(author_id) or {}
+    if not evidence_map:
+        return list(works or []), []
+
+    author_has_mounted_counts = any(
+        int(work.get("count", 0) or 0) > 0
+        or int(work.get("resolved_author_and_work", 0) or 0) > 0
+        or int(work.get("resolved_work_plus_inferred_author", 0) or 0) > 0
+        or int(work.get("passage_mentions", 0) or 0) > 0
+        for work in (works or [])
+    )
+
+    curated_occurrences: list[dict[str, Any]] = []
+    updated_works: list[dict[str, Any]] = []
+    for work in list(works or []):
+        canonical_work = str(work.get("canonical_work") or "")
+        evidence = evidence_map.get(canonical_work) or {}
+        evidence_count = int(evidence.get("count", 0) or 0)
+        evidence_occurrences = list(evidence.get("occurrences") or [])
+        curated_occurrences.extend(evidence_occurrences)
+        if not evidence_count:
+            updated_works.append(work)
+            continue
+        if author_has_mounted_counts:
+            updated_works.append(work)
+            continue
+        updated_works.append(
+            {
+                **work,
+                "count": max(int(work.get("count", 0) or 0), evidence_count),
+                "resolved_author_and_work": max(int(work.get("resolved_author_and_work", 0) or 0), evidence_count),
+                "passage_mentions": max(int(work.get("passage_mentions", 0) or 0), evidence_count),
+            }
+        )
+    return updated_works, curated_occurrences
+
+
+def synthesize_curated_work_entries(author_id: str | None) -> list[dict[str, Any]]:
+    if not author_id:
+        return []
+    anchor = load_author_curated_work_anchors().get(author_id) or {}
+    items = anchor.get("items_en") or []
+    synthesized = []
+    for item in items:
+        label = str(item.get("label") or "").strip()
+        if not label:
+            continue
+        normalized = unicodedata.normalize("NFKD", label)
+        ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
+        ascii_text = ascii_text.lower().replace("'", "").replace(".", " ")
+        public_slug = re.sub(r"_+", "_", re.sub(r"[^a-z0-9]+", "_", ascii_text).strip("_")) or "opera"
+        synthesized.append(
+            {
+                "canonical_work": label,
+                "display_label": label,
+                "public_slug_it": public_slug,
+                "count": 0,
+                "resolved_author_and_work": 0,
+                "resolved_work_plus_inferred_author": 0,
+                "passage_mentions": 0,
+            }
+        )
+    return synthesized
 
 
 def write_demo_authority_partial_tree_shards() -> dict[str, dict[str, Any]]:
@@ -3947,6 +5689,42 @@ def build_authority_index_author(author: dict[str, Any]) -> dict[str, Any]:
             else {"available": False}
         ),
         "flat_work_meta": (
+            {
+                "available": True,
+                "author_id": flat_work_object.get("author_id"),
+                "path": flat_work_object.get("path"),
+                "rollout_kind": flat_work_object.get("rollout_kind"),
+                "source_open_mode": flat_work_object.get("source_open_mode"),
+                "root_display_mode": flat_work_object.get("root_display_mode"),
+                "hide_internal_schema_node": flat_work_object.get("hide_internal_schema_node"),
+                "work_count": flat_work_object.get("work_count", 0),
+                "sample_occurrence_count": flat_work_object.get("sample_occurrence_count", 0),
+                "anchor_work_count": flat_work_object.get("anchor_work_count", 0),
+                "secondary_work_count": flat_work_object.get("secondary_work_count", 0),
+                "tier_counts": flat_work_object.get("tier_counts", {}),
+                "partial_tree_count": flat_work_object.get("partial_tree_count", 0),
+                "pattern_bundle_available": flat_work_object.get("pattern_bundle_available", False),
+                "candidate_locator_cluster_count": flat_work_object.get("candidate_locator_cluster_count", 0),
+                "branch_bundle_available": flat_work_object.get("branch_bundle_available", False),
+                "branch_candidate_count": flat_work_object.get("branch_candidate_count", 0),
+                "work_hardening_available": flat_work_object.get("work_hardening_available", False),
+                "hardening_focus_work_count": flat_work_object.get("hardening_focus_work_count", 0),
+                "stable_branch_candidate_count": flat_work_object.get("stable_branch_candidate_count", 0),
+                "normalized_backbone_book_count": flat_work_object.get("normalized_backbone_book_count", 0),
+                "locator_calibration_available": flat_work_object.get("locator_calibration_available", False),
+                "locator_question_node_count": flat_work_object.get("locator_question_node_count", 0),
+                "locator_article_node_count": flat_work_object.get("locator_article_node_count", 0),
+                "evidence_backed_part_count": flat_work_object.get("evidence_backed_part_count", 0),
+                "secondary_work_hold_count": flat_work_object.get("secondary_work_hold_count", 0),
+                "wave4_focus_work_count": flat_work_object.get("wave4_focus_work_count", 0),
+                "wave5_focus_work_count": flat_work_object.get("wave5_focus_work_count", 0),
+                "branch_mode": flat_work_object.get("branch_mode"),
+                "visible_children": flat_work_object.get("visible_children", []),
+            }
+            if flat_work_object and flat_work_object.get("available")
+            else {"available": False}
+        ),
+        "flat_work_object": (
             {
                 "available": True,
                 "author_id": flat_work_object.get("author_id"),
@@ -7679,6 +9457,498 @@ def infer_authority_sample_name(cantica: str | None, canto: int | str | None) ->
     return f"{str(cantica).lower()}{canto_number}"
 
 
+def build_commentary_room_route_key(sample_id: str) -> str:
+    cantica, canto = parse_sample_id(sample_id)
+    if not cantica or canto is None:
+        return sample_id
+    prefix = {
+        "inferno": "inf",
+        "purgatorio": "purg",
+        "paradiso": "par",
+    }.get(cantica, cantica[:4].lower())
+    return f"{prefix}{canto}"
+
+
+def build_commentary_room_line_route_key(sample_id: str, line_number: int) -> str:
+    return f"{build_commentary_room_route_key(sample_id)},{line_number}"
+
+
+def load_commentary_room_authority_metadata() -> tuple[dict[str, dict[str, Any]], dict[tuple[str, str], dict[str, Any]]]:
+    if not AUTHORITY_INDEX_PATH.exists() and not (DEMO_DATA_DIR / "authority_layer.json").exists():
+        return {}, {}
+
+    authority_layer_path = DEMO_DATA_DIR / "authority_layer.json"
+    if not authority_layer_path.exists():
+        return {}, {}
+
+    payload = json.loads(authority_layer_path.read_text(encoding="utf-8"))
+    authors: dict[str, dict[str, Any]] = {}
+    works: dict[tuple[str, str], dict[str, Any]] = {}
+
+    for row in payload.get("authors", []):
+        author_id = str(row.get("author_id") or "").strip()
+        if not author_id:
+            continue
+        canonical_name = str(row.get("canonical_name") or "").strip() or None
+        display_name = str(
+            row.get("display_name")
+            or authority_display_name(author_id, canonical_name)
+            or canonical_name
+            or author_id
+        ).strip()
+        public_slug_it = str(row.get("public_slug_it") or authority_public_slug(author_id, canonical_name)).strip()
+        authors[author_id] = {
+            "author_id": author_id,
+            "canonical_name": canonical_name or display_name,
+            "display_name": display_name,
+            "public_slug_it": public_slug_it or authority_public_slug(author_id, canonical_name),
+        }
+        for work in row.get("works", []) or []:
+            canonical_work = str(work.get("canonical_work") or "").strip()
+            if not canonical_work:
+                continue
+            work_row = dict(work)
+            work_row["canonical_work"] = canonical_work
+            works[(author_id, canonical_work)] = {
+                "author_id": author_id,
+                "canonical_work": canonical_work,
+                "display_label": authority_work_display_label(work_row) or canonical_work,
+                "public_slug_it": str(
+                    work_row.get("public_slug_it") or authority_work_public_slug(work_row)
+                ).strip() or authority_work_public_slug(work_row),
+                **authority_work_attribution_fields(work_row),
+            }
+
+    return authors, works
+
+
+def build_commentary_room_commentator_id(commentary_name: str | None) -> str:
+    label = str(commentary_name or "").strip()
+    return authority_public_slug(None, label or "commentary")
+
+
+def build_commentary_room_author_facet(
+    author_id: str,
+    author_meta: dict[str, dict[str, Any]],
+    record_count: int,
+    raw_mention_count: int,
+) -> dict[str, Any]:
+    meta = author_meta.get(author_id) or {}
+    canonical_name = str(meta.get("canonical_name") or author_id).strip() or author_id
+    display_name = str(meta.get("display_name") or canonical_name).strip() or canonical_name
+    public_slug_it = str(meta.get("public_slug_it") or authority_public_slug(author_id, canonical_name)).strip()
+    return {
+        "facet_id": f"authority-author:{author_id}",
+        "author_id": author_id,
+        "canonical_name": canonical_name,
+        "display_name": display_name,
+        "public_slug_it": public_slug_it or authority_public_slug(author_id, canonical_name),
+        "record_count": record_count,
+        "raw_mention_count": raw_mention_count,
+    }
+
+
+def build_commentary_room_work_facet(
+    author_id: str,
+    canonical_work: str,
+    author_meta: dict[str, dict[str, Any]],
+    work_meta: dict[tuple[str, str], dict[str, Any]],
+    record_count: int,
+    raw_mention_count: int,
+) -> dict[str, Any]:
+    work_row = work_meta.get((author_id, canonical_work)) or {}
+    author_row = author_meta.get(author_id) or {}
+    author_display_name = str(author_row.get("display_name") or author_id).strip() or author_id
+    canonical_name = str(author_row.get("canonical_name") or author_display_name).strip() or author_display_name
+    display_label = str(work_row.get("display_label") or canonical_work).strip() or canonical_work
+    public_slug_it = str(
+        work_row.get("public_slug_it")
+        or authority_work_public_slug({"canonical_work": canonical_work, "display_label": display_label})
+    ).strip()
+    return {
+        "facet_id": f"authority-work:{author_id}:{public_slug_it or authority_work_public_slug({'canonical_work': canonical_work, 'display_label': display_label})}",
+        "author_id": author_id,
+        "author_display_name": author_display_name,
+        "author_canonical_name": canonical_name,
+        "canonical_work": canonical_work,
+        "display_label": display_label,
+        "public_slug_it": public_slug_it or authority_work_public_slug({"canonical_work": canonical_work, "display_label": display_label}),
+        "record_count": record_count,
+        "raw_mention_count": raw_mention_count,
+        **authority_work_attribution_fields(work_row),
+    }
+
+
+def build_commentary_room_scope_payload(
+    sample_id: str,
+    scope_kind: str,
+    records: list[dict[str, Any]],
+    author_meta: dict[str, dict[str, Any]],
+    work_meta: dict[tuple[str, str], dict[str, Any]],
+    *,
+    line_number: int | None = None,
+    line_text: str | None = None,
+    line_count: int | None = None,
+    line_rooms: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    cantica_slug, canto_number = parse_sample_id(sample_id)
+    canto_label = format_canto_label(sample_id)
+    room_route_key = build_commentary_room_route_key(sample_id)
+    scope_id = f"commentary-room:{sample_id}" if scope_kind == "canto" else f"commentary-room:{sample_id}:line:{line_number}"
+    commentator_facets: dict[str, dict[str, Any]] = {}
+    authority_author_counts: dict[str, dict[str, int]] = defaultdict(lambda: {"record_count": 0, "raw_mention_count": 0})
+    authority_work_counts: dict[tuple[str, str], dict[str, int]] = defaultdict(lambda: {"record_count": 0, "raw_mention_count": 0})
+    record_rows: list[dict[str, Any]] = []
+
+    for record in records:
+        commentary_name = str(record.get("commentary_name") or "").strip()
+        commentator_id = build_commentary_room_commentator_id(commentary_name)
+        commentator_entry = commentator_facets.setdefault(
+            commentator_id,
+            {
+                "facet_id": f"commentator:{commentator_id}",
+                "commentator_id": commentator_id,
+                "commentary_name": commentary_name,
+                "commentary_abbr": build_commentary_abbr(commentary_name),
+                "record_count": 0,
+            },
+        )
+        commentator_entry["record_count"] += 1
+
+        raw_mentions = list(record.get("raw_work_mentions") or [])
+        record_author_counts: Counter[str] = Counter()
+        record_work_counts: Counter[tuple[str, str]] = Counter()
+        for mention in raw_mentions:
+            author_id = str(mention.get("author_id") or "").strip()
+            canonical_work = str(mention.get("canonical_work") or "").strip()
+            if author_id:
+                record_author_counts[author_id] += 1
+            if author_id and canonical_work:
+                record_work_counts[(author_id, canonical_work)] += 1
+
+        record_author_facets = [
+            build_commentary_room_author_facet(
+                author_id,
+                author_meta,
+                record_count=1,
+                raw_mention_count=count,
+            )
+            for author_id, count in sorted(
+                record_author_counts.items(),
+                key=lambda item: (-item[1], (author_meta.get(item[0], {}).get("display_name") or item[0]).casefold()),
+            )
+        ]
+        record_work_facets = [
+            build_commentary_room_work_facet(
+                author_id,
+                canonical_work,
+                author_meta,
+                work_meta,
+                record_count=1,
+                raw_mention_count=count,
+            )
+            for (author_id, canonical_work), count in sorted(
+                record_work_counts.items(),
+                key=lambda item: (
+                    -item[1],
+                    (author_meta.get(item[0][0], {}).get("display_name") or item[0][0]).casefold(),
+                    item[0][1].casefold(),
+                ),
+            )
+        ]
+
+        for author_row in record_author_facets:
+            counts = authority_author_counts[author_row["author_id"]]
+            counts["record_count"] += 1
+            counts["raw_mention_count"] += int(author_row.get("raw_mention_count", 0) or 0)
+
+        for work_row in record_work_facets:
+            work_key = (work_row["author_id"], work_row["canonical_work"])
+            counts = authority_work_counts[work_key]
+            counts["record_count"] += 1
+            counts["raw_mention_count"] += int(work_row.get("raw_mention_count", 0) or 0)
+
+        record_rows.append(
+            {
+                "record_id": record.get("id"),
+                "commentator_id": commentator_id,
+                "commentary_name": commentary_name,
+                "commentary_abbr": build_commentary_abbr(commentary_name),
+                "cantica": record.get("cantica"),
+                "canto": record.get("canto"),
+                "line_info": record.get("line_info"),
+                "line_start": record.get("line_start"),
+                "line_end": record.get("line_end"),
+                "line_span": record.get("line_span"),
+                "record_summary": record.get("record_summary"),
+                "record_text_preview": record.get("record_text_preview"),
+                "record_text_length": record.get("record_text_length"),
+                "date_label": record.get("date_label"),
+                "year_start": record.get("year_start"),
+                "year_end": record.get("year_end"),
+                "century_label": record.get("century_label"),
+                "fulltext_available": bool(record.get("fulltext_available")),
+                "fulltext_record_id": record.get("id"),
+                "authority_author_facet_ids": [row["facet_id"] for row in record_author_facets],
+                "authority_work_facet_ids": [row["facet_id"] for row in record_work_facets],
+                "authority_authors": record_author_facets,
+                "authority_works": record_work_facets,
+            }
+        )
+
+    commentator_rows = sorted(
+        commentator_facets.values(),
+        key=lambda row: (-int(row.get("record_count", 0) or 0), str(row.get("commentary_name") or "").casefold()),
+    )
+    authority_author_rows = sorted(
+        [
+            build_commentary_room_author_facet(
+                author_id,
+                author_meta,
+                record_count=counts["record_count"],
+                raw_mention_count=counts["raw_mention_count"],
+            )
+            for author_id, counts in authority_author_counts.items()
+        ],
+        key=lambda row: (-int(row.get("record_count", 0) or 0), str(row.get("display_name") or "").casefold()),
+    )
+    authority_work_rows = sorted(
+        [
+            build_commentary_room_work_facet(
+                author_id,
+                canonical_work,
+                author_meta,
+                work_meta,
+                record_count=counts["record_count"],
+                raw_mention_count=counts["raw_mention_count"],
+            )
+            for (author_id, canonical_work), counts in authority_work_counts.items()
+        ],
+        key=lambda row: (
+            -int(row.get("record_count", 0) or 0),
+            str(row.get("author_display_name") or "").casefold(),
+            str(row.get("display_label") or "").casefold(),
+        ),
+    )
+    record_rows.sort(
+        key=lambda row: (
+            int(row.get("line_start", 0) or 0),
+            int(row.get("line_end", 0) or 0),
+            str(row.get("commentary_name") or "").casefold(),
+            str(row.get("record_id") or ""),
+        )
+    )
+
+    scope = {
+        "scope_kind": scope_kind,
+        "scope_id": scope_id,
+        "sample_id": sample_id,
+        "route_key": room_route_key if scope_kind == "canto" else build_commentary_room_line_route_key(sample_id, int(line_number or 0)),
+        "cantica_slug": cantica_slug,
+        "cantica_label": cantica_slug.capitalize() if cantica_slug else None,
+        "canto_number": canto_number,
+        "canto_label": canto_label,
+        "record_store_path": f"./data/{sample_id}/records/store.json",
+        "record_fulltext_path": f"./data/{sample_id}/records/fulltext.json",
+        "record_work_mentions_path": f"./data/{sample_id}/records/work_mentions.json",
+    }
+    if scope_kind == "canto":
+        scope["line_count"] = line_count
+    else:
+        scope["line_number"] = line_number
+        scope["line_text"] = line_text
+
+    payload = {
+        "schema_version": "commentary-room-payload/v1",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "notes": {
+            "primary_object": "commentary_record",
+            "facet_count_semantics": "facet record_count means how many commentary records in this room carry that filter value",
+            "authority_boundary": "authority author/work rows are filter facets inside commentary rooms, not standalone reading objects",
+        },
+        "scope": scope,
+        "counts": {
+            "record_count": len(record_rows),
+            "commentator_count": len(commentator_rows),
+            "authority_author_count": len(authority_author_rows),
+            "authority_work_count": len(authority_work_rows),
+        },
+        "records": record_rows,
+        "commentator_facets": commentator_rows,
+        "authority_author_facets": authority_author_rows,
+        "authority_work_facets": authority_work_rows,
+        "sort_options": [
+            {"id": "line_order", "label": "Line order", "default": scope_kind == "canto"},
+            {"id": "commentator_az", "label": "Commentator A-Z", "default": False},
+            {"id": "date_asc", "label": "Date ascending", "default": False},
+            {"id": "date_desc", "label": "Date descending", "default": scope_kind == "line"},
+            {"id": "authority_signal_desc", "label": "Authority signal density", "default": False},
+        ],
+        "compare_enabled": True,
+    }
+    if scope_kind == "canto":
+        payload["line_rooms"] = line_rooms or []
+    return payload
+
+
+def build_commentary_page_data() -> Path | None:
+    store_paths = sorted(
+        DEMO_DATA_DIR.glob("*/records/store.json"),
+        key=lambda path: sample_id_sort_key(path.parent.parent.name),
+    )
+    if not store_paths:
+        return None
+
+    author_meta, work_meta = load_commentary_room_authority_metadata()
+    ensure_dir(COMMENTARY_PAGE_DATA_DIR)
+    ensure_dir(COMMENTARY_PAGE_CANTO_DIR)
+    ensure_dir(COMMENTARY_PAGE_LINE_DIR)
+
+    sample_manifest_rows: list[dict[str, Any]] = []
+    total_line_rooms = 0
+    total_records = 0
+
+    for store_path in store_paths:
+        sample_id = store_path.parent.parent.name
+        records_dir = store_path.parent
+        fulltext_path = records_dir / "fulltext.json"
+        work_mentions_path = records_dir / "work_mentions.json"
+        overview_path = DEMO_DATA_DIR / sample_id / "overview.json"
+
+        store_payload = json.loads(store_path.read_text(encoding="utf-8"))
+        fulltext_payload = (
+            json.loads(fulltext_path.read_text(encoding="utf-8"))
+            if fulltext_path.exists()
+            else {"records": {}}
+        )
+        work_mentions_payload = (
+            json.loads(work_mentions_path.read_text(encoding="utf-8"))
+            if work_mentions_path.exists()
+            else {"records": {}}
+        )
+        overview_payload = (
+            json.loads(overview_path.read_text(encoding="utf-8"))
+            if overview_path.exists()
+            else {}
+        )
+
+        store_records = store_payload.get("records") or {}
+        fulltext_records = fulltext_payload.get("records") or {}
+        work_mentions_records = work_mentions_payload.get("records") or {}
+        overview_lines = overview_payload.get("lines") or []
+        line_text_by_number = {
+            int(row.get("line_number")): str(row.get("line_text") or "")
+            for row in overview_lines
+            if row.get("line_number") not in (None, "")
+        }
+        derived_line_numbers = set(line_text_by_number)
+        normalized_records: list[dict[str, Any]] = []
+        records_by_line: dict[int, list[dict[str, Any]]] = defaultdict(list)
+
+        for record_id, row in store_records.items():
+            record = dict(row)
+            if "id" not in record:
+                record["id"] = record_id
+            record["fulltext_available"] = record_id in fulltext_records
+            work_row = work_mentions_records.get(record_id) or {}
+            record["raw_work_mentions"] = list(work_row.get("raw_work_mentions") or [])
+            record["raw_work_surface_count"] = int(work_row.get("raw_work_surface_count", 0) or 0)
+            normalized_records.append(record)
+
+            line_start = int(record.get("line_start", 0) or 0)
+            line_end = int(record.get("line_end", line_start) or line_start or 0)
+            if line_start > 0 and line_end >= line_start:
+                for line_number in range(line_start, line_end + 1):
+                    if line_number not in line_text_by_number:
+                        continue
+                    records_by_line[line_number].append(record)
+
+        normalized_records.sort(
+            key=lambda row: (
+                int(row.get("line_start", 0) or 0),
+                int(row.get("line_end", 0) or 0),
+                str(row.get("commentary_name") or "").casefold(),
+                str(row.get("id") or ""),
+            )
+        )
+        line_numbers = sorted(derived_line_numbers)
+        line_rooms: list[dict[str, Any]] = []
+
+        sample_line_dir = COMMENTARY_PAGE_LINE_DIR / sample_id
+        if sample_line_dir.exists():
+            shutil.rmtree(sample_line_dir)
+        ensure_dir(sample_line_dir)
+
+        for line_number in line_numbers:
+            line_records = list(records_by_line.get(line_number, []))
+            line_payload = build_commentary_room_scope_payload(
+                sample_id,
+                "line",
+                line_records,
+                author_meta,
+                work_meta,
+                line_number=line_number,
+                line_text=line_text_by_number.get(line_number),
+            )
+            line_output_path = sample_line_dir / f"{line_number:03d}.json"
+            line_output_path.write_text(json.dumps(line_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            line_rooms.append(
+                {
+                    "line_number": line_number,
+                    "line_text": line_text_by_number.get(line_number),
+                    "route_key": build_commentary_room_line_route_key(sample_id, line_number),
+                    "scope_id": line_payload["scope"]["scope_id"],
+                    "path": f"./data/commentary_pages/lines/{sample_id}/{line_number:03d}.json",
+                    "record_count": line_payload["counts"]["record_count"],
+                }
+            )
+
+        canto_payload = build_commentary_room_scope_payload(
+            sample_id,
+            "canto",
+            normalized_records,
+            author_meta,
+            work_meta,
+            line_count=(overview_payload.get("line_count") or len(line_numbers)),
+            line_rooms=line_rooms,
+        )
+        canto_output_path = COMMENTARY_PAGE_CANTO_DIR / f"{sample_id}.json"
+        canto_output_path.write_text(json.dumps(canto_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        sample_manifest_rows.append(
+            {
+                "sample_id": sample_id,
+                "route_key": build_commentary_room_route_key(sample_id),
+                "canto_path": f"./data/commentary_pages/cantos/{sample_id}.json",
+                "line_dir_path": f"./data/commentary_pages/lines/{sample_id}",
+                "record_count": canto_payload["counts"]["record_count"],
+                "line_room_count": len(line_rooms),
+                "commentator_count": canto_payload["counts"]["commentator_count"],
+                "authority_author_count": canto_payload["counts"]["authority_author_count"],
+                "authority_work_count": canto_payload["counts"]["authority_work_count"],
+            }
+        )
+        total_line_rooms += len(line_rooms)
+        total_records += canto_payload["counts"]["record_count"]
+
+    manifest_payload = {
+        "schema_version": "commentary-room-manifest/v1",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "notes": {
+            "purpose": "commentary-first canto and exact-line room payloads",
+            "source": "mounted local record store + fulltext availability + record-level work mentions",
+            "loading_model": "canto shard + per-line shard directory",
+        },
+        "sample_count": len(sample_manifest_rows),
+        "canto_room_count": len(sample_manifest_rows),
+        "line_room_count": total_line_rooms,
+        "total_record_count": total_records,
+        "samples": sample_manifest_rows,
+    }
+    COMMENTARY_PAGE_MANIFEST_PATH.write_text(json.dumps(manifest_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return COMMENTARY_PAGE_MANIFEST_PATH
+
+
 def authority_records_text_csv_candidates(sample_id: str) -> list[Path]:
     cantica, canto = parse_sample_id(sample_id)
     if not cantica or canto is None:
@@ -7690,6 +9960,28 @@ def authority_records_text_csv_candidates(sample_id: str) -> list[Path]:
     elif cantica == "purgatorio":
         candidates.append(SOURCE_DATA_DIR / "purg" / f"purg{canto}" / f"{sample_id}_records_text_full.csv")
     return candidates
+
+
+def build_authority_source_row(sample_id: str, path: Path, row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "result_url": str(row.get("result_url") or "").strip(),
+        "commentary_name": row.get("commentary_name"),
+        "cantica": row.get("cantica"),
+        "canto": row.get("canto"),
+        "line_info": row.get("line_info"),
+        "first_seen_line": row.get("first_seen_line"),
+        "record_text": row.get("record_text"),
+        "extracted_text_length": row.get("extracted_text_length"),
+        "fetch_status": row.get("fetch_status"),
+        "extraction_template_used": row.get("extraction_template_used"),
+        "line_start": row.get("line_start"),
+        "line_end": row.get("line_end"),
+        "line_span": row.get("line_span"),
+        "line_info_pattern": row.get("line_info_pattern"),
+        "line_info_parse_status": row.get("line_info_parse_status"),
+        "sample_name": sample_id,
+        "source_path": str(path.relative_to(ROOT)),
+    }
 
 
 def load_authority_source_rows_for_sample(sample_id: str) -> dict[str, dict[str, Any]]:
@@ -7708,30 +10000,236 @@ def load_authority_source_rows_for_sample(sample_id: str) -> dict[str, dict[str,
                     result_url = str(row.get("result_url") or "").strip()
                     if not result_url or result_url in rows_by_url:
                         continue
-                    rows_by_url[result_url] = {
-                        "result_url": result_url,
-                        "commentary_name": row.get("commentary_name"),
-                        "cantica": row.get("cantica"),
-                        "canto": row.get("canto"),
-                        "line_info": row.get("line_info"),
-                        "first_seen_line": row.get("first_seen_line"),
-                        "record_text": row.get("record_text"),
-                        "extracted_text_length": row.get("extracted_text_length"),
-                        "fetch_status": row.get("fetch_status"),
-                        "extraction_template_used": row.get("extraction_template_used"),
-                        "line_start": row.get("line_start"),
-                        "line_end": row.get("line_end"),
-                        "line_span": row.get("line_span"),
-                        "line_info_pattern": row.get("line_info_pattern"),
-                        "line_info_parse_status": row.get("line_info_parse_status"),
-                        "sample_name": sample_id,
-                        "source_path": str(path.relative_to(ROOT)),
-                    }
+                    rows_by_url[result_url] = build_authority_source_row(sample_id, path, row)
         except TimeoutError:
             AUTHORITY_SOURCE_TIMEOUT_SAMPLES.add(sample_id)
             continue
     AUTHORITY_SOURCE_TEXT_CACHE[sample_id] = rows_by_url
     return rows_by_url
+
+
+def load_authority_source_rows_by_record_id_for_sample(sample_id: str) -> dict[str, dict[str, Any]]:
+    cached = AUTHORITY_SOURCE_TEXT_BY_RECORD_ID_CACHE.get(sample_id)
+    if cached is not None:
+        return cached
+
+    rows_by_record_id: dict[str, dict[str, Any]] = {}
+    for path in authority_records_text_csv_candidates(sample_id):
+        if not path.exists():
+            continue
+        try:
+            with path.open(encoding="utf-8", newline="") as handle:
+                reader = csv.DictReader(handle)
+                for index, row in enumerate(reader, start=1):
+                    record_id = f"{sample_id}-r{index}"
+                    result_url = str(row.get("result_url") or "").strip()
+                    if not result_url or record_id in rows_by_record_id:
+                        continue
+                    rows_by_record_id[record_id] = build_authority_source_row(sample_id, path, row)
+        except TimeoutError:
+            AUTHORITY_SOURCE_TIMEOUT_SAMPLES.add(sample_id)
+            continue
+    AUTHORITY_SOURCE_TEXT_BY_RECORD_ID_CACHE[sample_id] = rows_by_record_id
+    return rows_by_record_id
+
+
+def load_authority_source_record_ids_by_result_url_for_sample(sample_id: str) -> dict[str, str]:
+    cached = AUTHORITY_SOURCE_RECORD_ID_BY_RESULT_URL_CACHE.get(sample_id)
+    if cached is not None:
+        return cached
+
+    record_ids_by_url: dict[str, str] = {}
+    for path in authority_records_text_csv_candidates(sample_id):
+        if not path.exists():
+            continue
+        try:
+            with path.open(encoding="utf-8", newline="") as handle:
+                reader = csv.DictReader(handle)
+                for index, row in enumerate(reader, start=1):
+                    result_url = str(row.get("result_url") or "").strip()
+                    if not result_url or result_url in record_ids_by_url:
+                        continue
+                    record_ids_by_url[result_url] = f"{sample_id}-r{index}"
+        except TimeoutError:
+            AUTHORITY_SOURCE_TIMEOUT_SAMPLES.add(sample_id)
+            continue
+    AUTHORITY_SOURCE_RECORD_ID_BY_RESULT_URL_CACHE[sample_id] = record_ids_by_url
+    return record_ids_by_url
+
+
+def load_authority_store_rows_for_sample(sample_id: str) -> dict[str, dict[str, Any]]:
+    cached = AUTHORITY_STORE_RECORD_CACHE.get(sample_id)
+    if cached is not None:
+        return cached
+
+    store_path = DEMO_DATA_DIR / sample_id / "records" / "store.json"
+    if not store_path.exists():
+        AUTHORITY_STORE_RECORD_CACHE[sample_id] = {}
+        return {}
+
+    try:
+        payload = json.loads(store_path.read_text(encoding="utf-8"))
+    except Exception:
+        AUTHORITY_STORE_RECORD_CACHE[sample_id] = {}
+        return {}
+
+    records = payload.get("records") or {}
+    AUTHORITY_STORE_RECORD_CACHE[sample_id] = records
+    return records
+
+
+def load_authority_fulltext_rows_for_sample(sample_id: str) -> dict[str, dict[str, Any]]:
+    cached = AUTHORITY_FULLTEXT_RECORD_CACHE.get(sample_id)
+    if cached is not None:
+        return cached
+
+    fulltext_path = DEMO_DATA_DIR / sample_id / "records" / "fulltext.json"
+    if not fulltext_path.exists():
+        AUTHORITY_FULLTEXT_RECORD_CACHE[sample_id] = {}
+        return {}
+
+    try:
+        payload = json.loads(fulltext_path.read_text(encoding="utf-8"))
+    except Exception:
+        AUTHORITY_FULLTEXT_RECORD_CACHE[sample_id] = {}
+        return {}
+
+    records = payload.get("records") or {}
+    AUTHORITY_FULLTEXT_RECORD_CACHE[sample_id] = records
+    return records
+
+
+def normalize_authority_match_text(value: Any) -> str:
+    text = str(value or "").strip().lower()
+    text = re.sub(r"\s+", " ", text)
+    return text
+
+
+def authority_source_row_matches_occurrence(source_row: dict[str, Any], occurrence: dict[str, Any]) -> bool:
+    target_commentary = normalize_authority_match_text(occurrence.get("commentary_name"))
+    target_line_info = normalize_authority_match_text(occurrence.get("line_info"))
+    source_commentary = normalize_authority_match_text(source_row.get("commentary_name"))
+    source_line_info = normalize_authority_match_text(source_row.get("line_info"))
+    if target_commentary and source_commentary and target_commentary != source_commentary:
+        return False
+    if target_line_info and source_line_info and target_line_info != source_line_info:
+        return False
+    return True
+
+
+def resolve_local_commentary_result_url(
+    sample_name: str | None,
+    occurrence: dict[str, Any],
+) -> str | None:
+    result_url = str(occurrence.get("result_url") or "").strip()
+    if result_url:
+        return result_url
+
+    sample_id = str(sample_name or "").strip()
+    commentary_record_id = str(occurrence.get("commentary_record_id") or "").strip()
+    if not sample_id or not commentary_record_id:
+        return None
+
+    source_row = load_authority_source_rows_by_record_id_for_sample(sample_id).get(commentary_record_id)
+    if source_row and authority_source_row_matches_occurrence(source_row, occurrence):
+        return str(source_row.get("result_url") or "").strip() or None
+    return None
+
+
+def resolve_local_commentary_record_id(
+    sample_name: str | None,
+    occurrence: dict[str, Any],
+) -> str | None:
+    sample_id = str(sample_name or "").strip()
+    if not sample_id:
+        return None
+
+    store_rows = load_authority_store_rows_for_sample(sample_id)
+    fulltext_rows = load_authority_fulltext_rows_for_sample(sample_id)
+    if not store_rows:
+        return None
+
+    current_id = str(occurrence.get("commentary_record_id") or "").strip()
+    if current_id in store_rows:
+        return current_id
+
+    result_url = str(occurrence.get("result_url") or "").strip()
+    source_row = load_authority_source_rows_for_sample(sample_id).get(result_url) if result_url else None
+    if result_url and source_row and authority_source_row_matches_occurrence(source_row, occurrence):
+        result_url_record_id = load_authority_source_record_ids_by_result_url_for_sample(sample_id).get(result_url)
+        if result_url_record_id and result_url_record_id in store_rows:
+            return result_url_record_id
+
+    target_commentary = normalize_authority_match_text(
+        occurrence.get("commentary_name") or (source_row or {}).get("commentary_name")
+    )
+    target_line_info = normalize_authority_match_text(
+        occurrence.get("line_info") or (source_row or {}).get("line_info")
+    )
+
+    target_line_start = infer_authority_jump_line_number(
+        occurrence.get("line_number")
+        or (source_row or {}).get("line_start")
+        or occurrence.get("line_info")
+        or (source_row or {}).get("line_info")
+    )
+    target_record_text = normalize_authority_match_text((source_row or {}).get("record_text"))
+
+    candidates: list[tuple[str, dict[str, Any]]] = []
+    for record_id, row in store_rows.items():
+        row_commentary = normalize_authority_match_text(row.get("commentary_name"))
+        row_line_info = normalize_authority_match_text(row.get("line_info"))
+        if target_commentary and row_commentary != target_commentary:
+            continue
+        if target_line_info and row_line_info != target_line_info:
+            continue
+        candidates.append((record_id, row))
+
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0][0]
+
+    if target_record_text:
+        narrowed = []
+        for record_id, row in candidates:
+            fulltext_row = fulltext_rows.get(record_id) or {}
+            row_record_text = normalize_authority_match_text(fulltext_row.get("record_text") or row.get("record_text"))
+            if not row_record_text:
+                continue
+            if row_record_text == target_record_text:
+                narrowed.append((record_id, row))
+                continue
+            if target_record_text in row_record_text or row_record_text in target_record_text:
+                narrowed.append((record_id, row))
+        if len(narrowed) == 1:
+            return narrowed[0][0]
+        if narrowed:
+            candidates = narrowed
+
+    if len(candidates) > 1:
+        normalized_texts = {
+            normalize_authority_match_text(
+                (fulltext_rows.get(record_id) or {}).get("record_text") or row.get("record_text")
+            )
+            for record_id, row in candidates
+        }
+        normalized_texts.discard("")
+        if len(normalized_texts) == 1:
+            return sorted(record_id for record_id, _ in candidates)[0]
+
+    if target_line_start is not None:
+        narrowed = [
+            (record_id, row)
+            for record_id, row in candidates
+            if infer_authority_jump_line_number(row.get("line_start")) == target_line_start
+        ]
+        if len(narrowed) == 1:
+            return narrowed[0][0]
+        if narrowed:
+            candidates = narrowed
+
+    return candidates[0][0] if len(candidates) == 1 else None
 
 
 def iter_frontend_ready_commentary_line_occurrences() -> Iterable[dict[str, Any]]:
@@ -7790,7 +10288,335 @@ def collect_surface_matches(text: str, surfaces: list[str]) -> list[str]:
     return matches
 
 
-def build_supplemental_dante_frontend_ready_payload() -> dict[str, Any]:
+def merge_supplemental_frontend_ready_payload(
+    authors_index: dict[str, Any],
+    works: dict[str, Any],
+    density: dict[str, Any],
+    occurrences: dict[str, Any],
+    commentary_line_index: dict[str, Any],
+    payload: dict[str, Any],
+) -> None:
+    authors_index_row = dict(payload.get("authors_index_row") or {})
+    works_row = dict(payload.get("works_row") or {})
+    commentary_line_index_row = dict(payload.get("commentary_line_index_row") or {})
+    author_id = str(authors_index_row.get("author_id") or works_row.get("author_id") or commentary_line_index_row.get("author_id") or "").strip()
+    if not author_id:
+        return
+    if not authors_index_row.get("total_mentions") and not works_row.get("total_work_mentions") and not commentary_line_index_row.get("sample_count"):
+        return
+
+    for row in authors_index.setdefault("authors", []):
+        if row.get("author_id") == author_id:
+            row.update(authors_index_row)
+            break
+    else:
+        authors_index["authors"].append(authors_index_row)
+
+    for row in works.setdefault("authors", []):
+        if row.get("author_id") == author_id:
+            row.update(works_row)
+            break
+    else:
+        works["authors"].append(works_row)
+
+    density.setdefault("rows", []).extend(payload.get("density_rows") or [])
+    occurrences.setdefault("occurrences", []).extend(payload.get("occurrence_rows") or [])
+
+    for row in commentary_line_index.setdefault("authors", []):
+        if row.get("author_id") == author_id:
+            row.update(commentary_line_index_row)
+            break
+    else:
+        commentary_line_index["authors"].append(commentary_line_index_row)
+
+
+def build_density_rows_from_occurrence_rows(
+    author_id: str,
+    occurrence_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    density_rows: dict[str, dict[str, Any]] = {}
+    for row in occurrence_rows:
+        sample_name = str(row.get("sample_name") or "").strip()
+        if not sample_name:
+            continue
+        density_row = density_rows.setdefault(
+            sample_name,
+            {
+                "author_id": author_id,
+                "sample_name": sample_name,
+                "canto_label": row.get("canto_label") or format_canto_label(sample_name),
+                "cantica": row.get("cantica"),
+                "canto": row.get("canto"),
+                "total_mentions": 0,
+                "authority_citation": 0,
+                "character_mention": 0,
+                "ambiguous_author_character": 0,
+                "generic_mention": 0,
+            },
+        )
+        density_row["total_mentions"] += 1
+    return list(density_rows.values())
+
+
+def build_commentary_line_index_row_from_occurrence_rows(
+    author_id: str,
+    canonical_name: str,
+    frontend_status: str,
+    frontend_notes: str,
+    occurrence_rows: list[dict[str, Any]],
+) -> dict[str, Any]:
+    samples: dict[str, dict[str, Any]] = {}
+    for row in occurrence_rows:
+        sample_name = str(row.get("sample_name") or "").strip()
+        if not sample_name:
+            continue
+        sample_entry = samples.setdefault(
+            sample_name,
+            {
+                "sample_name": sample_name,
+                "canto_label": row.get("canto_label") or format_canto_label(sample_name),
+                "cantica": row.get("cantica"),
+                "canto": row.get("canto"),
+                "total_mentions": 0,
+                "line_groups": {},
+            },
+        )
+        sample_entry["total_mentions"] += 1
+        line_start = infer_authority_jump_line_number(row.get("line_number"))
+        if line_start is None:
+            line_start = infer_authority_jump_line_number(row.get("line_info"))
+        line_end = line_start
+        raw_line_info = str(row.get("line_info") or "").strip()
+        if raw_line_info:
+            numbers = [int(match) for match in re.findall(r"\d+", raw_line_info)]
+            if numbers:
+                line_start = numbers[0]
+                line_end = numbers[-1]
+        line_key = f"{line_start or 0}:{line_end or 0}:{raw_line_info or (line_start or 0)}"
+        group = sample_entry["line_groups"].setdefault(
+            line_key,
+            {
+                "line_key": line_key,
+                "line_info": raw_line_info or (str(line_start) if line_start else ""),
+                "line_start": line_start,
+                "line_end": line_end,
+                "total_mentions": 0,
+                "commentary_count": 0,
+                "commentary_index": {},
+                "mention_role_breakdown": {},
+                "occurrences": [],
+            },
+        )
+        group["total_mentions"] += 1
+        commentary_name = str(row.get("commentary_name") or "").strip()
+        if commentary_name:
+            entry = group["commentary_index"].setdefault(
+                commentary_name,
+                {
+                    "abbr": row.get("commentary_abbr") or build_commentary_abbr(commentary_name),
+                    "commentary_name": commentary_name,
+                    "mention_count": 0,
+                },
+            )
+            entry["mention_count"] += 1
+        group["occurrences"].append(dict(row))
+
+    sample_rows: list[dict[str, Any]] = []
+    for sample_name, sample_entry in sorted(samples.items(), key=lambda item: sample_id_sort_key(item[0])):
+        line_groups: list[dict[str, Any]] = []
+        for group in sorted(
+            sample_entry["line_groups"].values(),
+            key=lambda item: (
+                int(item.get("line_start") or 0),
+                int(item.get("line_end") or 0),
+                str(item.get("line_info") or ""),
+            ),
+        ):
+            commentary_index = sorted(
+                group["commentary_index"].values(),
+                key=lambda item: (
+                    -int(item.get("mention_count", 0) or 0),
+                    str(item.get("commentary_name") or "").casefold(),
+                ),
+            )
+            group["commentary_count"] = len(commentary_index)
+            group["commentary_index"] = commentary_index
+            line_groups.append(group)
+        sample_rows.append(
+            {
+                "sample_name": sample_name,
+                "canto_label": sample_entry.get("canto_label"),
+                "cantica": sample_entry.get("cantica"),
+                "canto": sample_entry.get("canto"),
+                "total_mentions": sample_entry.get("total_mentions", 0),
+                "line_group_count": len(line_groups),
+                "line_groups": line_groups,
+            }
+        )
+
+    return {
+        "author_id": author_id,
+        "canonical_name": canonical_name,
+        "frontend_status": frontend_status,
+        "frontend_notes": frontend_notes,
+        "sample_count": len(sample_rows),
+        "samples": sample_rows,
+    }
+
+
+def build_registry_mounted_supplemental_frontend_ready_payloads(
+    authors_index: dict[str, Any],
+    mounted_author_work_stats: dict[str, dict[str, dict[str, int]]],
+    mounted_author_work_occurrences: dict[str, list[dict[str, Any]]],
+) -> list[dict[str, Any]]:
+    existing_author_ids = {
+        str(row.get("author_id") or "").strip()
+        for row in authors_index.get("authors", [])
+        if str(row.get("author_id") or "").strip()
+    }
+    registry_authors = (
+        json.loads(AUTHORITY_AUTHORS_REGISTRY_PATH.read_text(encoding="utf-8"))
+        if AUTHORITY_AUTHORS_REGISTRY_PATH.exists()
+        else []
+    )
+    supplemental_payloads: list[dict[str, Any]] = []
+    for registry_author in registry_authors:
+        author_id = str(registry_author.get("author_id") or "").strip()
+        if not author_id or author_id in existing_author_ids:
+            continue
+        mounted_stats = mounted_author_work_stats.get(author_id) or {}
+        mounted_total = sum(int(item.get("count", 0) or 0) for item in mounted_stats.values())
+        if mounted_total <= 0:
+            continue
+        canonical_name = str(registry_author.get("canonical_name") or author_id).strip() or author_id
+        display_name = authority_display_name(author_id, canonical_name)
+        frontend_notes = (
+            f"{display_name} 现在已经有 mounted work mentions，不该继续停在 authority layer 外；"
+            "前台应直接挂出 works tree，并按当前 payload 诚实呈现 work nodes 与 sampled commentary occurrences。"
+        )
+        occurrence_rows = [
+            {
+                **row,
+                "author": row.get("author") or display_name,
+                "frontend_status": "ready",
+                "frontend_notes": frontend_notes,
+            }
+            for row in (mounted_author_work_occurrences.get(author_id) or [])
+        ]
+        works_list = build_mounted_author_work_rows(author_id, mounted_stats)
+        commentary_line_index_row = build_commentary_line_index_row_from_occurrence_rows(
+            author_id,
+            canonical_name,
+            "ready",
+            frontend_notes,
+            occurrence_rows,
+        )
+        supplemental_payloads.append(
+            {
+                "authors_index_row": {
+                    "author_id": author_id,
+                    "canonical_name": canonical_name,
+                    "aliases": list(registry_author.get("aliases") or []),
+                    "total_mentions": len(occurrence_rows),
+                    "total_work_mentions": mounted_total,
+                    "frontend_status": "ready",
+                    "frontend_notes": frontend_notes,
+                    "mention_role_breakdown": {},
+                },
+                "works_row": {
+                    "author_id": author_id,
+                    "canonical_name": canonical_name,
+                    "frontend_status": "ready",
+                    "frontend_notes": frontend_notes,
+                    "total_work_mentions": mounted_total,
+                    "works": works_list,
+                },
+                "density_rows": build_density_rows_from_occurrence_rows(author_id, occurrence_rows),
+                "occurrence_rows": occurrence_rows,
+                "commentary_line_index_row": commentary_line_index_row,
+            }
+        )
+    return supplemental_payloads
+
+
+def collect_cinonio_author_hits(text: str) -> list[str]:
+    strong_hits = collect_surface_matches(
+        text,
+        ["Cinonio", "Cinon.", "il Cinonio", "'l Cinonio", "’l Cinonio"],
+    )
+    return strong_hits
+
+
+def collect_cinonio_work_hits(text: str) -> list[str]:
+    patterns = [
+        re.compile(
+            r"(?P<author>(?:['’]l\s+)?Cinonio|Cinon\.)\s*(?:,?\s*|\[\s*|\(\s*|:\s*)?(?P<work>Osservaz\.\s*Partic\.|Osserv\.\s*Part\.|Particelle|Partic\.|Part\.)",
+            re.I,
+        ),
+        re.compile(r"(?P<author>Cin\.)\s*(?P<work>Partic\.|Part\.)", re.I),
+    ]
+    hits: list[str] = []
+    seen: set[str] = set()
+    for pattern in patterns:
+        for match in pattern.finditer(text):
+            hit = " ".join(str(match.group("work") or "").split()).strip()
+            key = hit.casefold()
+            if hit and key not in seen:
+                seen.add(key)
+                hits.append(hit)
+    return hits
+
+
+def build_supplemental_dante_frontend_ready_payload(
+    mounted_author_work_stats: dict[str, dict[str, dict[str, int]]] | None = None,
+    mounted_author_work_occurrences: dict[str, list[dict[str, Any]]] | None = None,
+) -> dict[str, Any]:
+    mounted_stats = (mounted_author_work_stats or {}).get("dante") or {}
+    mounted_occurrences = list((mounted_author_work_occurrences or {}).get("dante") or [])
+    if mounted_stats or mounted_occurrences:
+        frontend_notes = AUTHORITY_OBJECT_ROLLOUT_POLICY["dante"]["frontend_notes_override"]
+        occurrence_rows = [
+            {
+                **row,
+                "author": row.get("author") or "Dante",
+                "frontend_status": row.get("frontend_status") or "ready",
+                "frontend_notes": row.get("frontend_notes") or frontend_notes,
+            }
+            for row in mounted_occurrences
+        ]
+        works_list = build_mounted_author_work_rows("dante", mounted_stats)
+        total_work_mentions = sum(int(item.get("count", 0) or 0) for item in mounted_stats.values())
+        commentary_line_index_row = build_commentary_line_index_row_from_occurrence_rows(
+            "dante",
+            "Dante",
+            "ready",
+            frontend_notes,
+            occurrence_rows,
+        )
+        return {
+            "authors_index_row": {
+                "author_id": "dante",
+                "canonical_name": "Dante",
+                "aliases": DANTE_SUPPLEMENTAL_AUTHOR["aliases"],
+                "total_mentions": len(occurrence_rows),
+                "total_work_mentions": total_work_mentions,
+                "frontend_status": "ready",
+                "frontend_notes": frontend_notes,
+                "mention_role_breakdown": {},
+            },
+            "works_row": {
+                "author_id": "dante",
+                "canonical_name": "Dante",
+                "frontend_status": "ready",
+                "frontend_notes": frontend_notes,
+                "total_work_mentions": total_work_mentions,
+                "works": works_list,
+            },
+            "density_rows": build_density_rows_from_occurrence_rows("dante", occurrence_rows),
+            "occurrence_rows": occurrence_rows,
+            "commentary_line_index_row": commentary_line_index_row,
+        }
+
     commentary_rows: list[dict[str, Any]] = []
     density_rows: dict[str, dict[str, Any]] = {}
     works_counter: dict[str, dict[str, int]] = {}
@@ -7855,7 +10681,7 @@ def build_supplemental_dante_frontend_ready_payload() -> dict[str, Any]:
                                 resolved = "resolved_author_and_work" if author_hits else "resolved_work_plus_inferred_author"
                                 work_stat["count"] += 1
                                 work_stat[resolved] += 1
-                                if re.search(r"\b(?:[ivxlcdm]+|\d+)\b", text, re.I):
+                                if re.search(rf"\b(?:{ROMAN_CITATION_TOKEN_SOURCE}|\d+)\b", text, re.I):
                                     work_stat["passage_mentions"] += 1
                                 mention_payloads.append(
                                     {
@@ -8031,6 +10857,232 @@ def build_supplemental_dante_frontend_ready_payload() -> dict[str, Any]:
     }
 
 
+def build_supplemental_cinonio_frontend_ready_payload() -> dict[str, Any]:
+    commentary_rows: list[dict[str, Any]] = []
+    density_rows: dict[str, dict[str, Any]] = {}
+    works_counter: dict[str, dict[str, int]] = {}
+    line_groups_by_sample: dict[str, dict[str, Any]] = {}
+
+    for csv_path in sorted(SOURCE_DATA_DIR.glob("*_records_text_full.csv")):
+        try:
+            with csv_path.open(encoding="utf-8", newline="") as handle:
+                reader = csv.DictReader(handle)
+                for row in reader:
+                    text = str(row.get("record_text") or "")
+                    if not text:
+                        continue
+                    lowered_text = text.casefold()
+                    if not any(marker in lowered_text for marker in CINONIO_SUPPLEMENTAL_MARKERS):
+                        continue
+
+                    author_hits = collect_cinonio_author_hits(text)
+                    work_hits = collect_cinonio_work_hits(text)
+                    if not author_hits and not work_hits:
+                        continue
+
+                    cantica = str(row.get("cantica") or "").strip()
+                    canto = row.get("canto")
+                    sample_name = infer_authority_sample_name(cantica, canto)
+                    if not sample_name:
+                        continue
+                    canto_label = f"{cantica} {canto}".strip()
+                    line_info = str(row.get("line_info") or "").strip()
+                    line_start = infer_authority_jump_line_number(row.get("line_start"))
+                    line_end = infer_authority_jump_line_number(row.get("line_end"))
+                    commentary_name = str(row.get("commentary_name") or "").strip()
+                    result_url = str(row.get("result_url") or "").strip()
+
+                    mention_payloads: list[dict[str, Any]] = []
+                    if work_hits:
+                        work_stat = works_counter.setdefault(
+                            "Particelle",
+                            {
+                                "canonical_work": "Particelle",
+                                "count": 0,
+                                "resolved_author_and_work": 0,
+                                "resolved_work_plus_inferred_author": 0,
+                                "passage_mentions": 0,
+                            },
+                        )
+                        for hit in work_hits:
+                            resolved = "resolved_author_and_work" if author_hits else "resolved_work_plus_inferred_author"
+                            work_stat["count"] += 1
+                            work_stat[resolved] += 1
+                            if re.search(rf"\b(?:cap\.?|capitolo|{ROMAN_CITATION_TOKEN_SOURCE}|\d+)\b", text, re.I):
+                                work_stat["passage_mentions"] += 1
+                            mention_payloads.append(
+                                {
+                                    "author_id": "cinonio",
+                                    "author": "Cinonio",
+                                    "frontend_status": "ready",
+                                    "frontend_notes": AUTHORITY_OBJECT_ROLLOUT_POLICY["cinonio"]["frontend_notes_override"],
+                                    "work": "Particelle",
+                                    "cantica": cantica,
+                                    "canto": int(canto),
+                                    "canto_label": canto_label,
+                                    "line_info": line_info,
+                                    "commentary_name": commentary_name,
+                                    "commentary_abbr": build_commentary_abbr(commentary_name),
+                                    "raw_mention": hit,
+                                    "resolution_status": resolved,
+                                    "confidence": 0.92 if author_hits else 0.8,
+                                    "raw_passage": None,
+                                    "commentary_record_id": build_supplemental_occurrence_id("cinonio", result_url, "Particelle", hit),
+                                    "result_url": result_url,
+                                    "mention_role": None,
+                                    "mention_role_confidence": None,
+                                    "sample_name": sample_name,
+                                    "line_number": line_start,
+                                }
+                            )
+                    elif author_hits:
+                        for hit in author_hits:
+                            mention_payloads.append(
+                                {
+                                    "author_id": "cinonio",
+                                    "author": "Cinonio",
+                                    "frontend_status": "ready",
+                                    "frontend_notes": AUTHORITY_OBJECT_ROLLOUT_POLICY["cinonio"]["frontend_notes_override"],
+                                    "work": None,
+                                    "cantica": cantica,
+                                    "canto": int(canto),
+                                    "canto_label": canto_label,
+                                    "line_info": line_info,
+                                    "commentary_name": commentary_name,
+                                    "commentary_abbr": build_commentary_abbr(commentary_name),
+                                    "raw_mention": hit,
+                                    "resolution_status": "resolved_author_only",
+                                    "confidence": 0.78,
+                                    "raw_passage": None,
+                                    "commentary_record_id": build_supplemental_occurrence_id("cinonio", result_url, hit),
+                                    "result_url": result_url,
+                                    "mention_role": None,
+                                    "mention_role_confidence": None,
+                                    "sample_name": sample_name,
+                                    "line_number": line_start,
+                                }
+                            )
+
+                    for payload in mention_payloads:
+                        commentary_rows.append(payload)
+                        density_entry = density_rows.setdefault(
+                            sample_name,
+                            {
+                                "author_id": "cinonio",
+                                "author": "Cinonio",
+                                "frontend_status": "ready",
+                                "sample_name": sample_name,
+                                "canto_label": canto_label,
+                                "cantica": cantica,
+                                "canto": int(canto),
+                                "total_mentions": 0,
+                            },
+                        )
+                        density_entry["total_mentions"] += 1
+
+                        sample_entry = line_groups_by_sample.setdefault(
+                            sample_name,
+                            {
+                                "sample_name": sample_name,
+                                "canto_label": canto_label,
+                                "cantica": cantica,
+                                "canto": int(canto),
+                                "total_mentions": 0,
+                                "groups": {},
+                            },
+                        )
+                        sample_entry["total_mentions"] += 1
+                        line_key = f"{line_start or line_info}:{line_end or line_info}:{line_info or line_start or ''}"
+                        group_entry = sample_entry["groups"].setdefault(
+                            line_key,
+                            {
+                                "line_key": line_key,
+                                "line_info": line_info,
+                                "line_start": line_start,
+                                "line_end": line_end,
+                                "total_mentions": 0,
+                                "commentary_count": 0,
+                                "commentary_index": {},
+                                "mention_role_breakdown": {},
+                                "occurrences": [],
+                            },
+                        )
+                        group_entry["total_mentions"] += 1
+                        group_entry["occurrences"].append(payload)
+                        commentary_bucket = group_entry["commentary_index"].setdefault(
+                            commentary_name,
+                            {
+                                "abbr": build_commentary_abbr(commentary_name),
+                                "commentary_name": commentary_name,
+                                "mention_count": 0,
+                            },
+                        )
+                        commentary_bucket["mention_count"] += 1
+        except (OSError, UnicodeDecodeError, csv.Error):
+            continue
+
+    works_list = sorted(
+        works_counter.values(),
+        key=lambda item: (-item["count"], item["canonical_work"].casefold()),
+    )
+    commentary_samples = []
+    for sample_name, sample in sorted(line_groups_by_sample.items(), key=lambda item: sample_id_sort_key(item[0])):
+        groups = []
+        for group in sorted(sample["groups"].values(), key=lambda item: (item.get("line_start") or 10**9, item.get("line_info") or "")):
+            groups.append(
+                {
+                    **group,
+                    "commentary_count": len(group["commentary_index"]),
+                    "commentary_index": sorted(group["commentary_index"].values(), key=lambda item: (-item["mention_count"], item["commentary_name"].casefold())),
+                }
+            )
+        commentary_samples.append(
+            {
+                "sample_name": sample_name,
+                "canto_label": sample["canto_label"],
+                "cantica": sample["cantica"],
+                "canto": sample["canto"],
+                "total_mentions": sample["total_mentions"],
+                "line_group_count": len(groups),
+                "line_groups": groups,
+            }
+        )
+
+    authors_index_row = {
+        "author_id": "cinonio",
+        "canonical_name": "Cinonio",
+        "aliases": CINONIO_SUPPLEMENTAL_AUTHOR["aliases"],
+        "total_mentions": len(commentary_rows),
+        "total_work_mentions": sum(item["count"] for item in works_list),
+        "frontend_status": "ready",
+        "frontend_notes": AUTHORITY_OBJECT_ROLLOUT_POLICY["cinonio"]["frontend_notes_override"],
+        "mention_role_breakdown": {},
+    }
+    works_row = {
+        "author_id": "cinonio",
+        "canonical_name": "Cinonio",
+        "frontend_status": "ready",
+        "frontend_notes": AUTHORITY_OBJECT_ROLLOUT_POLICY["cinonio"]["frontend_notes_override"],
+        "total_work_mentions": sum(item["count"] for item in works_list),
+        "works": works_list,
+    }
+    commentary_line_index_row = {
+        "author_id": "cinonio",
+        "canonical_name": "Cinonio",
+        "frontend_status": "ready",
+        "frontend_notes": AUTHORITY_OBJECT_ROLLOUT_POLICY["cinonio"]["frontend_notes_override"],
+        "sample_count": len(commentary_samples),
+        "samples": commentary_samples,
+    }
+    return {
+        "authors_index_row": authors_index_row,
+        "works_row": works_row,
+        "density_rows": list(density_rows.values()),
+        "occurrence_rows": commentary_rows,
+        "commentary_line_index_row": commentary_line_index_row,
+    }
+
+
 def normalize_authority_text_aliases(author_id: str, aliases: list[str]) -> list[str]:
     policy = AUTHORITY_TEXT_MATCH_POLICY.get(author_id, {})
     learned = load_commentary_alias_learning().get(author_id, {})
@@ -8063,7 +11115,7 @@ def build_authority_text_occurrences(
     aliases: list[str],
     manifest_lookup: dict[str, dict],
 ) -> tuple[list[dict], dict[str, Any]]:
-    canonical_cache = load_canonical_line_cache()
+    canonical_lines = load_normalized_canonical_line_cache()
     learned = load_commentary_alias_learning().get(author_id, {})
     policy = AUTHORITY_TEXT_MATCH_POLICY.get(author_id, {})
     normalized_aliases = normalize_authority_text_aliases(author_id, aliases)
@@ -8076,6 +11128,20 @@ def build_authority_text_occurrences(
         if str(root or "").strip()
     ]
     fuzzy_roots = sorted({root for root in fuzzy_roots if len(root) >= 4}, key=len, reverse=True)
+    alias_patterns = [
+        (
+            alias,
+            re.compile(rf"(?<![a-z]){re.escape(alias)}(?![a-z])"),
+        )
+        for alias in normalized_aliases
+    ]
+    root_patterns = [
+        (
+            root,
+            re.compile(rf"(?<![a-z]){re.escape(root)}[a-z]*(?![a-z])"),
+        )
+        for root in fuzzy_roots
+    ]
     if not normalized_aliases:
         return [], {
             "status": "no_aliases_for_text_layer",
@@ -8087,54 +11153,51 @@ def build_authority_text_occurrences(
         }
 
     grouped: dict[str, dict[str, Any]] = {}
-    for sample_id, lines in canonical_cache.items():
-        cantica, canto = parse_sample_id(sample_id)
-        if not cantica or canto is None:
+    for line in canonical_lines:
+        normalized_line = line["normalized_line"]
+        matched_aliases = [
+            alias
+            for alias, pattern in alias_patterns
+            if alias in normalized_line and pattern.search(normalized_line)
+        ]
+        compact_line = line["compact_line"]
+        matched_roots = [
+            root
+            for root, pattern in root_patterns
+            if root in compact_line and pattern.search(compact_line)
+        ]
+        matched_aliases.extend(
+            f"fuzzy:{root}"
+            for root in matched_roots
+            if f"fuzzy:{root}" not in matched_aliases
+        )
+        if not matched_aliases:
             continue
-        for line_number, line_text in sorted(lines.items()):
-            normalized_line = re.sub(r"\s+", " ", normalize_semantic_text(line_text))
-            matched_aliases = [
-                alias
-                for alias in normalized_aliases
-                if re.search(rf"(?<![a-z]){re.escape(alias)}(?![a-z])", normalized_line)
-            ]
-            compact_line = re.sub(r"[^a-z ]", "", normalized_line)
-            matched_roots = [
-                root
-                for root in fuzzy_roots
-                if re.search(rf"(?<![a-z]){re.escape(root)}[a-z]*(?![a-z])", compact_line)
-            ]
-            matched_aliases.extend(
-                f"fuzzy:{root}"
-                for root in matched_roots
-                if f"fuzzy:{root}" not in matched_aliases
-            )
-            if not matched_aliases:
-                continue
 
-            entry = grouped.setdefault(
-                sample_id,
-                {
-                    "sample_name": sample_id,
-                    "canto_label": format_canto_label(sample_id),
-                    "cantica": cantica.capitalize(),
-                    "canto": canto,
-                    "sample_available": sample_id in manifest_lookup,
-                    "occurrence_count": 0,
-                    "matched_aliases": set(),
-                    "line_occurrences": [],
-                },
-            )
-            entry["occurrence_count"] += 1
-            entry["matched_aliases"].update(matched_aliases)
-            entry["line_occurrences"].append(
-                {
-                    "line_number": line_number,
-                    "line_label": f"Line {line_number}",
-                    "line_text": line_text,
-                    "matched_aliases": sorted(set(matched_aliases)),
-                }
-            )
+        sample_id = line["sample_id"]
+        entry = grouped.setdefault(
+            sample_id,
+            {
+                "sample_name": sample_id,
+                "canto_label": format_canto_label(sample_id),
+                "cantica": line["cantica"].capitalize(),
+                "canto": line["canto"],
+                "sample_available": sample_id in manifest_lookup,
+                "occurrence_count": 0,
+                "matched_aliases": set(),
+                "line_occurrences": [],
+            },
+        )
+        entry["occurrence_count"] += 1
+        entry["matched_aliases"].update(matched_aliases)
+        entry["line_occurrences"].append(
+            {
+                "line_number": line["line_number"],
+                "line_label": f"Line {line['line_number']}",
+                "line_text": line["line_text"],
+                "matched_aliases": sorted(set(matched_aliases)),
+            }
+        )
 
     by_canto = []
     for sample_id in sorted(grouped, key=sample_id_sort_key):
@@ -8168,6 +11231,21 @@ def build_authority_text_occurrences(
 
 
 def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
+    timing_enabled = os.environ.get("AUTHORITY_BUILD_TIMING") == "1"
+    timing_started_at = time.time()
+    timing_last_at = timing_started_at
+
+    def timing_mark(label: str) -> None:
+        nonlocal timing_last_at
+        if not timing_enabled:
+            return
+        now = time.time()
+        print(
+            f"[authority-build] {label}: +{now - timing_last_at:.2f}s total={now - timing_started_at:.2f}s",
+            flush=True,
+        )
+        timing_last_at = now
+
     authors_index_path = AUTHORITY_FRONTEND_READY_DIR / "authors_index.json"
     density_path = AUTHORITY_FRONTEND_READY_DIR / "author_density_by_canto.json"
     works_path = AUTHORITY_FRONTEND_READY_DIR / "author_works.json"
@@ -8178,24 +11256,87 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
     if not all(path.exists() for path in required_paths):
         return None
 
+    timing_mark("start")
     authors_index = json.loads(authors_index_path.read_text(encoding="utf-8"))
     density = json.loads(density_path.read_text(encoding="utf-8"))
     works = json.loads(works_path.read_text(encoding="utf-8"))
     occurrences = json.loads(occurrences_path.read_text(encoding="utf-8"))
     commentary_line_index = json.loads(commentary_line_index_path.read_text(encoding="utf-8"))
+    commentary_line_index = normalize_authority_commentary_line_index_payload(commentary_line_index)
+    commentary_line_index_path.write_text(json.dumps(commentary_line_index, ensure_ascii=False, indent=2), encoding="utf-8")
+    timing_mark("loaded frontend-ready payloads")
+    authority_fulltext_eligible_samples = load_authority_fulltext_eligible_sample_ids()
+    mounted_author_work_stats = collect_mounted_author_work_stats(authority_fulltext_eligible_samples)
+    mounted_author_work_occurrences = collect_mounted_author_work_occurrences(authority_fulltext_eligible_samples)
+    timing_mark("collected mounted work stats")
+    registry_works = json.loads(AUTHORITY_WORKS_REGISTRY_PATH.read_text(encoding="utf-8")) if AUTHORITY_WORKS_REGISTRY_PATH.exists() else []
+    registry_works_by_author: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in registry_works:
+        author_id = str(row.get("author_id") or "").strip()
+        canonical_work = str(row.get("canonical_work") or row.get("canonical_name") or "").strip()
+        if not author_id or not canonical_work:
+            continue
+        mounted_metrics = (mounted_author_work_stats.get(author_id) or {}).get(canonical_work, {})
+        display_label = authority_work_display_label({**row, "canonical_work": canonical_work}) or canonical_work
+        registry_works_by_author[author_id].append(
+            {
+                "canonical_work": canonical_work,
+                "display_label": display_label,
+                "public_slug_it": str(row.get("public_slug_it") or authority_work_public_slug({**row, "canonical_work": canonical_work, "display_label": display_label})).strip()
+                or authority_work_public_slug({**row, "canonical_work": canonical_work, "display_label": display_label}),
+                "count": int(mounted_metrics.get("count", 0) or 0),
+                "resolved_author_and_work": int(mounted_metrics.get("resolved_author_and_work", 0) or 0),
+                "resolved_work_plus_inferred_author": int(mounted_metrics.get("resolved_work_plus_inferred_author", 0) or 0),
+                "passage_mentions": int(mounted_metrics.get("passage_mentions", 0) or 0),
+                **authority_work_attribution_fields(row),
+            }
+        )
+    for author_id in registry_works_by_author:
+        registry_works_by_author[author_id] = sorted(
+            registry_works_by_author[author_id],
+            key=lambda item: item.get("canonical_work", "").casefold(),
+        )
 
-    author_ids = {str(row.get("author_id") or "").strip() for row in authors_index.get("authors", [])}
-    if "dante" not in author_ids:
-        supplemental_dante = build_supplemental_dante_frontend_ready_payload()
-        authors_index.setdefault("authors", []).append(supplemental_dante["authors_index_row"])
-        works.setdefault("authors", []).append(supplemental_dante["works_row"])
-        density.setdefault("rows", []).extend(supplemental_dante["density_rows"])
-        occurrences.setdefault("occurrences", []).extend(supplemental_dante["occurrence_rows"])
-        commentary_line_index.setdefault("authors", []).append(supplemental_dante["commentary_line_index_row"])
+    merge_supplemental_frontend_ready_payload(
+        authors_index,
+        works,
+        density,
+        occurrences,
+        commentary_line_index,
+        build_supplemental_dante_frontend_ready_payload(
+            mounted_author_work_stats,
+            mounted_author_work_occurrences,
+        ),
+    )
+    timing_mark("merged supplemental dante")
+    merge_supplemental_frontend_ready_payload(
+        authors_index,
+        works,
+        density,
+        occurrences,
+        commentary_line_index,
+        build_supplemental_cinonio_frontend_ready_payload(),
+    )
+    timing_mark("merged supplemental cinonio")
+    for payload in build_registry_mounted_supplemental_frontend_ready_payloads(
+        authors_index,
+        mounted_author_work_stats,
+        mounted_author_work_occurrences,
+    ):
+        merge_supplemental_frontend_ready_payload(
+            authors_index,
+            works,
+            density,
+            occurrences,
+            commentary_line_index,
+            payload,
+        )
+    timing_mark("merged registry mounted supplemental")
 
     works_trees = load_authority_works_trees()
     works_tree_shard_paths = write_demo_authority_works_tree_shards(works_trees)
     commentary_line_shard_paths = write_demo_authority_commentary_line_shards(commentary_line_index)
+    timing_mark("wrote works trees and commentary line shards")
 
     manifest_lookup = {entry["id"]: entry for entry in manifest_entries}
     works_by_author = {item["author_id"]: item for item in works.get("authors", [])}
@@ -8220,18 +11361,73 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
             "sample_available": sample_name in manifest_lookup,
         }
         occurrences_by_author[row["author_id"]].append(row_entry)
+    for author_id, mounted_rows in mounted_author_work_occurrences.items():
+        occurrences_by_author[author_id] = merge_author_occurrence_rows(
+            occurrences_by_author.get(author_id, []),
+            mounted_rows,
+        )
+    timing_mark("grouped density and occurrences")
 
     priority_authors = {"virgil", "aristotle", "paul_the_apostle", "psalmist", "augustine", "cicero", "statius", "dante"}
     author_entries = []
     for author in authors_index.get("authors", []):
         author_id = author["author_id"]
+        timing_mark(f"author start {author_id}")
         rollout_policy = AUTHORITY_OBJECT_ROLLOUT_POLICY.get(author_id, {})
         work_entry = works_by_author.get(author_id, {})
+        mounted_work_rows = build_mounted_author_work_rows(author_id, mounted_author_work_stats.get(author_id))
+        effective_works = reconcile_author_work_entries(
+            author_id,
+            list(work_entry.get("works") or []),
+            list(registry_works_by_author.get(author_id, [])),
+            mounted_work_rows,
+        )
+        if not effective_works:
+            curated_works = synthesize_curated_work_entries(author_id)
+            if curated_works:
+                effective_works = curated_works
+                work_entry = {"works": curated_works}
+        effective_works, curated_work_occurrences = apply_curated_work_evidence(author_id, effective_works)
+        visible_works = filter_visible_author_work_entries(effective_works)
+        display_name = authority_display_name(author_id, author["canonical_name"])
+        total_work_mentions = sum(int(work.get("count", 0) or 0) for work in effective_works)
+        has_positive_work_evidence = any(
+            int(work.get("count", 0) or 0) > 0
+            or int(work.get("resolved_author_and_work", 0) or 0) > 0
+            or int(work.get("resolved_work_plus_inferred_author", 0) or 0) > 0
+            or int(work.get("passage_mentions", 0) or 0) > 0
+            for work in effective_works
+        )
+        policy_works_layer_mode = rollout_policy.get("works_layer_mode")
+        if works_trees.get(author_id):
+            effective_works_layer_mode = "works_tree"
+        else:
+            effective_works_layer_mode = policy_works_layer_mode or ("flat_work_overview" if visible_works else "no_work_layer")
+        auto_promoted_work_overview = False
+        registry_promoted_work_overview = False
+        if not works_trees.get(author_id) and policy_works_layer_mode == "no_work_layer" and total_work_mentions > 0:
+            effective_works_layer_mode = "flat_work_overview"
+            auto_promoted_work_overview = True
+        elif policy_works_layer_mode == "no_work_layer" and visible_works and not works_trees.get(author_id):
+            effective_works_layer_mode = "flat_work_overview"
+            registry_promoted_work_overview = True
         density_rows = sorted(
             density_by_author.get(author_id, []),
             key=lambda item: (-item.get("total_mentions", 0), *sample_id_sort_key(item.get("sample_name", ""))),
         )
-        occurrence_rows = occurrences_by_author.get(author_id, [])
+        occurrence_rows = merge_curated_work_occurrence_rows(
+            occurrences_by_author.get(author_id, []),
+            curated_work_occurrences,
+        )
+        occurrence_rows = [
+            {
+                **item,
+                "author": item.get("author") or display_name,
+                "frontend_status": item.get("frontend_status") or rollout_policy.get("frontend_status_override") or author.get("frontend_status") or "ready",
+                "frontend_notes": item.get("frontend_notes") or rollout_policy.get("frontend_notes_override") or author.get("frontend_notes"),
+            }
+            for item in occurrence_rows
+        ]
         text_occurrences_by_canto, text_layer_summary = build_authority_text_occurrences(
             author_id,
             author.get("aliases", []),
@@ -8360,19 +11556,27 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
             {
                 "author_id": author_id,
                 "canonical_name": author["canonical_name"],
-                "display_name": authority_display_name(author_id, author["canonical_name"]),
+                "display_name": display_name,
                 "public_slug_it": authority_public_slug(author_id, author["canonical_name"]),
                 "aliases": author.get("aliases", []),
-                "frontend_status": rollout_policy.get(
-                    "frontend_status_override",
-                    author.get("frontend_status", "review_first"),
+                "frontend_status": rollout_policy.get("frontend_status_override")
+                or author.get("frontend_status")
+                or "review_first",
+                "frontend_notes": (
+                    f"{display_name} 现在已经有可读的 mounted work citations，不再需要停在 commentary shell；前台应直接挂出 works tree，再慢慢决定是否继续细化 branch tree。"
+                    if auto_promoted_work_overview
+                    else f"{display_name} 现在虽然还缺更深的 mounted local branch evidence，但 public room、curated work anchors 与 sampled occurrences 已经足够完整；前台直接按 works tree 打开，同时保留保守 locator 语气。"
+                    if registry_promoted_work_overview
+                    else rollout_policy.get("frontend_notes_override", author.get("frontend_notes"))
                 ),
-                "frontend_notes": rollout_policy.get("frontend_notes_override", author.get("frontend_notes")),
                 "priority_author": author_id in priority_authors,
-                "object_rollout_status": rollout_policy.get("object_rollout_status", author.get("frontend_status", "review_first")),
+                "object_rollout_status": rollout_policy.get("object_rollout_status")
+                or author.get("object_rollout_status")
+                or author.get("frontend_status")
+                or "review_first",
                 "entry_mode": rollout_policy.get("entry_mode", "author_commentary_entry"),
                 "total_mentions": author.get("total_mentions", 0),
-                "total_work_mentions": author.get("total_work_mentions", 0),
+                "total_work_mentions": total_work_mentions,
                 "mention_role_breakdown": author.get("mention_role_breakdown", {}),
                 "text_layer_status": text_layer_summary["status"],
                 "text_layer_note": text_layer_summary["note"],
@@ -8413,16 +11617,19 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
                     "recommended_flow": "choose sample first, then load authority_commentary_lines/<author>/<sample>.json",
                 },
                 "by_canto_density": by_canto_density,
-                "works": work_entry.get("works", [])[:10],
-                "works_layer_mode": rollout_policy.get(
-                    "works_layer_mode",
-                    "works_tree" if works_trees.get(author_id) else ("flat_work_overview" if work_entry.get("works") else "no_work_layer"),
-                ),
-                "works_layer_note": rollout_policy.get(
-                    "works_layer_note",
-                    "当前对象没有 works tree；如需进入 works 层，应先以保守 overview 形式呈现。"
-                    if work_entry.get("works") and not works_trees.get(author_id)
-                    else None,
+                "works": visible_works[:10],
+                "works_layer_mode": effective_works_layer_mode,
+                "works_layer_note": (
+                    f"{display_name} 当前已经有 mounted work citations，可先以 work overview 打开，再慢慢决定是否细化 branch tree。"
+                    if auto_promoted_work_overview
+                    else f"{display_name} 当前以前台 completed work room 打开：先读 curated work cards 与 static autore room，再等待 mounted local evidence 慢慢长厚。"
+                    if registry_promoted_work_overview
+                    else rollout_policy.get(
+                        "works_layer_note",
+                        "当前对象没有 works tree；如需进入 works 层，应先以保守 overview 形式呈现。"
+                        if visible_works and not works_trees.get(author_id)
+                        else None,
+                    )
                 ),
                 "caveat_flags": rollout_policy.get("caveat_flags", []),
                 "work_branch_bundle": work_branch_bundle_payload,
@@ -8588,6 +11795,7 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
                 ),
             }
         )
+        timing_mark(f"author done {author_id}")
 
     author_entries.sort(
         key=lambda item: (
@@ -8596,6 +11804,19 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
             item["canonical_name"].lower(),
         )
     )
+
+    for author in author_entries:
+        author_id = author.get("author_id")
+        display_name = author.get("display_name") or authority_display_name(author_id, author.get("canonical_name"))
+        occurrences_by_author[author_id] = [
+            {
+                **item,
+                "author": item.get("author") or display_name,
+                "frontend_status": item.get("frontend_status") or author.get("frontend_status"),
+                "frontend_notes": item.get("frontend_notes") or author.get("frontend_notes"),
+            }
+            for item in occurrences_by_author.get(author_id, [])
+        ]
 
     flat_object_shard_meta = write_demo_authority_flat_object_shards(author_entries, works_by_author, occurrences_by_author)
     for author in author_entries:
@@ -8616,6 +11837,10 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
                 author["object_rollout_status"] = policy_rollout_status or author["frontend_status"] or "ready"
             if rollout_policy.get("works_layer_note"):
                 author["works_layer_note"] = rollout_policy["works_layer_note"]
+        elif author.get("works_layer_mode") == "flat_work_overview":
+            existing_meta = load_existing_flat_object_meta(author_id)
+            if existing_meta:
+                author["flat_work_object"] = existing_meta
 
     partial_tree_shard_meta = write_demo_authority_partial_tree_shards()
     for author in author_entries:
@@ -8636,7 +11861,15 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
             author["occurrence_sample_object"] = occurrence_sample_shard_meta[author_id]
 
     for author in author_entries:
+        author_id = author.get("author_id")
+        if author.get("works_layer_mode") == "works_tree" and works_trees.get(author_id):
+            branch_summary = summarize_author_works_tree_payload(works_trees.get(author_id))
+            if author.get("works_tree"):
+                author["works_tree"]["branch_summary"] = branch_summary
+            author["works_layer_note"] = build_live_works_tree_note(author, works_trees.get(author_id))
         promote_author_ready_status(author)
+        author["works"] = filter_visible_author_work_entries(author.get("works"))
+        author["reading_contract_meta"] = build_authority_reading_contract_meta(author)
 
     authority_notes = {
         "lens_scope": "100-canto frontend authority lens, with commedia-text-first reading order",
@@ -8647,7 +11880,7 @@ def build_authority_layer(manifest_entries: list[dict]) -> Path | None:
             "commentary_authority_layer",
             "works_passages_occurrences_drilldown",
         ],
-        "works_tree_scope": "Authority works tree currently supports Aristotle, Paul, and Psalmist across the 100-sample demo shell; work tree node types follow WORK_TREE_POLICY_V1, but locator semantics remain object-sensitive.",
+        "works_tree_scope": "Authority now mounts author-side works trees across the live universe; work tree node types still follow WORK_TREE_POLICY_V1, while entry contracts and locator semantics remain object-sensitive where special-case pressure survives.",
         "split_v1_available": {
             "authority_index_path": "./data/authority_index.json",
             "authority_author_detail_dir": "./data/authority_authors",
@@ -9344,7 +12577,14 @@ def main() -> None:
     warnings.filterwarnings("ignore", category=ConvergenceWarning, module=r"sklearn")
     args = parse_args()
     switches = resolve_build_switches(args)
-    samples, inventory = resolve_samples(args.sample.lower())
+    sample_arg = args.sample.lower()
+    if (
+        switches["skip_line_level"]
+        and sample_arg == "inferno1"
+        and args.build_profile in {"website-safe", "authority-refresh", "research-refresh", "loci-refresh"}
+    ):
+        sample_arg = "all-eligible"
+    samples, inventory = resolve_samples(sample_arg)
     repaired_samples: list[str] = []
     if not switches["skip_line_level"]:
         repaired_samples = repair_generated_poem_text_outputs(samples)

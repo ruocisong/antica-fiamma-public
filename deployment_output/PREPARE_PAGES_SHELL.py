@@ -39,6 +39,10 @@ def main() -> None:
             shutil.copy2(source, OUTPUT_ROOT / filename)
 
     copy_tree(FRONTEND_ROOT / "static", OUTPUT_ROOT / "static")
+    for dirname in ("autore", "personaggio", "research"):
+        source = FRONTEND_ROOT / dirname
+        if source.exists():
+            copy_tree(source, OUTPUT_ROOT / dirname)
 
     print("Prepared Pages shell release folder:")
     print(f"- {OUTPUT_ROOT}")

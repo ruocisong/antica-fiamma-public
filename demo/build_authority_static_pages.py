@@ -24,6 +24,31 @@ PERSONAGGIO_TAIL_LEDGERS_PATH = DATA_DIR / "personaggio_tail_ledgers.json"
 
 
 DISPLAY_NAME_OVERRIDES = {
+    "moses": "Mosè",
+    "isaiah": "Isaia",
+    "matthew": "Matteo Evangelista",
+    "mark": "Marco Evangelista",
+    "luke": "Luca Evangelista",
+    "john_the_evangelist": "Giovanni Evangelista",
+    "samuel": "Samuele",
+    "ezekiel": "Ezechiele",
+    "daniel": "Daniele",
+    "zechariah": "Zaccaria",
+    "joshua": "Giosuè",
+    "sirach": "Siracide",
+    "jeremiah": "Geremia",
+    "baruch": "Baruc",
+    "hosea": "Osea",
+    "job": "Giobbe",
+    "tobit": "Tobia",
+    "judith": "Giuditta",
+    "jonah": "Giona",
+    "micah": "Michea",
+    "habakkuk": "Abacuc",
+    "zephaniah": "Sofonia",
+    "amos": "Amos",
+    "joel": "Gioele",
+    "malachi": "Malachia",
     "aristotle": "Aristotele",
     "paul_the_apostle": "Paolo Apostolo",
     "psalmist": "Salmista",
@@ -62,6 +87,11 @@ DISPLAY_NAME_OVERRIDES = {
     "solino": "Solino",
     "tommaso_daquino": "Tommaso d'Aquino",
     "alberto_magno": "Alberto Magno",
+    "graziolo_bambaglioli": "Graziolo Bambaglioli",
+    "petrus_comestor": "Pietro Comestore",
+    "fulgentius_planciades": "Fulgenzio Planciade",
+    "cassiodorus": "Cassiodoro",
+    "thomas_of_celano": "Tommaso da Celano",
 }
 
 WORK_DISPLAY_OVERRIDES = {
@@ -76,11 +106,37 @@ WORK_DISPLAY_OVERRIDES = {
     ("paul_the_apostle", "Epistle to the Romans"): "Lettera ai Romani",
     ("paul_the_apostle", "First Corinthians"): "Prima lettera ai Corinzi",
     ("psalmist", "Psalms"): "Salmi",
+    ("samuel", "First Book of Samuel"): "Primo libro di Samuele",
+    ("samuel", "Second Book of Samuel"): "Secondo libro di Samuele",
+    ("ezekiel", "Book of Ezekiel"): "Libro di Ezechiele",
+    ("daniel", "Book of Daniel"): "Libro di Daniele",
+    ("zechariah", "Book of Zechariah"): "Libro di Zaccaria",
+    ("joshua", "Book of Joshua"): "Libro di Giosuè",
+    ("paul_the_apostle", "Letter to the Hebrews"): "Lettera agli Ebrei",
+    ("sirach", "Book of Ecclesiasticus"): "Ecclesiastico (Siracide)",
+    ("salomone", "Wisdom of Solomon"): "Sapienza di Salomone",
+    ("jeremiah", "Book of Jeremiah"): "Libro di Geremia",
+    ("jeremiah", "Lamentations"): "Lamentazioni",
+    ("baruch", "Book of Baruch"): "Libro di Baruc",
+    ("hosea", "Book of Hosea"): "Libro di Osea",
+    ("job", "Book of Job"): "Libro di Giobbe",
+    ("tobit", "Book of Tobit"): "Libro di Tobia",
+    ("judith", "Book of Judith"): "Libro di Giuditta",
+    ("jonah", "Book of Jonah"): "Libro di Giona",
+    ("micah", "Book of Micah"): "Libro di Michea",
+    ("habakkuk", "Book of Habakkuk"): "Libro di Abacuc",
+    ("zephaniah", "Book of Zephaniah"): "Libro di Sofonia",
+    ("amos", "Book of Amos"): "Libro di Amos",
+    ("joel", "Book of Joel"): "Libro di Gioele",
+    ("malachi", "Book of Malachi"): "Libro di Malachia",
     ("statius", "Thebaid"): "Thebais",
     ("statius", "Achilleid"): "Achilleis",
     ("virgil", "Aeneid"): "Aeneis",
     ("virgil", "Georgics"): "Georgica",
     ("virgil", "Eclogues"): "Eclogae",
+    ("dante", "Inferno"): "Inferno",
+    ("dante", "Purgatorio"): "Purgatorio",
+    ("dante", "Paradiso"): "Paradiso",
 }
 
 PERSONAGGIO_PAGES = [
@@ -407,27 +463,6 @@ PERSONAGGIO_PAGES = [
         "author_slug": "tolomeo",
     },
     {
-        "slug": "ulisse",
-        "title": "Ulisse",
-        "lead_en": (
-            "This personaggio page for Ulisse now belongs to the completed character district. "
-            "The current residual evidence points more toward character-presence and reused narrative exemplum than toward a new authority-author room."
-        ),
-        "lead_bi": (
-            "这张 `Ulisse` personaggio 页面现在已经属于完成建制后的角色区。"
-            "当前残余证据更像角色在场和叙事 exemplum 的重复调用，而不是一个新的 authority-author room。"
-        ),
-        "why_en": (
-            "Ulisse currently reads less like an external auctor and more like a narrative figure whose name keeps resurfacing inside commentary explanation."
-        ),
-        "why_bi": (
-            "当前的 Ulisse 更不像外部 auctor，而更像一个不断在 commentary 解释里回返的叙事角色。"
-        ),
-        "state_en": "This layer is still thin, but it is already a real character-space for Ulisse rather than a deferred note.",
-        "state_bi": "这一层现在仍然很薄，但它已经是 Ulisse 的真实角色空间，而不再只是延后的备注。",
-        "author_slug": None,
-    },
-    {
         "slug": "sordello",
         "title": "Sordello",
         "lead_en": (
@@ -725,22 +760,6 @@ PERSONAGGIO_SCENE_NOTES = {
             "后续 commentary 会把这个名字重新压成 cosmological authority，所以这间房不能在 author-shell 变厚时丢掉自己的场景身体。",
         ],
     },
-    "ulisse": {
-        "scene_note_en": "A narrative exemplar whose name reenters commentary through the force of the episode itself.",
-        "scene_note_bi": "一个通过情节自身力量不断回返 commentary 的叙事 exemplum。",
-        "canto_note_en": "Main dramatic corridor: Inferno 26.",
-        "canto_note_bi": "主要戏剧走廊：Inferno 26。",
-        "scene_pressure_en": "Ulisse's room matters because narrative force itself generates the afterlife of the name. The figure is not borrowed quietly; he detonates into one of the poem's strongest exemplary scenes.",
-        "scene_pressure_bi": "Ulisse 这间房的重要性在于：名字的后世回响是由叙事情节本身制造出来的。这个 figure 不是被安静借来，而是在诗里炸成最强的一类 exemplum 场景。",
-        "canto_threads_en": [
-            "Inferno 26: the room is almost entirely made of scene-pressure, since speech, flame, voyage, and ruin all fuse into one exemplary body.",
-            "Later commentary keeps returning to the room because the episode itself continues to radiate interpretive pressure outward.",
-        ],
-        "canto_threads_bi": [
-            "Inferno 26：这间房几乎完全由 scene-pressure 构成，因为发言、火焰、航行和毁灭全都熔成了一个 exemplum 身体。",
-            "后续 commentary 会不断回返这间房，因为这个情节本身会持续把解释压力向外辐射。",
-        ],
-    },
     "sordello": {
         "scene_note_en": "A scene-memory figure tied to Purgatorio's political and affective atmosphere.",
         "scene_note_bi": "和 Purgatorio 的政治气氛与情感空气连在一起的场景记忆人物。",
@@ -776,7 +795,6 @@ PERSONAGGIO_CORRIDOR_GROUPS = {
     "averroe": "Limbo",
     "avicenna": "Limbo",
     "tolomeo": "Limbo",
-    "ulisse": "Inferno",
     "sordello": "Purgatorio",
 }
 
@@ -893,18 +911,6 @@ PERSONAGGIO_CURATED_WORK_ANCHORS = {
             ("Pharsalia", "内战史诗的压力，是让 Lucano 超过一个裸 bella scola 名字的主电流。"),
         ],
     },
-    "ulisse": {
-        "lead_en": "Ulisse stays scene-first, but the room still benefits from two explicit reading anchors instead of a blank works apology.",
-        "lead_bi": "Ulisse 保持 scene-first 没错，但这间房仍然需要两根明确的阅读锚，而不是一段空泛的 works 道歉。",
-        "items_en": [
-            ("Inferno 26", "The speech-scene itself is the first anchor: counsel, voyage, and catastrophic desire are already enough to hold the room."),
-            ("Odyssey", "Homeric return-memory remains the second anchor even when Dante's Ulisse sharply departs from it."),
-        ],
-        "items_bi": [
-            ("Inferno 26", "首先的锚点就是这段发言场景本身：劝说、航行和灾难性的欲望已经足够撑起这间房。"),
-            ("Odyssey", "Homeric 的回返记忆仍然是第二根锚点，哪怕 Dante 的 Ulisse 明显偏离了它。"),
-        ],
-    },
     "sordello": {
         "lead_en": "Sordello also stays scene-first, but the room is clearer once its dramatic and troubadour anchors are named aloud.",
         "lead_bi": "Sordello 同样保持 scene-first，但把它的戏剧锚点和 troubadour 锚点直接说出来，这间房会清楚很多。",
@@ -994,6 +1000,114 @@ AUTHOR_CURATED_WORK_ANCHORS = {
         "items_bi": [
             ("Gospel of John", "Johannine 的见证与神学，让这间房超过缩写级别的存在。"),
             ("Apocalypse", "启示性异象让这间房从 gospel prose 扩到 eschatological reading pressure。"),
+        ],
+    },
+    "samuel": {
+        "lead_en": "Samuele still lacks a mounted historical scriptural tree, but the room already stands on a clear double-book backbone.",
+        "lead_bi": "Samuele 还没有正式挂出的历史书 tree，但这间房已经立在清楚的双书主脊上。",
+        "items_en": [
+            ("First Book of Samuel", "Kingship, prophetic vocation, and Davidic emergence keep Samuel visible in historical-scriptural traffic."),
+            ("Second Book of Samuel", "Davidic monarchy and sin-repentance pressure thicken the room beyond a single abbreviation."),
+        ],
+        "items_bi": [
+            ("First Book of Samuel", "王权、先知召命和大卫的兴起，让 Samuele 在历史性 scriptural traffic 中保持可见。"),
+            ("Second Book of Samuel", "大卫王权与罪悔压力，让这间房超过一个缩写。"),
+        ],
+    },
+    "ezekiel": {
+        "lead_en": "Ezechiele still lacks a mounted prophetic tree, but the room already rests on a strong visionary backbone.",
+        "lead_bi": "Ezechiele 还没有正式挂出的 prophetic tree，但这间房已经立在很强的异象主脊上。",
+        "items_en": [
+            ("Book of Ezekiel", "Vision, judgment, and restoration keep the room prophetically charged."),
+        ],
+        "items_bi": [
+            ("Book of Ezekiel", "异象、审判与复兴，让这间房保持 prophetic 电流。"),
+        ],
+    },
+    "daniel": {
+        "lead_en": "Daniele still lacks a mounted apocalyptic tree, but the room already has a strong prophetic-apocalyptic anchor.",
+        "lead_bi": "Daniele 还没有正式挂出的 apocalyptic tree，但这间房已经有很强的 prophetic-apocalyptic 锚点。",
+        "items_en": [
+            ("Book of Daniel", "Dream, empire, and apocalypse keep the room visibly active inside commentary citation."),
+        ],
+        "items_bi": [
+            ("Book of Daniel", "梦境、帝国与 apocalypse，让这间房在 commentary citation 里保持活跃。"),
+        ],
+    },
+    "zechariah": {
+        "lead_en": "Zaccaria still lacks a mounted prophetic tree, but the room already has a stable visionary anchor.",
+        "lead_bi": "Zaccaria 还没有正式挂出的 prophetic tree，但这间房已经有稳定的异象锚点。",
+        "items_en": [
+            ("Book of Zechariah", "Vision and messianic pressure keep the room legible in scriptural traffic."),
+        ],
+        "items_bi": [
+            ("Book of Zechariah", "异象与 messianic 压力，让这间房在 scriptural traffic 中保持可读。"),
+        ],
+    },
+    "joshua": {
+        "lead_en": "Giosuè still lacks a mounted historical scriptural tree, but the room already has a clear conquest-passage anchor.",
+        "lead_bi": "Giosuè 还没有正式挂出的历史书 tree，但这间房已经有清楚的 conquest / passage 锚点。",
+        "items_en": [
+            ("Book of Joshua", "Conquest, crossing, and inherited land keep the room historically vivid."),
+        ],
+        "items_bi": [
+            ("Book of Joshua", "征服、过渡与承受之地，让这间房在历史层面保持鲜明。"),
+        ],
+    },
+    "graziolo_bambaglioli": {
+        "lead_en": "Graziolo Bambaglioli still lacks a mounted commentary tree, but the room already has a stable early-commentary anchor.",
+        "lead_bi": "Graziolo Bambaglioli 还没有正式挂出的 commentary tree，但这间房已经有稳定的早期注释锚点。",
+        "items_en": [
+            ("Commentary on the Inferno", "Early Inferno exegesis keeps Graziolo visible as more than a bibliographic shadow."),
+        ],
+        "items_bi": [
+            ("Commentary on the Inferno", "早期 Inferno 解经，让 Graziolo 不只是一个书目影子。"),
+        ],
+    },
+    "petrus_comestor": {
+        "lead_en": "Pietro Comestore still lacks a mounted scholastic tree, but the room already stands on one strong historiographic backbone.",
+        "lead_bi": "Pietro Comestore 还没有正式挂出的 scholastic tree，但这间房已经站在一根很强的史述主脊上。",
+        "items_en": [
+            ("Historia scholastica", "Biblical-historiographic synthesis keeps the room stable inside scholastic citation traffic."),
+        ],
+        "items_bi": [
+            ("Historia scholastica", "圣经史述综合，让这间房在 scholastic citation traffic 中保持稳定。"),
+        ],
+    },
+    "fulgentius_planciades": {
+        "lead_en": "Fulgenzio Planciade still lacks a mounted mythographic tree, but the room already has a compact allegorical backbone.",
+        "lead_bi": "Fulgenzio Planciade 还没有正式挂出的 mythographic tree，但这间房已经有紧凑的 allegorical 主脊。",
+        "items_en": [
+            ("Mythologiae", "Mythographic ordering keeps the room visible beyond a stray citation tag."),
+            ("Expositio Virgilianae continentiae", "Virgilian allegory thickens the room inside classical commentary."),
+        ],
+        "items_bi": [
+            ("Mythologiae", "神话学编排让这间房超过一个漂浮的 citation tag。"),
+            ("Expositio Virgilianae continentiae", "Virgilian 寓意解读，让这间房在 classical commentary 里变厚。"),
+        ],
+    },
+    "cassiodorus": {
+        "lead_en": "Cassiodoro still lacks a mounted patristic tree, but the room already rests on a clear exegetical-monastic pair.",
+        "lead_bi": "Cassiodoro 还没有正式挂出的 patristic tree，但这间房已经立在清楚的解经 / monastic 双锚上。",
+        "items_en": [
+            ("Expositio Psalmorum", "Psalmic exegesis keeps Cassiodorus visible inside monastic commentary."),
+            ("Institutiones", "Scholarly ordering widens the room beyond one exegetical book."),
+        ],
+        "items_bi": [
+            ("Expositio Psalmorum", "对诗篇的解经，让 Cassiodorus 在 monastic commentary 中保持可见。"),
+            ("Institutiones", "知识编排让这间房超过一本解经书。"),
+        ],
+    },
+    "thomas_of_celano": {
+        "lead_en": "Tommaso da Celano still lacks a mounted Franciscan tree, but the room already has a devotional-hagiographic backbone.",
+        "lead_bi": "Tommaso da Celano 还没有正式挂出的 Franciscan tree，但这间房已经有 devotional-hagiographic 主脊。",
+        "items_en": [
+            ("Vita prima Sancti Francisci", "Franciscan life-writing keeps the room historically and devotionally concrete."),
+            ("Dies irae", "Liturgical afterlife keeps the room audible beyond prose hagiography."),
+        ],
+        "items_bi": [
+            ("Vita prima Sancti Francisci", "方济各生平书写，让这间房在历史与 devotional 层面都很具体。"),
+            ("Dies irae", "礼仪性的后效，让这间房超过 prose hagiography。"),
         ],
     },
     "alberto_magno": {
@@ -1474,12 +1588,14 @@ AUTHOR_CURATED_WORK_ANCHORS = {
         "lead_en": "Dante now has a mounted authority room of his own; the strongest current runs through self-citation, political doctrine, vernacular theory, and autobiographical memory.",
         "lead_bi": "Dante 现在已经有自己的 authority room；最强电流来自自我引用、政治理论、俗语诗学和自传性记忆。",
         "items_en": [
+            ("Inferno / Purgatorio / Paradiso", "Internal cantica cross-reference keeps the room visibly tied to Dante's own poem as a controlled self-citation field."),
             ("Convivio", "Philosophical prose and self-commentary give the room its broadest reflective threshold."),
             ("De Monarchia", "Political doctrine keeps the room vertically tied to empire, justice, and history."),
             ("Vita Nuova", "Autobiographical memory and lyric prose stop Dante from collapsing into doctrine alone."),
             ("De vulgari eloquentia", "Vernacular theory keeps the room visibly philological as well as poetic."),
         ],
         "items_bi": [
+            ("Inferno / Purgatorio / Paradiso", "三 cantiche 的内部 cross-reference，让这间房始终挂在 Dante 自己的诗上，但作为受控的 self-citation field 来读。"),
             ("Convivio", "哲学性 prose 与自我评论，给这间房最宽的反思入口。"),
             ("De Monarchia", "政治理论让这间房始终挂在帝国、正义和历史上。"),
             ("Vita Nuova", "自传性记忆与 lyric prose，防止 Dante 缩成纯 doctrine。"),
@@ -1617,11 +1733,11 @@ WORK_CURATED_BRANCH_ANCHORS = {
         "items_en": [("Speech of Diotima", "The ascent of love keeps the room structurally memorable."), ("Alcibiades’ entrance", "The late arrival widens the room beyond pure doctrine into drama.")],
         "items_bi": [("Speech of Diotima", "爱之上升，让这间房有结构性的记忆点。"), ("Alcibiades’ entrance", "后段 Alcibiades 的闯入，让这间房不只剩 doctrine，而重新变成戏。")],
     },
-    ("platone", "de_immortalitate_anime"): {
-        "lead_en": "De immortalitate anime currently reads as an immortality-focused Platonic lane rather than a local branch tree.",
-        "lead_bi": "De immortalitate anime 现在更像一条柏拉图式的灵魂不朽线路，而不是本地 branch tree。",
-        "items_en": [("Soul’s endurance", "The room stays readable through the persistence of the soul."), ("Philosophical purification", "Purification gives the room an ascensional moral contour.")],
-        "items_bi": [("Soul’s endurance", "通过灵魂的持续性，这间房保持可读。"), ("Philosophical purification", "净化主题给这间房上升性的 moral contour。")],
+    ("agostino", "de_immortalitate_animae"): {
+        "lead_en": "De immortalitate animae now belongs with Augustine's introspective and doctrinal room, even where the local mounted sample is still thin.",
+        "lead_bi": "De immortalitate animae 现在归入奥古斯丁的内省与 doctrinal 房间，即使本地 mounted sample 仍然偏薄。",
+        "items_en": [("Soul’s endurance", "The room remains readable through Augustine's insistence on the soul's continuing life."), ("Interior return", "The work thickens Augustine's return inward rather than extending a Platonic branch tree here.")],
+        "items_bi": [("Soul’s endurance", "通过奥古斯丁对灵魂持续生命的坚持，这间房保持可读。"), ("Interior return", "这部作品加厚的是奥古斯丁向内返回的房间，而不是这里的 Platonic branch tree。")],
     },
     ("seneca", "hercules_furens"): {
         "lead_en": "Hercules Furens still has no branch tree here, but its tragic room already opens through rage and aftermath.",
@@ -1831,12 +1947,26 @@ def build_author_work_note_en(author: dict, curated: dict | None = None) -> str:
         )
     if work_mode == "flat_work_overview":
         return (
-            f"{name} currently opens through a flat work overview: keep the main works visible and readable, but do "
-            "not overstate the room as a fully branched local tree."
+            f"{name} currently opens through a lighter mounted work room: keep the main works visible and readable, "
+            "but do not overstate the room as a deeper locator tree than the local payload can honestly support."
         )
     if work_mode == "special_case_object":
         return f"{name} currently opens through a controlled special-case work path rather than a generic work tree."
     return f"{name} currently exposes the mounted work layer that belongs to this room."
+
+
+def build_work_attribution_note_en(work_summary: dict) -> str:
+    status = str(work_summary.get("attribution_status") or "").strip()
+    note = str(work_summary.get("attribution_note_en") or "").strip()
+    if note:
+        return note
+    if status == "secure":
+        return "This author/work pairing is treated here as secure."
+    if status in {"traditional", "traditional_heading", "composite_traditional"}:
+        return "This room keeps the traditional attribution used by commentary practice, without claiming a fully settled modern historical authorship."
+    if status in {"pseudonymous_traditional", "disputed_traditional"}:
+        return "This room stays navigable under traditional commentary attribution, but the work should not be read here as a simple secure historical author/work pairing."
+    return ""
 
 
 def format_alias_list(items: list[str]) -> str:
@@ -1950,34 +2080,7 @@ def render_reference_bands(alias_meta: dict, bilingual: bool = False) -> str:
 
 
 def render_virgilio_appendix_ledger(bilingual: bool = False) -> str:
-    if not VIRGILIO_APPENDIX_LEDGER:
-        return ""
-    groups = [
-        ("in_alias", "Already frozen in alias layers", "已收进 alias 层"),
-        ("in_refer", "Already frozen in reference field", "已收进 refer 层"),
-        ("should_live_in_scene_note", "Better kept in scene-note prose", "更适合留在 scene-note prose"),
-        ("not_yet_frozen", "Still not frozen", "还没冻结"),
-    ]
-    sections = []
-    for status, title_en, title_bi in groups:
-        rows = [row for row in VIRGILIO_APPENDIX_LEDGER if row.get("status") == status]
-        if not rows:
-            continue
-        title = title_bi if bilingual else title_en
-        items = []
-        for row in rows:
-            items.append(
-                f"<li><strong>{esc(row.get('surface'))}</strong> · {esc(row.get('why'))}</li>"
-            )
-        sections.append(
-            f"""
-            <section class="help-section appendix-ledger-block">
-              <h4>{esc(title)}</h4>
-              <ul class="help-list">{''.join(items)}</ul>
-            </section>
-            """
-        )
-    return "".join(sections)
+    return ""
 
 
 def render_personaggio_tail_ledger(slug: str, bilingual: bool = False) -> str:
@@ -2211,7 +2314,7 @@ def render_personaggio_related_works(slug: str, bilingual: bool = False) -> str:
 
 def render_personaggio_room_thickness(slug: str, bilingual: bool = False) -> str:
     alias_meta = PERSONAGGIO_ALIAS_ATLAS.get(slug) or {}
-    ledger_rows = VIRGILIO_APPENDIX_LEDGER if slug == "virgilio" else (PERSONAGGIO_TAIL_LEDGERS.get(slug, {}).get("rows") or [])
+    ledger_rows = [] if slug == "virgilio" else (PERSONAGGIO_TAIL_LEDGERS.get(slug, {}).get("rows") or [])
     structured_count = sum(len(band.get("items") or []) for band in alias_meta.get("poem_layer_structured_bands") or [])
     reference_count = sum(len(band.get("items") or []) for band in alias_meta.get("poem_layer_reference_bands") or [])
     items = [
@@ -2222,7 +2325,7 @@ def render_personaggio_room_thickness(slug: str, bilingual: bool = False) -> str
         ("Stable commentary aliases", "注释层稳定 alias", len(alias_meta.get("commentary_layer_stable_aliases") or [])),
         ("Cue commentary aliases", "注释层提示 alias", len(alias_meta.get("commentary_layer_cue_aliases") or [])),
         ("Caveated commentary aliases", "注释层保留 alias", len(alias_meta.get("commentary_layer_caveated_aliases") or [])),
-        ("Ledger rows", "对账条目", len(ledger_rows)),
+        *([] if slug == "virgilio" else [("Ledger rows", "对账条目", len(ledger_rows))]),
     ]
     markup = "".join(
         f"<li><strong>{esc(label_bi if bilingual else label_en)}</strong> · {esc(count)}</li>"
@@ -2248,6 +2351,10 @@ def rel_data_path(path_str: str | None) -> Path | None:
     return path if path.exists() else None
 
 
+SITE_URL = "https://ddpcommentary.com"
+ASSET_VERSION = "20260415d"
+
+
 def page_shell(
     title: str,
     kicker: str,
@@ -2256,16 +2363,30 @@ def page_shell(
     body_bi: str,
     language_key: str,
     asset_prefix: str,
+    canonical_path: str | None = None,
+    description: str | None = None,
 ) -> str:
+    desc = description or title
+    seo_block = ""
+    if canonical_path:
+        canonical_url = f"{SITE_URL}{canonical_path}"
+        seo_block = (
+            f'<meta property="og:title" content="{esc(title)}" />\n'
+            f'    <meta property="og:description" content="{esc(desc)}" />\n'
+            f'    <meta property="og:type" content="article" />\n'
+            f'    <meta property="og:url" content="{esc(canonical_url)}" />\n'
+            f'    <meta name="robots" content="index,follow" />\n'
+            f'    <link rel="canonical" href="{esc(canonical_url)}" />\n    '
+        )
     return f"""<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{esc(title)}</title>
-    <meta name="description" content="{esc(title)}" />
-    <link rel="icon" href="{esc(asset_prefix)}/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="{esc(asset_prefix)}/static/styles.css" />
+    <meta name="description" content="{esc(desc)}" />
+    {seo_block}<link rel="icon" href="{esc(asset_prefix)}/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="{esc(asset_prefix)}/static/styles.css?v={ASSET_VERSION}" />
   </head>
   <body class="help-popup-page">
     <main class="help-popup-shell">
@@ -2408,7 +2529,9 @@ def unique_slug(base: str, used: set[str]) -> str:
 
 def load_author_shell(author_id: str) -> dict:
     wrapper = load_json(DATA_DIR / "authority_authors" / f"{author_id}.json")
-    author = wrapper.get("author", {})
+    shell = wrapper.get("author", {}) or {}
+    summary = AUTHOR_SHELL_ROWS.get(author_id) or {}
+    author = {**summary, **shell}
     author["_shell_contract"] = wrapper.get("shell_contract", {})
     return author
 
@@ -2470,14 +2593,19 @@ def flatten_locator_nodes(nodes: list[dict], source_kind: str) -> list[dict]:
 
     def walk(node: dict) -> None:
         label = node.get("label") or node.get("node_key")
+        occurrences = node.get("occurrences") or []
+        if not occurrences:
+            for child in node.get("children") or []:
+                if isinstance(child, dict):
+                    occurrences.extend(child.get("occurrences") or [])
         if label:
             rows.append(
                 {
                     "label": label,
-                    "count": node.get("count") or len(node.get("occurrences") or []),
+                    "count": node.get("count") or len(occurrences),
                     "status": node.get("node_type") or source_kind,
                     "source_kind": source_kind,
-                    "occurrences": (node.get("occurrences") or [])[:24],
+                    "occurrences": occurrences[:24],
                     "children_count": len(node.get("children") or []),
                     "summary": node.get("jump_target", {}).get("sample_id") if isinstance(node.get("jump_target"), dict) else None,
                 }
@@ -2602,6 +2730,7 @@ def build_branch_page(
         </section>
       </div>
     """
+    branch_slug = branch.get("slug") or slugify(branch_label)
     return page_shell(
         title=f"{branch_label} / {work_label}",
         kicker="Autore · Branch",
@@ -2610,6 +2739,8 @@ def build_branch_page(
         body_bi=body_bi,
         language_key=f"branch-{author_slug}-{work_slug}-{slugify(branch_label)}",
         asset_prefix="",
+        canonical_path=f"/autore/{author_slug}/{work_slug}/{branch_slug}.html",
+        description=f"{branch_label} — a branch of {work_label} by {author_name} in the Segni de l’antica fiamma Authority Layer.",
     )
 
 
@@ -2628,6 +2759,9 @@ def build_work_page(
     resolved = work_summary.get("resolved_author_and_work") or 0
     inferred = work_summary.get("resolved_work_plus_inferred_author") or 0
     passage_mentions = work_summary.get("passage_mentions") or 0
+    attribution_status = str(work_summary.get("attribution_status") or "").strip()
+    attribution_model = str(work_summary.get("attribution_model") or "").strip()
+    attribution_note = build_work_attribution_note_en(work_summary)
     curated_branch = WORK_CURATED_BRANCH_ANCHORS.get((author_slug, work_slug)) or {}
     branch_links = "".join(
         f"<li><a href=\"./{esc(work_slug)}/{esc(row['slug'])}.html\">{esc(row['label'])}</a> · {esc(row['source_kind'])} · {esc(row['count'] or 0)}</li>"
@@ -2691,9 +2825,11 @@ def build_work_page(
             <strong>{esc(passage_mentions)}</strong>.
           </p>
           <p class="help-paragraph">{esc(detail_note)}</p>
+          {f'<p class="help-paragraph"><strong>Attribution:</strong> {esc(attribution_status.replace("_", " "))}. {esc(attribution_note)}</p>' if attribution_status or attribution_note else ''}
+          {f'<p class="help-paragraph"><strong>Model:</strong> {esc(attribution_model.replace("_", " "))}</p>' if attribution_model else ''}
         </section>
         <section class="help-section">
-          <h3>Available Book / Chapter Links</h3>
+          <h3>Available Locator Links</h3>
           <ul class="help-list">{branch_links}</ul>
         </section>
         <section class="help-section">
@@ -2720,9 +2856,11 @@ def build_work_page(
             <strong>{esc(passage_mentions)}</strong>。
           </p>
           <p class="help-paragraph">{esc(detail_note)}</p>
+          {f'<p class="help-paragraph"><strong>归属状态：</strong>{esc(attribution_status.replace("_", " "))}。{esc(attribution_note)}</p>' if attribution_status or attribution_note else ''}
+          {f'<p class="help-paragraph"><strong>归属模型：</strong>{esc(attribution_model.replace("_", " "))}</p>' if attribution_model else ''}
         </section>
         <section class="help-section">
-          <h3>可用的书 / 章节链接</h3>
+          <h3>可用的 locator 链接</h3>
           <ul class="help-list">{branch_links_bi}</ul>
         </section>
         <section class="help-section">
@@ -2743,6 +2881,8 @@ def build_work_page(
         body_bi=body_bi,
         language_key=f"work-{author_slug}-{work_slug}",
         asset_prefix="../..",
+        canonical_path=f"/autore/{author_slug}/{work_slug}.html",
+        description=f"{work_label} by {author_name} — Segni de l’antica fiamma Authority Layer work page.",
     )
 
 
@@ -2900,7 +3040,7 @@ def build_author_card(author: dict, work_links: list[dict]) -> tuple[str, str]:
             <h3>Return Paths</h3>
             <p class="help-paragraph">
               Return to the <a href="../authority.html">Authority page</a>, the <a href="./index.html">autore index</a>,
-              or the <a href="../index.html">workbench</a>.
+              or <a href="../index.html">Segni de l’antica fiamma</a>.
             </p>
           </section>
         </div>
@@ -2954,7 +3094,7 @@ def build_author_card(author: dict, work_links: list[dict]) -> tuple[str, str]:
           <section class="help-section">
             <h3>返回路径</h3>
             <p class="help-paragraph">
-              可以回到 <a href="../authority.html">Authority 页面</a>、<a href="./index.html">autore 索引页</a>，或者 <a href="../index.html">workbench 首页</a>。
+              可以回到 <a href="../authority.html">Authority 页面</a>、<a href="./index.html">autore 索引页</a>，或者 <a href="../index.html">Segni de l’antica fiamma 首页</a>。
             </p>
           </section>
         </div>
@@ -2967,6 +3107,8 @@ def build_author_card(author: dict, work_links: list[dict]) -> tuple[str, str]:
         body_bi=body_bi,
         language_key=f"autore-{slug}",
         asset_prefix="..",
+        canonical_path=f"/autore/{slug}.html",
+        description=f"{name} — tracked author in the Segni de l’antica fiamma Authority Layer, with mounted works, aliases, and related personaggi.",
     )
     return slug, html_doc
 
@@ -3016,7 +3158,17 @@ def build_autore_index(authors: list[dict], source_count: int, highlight_author_
       </p>
       <div class="help-modal-body">{''.join(rows)}</div>
     """
-    return page_shell("Autori / Authority Atlas", "Autore", "../authority.html", body_en, body_bi, "autore-index", "..")
+    return page_shell(
+        "Autori / Authority Atlas",
+        "Autore",
+        "../authority.html",
+        body_en,
+        body_bi,
+        "autore-index",
+        "..",
+        canonical_path="/autore/index.html",
+        description="Index of tracked authors (autori) in the Segni de l’antica fiamma Authority Layer, covering Scripture, classical, patristic, medieval, and scholastic sources anchored in Dante's Commedia.",
+    )
 
 
 def build_personaggio_index() -> str:
@@ -3112,7 +3264,7 @@ def build_personaggio_index() -> str:
           <h3>Current State</h3>
           <p class="help-paragraph">
             Characters such as Virgilio, Stazio, Tommaso d'Aquino, San Pietro, Salomone, Aristotele, Omero, Orazio,
-            Ovidio, Lucano, Platone, Seneca, Averroè, Avicenna, Tolomeo, Ulisse, and Sordello deserve a layer that is
+            Ovidio, Lucano, Platone, Seneca, Averroè, Avicenna, Tolomeo, and Sordello deserve a layer that is
             distinct from authority-author profiles. This build still keeps that layer compact, but it is no longer empty.
           </p>
         </section>
@@ -3149,7 +3301,7 @@ def build_personaggio_index() -> str:
         <section class="help-section">
           <h3>当前状态</h3>
           <p class="help-paragraph">
-            像 Virgilio、Stazio、Tommaso d'Aquino、San Pietro、Salomone、Aristotele、Omero、Orazio、Ovidio、Lucano、Platone、Seneca、Averroè、Avicenna、Tolomeo、Ulisse、Sordello 这样的对象，都值得拥有和 authority-author page 不同的角色层页面。现在这层仍然很克制，但已经不再是空的。
+            像 Virgilio、Stazio、Tommaso d'Aquino、San Pietro、Salomone、Aristotele、Omero、Orazio、Ovidio、Lucano、Platone、Seneca、Averroè、Avicenna、Tolomeo、Sordello 这样的对象，都值得拥有和 authority-author page 不同的角色层页面。现在这层仍然很克制，但已经不再是空的。
           </p>
         </section>
         <section class="help-section">
@@ -3177,7 +3329,17 @@ def build_personaggio_index() -> str:
         </section>
       </div>
     """
-    return page_shell("Personaggi / Character Atlas", "Personaggio", "../authority.html", body_en, body_bi, "personaggio-index", "..")
+    return page_shell(
+        "Personaggi / Character Atlas",
+        "Personaggio",
+        "../authority.html",
+        body_en,
+        body_bi,
+        "personaggio-index",
+        "..",
+        canonical_path="/personaggio/index.html",
+        description="Index of named characters (personaggi) in Dante's Commedia tracked by the Segni de l’antica fiamma Authority Layer, with alias atlases and cross-links to author pages.",
+    )
 
 
 def build_personaggio_page(item: dict) -> str:
@@ -3197,8 +3359,8 @@ def build_personaggio_page(item: dict) -> str:
     )
     structured_aliases_en = render_structured_alias_bands(alias_meta, bilingual=False)
     structured_aliases_bi = render_structured_alias_bands(alias_meta, bilingual=True)
-    reference_bands_en = render_reference_bands(alias_meta, bilingual=False)
-    reference_bands_bi = render_reference_bands(alias_meta, bilingual=True)
+    reference_bands_en = "" if slug == "virgilio" else render_reference_bands(alias_meta, bilingual=False)
+    reference_bands_bi = "" if slug == "virgilio" else render_reference_bands(alias_meta, bilingual=True)
     appendix_ledger_en = render_virgilio_appendix_ledger(bilingual=False) if slug == "virgilio" else ""
     appendix_ledger_bi = render_virgilio_appendix_ledger(bilingual=True) if slug == "virgilio" else ""
     tail_ledger_en = render_personaggio_tail_ledger(slug, bilingual=False) if slug != "virgilio" else ""
@@ -3304,20 +3466,60 @@ def build_personaggio_page(item: dict) -> str:
         {f'<section class="help-section"><h3>Alias 对账</h3>{tail_ledger_bi}</section>' if tail_ledger_bi else ''}
       </div>
     """
-    return page_shell(f"{title} / Personaggio", "Personaggio", "./index.html", body_en, body_bi, f"personaggio-{slug}", "..")
+    return page_shell(
+        f"{title} / Personaggio",
+        "Personaggio",
+        "./index.html",
+        body_en,
+        body_bi,
+        f"personaggio-{slug}",
+        "..",
+        canonical_path=f"/personaggio/{slug}.html",
+        description=f"{title} — a personaggio tracked in the Segni de l’antica fiamma Authority Layer, with scene notes, alias atlas, and cross-links to the related autore entry.",
+    )
 
 
-def generate_author_subpages(author: dict) -> tuple[list[dict], int]:
+def cleanup_stale_autore_branch_pages(desired_branch_files: set[Path]) -> int:
+    removed = 0
+    for stale_file in AUTORE_DIR.glob("*/*/*.html"):
+        if stale_file in desired_branch_files:
+            continue
+        stale_file.unlink()
+        removed += 1
+        try:
+            stale_file.parent.rmdir()
+        except OSError:
+            pass
+    return removed
+
+
+def cleanup_stale_autore_work_pages(desired_work_files: set[Path]) -> int:
+    removed = 0
+    for stale_file in AUTORE_DIR.glob("*/*.html"):
+        if stale_file in desired_work_files:
+            continue
+        stale_file.unlink()
+        removed += 1
+        try:
+            stale_file.parent.rmdir()
+        except OSError:
+            pass
+    return removed
+
+
+def generate_author_subpages(author: dict) -> tuple[list[dict], int, set[Path], set[Path]]:
     author_name = display_name(author)
     author_slug = author_public_slug(author)
     detail = load_detail_object(author)
     work_links: list[dict] = []
+    desired_work_files: set[Path] = set()
+    desired_branch_files: set[Path] = set()
     branch_page_count = 0
     work_dir = AUTORE_DIR / author_slug
     ensure_dir(work_dir)
 
     work_summaries = author.get("works") or []
-    if not work_summaries and detail and "work_cards" in detail:
+    if not work_summaries and author.get("works_layer_mode") == "flat_work_overview" and detail and "work_cards" in detail:
         work_summaries = [
             {
                 "canonical_work": card.get("canonical_work"),
@@ -3326,6 +3528,9 @@ def generate_author_subpages(author: dict) -> tuple[list[dict], int]:
                 "resolved_author_and_work": card.get("resolved_author_and_work") or 0,
                 "resolved_work_plus_inferred_author": card.get("resolved_work_plus_inferred_author") or 0,
                 "passage_mentions": card.get("passage_mentions") or 0,
+                "attribution_status": card.get("attribution_status"),
+                "attribution_model": card.get("attribution_model"),
+                "attribution_note_en": card.get("attribution_note_en"),
             }
             for card in detail.get("work_cards") or []
             if card.get("canonical_work")
@@ -3347,21 +3552,26 @@ def generate_author_subpages(author: dict) -> tuple[list[dict], int]:
             branch_slug = unique_slug(entry["label"], seen)
             entry["slug"] = branch_slug
             branch_rows.append(entry)
-            (branch_dir / f"{branch_slug}.html").write_text(
+            branch_file = branch_dir / f"{branch_slug}.html"
+            branch_file.write_text(
                 build_branch_page(author_name, author_slug, work_label, work_slug, entry),
                 encoding="utf-8",
             )
+            desired_branch_files.add(branch_file)
             branch_page_count += 1
 
-        (work_dir / f"{work_slug}.html").write_text(
+        work_file = work_dir / f"{work_slug}.html"
+        work_file.write_text(
             build_work_page(author, author_slug, work_summary, detail, branch_rows),
             encoding="utf-8",
         )
+        desired_work_files.add(work_file)
         legacy_work_slug = slugify(work_name)
         if legacy_work_slug and legacy_work_slug != work_slug:
             legacy_title = f"{work_name} / {author_name}"
             legacy_target = f"./{work_slug}.html"
-            (work_dir / f"{legacy_work_slug}.html").write_text(
+            legacy_work_file = work_dir / f"{legacy_work_slug}.html"
+            legacy_work_file.write_text(
                 build_redirect_page(
                     title=legacy_title,
                     kicker="Autore · Opera alias",
@@ -3398,6 +3608,7 @@ def generate_author_subpages(author: dict) -> tuple[list[dict], int]:
                 ),
                 encoding="utf-8",
             )
+            desired_work_files.add(legacy_work_file)
         work_links.append(
             {
                 "slug": work_slug,
@@ -3407,7 +3618,7 @@ def generate_author_subpages(author: dict) -> tuple[list[dict], int]:
             }
         )
 
-    return work_links, branch_page_count
+    return work_links, branch_page_count, desired_branch_files, desired_work_files
 
 
 def main() -> None:
@@ -3448,10 +3659,14 @@ def main() -> None:
 
     work_page_total = 0
     branch_page_total = 0
+    desired_work_files: set[Path] = set()
+    desired_branch_files: set[Path] = set()
     for author_summary in authors:
         author = load_author_shell(author_summary.get("author_id"))
-        work_links, author_branch_pages = generate_author_subpages(author)
+        work_links, author_branch_pages, author_branch_files, author_work_files = generate_author_subpages(author)
         branch_page_total += author_branch_pages
+        desired_branch_files.update(author_branch_files)
+        desired_work_files.update(author_work_files)
         work_page_total += len(work_links)
         slug, html_doc = build_author_card(author, work_links)
         (AUTORE_DIR / f"{slug}.html").write_text(html_doc, encoding="utf-8")
@@ -3465,8 +3680,14 @@ def main() -> None:
         encoding="utf-8",
     )
     (PERSONAGGIO_DIR / "index.html").write_text(build_personaggio_index(), encoding="utf-8")
+    desired_personaggio_files = {"index.html"} | {f"{item['slug']}.html" for item in PERSONAGGIO_PAGES}
+    for stale_file in PERSONAGGIO_DIR.glob("*.html"):
+        if stale_file.name not in desired_personaggio_files:
+            stale_file.unlink()
     for item in PERSONAGGIO_PAGES:
         (PERSONAGGIO_DIR / f"{item['slug']}.html").write_text(build_personaggio_page(item), encoding="utf-8")
+    stale_work_pages_removed = cleanup_stale_autore_work_pages(desired_work_files)
+    stale_branch_pages_removed = cleanup_stale_autore_branch_pages(desired_branch_files)
     (DATA_DIR / "authority_curated_room_anchors.json").write_text(
         json.dumps(build_curated_room_anchor_payload(), ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -3474,6 +3695,8 @@ def main() -> None:
     print(f"Wrote autore pages: {len(authors)}")
     print(f"Wrote work pages: {work_page_total}")
     print(f"Wrote branch pages: {branch_page_total}")
+    print(f"Removed stale work pages: {stale_work_pages_removed}")
+    print(f"Removed stale branch pages: {stale_branch_pages_removed}")
     print(f"Wrote {AUTORE_DIR / 'index.html'}")
     print(f"Wrote {PERSONAGGIO_DIR / 'index.html'}")
     for item in PERSONAGGIO_PAGES:

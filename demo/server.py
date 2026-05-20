@@ -117,7 +117,17 @@ class DemoHandler(http.server.SimpleHTTPRequestHandler):
             return super().send_head()
 
         if not self.client_accepts_gzip() or path.suffix.lower() not in COMPRESSIBLE_SUFFIXES:
-            return super().send_head()
+            try:
+                handle = path.open("rb")
+            except OSError:
+                self.send_error(404, "File not found")
+                return None
+            self.send_response(200)
+            self.send_header("Content-Type", self.guess_type(str(path)))
+            self.send_header("Content-Length", str(path.stat().st_size))
+            self.send_header("Last-Modified", self.date_time_string(path.stat().st_mtime))
+            self.end_headers()
+            return handle
 
         try:
             raw_body = path.read_bytes()

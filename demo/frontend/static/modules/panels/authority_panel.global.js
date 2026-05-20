@@ -57,21 +57,16 @@
         : (Array.isArray(scan?.author_personaggi) ? scan.author_personaggi : []));
       const standaloneRows = Array.isArray(scan?.standalone_personaggi) ? scan.standalone_personaggi : [];
       const allRows = [...authorRows, ...standaloneRows];
-      // Ulisse keeps a strong standalone personaggio room, but this navigation is intentionally
-      // scoped to the authority-facing district and autore-personaggio corridor. Keep the filter
-      // explicit so it reads as policy rather than as an unexplained omission.
-      const filteredRows = allRows.filter((row) => String(row?.page_slug || "").trim() !== "ulisse");
       const preferredNames = Array.isArray(scan?.recommended_first_personaggi)
         ? scan.recommended_first_personaggi
         : [];
       if (!preferredNames.length) {
-        return filteredRows;
+        return allRows;
       }
-      const rowMap = new Map(filteredRows.map((row) => [String(row.display_name || "").trim(), row]));
+      const rowMap = new Map(allRows.map((row) => [String(row.display_name || "").trim(), row]));
       return preferredNames
         .map((name) => rowMap.get(String(name || "").trim()))
-        .filter(Boolean)
-        .filter((row) => String(row?.page_slug || "").trim() !== "ulisse");
+        .filter(Boolean);
     }
 
     function getFigurePoemAliasTerms(entries = []) {
@@ -104,8 +99,11 @@
     }
 
     function buildRowsFromPoemAliasEntry(entry) {
-      return (Array.isArray(entry?.sample_occurrences) ? entry.sample_occurrences : [])
-        .slice(0, 12)
+      const sourceRows = Array.isArray(entry?.all_occurrences) && entry.all_occurrences.length
+        ? entry.all_occurrences
+        : (Array.isArray(entry?.sample_occurrences) ? entry.sample_occurrences : []);
+      return sourceRows
+        .slice(0, 80)
         .map((example) => {
           const lineNumber = Number(example?.line_number);
           const sampleId = String(example?.cantica || "").trim() && Number.isFinite(example?.canto)
@@ -116,8 +114,33 @@
             lineNumber,
             title: formatCompactCommediaLocation(example),
             text: example?.line_text || "",
+            highlightTerm: String(entry?.term || entry?.label || entry?.source_term || "").trim(),
           };
         });
+    }
+
+    function escapeRegExp(value) {
+      return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function renderOccurrenceLineHtml(line, highlightTerm) {
+      const text = String(line || "");
+      const term = String(highlightTerm || "").trim();
+      if (!term) {
+        return escapeHtml(text);
+      }
+      const pattern = new RegExp(escapeRegExp(term), "ig");
+      let cursor = 0;
+      let output = "";
+      let match = pattern.exec(text);
+      while (match) {
+        output += escapeHtml(text.slice(cursor, match.index));
+        output += `<mark class="figure-inline-hit">${escapeHtml(match[0])}</mark>`;
+        cursor = match.index + match[0].length;
+        match = pattern.exec(text);
+      }
+      output += escapeHtml(text.slice(cursor));
+      return output;
     }
 
     function getFilteredFigureOccurrenceRows(personaggioRow, authorityAuthor, poemAliasRow, chooseText) {
@@ -158,6 +181,7 @@
             lineNumber: Number(item.line_number || item.jump_target?.line_number || 0),
             title: `${item.commentary_name || chooseText("Commentary witness", "注释见证")} · ${item.line_info || item.canto_label || item.sample_name || ""}`,
             text: item.raw_mention || item.raw_passage || chooseText("Open this commentary occurrence.", "打开这条注释命中。"),
+            highlightTerm: activeLabel,
           }));
         if (filteredAuthorityRows.length) {
           return filteredAuthorityRows;
@@ -168,6 +192,7 @@
             lineNumber: Number(item.line_number || item.jump_target?.line_number || 0),
             title: `${item.commentary_name || chooseText("Commentary witness", "注释见证")} · ${item.line_info || item.canto_label || item.sample_name || ""}`,
             text: item.raw_mention || item.raw_passage || chooseText("Open this commentary occurrence.", "打开这条注释命中。"),
+            highlightTerm: activeLabel,
           }));
         }
         const filteredExamples = filterFigureExamplesByLabel(personaggioRow?.examples || [], activeLabel, chooseText);
@@ -265,19 +290,20 @@
         .map((item) => {
           const title = escapeHtml(item.title || "");
           const lines = [item.text, item.secondaryText].filter(Boolean);
-          const body = lines.map((line) => `<span>${escapeHtml(line)}</span>`).join("");
+          const highlightTerm = String(item.highlightTerm || "").trim();
+          const highlightedBody = lines.map((line) => `<span>${renderOccurrenceLineHtml(line, highlightTerm)}</span>`).join("");
           if (item.sampleId && Number.isFinite(item.lineNumber) && item.lineNumber > 0) {
             return `
               <button type="button" class="occurrence-row" data-occurrence-sample="${escapeHtml(item.sampleId)}" data-occurrence-line="${item.lineNumber}">
                 <strong>${title}</strong>
-                ${body}
+                ${highlightedBody}
               </button>
             `;
           }
           return `
             <div class="occurrence-row is-static">
               <strong>${title}</strong>
-              ${body}
+              ${highlightedBody}
             </div>
           `;
         })
@@ -331,10 +357,13 @@
         .join("");
     }
 
-    function renderBandDetails(bands, chooseTitleKey, chooseIntroKey) {
+    function renderBandDetails(bands, chooseTitleKey, chooseIntroKey, options = {}) {
       if (!Array.isArray(bands) || !bands.length) {
         return "";
       }
+      const selectedFigureSlug = String(options.selectedFigureSlug || "").trim();
+      const activeBandKey = normalizeFigureBandKey(state.activeFigureFilterBandKey || "");
+      const activeLabel = normalizeFigureFilterLabel(state.activeFigureFilterLabel);
       return `
         <div class="figure-band-list">
           ${bands.map((band) => {
@@ -342,16 +371,24 @@
             const intro = band?.[chooseIntroKey] || band?.intro_en || "";
             const items = Array.isArray(band?.items) ? band.items : [];
             const bandKey = normalizeFigureBandKey(band?.key || title);
-            const activeLabel = normalizeFigureBandKey(bandKey) === String(state.activeFigureFilterBandKey || "")
+            const activeItemLabel = bandKey === activeBandKey
               ? normalizeFigureFilterLabel(state.activeFigureFilterLabel)
               : "";
-            const visibleItems = activeLabel
-              ? items.filter((item) => normalizeFigureFilterLabel(item.label || item.source_term || "") === activeLabel)
-              : items;
-            const itemPills = renderBandItemPills(items, bandKey);
-            const examples = activeLabel
+            const isVirgilioLemmaTree = selectedFigureSlug === "virgilio"
+              && ["phrase_expansions", "frasal_apostrophes_periphrases"].includes(bandKey)
+              && activeBandKey === "single_words"
+              && activeLabel;
+            const visibleItems = isVirgilioLemmaTree
+              ? items.filter((item) => normalizeFigureFilterLabel(item.source_term || "") === activeLabel)
+              : (activeItemLabel
+                  ? items.filter((item) => normalizeFigureFilterLabel(item.label || item.source_term || "") === activeItemLabel)
+                  : items);
+            const itemPills = renderBandItemPills(isVirgilioLemmaTree ? visibleItems : items, bandKey);
+            const examples = activeItemLabel
               ? visibleItems.flatMap((item) => {
-                  const rawExamples = Array.isArray(item.examples) ? item.examples : [];
+                  const rawExamples = Array.isArray(item.all_occurrences) && item.all_occurrences.length
+                    ? item.all_occurrences
+                    : (Array.isArray(item.examples) ? item.examples : []);
                   return rawExamples.map((example) => {
                     const lineNumber = Number(example?.line_number);
                     const sampleId = String(example?.cantica || "").trim() && Number.isFinite(example?.canto)
@@ -360,7 +397,7 @@
                     const titleLabel = formatCompactCommediaLocation(example);
                     const body = [example?.line_text]
                       .filter(Boolean)
-                      .map((line) => `<span>${escapeHtml(line)}</span>`)
+                      .map((line) => `<span>${renderOccurrenceLineHtml(line, item.label || item.source_term || "")}</span>`)
                       .join("");
                     if (sampleId && Number.isFinite(lineNumber) && lineNumber > 0) {
                       return `
@@ -378,6 +415,40 @@
                     `;
                   });
                 }).join("")
+              : isVirgilioLemmaTree
+                ? visibleItems
+                    .map((item) => {
+                      const itemExamples = Array.isArray(item.examples) ? item.examples.slice(0, 2) : [];
+                      const firstExample = itemExamples[0] || null;
+                      if (!firstExample) {
+                        return "";
+                      }
+                      const secondExample = itemExamples[1] || null;
+                      const lineNumber = Number(firstExample?.line_number);
+                      const sampleId = String(firstExample?.cantica || "").trim() && Number.isFinite(firstExample?.canto)
+                        ? `${String(firstExample.cantica).toLowerCase()}${firstExample.canto}`
+                        : "";
+                      const titleLabel = formatCompactCommediaLocation(firstExample);
+                      const body = [firstExample?.line_text, secondExample?.line_text]
+                        .filter(Boolean)
+                        .map((line) => `<span>${renderOccurrenceLineHtml(line, item.label || "")}</span>`)
+                        .join("");
+                      if (sampleId && Number.isFinite(lineNumber) && lineNumber > 0) {
+                        return `
+                          <button type="button" class="occurrence-row" data-occurrence-sample="${escapeHtml(sampleId)}" data-occurrence-line="${lineNumber}">
+                            <strong>${escapeHtml(titleLabel)}</strong>
+                            ${body}
+                          </button>
+                        `;
+                      }
+                      return `
+                        <div class="occurrence-row is-static">
+                          <strong>${escapeHtml(titleLabel)}</strong>
+                          ${body}
+                        </div>
+                      `;
+                    })
+                    .join("")
               : items
                   .slice(0, 3)
                   .map((item) => {
@@ -394,7 +465,7 @@
                     const titleLabel = formatCompactCommediaLocation(firstExample);
                     const body = [firstExample?.line_text, secondExample?.line_text]
                       .filter(Boolean)
-                      .map((line) => `<span>${escapeHtml(line)}</span>`)
+                      .map((line) => `<span>${renderOccurrenceLineHtml(line, item.label || "")}</span>`)
                       .join("");
                     if (sampleId && Number.isFinite(lineNumber) && lineNumber > 0) {
                       return `
@@ -426,22 +497,7 @@
     }
 
     function renderVirgilioLedgerSummary(ledger, chooseText) {
-      const rows = Array.isArray(ledger?.rows) ? ledger.rows : [];
-      if (!rows.length) {
-        return "";
-      }
-      const aliasCount = rows.filter((row) => String(row.status) === "in_alias").length;
-      const referCount = rows.filter((row) => String(row.status) === "in_refer").length;
-      return `
-        <section class="figure-band-block">
-          <h4>${escapeHtml(chooseText("Appendix ledger", "附录对账"))}</h4>
-          <p class="semantic-intro">${escapeHtml(chooseText("Virgilio now carries a dedicated appendix-ledger pass, so the panel can surface not only names, but the richer field of references gathered from the thesis appendix.", "Virgilio 现在带着专门的 appendix-ledger，所以这里不只显示叫法，也显示论文附录里整理出来的 refer 场。"))}</p>
-          <div class="locus-meta-row">
-            <span class="pill">${escapeHtml(chooseText(`In alias: ${aliasCount}`, `别名层：${aliasCount}`))}</span>
-            <span class="pill">${escapeHtml(chooseText(`In refer: ${referCount}`, `refer 层：${referCount}`))}</span>
-          </div>
-        </section>
-      `;
+      return "";
     }
 
     function renderFigurePanel() {
@@ -592,13 +648,17 @@
       const structuredBands = renderBandDetails(
         selectedAtlas?.poem_layer_structured_bands || [],
         isEnglish ? "title_en" : "title_bi",
-        isEnglish ? "intro_en" : "intro_bi"
+        isEnglish ? "intro_en" : "intro_bi",
+        { selectedFigureSlug: selectedFigure?.page_slug || "" }
       );
-      const referenceBands = renderBandDetails(
-        selectedAtlas?.poem_layer_reference_bands || [],
-        isEnglish ? "title_en" : "title_bi",
-        isEnglish ? "intro_en" : "intro_bi"
-      );
+      const referenceBands = selectedFigure?.page_slug === "virgilio"
+        ? ""
+        : renderBandDetails(
+            selectedAtlas?.poem_layer_reference_bands || [],
+            isEnglish ? "title_en" : "title_bi",
+            isEnglish ? "intro_en" : "intro_bi",
+            { selectedFigureSlug: selectedFigure?.page_slug || "" }
+          );
       const ledgerSummary = selectedFigure?.page_slug === "virgilio"
         ? renderVirgilioLedgerSummary(state.virgilioAppendixLedger, chooseText)
         : "";

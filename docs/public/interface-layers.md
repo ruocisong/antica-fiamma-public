@@ -1,75 +1,84 @@
 # Interface Layers
 
-This note describes the public-facing reading surfaces of the DDP Commentary Workbench in the order a first-time visitor is most likely to encounter them.
+This note describes the public reading surfaces of **Antica Fiamma** in the order a visitor is likely to encounter them.
+
+For the visual tour, see [ddpcommentary.com/reading-route.html](https://ddpcommentary.com/reading-route.html).
 
 ## Main Entry
 
-The Main Entry is the canto-level opening surface. It presents a line map rather than a global search box and asks the reader to enter the workbench through a specific line.
+The Main Entry is the canto-level opening surface. It presents Dante's poem as a line map and asks the reader to begin with a canto, a line, or a precise jump.
 
-Its job is to answer a simple first question:
-
-- where should I begin reading commentary for this canto?
+The key design decision is that the interface begins from the poem, not from a detached database search.
 
 ## Analysis Layer / Line Snapshot
 
-The Analysis Layer appears as soon as a line is selected.
+The Analysis Layer appears after a line is selected.
 
-The Line Snapshot is the first orientation layer between the chosen line and the deeper reading surfaces below it. It gives a compact sense of local density, pressure, representative terms, and immediate reading context before the reader begins moving through commentary cards in detail.
+The Line Snapshot gives a compact first orientation: local density, commentary pressure, representative terms, century span, and nearby reading context. It helps the reader understand the shape of the material before opening the commentary cards in detail.
 
 ## Close Reading
 
-Close Reading is the main commentary-card surface.
+Close Reading is the commentary-card surface.
 
-This is where record-level reading begins in earnest: chronology, ordering, range, source differences, and comparison all become materially useful here. The interface moves from orientation to actual commentary handling.
+This is where record-level reading begins: date, ordering, line span, source, full-text expansion, and card-level comparison start to matter. The line remains the anchor, but the commentary itself is now on the table.
+
+## Commentary
+
+The Commentary layer keeps source records readable as records. It preserves the difference between a local interface enhancement and the underlying source archive.
+
+In the live site, commentary cards remain tied to line context, full-text access, and source-facing metadata rather than dissolving into a generic search result.
 
 ## Dante Word Locus Layer
 
-The Dante Word Locus Layer opens when the reader follows a specific Dante word rather than a whole line. It treats line selection and word selection as different reading acts.
+The Dante Word Locus Layer opens when a reader follows a specific Dante content word.
 
-Its public panels include:
+It treats choosing a line and choosing a word as different reading acts. The public word-level route includes:
 
-- **Occurrence Explorer**: where else the chosen word appears
-- **Weighted Micro-Context Concurrence**: which nearby words tend to gather around it
-- **Exact Local Phrase Expansions**: whether the word grows into a repeating local phrase
-- **Contrastive Interpretive Vocabulary**: which interpretive vocabulary is unusually attached to that word in its local commentary environment
+- **Occurrence Explorer**: where else the chosen word appears in the poem
+- **Weighted Micro-Context Concurrence**: which nearby content words gather around it
+- **Exact Local Phrase Expansions**: whether the word grows into short repeating phrase forms
+- **Contrastive Interpretive Vocabulary**: which commentary-side interpretive terms become unusually salient around the selected locus
 
 ## Interpretive Fields
 
-Interpretive Fields gather local semantic clustering around the selected line.
+Interpretive Fields gather local commentary-side semantic directions around a selected line.
 
-They are meant to show how commentary pressure organizes itself around a local passage rather than across the whole poem at once.
+They are not final names for Dante's meaning. They are local handles that help the reader re-enter commentary cards through recurring explanatory pressure.
 
 ## Cross-Canto Echoes
 
-Cross-Canto Echoes extend the selected line outward to other lines elsewhere in the *Commedia*.
+Cross-Canto Echoes surface lines elsewhere in the *Commedia* that deserve to be read beside the selected line.
 
-The aim is not simply to find lexical repetition, but to surface passages that deserve to be read beside the current line as part of a broader interpretive pattern.
+The current public framing is text-first: shared wording and nearby poetic context come first, while commentary support acts as a secondary reinforcement rather than the sole ranking logic.
 
 ## Compare
 
 Compare is the side-by-side reading surface.
 
-It allows commentary records, traditions, or interpretive positions to be read against one another without losing the local line that originally opened the route.
+It lets readers hold multiple commentary records or interpretive traditions together without losing the local line that opened the route.
 
 ## Authority
 
-Authority is the author-, work-, and source-oriented navigation layer.
+Authority is the author-, work-, personaggio-, and source-oriented navigation layer.
 
-It keeps the commentary archive readable not only as a pile of records, but as a structured intellectual network of authors, works, and transmission paths.
+It lets the commentary tradition appear not only as a stack of notes, but as a structured field of authors, works, inherited references, and source-facing reading paths. The public site now also includes standalone authority pages and generated authority rooms.
 
-## Suggested Reading Order
+## Research Rooms
 
-For a first walkthrough, the most natural order is:
+Research rooms are public case-study pages built inside the larger Antica Fiamma environment.
 
-- Main Entry
-- Analysis Layer / Line Snapshot
-- Close Reading
-- Dante Word Locus Layer
-- Interpretive Fields
-- Cross-Canto Echoes
-- Compare
-- Authority
+The first major example is:
 
-For a visual version of this sequence, see:
+- [Fiamma: Dante and the Fire Motif in the Commedia](https://ddpcommentary.com/research/fiamma.html)
 
-- [`/demo/frontend/reading-route.html`](../../demo/frontend/reading-route.html)
+This page documents a lexical and interpretive research configuration while keeping line-level return paths and close reading as the final horizon.
+
+## Suggested Walkthrough
+
+For a first walkthrough:
+
+- start at [Antica Fiamma](https://ddpcommentary.com)
+- read the [Interface Tour](https://ddpcommentary.com/reading-route.html)
+- keep the [Guide](https://ddpcommentary.com/guide.html) open as a practical map
+- use the [Authority Layer](https://ddpcommentary.com/authority.html) when moving from commentary cards toward authors, works, and source paths
+- visit the [Fiamma Research Room](https://ddpcommentary.com/research/fiamma.html) to see how a focused research case can live inside the same public environment

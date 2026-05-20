@@ -15,6 +15,29 @@
       renderModuleLabel,
     } = deps;
 
+    function resetCoverageListViewport() {
+      if (!elements.coverageList) {
+        return;
+      }
+      const reset = () => {
+        if (Number.isFinite(Number(state.selectedLine))) {
+          return;
+        }
+        elements.coverageList.scrollTop = 0;
+        elements.coverageList.scrollLeft = 0;
+      };
+      reset();
+      const raf = typeof globalThis.requestAnimationFrame === "function"
+        ? globalThis.requestAnimationFrame.bind(globalThis)
+        : (callback) => globalThis.setTimeout(callback, 0);
+      raf(() => {
+        reset();
+        raf(() => {
+          reset();
+        });
+      });
+    }
+
     function renderCoverage() {
       const isEnglish = state.uiLanguage === "en";
       const chooseText = (en, zh) => (isEnglish ? en : zh);
@@ -40,11 +63,10 @@
         row.tabIndex = 0;
         row.setAttribute("role", "button");
         row.innerHTML = `
-          <div class="coverage-line-top">
-            <a class="line-number coverage-link" href="${permalink}" data-line-link="${line.line_number}">Line ${line.line_number}</a>
-            <span class="coverage-count">${line.coverage_count} records</span>
+          <div class="coverage-row-main">
+            <div class="line-text line-locus-stream coverage-line-locus-stream">${line.line_text ? renderSelectableLineMarkup(line, { dataAttribute: "data-coverage-locus-id", markInitialLetter: true }) : escapeHtml("No base text captured for this line.")}</div>
+            <a class="line-number coverage-link" href="${permalink}" data-line-link="${line.line_number}" aria-label="${escapeHtml(chooseText(`Open line ${line.line_number}`, `打开第 ${line.line_number} 行`))}">${line.line_number}</a>
           </div>
-          <div class="line-text line-locus-stream coverage-line-locus-stream">${line.line_text ? renderSelectableLineMarkup(line, { dataAttribute: "data-coverage-locus-id" }) : escapeHtml("No base text captured for this line.")}</div>
         `;
         row.addEventListener("click", () => handleCoverageRowSelection(line.line_number));
         row.addEventListener("keydown", (event) => {
@@ -69,6 +91,7 @@
       });
 
       elements.coverageList.replaceChildren(...buttons);
+      resetCoverageListViewport();
     }
 
     function renderShellSample(entry) {

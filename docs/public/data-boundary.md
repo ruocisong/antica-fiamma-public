@@ -2,49 +2,52 @@
 
 This note explains what the public-facing `ddp-workbench-public` repository does and does not contain at the data level.
 
-## What Is Included Here
+## Included Here
 
 This repository includes:
 
-- the public interface shell under [`demo/frontend`](../../demo/frontend)
+- the public Antica Fiamma shell under [`demo/frontend`](../../demo/frontend)
+- public static pages such as About, Guide, Interface Tour, Authority, and the Fiamma research room
+- generated static authority pages under `autore/` and `personaggio/`
 - selected build scripts that explain how interface-facing structures are prepared
-- deployment helpers for the public shell
-- public-facing documentation about scope, method, and interface structure
+- smoke tests for the public shell
+- Cloudflare Pages deployment helpers
+- public documentation about interface structure, scope, data boundary, and source attribution
+- selected source-capture utilities under [`src/ddp_scraper`](../../src/ddp_scraper)
 
-## What Is Not Included Here
+## Not Included Here
 
-This repository does **not** version the heavy runtime payloads delivered to the live interface at runtime.
+This repository does **not** version the heavy runtime payloads delivered to the live interface.
 
-In particular, the repository does not ship the large frontend data layer under `demo/frontend/data/`.
+In particular, it excludes:
 
-That means a reader can inspect the public shell and supporting build logic here, but not the full heavy derived payloads that power the live workbench.
+- `demo/frontend/data/`
+- `demo/frontend/reports/`
+- local data snapshots and legacy data stores
+- internal research thread outputs
+- publication drafting folders
+- large experimental semantic, summary, and cross-canto workspaces
+- local operational scripts that are not needed for public review
 
 ## Why The Boundary Exists
 
 The boundary is intentional.
 
-The public repository is meant to expose:
-
-- the shape of the interface
-- the scholarly reading surfaces
-- the method-facing build logic
-- the public deployment path
-
-without turning the repository itself into a distribution point for the full runtime payloads.
+Antica Fiamma is a live research interface with a substantial runtime data layer. The public repository is meant to make the public shell, public documentation, selected method-facing code, and deployment path legible without turning GitHub into the distribution channel for every generated payload.
 
 ## Source Archive And Interface Layer
 
-The workbench is built on top of the Dartmouth Dante Project as its source archive.
+Antica Fiamma is built with the Dartmouth Dante Project as its commentary source.
 
-This repository therefore represents an additional interface layer, not a replacement source archive. Public presentation should keep that distinction visible and continue to credit the Dartmouth Dante Project explicitly.
+This repository represents an additional scholarly interface layer. It is not a replacement archive, and it should not obscure the source relationship. The public pages therefore continue to credit the Dartmouth Dante Project explicitly while distinguishing DDP as source archive from Antica Fiamma as reading environment.
 
-## How To Read This Repository
+## Practical Consequence
 
-The simplest way to interpret this repository is:
+A reader can inspect:
 
-- the interface shell is here
-- the public explanatory material is here
-- selected build logic is here
-- the heavy runtime data layer is elsewhere
+- how the public shell is structured
+- how the major reading layers are framed
+- how selected build and deployment scripts are organized
+- how the project describes its source and reuse boundary
 
-That boundary is part of the project design, not an omission caused by an incomplete upload.
+A reader should not expect this repository alone to reproduce the full live runtime corpus.

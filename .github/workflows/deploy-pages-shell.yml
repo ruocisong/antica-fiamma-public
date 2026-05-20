@@ -6,10 +6,9 @@ on:
     branches:
       - main
     paths:
-      - "demo/frontend/index.html"
-      - "demo/frontend/guide.html"
-      - "demo/frontend/about.html"
-      - "demo/frontend/authority.html"
+      - "demo/frontend/*.html"
+      - "demo/frontend/autore/**"
+      - "demo/frontend/personaggio/**"
       - "demo/frontend/robots.txt"
       - "demo/frontend/sitemap.xml"
       - "demo/frontend/favicon.svg"

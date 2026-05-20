@@ -3,40 +3,46 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DDP Commentary Workbench</title>
+    <title>Segni de l’antica fiamma - Dante workbench</title>
     <meta
       name="description"
-      content="A scholarly reading interface for the Dartmouth Dante Project that brings canto navigation, line-level commentary density, close reading, comparison, loci, and authority pathways into one workbench." />
-    <meta property="og:title" content="DDP Commentary Workbench" />
+      content="Digital pathways through Dante’s text, commentaries, and intertextual traces. Segni de l’antica fiamma is a text-first Dante reading environment by Ruoci Song." />
+    <meta property="og:title" content="Segni de l’antica fiamma - Dante workbench" />
     <meta
       property="og:description"
-      content="Read Dante commentary through canto maps, line-level density, close reading, comparison, loci, and authority pathways." />
+      content="Digital pathways through Dante’s text, commentaries, and intertextual traces." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ddpcommentary.com/" />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://ddpcommentary.com/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/static/styles.css?v=20260407t" />
-    <script src="/static/modules/core/config.global.js" defer></script>
-    <script src="/static/modules/core/state.global.js?v=20260407t" defer></script>
-    <script src="/static/modules/core/dom.global.js" defer></script>
-    <script src="/static/modules/core/loaders.global.js?v=20260407t" defer></script>
-    <script src="/static/modules/core/routing.global.js" defer></script>
-    <script src="/static/modules/panels/coverage_panel.global.js" defer></script>
-    <script src="/static/modules/panels/authority_panel.global.js?v=20260407t" defer></script>
-    <script src="/static/modules/panels/semantic_panel.global.js?v=20260407t" defer></script>
-    <script src="/static/modules/panels/loci_panel.global.js?v=20260407t" defer></script>
-    <script src="/static/modules/panels/records_panel.global.js?v=20260407t" defer></script>
-    <script src="/static/modules/panels/search_bridge.global.js" defer></script>
-    <script src="/static/app.js?v=20260407t" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=IM+Fell+English:ital@0;1&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css?v=20260512c" />
+    <script src="/static/modules/core/config.global.js?v=20260507b" defer></script>
+    <script src="/static/modules/core/state.global.js?v=20260507e" defer></script>
+    <script src="/static/modules/core/dom.global.js?v=20260408am" defer></script>
+    <script src="/static/modules/core/loaders.global.js?v=20260507b" defer></script>
+    <script src="/static/modules/core/routing.global.js?v=20260415d" defer></script>
+    <script src="/static/modules/panels/coverage_panel.global.js?v=20260517b" defer></script>
+    <script src="/static/modules/panels/authority_panel.global.js?v=20260408aj" defer></script>
+    <script src="/static/modules/panels/line/semantic_panel.global.js?v=20260408j" defer></script>
+    <script src="/static/modules/panels/word/word_level_panel.global.js?v=20260408e" defer></script>
+    <script src="/static/modules/panels/line/line_level_panel.global.js?v=20260408j" defer></script>
+    <script src="/static/modules/panels/records_panel.global.js?v=20260501a" defer></script>
+    <script src="/static/modules/panels/search_bridge.global.js?v=20260415d" defer></script>
+    <script src="/static/app.js?v=20260517f" defer></script>
   </head>
   <body>
     <noscript>
       <div class="page-shell" style="padding-top: 18px;">
         <section class="panel">
           <p class="panel-kicker">JavaScript Required</p>
-          <h2>DDP Commentary Workbench</h2>
-          <p>This workbench currently needs JavaScript to load canto navigation, line-level commentary cards, and panel data.</p>
+          <h2>Segni de l’antica fiamma</h2>
+          <p>Segni de l’antica fiamma needs JavaScript to load canto navigation, line-level commentary cards, and panel data.</p>
           <p>You can still use the static pages here:</p>
           <p>
             <a href="/guide.html">Guide</a>
@@ -58,13 +64,22 @@
       <div class="help-overlay-backdrop" id="help-overlay-backdrop"></div>
       <div class="help-overlay-card" role="dialog" aria-modal="true" aria-labelledby="help-overlay-title">
         <main class="help-popup-shell help-overlay-shell">
-          <p class="panel-kicker">UI Guide</p>
-          <div class="help-popup-head">
-            <h1 id="help-overlay-title">Guide</h1>
-            <button type="button" class="inline-text-button help-overlay-close-button" id="help-overlay-close">Close</button>
+          <div class="help-overlay-content">
+            <p class="panel-kicker">UI Guide</p>
+            <div class="help-popup-head">
+              <h1 id="help-overlay-title">Guide</h1>
+              <button type="button" class="inline-text-button help-overlay-close-button" id="help-overlay-close">Close</button>
+            </div>
+            <div class="help-audience-row" id="help-audience-row" hidden>
+              <span class="help-audience-label" id="help-audience-label">Reading angle</span>
+              <div class="ui-language-toggle" id="help-audience-toggle" aria-label="Help audience switch">
+                <button type="button" class="ui-language-chip" data-help-audience="philologist">Philologist</button>
+                <button type="button" class="ui-language-chip" data-help-audience="dh">Digital Humanist</button>
+              </div>
+            </div>
+            <p class="help-modal-lead" id="help-overlay-lead"></p>
+            <div class="help-modal-body" id="help-overlay-body"></div>
           </div>
-          <p class="help-modal-lead" id="help-overlay-lead"></p>
-          <div class="help-modal-body" id="help-overlay-body"></div>
         </main>
       </div>
     </div>
@@ -72,27 +87,27 @@
       <nav class="page-anchors" aria-label="Workspace navigation">
         <a class="anchor-link" href="#coverage-section" data-section="coverage-section">Entry</a>
         <a class="anchor-link" href="#records-section" data-section="records-section">Close Reading</a>
-        <a class="anchor-link" href="#compare-section" data-section="compare-section">Compare</a>
+        <a class="anchor-link" href="#commentary-section" data-section="commentary-section">Commentary</a>
         <a class="anchor-link" href="#scholar-section" data-section="scholar-section">Authority</a>
       </nav>
       <a class="back-to-top" href="#top" aria-label="Back to top">Top</a>
       <button class="back-nav-button" id="back-nav-button" type="button" aria-label="Go back">Back</button>
 
       <header class="hero">
-        <div>
+        <button type="button" class="hero-image-help-trigger" data-help-key="homepage-image" aria-label="Homepage image note">i</button>
+        <div class="hero-content">
           <div class="eyebrow-row">
-            <p class="eyebrow" data-ui-key="hero.eyebrow">Digital Humanities Demo</p>
-            <a class="guide-button guide-button-inline" data-ui-key="hero.guide" data-page-link="guide" href="/guide.html" target="_blank" rel="noreferrer">→ Guide</a>
-            <a class="guide-button guide-button-inline" data-ui-key="hero.about" data-page-link="about" href="/about.html" target="_blank" rel="noreferrer">→ About</a>
+            <p class="eyebrow" data-ui-key="hero.eyebrow">Digital Humanities Workbench</p>
+            <a class="guide-button guide-button-inline" data-ui-key="hero.guide" data-page-link="guide" href="/guide.html" target="_blank" rel="noreferrer">Guide</a>
+            <a class="guide-button guide-button-inline" data-ui-key="hero.about" data-page-link="about" href="/about.html" target="_blank" rel="noreferrer">About</a>
+            <a class="guide-button guide-button-inline" data-ui-key="hero.route" href="/reading-route.html" target="_blank" rel="noreferrer">Interface Tour</a>
           </div>
-          <h1>DDP Commentary Workbench</h1>
-          <p class="hero-copy">
-            <em>Conosco i segni de l'antica fiamma🔥</em>
-            <a class="hero-exemplar-link" data-ui-key="hero.route" href="/reading-route.html" target="_blank" rel="noreferrer">→ Reading Route</a>
+          <h1 class="hero-title">Segni de l’antica <a class="hero-title-link" href="/research/fiamma.html">fiamma</a>:</h1>
+          <p class="hero-subtitle">
+            Digital pathways through Dante’s text, commentaries, and intertextual traces.
           </p>
           <p class="hero-credit">
-            Powered by Ruoci Song, ChatGPT, Codex, and Claude Code.<br />
-            Source site:
+            Commentary source:
             <a href="https://dante.dartmouth.edu/" target="_blank" rel="noreferrer">Dartmouth Dante Project</a>
           </p>
         </div>
@@ -129,11 +144,16 @@
 
       <section class="panel sample-browser-panel" aria-label="Divine Comedy canto browser">
         <div class="panel-head sample-browser-head">
-          <div class="panel-title-block">
-            <p class="panel-kicker" data-ui-key="browser.kicker">Divine Comedy Map</p>
-            <div class="title-with-help">
-              <h2 data-ui-key="browser.title">Canto Browser</h2>
-              <button type="button" class="help-trigger" data-help-key="canto-browser" aria-label="Canto Browser help">i</button>
+          <div class="panel-heading-with-manicula">
+            <button type="button" class="panel-manicula-trigger" data-help-key="manicula" aria-label="Manicula help">
+              <img class="panel-manicula" src="/static/assets/manicula-transparent.png" width="40" height="40" alt="" aria-hidden="true" />
+            </button>
+            <div class="panel-title-block">
+              <p class="panel-kicker" data-ui-key="browser.kicker">Divine Comedy Map</p>
+              <div class="title-with-help">
+                <h2 data-ui-key="browser.title">Canto Browser</h2>
+                <button type="button" class="help-trigger" data-help-key="canto-browser" aria-label="Canto Browser help">i</button>
+              </div>
             </div>
           </div>
           <div class="browser-summary" id="browser-summary">Open any canto directly from the full <em>Commedia</em> map.</div>
@@ -145,11 +165,16 @@
       <main class="workspace-grid">
         <section class="panel coverage-panel" id="coverage-section" data-anchor-section>
           <div class="panel-head">
-            <div class="panel-title-block">
-              <p class="panel-kicker" data-ui-key="coverage.kicker">Main Entry</p>
-              <div class="title-with-help">
-                <h2 id="coverage-title" data-ui-key="coverage.title">Inferno I</h2>
-                <button type="button" class="help-trigger" data-help-key="entry-panel" aria-label="Entry help">i</button>
+            <div class="panel-heading-with-manicula">
+              <button type="button" class="panel-manicula-trigger" data-help-key="manicula" aria-label="Manicula help">
+                <img class="panel-manicula" src="/static/assets/manicula-transparent.png" width="40" height="40" alt="" aria-hidden="true" />
+              </button>
+              <div class="panel-title-block">
+                <p class="panel-kicker" data-ui-key="coverage.kicker">Main Entry</p>
+                <div class="title-with-help">
+                  <h2 id="coverage-title" data-ui-key="coverage.title">Inferno I</h2>
+                  <button type="button" class="help-trigger" data-help-key="entry-panel" aria-label="Entry help">i</button>
+                </div>
               </div>
             </div>
             <p class="panel-note" data-ui-key="coverage.note">
@@ -166,11 +191,16 @@
 
         <section class="panel records-panel" id="records-section" data-anchor-section>
           <div class="panel-head">
-            <div class="panel-title-block">
-              <p class="panel-kicker" data-ui-key="records.kicker">Close Reading</p>
-              <div class="title-with-help">
-                <h2 id="line-title" data-ui-key="records.title.idle">Select a line</h2>
-                <button type="button" class="help-trigger" data-help-key="close-reading" aria-label="Close Reading help">i</button>
+            <div class="panel-heading-with-manicula">
+              <button type="button" class="panel-manicula-trigger" data-help-key="manicula" aria-label="Manicula help">
+                <img class="panel-manicula" src="/static/assets/manicula-transparent.png" width="40" height="40" alt="" aria-hidden="true" />
+              </button>
+              <div class="panel-title-block">
+                <p class="panel-kicker" data-ui-key="records.kicker">Close Reading</p>
+                <div class="title-with-help">
+                  <h2 id="line-title" data-ui-key="records.title.idle">Select a line</h2>
+                  <button type="button" class="help-trigger" data-help-key="close-reading" aria-label="Close Reading help">i</button>
+                </div>
               </div>
             </div>
             <div class="records-toolbar">
@@ -191,39 +221,80 @@
           <div class="vocabulary-panel" id="vocabulary-panel"></div>
           <div class="semantic-panel" id="semantic-panel"></div>
           <div class="recurrence-panel" id="recurrence-panel"></div>
-          <div class="records-list" id="records-list"></div>
         </section>
 
-        <aside class="panel compare-panel" id="compare-section" data-anchor-section>
+        <aside class="panel compare-panel commentary-panel" id="commentary-section" data-anchor-section>
           <div class="panel-head compare-head">
-            <div class="panel-title-block">
-              <p class="panel-kicker" data-ui-key="compare.kicker">Compare</p>
-              <div class="title-with-help">
-                <h2 data-ui-key="compare.title">Comparison Workspace</h2>
-                <button type="button" class="help-trigger" data-help-key="compare-panel" aria-label="Compare help">i</button>
+            <div class="panel-heading-with-manicula">
+              <button type="button" class="panel-manicula-trigger" data-help-key="manicula" aria-label="Manicula help">
+                <img class="panel-manicula" src="/static/assets/manicula-transparent.png" width="40" height="40" alt="" aria-hidden="true" />
+              </button>
+              <div class="panel-title-block">
+                <p class="panel-kicker" data-ui-key="commentary.kicker">Commentary</p>
+                <div class="title-with-help">
+                  <h2 data-ui-key="commentary.title">Commentary</h2>
+                  <button type="button" class="help-trigger" data-help-key="commentary-panel" aria-label="Commentary help">i</button>
+                </div>
               </div>
             </div>
-            <div class="compare-head-actions">
-              <button id="clear-pins" class="ghost-button" type="button" data-ui-key="compare.clear">Clear pins</button>
-              <button id="open-compare-line" class="ghost-button" type="button">Open line</button>
-            </div>
           </div>
-          <div class="compare-summary" id="compare-summary" data-ui-key="compare.summary.empty">No pinned cards yet.</div>
-          <div class="compare-list" id="compare-list"></div>
+          <section class="commentary-subsection commentary-cards-section" id="commentary-cards-section">
+            <div class="panel-head commentary-subhead">
+              <div class="panel-title-block">
+                <p class="panel-kicker" data-ui-key="commentary.cards.kicker">Commentary Cards</p>
+                <h3 data-ui-key="commentary.cards.title">Cards Reaching This Line</h3>
+              </div>
+              <div class="records-toolbar commentary-toolbar">
+                <label for="commentary-sort-mode" data-ui-key="records.sort.label">Sort</label>
+                <select id="commentary-sort-mode">
+                  <option value="chronological" data-ui-key="records.sort.chronological">By date</option>
+                  <option value="commentary" data-ui-key="records.sort.commentary">By commentary</option>
+                  <option value="span" data-ui-key="records.sort.span">By line span</option>
+                  <option value="length" data-ui-key="records.sort.length">By excerpt length</option>
+                </select>
+                <button id="commentary-sort-direction" class="ghost-button" type="button" data-ui-key="records.sort.asc">Ascending</button>
+              </div>
+            </div>
+            <div class="commentary-summary" id="commentary-summary" data-ui-key="commentary.summary.idle">Select a line in Close Reading to open the commentary cards gathered for it.</div>
+            <div class="records-list" id="records-list"></div>
+          </section>
+
+          <section class="commentary-subsection comparison-subsection" id="compare-section">
+            <div class="panel-head compare-head commentary-subhead">
+              <div class="panel-title-block">
+                <p class="panel-kicker" data-ui-key="compare.kicker">Compare</p>
+                <div class="title-with-help">
+                  <h3 data-ui-key="compare.title">Comparison Workspace</h3>
+                  <button type="button" class="help-trigger" data-help-key="compare-panel" aria-label="Compare help">i</button>
+                </div>
+              </div>
+              <div class="compare-head-actions">
+                <button id="clear-pins" class="ghost-button" type="button" data-ui-key="compare.clear">Clear pins</button>
+                <button id="open-compare-line" class="ghost-button" type="button">Open line</button>
+              </div>
+            </div>
+            <div class="compare-summary" id="compare-summary" data-ui-key="compare.summary.empty">No pinned cards yet.</div>
+            <div class="compare-list" id="compare-list"></div>
+          </section>
         </aside>
 
         <aside class="panel scholar-panel" id="scholar-section" data-anchor-section>
           <div class="panel-head">
-            <div class="panel-title-block">
-              <p class="panel-kicker" data-ui-key="authority.kicker">Authority Layer</p>
-              <div class="title-with-help">
-                <h2 data-ui-key="authority.title">Authorities as cited in the commentary tradition</h2>
-                <button type="button" class="help-trigger" data-help-key="authority-panel" aria-label="Authority help">i</button>
+            <div class="panel-heading-with-manicula">
+              <button type="button" class="panel-manicula-trigger" data-help-key="manicula" aria-label="Manicula help">
+                <img class="panel-manicula" src="/static/assets/manicula-transparent.png" width="40" height="40" alt="" aria-hidden="true" />
+              </button>
+              <div class="panel-title-block">
+                <p class="panel-kicker" data-ui-key="authority.kicker">Authority Layer</p>
+                <div class="title-with-help">
+                  <h2 data-ui-key="authority.title">Authorities as cited in the commentary tradition</h2>
+                  <button type="button" class="help-trigger" data-help-key="authority-panel" aria-label="Authority help">i</button>
+                </div>
               </div>
             </div>
             <div>
-              <p class="panel-note" data-ui-key="authority.note">This panel keeps figure navigation and authority reading on their own path, instead of burying them inside Compare.</p>
-              <a class="guide-button guide-button-inline" href="/authority.html" target="_blank" rel="noreferrer">→ Authority Page</a>
+              <p class="panel-note" data-ui-key="authority.note">Select a line to see which authorities and works appear in the commentary reaching it.</p>
+              <a class="guide-button guide-button-inline" href="/authority.html" target="_blank" rel="noreferrer">→ Authority About</a>
             </div>
           </div>
           <div class="scholar-panel-body figure-panel" id="figure-panel"></div>

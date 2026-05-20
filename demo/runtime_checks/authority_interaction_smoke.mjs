@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 import http from "node:http";
+import { writeFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const DEBUG_HOST = process.env.CDP_HOST || "127.0.0.1";
 const DEMO_URL = process.env.DEMO_URL || "http://127.0.0.1:8777/";
@@ -20,6 +23,9 @@ const SMOKE_ONLY = String(process.env.AUTHORITY_SMOKE_ONLY || "")
   .map((item) => item.trim().toLowerCase())
   .filter(Boolean);
 const SMOKE_TRACE = /^(1|true|yes)$/i.test(String(process.env.AUTHORITY_SMOKE_TRACE || "").trim());
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPORT_JSON_PATH = path.resolve(__dirname, "../frontend/reports/authority_interaction_smoke.json");
+const REPORT_MD_PATH = path.resolve(__dirname, "../frontend/reports/authority_review_packet.md");
 
 function normalizeComparableUrl(rawUrl, { ignoreSearch = false } = {}) {
   try {
@@ -227,8 +233,55 @@ function trace(message) {
   }
 }
 
+function writeSmokeArtifacts(payload) {
+  const authorsDetail = payload?.results?.find((item) => item.name === "all authority authors basic install")?.detail || {};
+  const authorCount = Number(authorsDetail.authorCount || 0);
+  const visited = Array.isArray(authorsDetail.visited) ? authorsDetail.visited : [];
+  payload.authorCount = authorCount;
+  payload.visited = visited.length;
+  writeFileSync(REPORT_JSON_PATH, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+  const worksTreeCount = visited.filter((row) => row.worksLayerMode === "works_tree").length;
+  const flatCount = visited.filter((row) => row.worksLayerMode === "flat_work_overview").length;
+  const specialCount = visited.filter((row) => row.worksLayerMode === "no_works_tree").length;
+  const specialEntryCount = visited.filter((row) => row.entryContractType === "special_case_entry").length;
+  const lines = [
+    "# Authority Review Packet",
+    "",
+    `- ok: ${payload.ok}`,
+    `- resultCount: ${payload.resultCount}`,
+    `- authorCount: ${authorCount}`,
+    `- failures: ${Array.isArray(payload.failures) ? payload.failures.length : 0}`,
+    `- works-tree entries visited: ${worksTreeCount}`,
+    `- flat-overview entries visited: ${flatCount}`,
+    `- special-case entries visited: ${specialCount}`,
+    `- special-case entry contracts visited: ${specialEntryCount}`,
+    "",
+    "## Notes",
+    "",
+    "- This packet is generated from the current live workbench smoke.",
+    "- It reflects the active authority universe rather than older 45-author snapshots.",
+  ];
+  if (Array.isArray(payload.failures) && payload.failures.length) {
+    lines.push("", "## Failures", "");
+    for (const failure of payload.failures) {
+      lines.push(`- ${failure.name}: ${failure.error}`);
+    }
+  }
+  writeFileSync(REPORT_MD_PATH, `${lines.join("\n")}\n`, "utf8");
+}
+
 async function main() {
   const { ws, send } = await connectToChrome();
+  const authorityLayer = await fetchJson(new URL("data/authority_layer.json", DEMO_URL).toString());
+  const authorityAuthorLookup = new Map();
+  for (const author of Array.isArray(authorityLayer?.authors) ? authorityLayer.authors : []) {
+    if (author?.author_id) {
+      authorityAuthorLookup.set(String(author.author_id), author);
+    }
+    if (author?.public_slug_it) {
+      authorityAuthorLookup.set(String(author.public_slug_it), author);
+    }
+  }
   const failures = [];
   const results = [];
 
@@ -322,7 +375,11 @@ async function main() {
   async function readText(selector) {
     return evaluate(`(() => {
       const node = document.querySelector(${JSON.stringify(selector)});
-      return node ? node.textContent.trim() : null;
+      if (!node) return null;
+      const raw = typeof node.innerText === 'string' && node.innerText.trim()
+        ? node.innerText
+        : node.textContent;
+      return String(raw || '').replace(/\\s*\\n\\s*/g, '\\n').replace(/[ \\t]+/g, ' ').trim() || null;
     })()`);
   }
 
@@ -439,6 +496,7 @@ async function main() {
     for (const author of authors) {
       console.error(`[smoke] author: ${author.id}`);
       await selectAuthorityAuthor(author.id, author.label);
+      const liveAuthor = authorityAuthorLookup.get(author.id) || null;
       const summary = await readText(".figure-summary strong");
       if (!summary || !summary.toLowerCase().includes(String(author.label).toLowerCase().split(" ")[0])) {
         throw new Error(`Summary did not settle for ${author.id}.`);
@@ -456,6 +514,9 @@ async function main() {
         id: author.id,
         label: author.label,
         summary,
+        worksLayerMode: liveAuthor?.works_layer_mode || null,
+        entryMode: liveAuthor?.entry_mode || null,
+        entryContractType: liveAuthor?.reading_contract_meta?.entry_contract_type || null,
         contract: await readText(".authority-reading-contract"),
         banner: await readText(".authority-flat-banner"),
         specialCase: await readText(".authority-special-case-panel"),
@@ -469,7 +530,7 @@ async function main() {
     };
   });
 
-  await test("cicero flat works navigation", async () => {
+  await test("cicero works tree navigation", async () => {
     trace("cicero: reopen lens");
     await reopenAuthorityLens();
     trace("cicero: select author");
@@ -493,10 +554,9 @@ async function main() {
       trace(`cicero: missing work buttons snapshot ${formatValue(snapshot)}`);
       throw new Error("Cicero work filter did not render.");
     }
-    trace("cicero: read banner");
-    const bannerText = await readText(".authority-flat-banner");
-    if (!bannerText || !bannerText.includes("flat-work object")) {
-      throw new Error("Cicero flat-work banner missing.");
+    const contractText = await readText(".authority-reading-contract");
+    if (!contractText || !contractText.includes("Works-tree entry")) {
+      throw new Error("Cicero works-tree contract missing.");
     }
     trace("cicero: pick work");
     const pickedWork = await evaluate(`(() => {
@@ -514,6 +574,23 @@ async function main() {
       throw new Error("Cicero did not expose a clickable work filter.");
     }
     trace(`cicero: picked work ${pickedWork}`);
+    const workSurfaceReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0 || document.querySelectorAll('[data-authority-node]').length > 0`, 8000);
+    if (!workSurfaceReady) {
+      throw new Error("Cicero work tree did not expose a node or occurrence surface.");
+    }
+    await evaluate(`(() => {
+      const preferred = document.querySelector('[data-authority-node="work_only"]');
+      if (preferred) {
+        preferred.click();
+        return 'work_only';
+      }
+      const candidate = document.querySelector('[data-authority-node]');
+      if (candidate) {
+        candidate.click();
+        return candidate.getAttribute('data-authority-node') || 'node';
+      }
+      return null;
+    })()`);
     const rowReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0`, 8000);
     if (!rowReady) {
       throw new Error("Cicero occurrence rows did not render.");
@@ -528,7 +605,7 @@ async function main() {
     return {
       selectedAuthor: await readText(".figure-summary strong"),
       pickedWork,
-      bannerText,
+      contractText,
       selectedHeading: await readText(".authority-stage-block-secondary h4"),
       sourceHeading: await readText(".authority-source-head h5"),
     };
@@ -549,33 +626,19 @@ async function main() {
       throw new Error("Statius special-case scope missing Purgatorio 21+.");
     }
     await openAuthorityView("drilldown");
-    const bannerReady = await waitFor(`Boolean(document.querySelector('.authority-caveat-banner'))`, 8000);
-    if (!bannerReady) {
-      throw new Error("Statius drilldown caveat banner missing.");
+    const worksReady = await waitFor(`Boolean(document.querySelector('[data-authority-work="Thebaid"]'))`, 8000);
+    if (!worksReady) {
+      throw new Error("Statius works tree did not render.");
     }
-    const scopeReady = await waitFor(`Boolean(document.querySelector('[data-authority-scope="purg21_plus"]'))`, 8000);
-    if (!scopeReady) {
-      throw new Error("Statius scope filter missing.");
-    }
-    await click('[data-authority-scope="purg21_plus"]');
-    const scopedStateReady = await waitFor(`(() => {
-      const heading = document.querySelector('.vocabulary-section-grid h4:nth-of-type(2)')?.textContent || '';
-      const hasRows = document.querySelectorAll('[data-authority-occurrence-key]').length > 0;
-      const hasEmpty = Boolean(document.querySelector('.vocabulary-section-grid .empty-state'));
-      return heading.includes('Purgatorio 21+') || hasRows || hasEmpty;
-    })()`, 8000);
-    if (!scopedStateReady) {
-      throw new Error("Statius scoped drilldown did not settle into rows or an explicit empty state.");
+    const drilldownPanelText = await readText(".authority-special-case-panel");
+    if (!drilldownPanelText || !drilldownPanelText.includes("Purgatorio 21+")) {
+      throw new Error("Statius works lens lost the Purgatorio 21+ special-case panel.");
     }
     return {
       specialCasePanel: panelText,
-      caveatBanner: await readText(".authority-caveat-banner"),
-      scopeLabel: await readText('[data-authority-scope="purg21_plus"] strong'),
-      scopedHeading: await evaluate(`(() => {
-        const headings = [...document.querySelectorAll('.vocabulary-section-grid h4')];
-        return headings[1]?.textContent?.trim() || null;
-      })()`),
-      scopedOccurrenceCount: await evaluate(`document.querySelectorAll('[data-authority-occurrence-key]').length`),
+      drilldownPanel: drilldownPanelText,
+      contractText: await readText(".authority-reading-contract"),
+      workButtons: await evaluate(`document.querySelectorAll('[data-authority-work]').length`),
     };
   });
 
@@ -596,17 +659,19 @@ async function main() {
     if (!(await openAuthorityView("drilldown"))) {
       throw new Error("Virgil drilldown tab not found.");
     }
-    const contractReady = await waitFor(`Boolean(document.querySelector('.authority-reading-contract')) || Boolean(document.querySelector('.authority-caveat-banner'))`, 8000);
-    if (!contractReady) {
-      throw new Error("Virgil entry contract banner missing.");
+    const worksReady = await waitFor(`Boolean(document.querySelector('[data-authority-work="Aeneid"]'))`, 8000);
+    if (!worksReady) {
+      throw new Error("Virgil works tree did not render.");
+    }
+    const drilldownPanelText = await readText(".authority-special-case-panel");
+    if (!drilldownPanelText || !drilldownPanelText.includes("system-wide")) {
+      throw new Error("Virgil works lens lost the system-wide special-case panel.");
     }
     return {
       specialCasePanel: panelText,
-      contractText: await evaluate(`(() => {
-        return document.querySelector('.authority-reading-contract')?.textContent?.trim()
-          || document.querySelector('.authority-caveat-banner')?.textContent?.trim()
-          || null;
-      })()`),
+      drilldownPanel: drilldownPanelText,
+      contractText: await readText(".authority-reading-contract"),
+      workButtons: await evaluate(`document.querySelectorAll('[data-authority-work]').length`),
     };
   });
 
@@ -629,7 +694,7 @@ async function main() {
     await click('[data-authority-node="work_only"]');
     const workOnlyReady = await waitFor(`(() => {
       const heading = document.querySelector('.authority-stage-block-secondary h4')?.textContent || '';
-      return heading.includes('Work-only bucket') && document.querySelectorAll('[data-authority-occurrence-key]').length > 0;
+      return heading.includes('Work-level citations') && document.querySelectorAll('[data-authority-occurrence-key]').length > 0;
     })()`, 8000);
     if (!workOnlyReady) {
       throw new Error("Aristotle work-only bucket did not expose occurrences.");
@@ -643,7 +708,7 @@ async function main() {
     await click('[data-authority-node="pseudo_passage"]');
     const pseudoReady = await waitFor(`(() => {
       const heading = document.querySelector('.authority-stage-block-secondary h4')?.textContent || '';
-      return heading.includes('Pseudo-passage bucket') && document.querySelectorAll('[data-authority-occurrence-key]').length > 0;
+      return heading.includes('Weak locator evidence') && document.querySelectorAll('[data-authority-occurrence-key]').length > 0;
     })()`, 8000);
     if (!pseudoReady) {
       throw new Error("Aristotle pseudo-passage bucket did not expose occurrences.");
@@ -656,8 +721,8 @@ async function main() {
 
     return {
       selectedWork: await evaluate(`document.querySelector('[data-authority-work="Poetics"] strong')?.textContent?.trim()`),
-      workOnlyHeading: "Work-only bucket",
-      pseudoHeading: "Pseudo-passage bucket",
+      workOnlyHeading: "Work-level citations",
+      pseudoHeading: "Weak locator evidence",
       sourceHeading: await readText(".authority-source-head h5"),
     };
   });
@@ -681,7 +746,7 @@ async function main() {
     await click('[data-authority-node="pseudo_passage"]');
     const pseudoReady = await waitFor(`(() => {
       const heading = document.querySelector('.authority-stage-block-secondary h4')?.textContent || '';
-      return heading.includes('Pseudo-passage bucket') && document.querySelectorAll('[data-authority-occurrence-key]').length > 0;
+      return heading.includes('Weak locator evidence') && document.querySelectorAll('[data-authority-occurrence-key]').length > 0;
     })()`, 8000);
     if (!pseudoReady) {
       throw new Error("Paul ambiguous pseudo-passage bucket did not expose occurrences.");
@@ -719,7 +784,7 @@ async function main() {
     };
   });
 
-  await test("augustine matured flat-work entry", async () => {
+  await test("augustine works tree entry", async () => {
     await reopenAuthorityLens();
     await selectAuthorityAuthor("augustine", "Agostino");
     if (!(await openAuthorityView("drilldown"))) {
@@ -729,8 +794,28 @@ async function main() {
     if (!workReady) {
       throw new Error("Augustine work cards did not render.");
     }
-    const bannerText = await readText(".authority-flat-banner");
+    const contractText = await readText(".authority-reading-contract");
+    if (!contractText || !contractText.includes("Works-tree entry")) {
+      throw new Error("Augustine works-tree contract missing.");
+    }
     await click('[data-authority-work="Confessions"]');
+    const workSurfaceReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0 || document.querySelectorAll('[data-authority-node]').length > 0`, 8000);
+    if (!workSurfaceReady) {
+      throw new Error("Augustine work tree did not expose a node or occurrence surface.");
+    }
+    await evaluate(`(() => {
+      const preferred = document.querySelector('[data-authority-node="work_only"]');
+      if (preferred) {
+        preferred.click();
+        return 'work_only';
+      }
+      const candidate = document.querySelector('[data-authority-node]');
+      if (candidate) {
+        candidate.click();
+        return candidate.getAttribute('data-authority-node') || 'node';
+      }
+      return null;
+    })()`);
     const rowsReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0`, 8000);
     if (!rowsReady) {
       throw new Error("Augustine Confessions occurrences did not render.");
@@ -741,7 +826,7 @@ async function main() {
       throw new Error("Augustine source panel did not open.");
     }
     return {
-      bannerText,
+      contractText,
       sourceHeading: await readText(".authority-source-head h5"),
     };
   });
@@ -773,7 +858,7 @@ async function main() {
     };
   });
 
-  await test("ovid cleanup flat-work lanes", async () => {
+  await test("ovid works tree lane", async () => {
     await reopenAuthorityLens();
     await selectAuthorityAuthor("ovid", "Ovid");
     if (!(await openAuthorityView("drilldown"))) {
@@ -783,7 +868,28 @@ async function main() {
     if (!workReady) {
       throw new Error("Ovid work cards did not render.");
     }
+    const contractText = await readText(".authority-reading-contract");
+    if (!contractText || !contractText.includes("Works-tree entry")) {
+      throw new Error("Ovid works-tree contract missing.");
+    }
     await click('[data-authority-work="Metamorphoses"]');
+    const workSurfaceReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0 || document.querySelectorAll('[data-authority-node]').length > 0`, 8000);
+    if (!workSurfaceReady) {
+      throw new Error("Ovid work tree did not expose a node or occurrence surface.");
+    }
+    await evaluate(`(() => {
+      const preferred = document.querySelector('[data-authority-node="work_only"]');
+      if (preferred) {
+        preferred.click();
+        return 'work_only';
+      }
+      const candidate = document.querySelector('[data-authority-node]');
+      if (candidate) {
+        candidate.click();
+        return candidate.getAttribute('data-authority-node') || 'node';
+      }
+      return null;
+    })()`);
     const rowsReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0`, 8000);
     if (!rowsReady) {
       throw new Error("Ovid Metamorphoses occurrences did not render.");
@@ -794,13 +900,12 @@ async function main() {
       throw new Error("Ovid source panel did not open.");
     }
     return {
-      bannerText: await readText(".authority-flat-banner"),
-      contractText: await readText(".authority-reading-contract"),
+      contractText,
       sourceHeading: await readText(".authority-source-head h5"),
     };
   });
 
-  await test("seneca mixed core lane", async () => {
+  await test("seneca works tree lane", async () => {
     await reopenAuthorityLens();
     await selectAuthorityAuthor("seneca", "Seneca");
     if (!(await openAuthorityView("drilldown"))) {
@@ -810,8 +915,28 @@ async function main() {
     if (!workReady) {
       throw new Error("Seneca work cards did not render.");
     }
+    const contractText = await readText(".authority-reading-contract");
+    if (!contractText || !contractText.includes("Works-tree entry")) {
+      throw new Error("Seneca works-tree contract missing.");
+    }
     await click('[data-authority-work="Epistulae morales"]');
-    const bannerText = await readText(".authority-flat-banner");
+    const workSurfaceReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0 || document.querySelectorAll('[data-authority-node]').length > 0`, 8000);
+    if (!workSurfaceReady) {
+      throw new Error("Seneca work tree did not expose a node or occurrence surface.");
+    }
+    await evaluate(`(() => {
+      const preferred = document.querySelector('[data-authority-node="work_only"]');
+      if (preferred) {
+        preferred.click();
+        return 'work_only';
+      }
+      const candidate = document.querySelector('[data-authority-node]');
+      if (candidate) {
+        candidate.click();
+        return candidate.getAttribute('data-authority-node') || 'node';
+      }
+      return null;
+    })()`);
     const rowsReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0`, 8000);
     if (!rowsReady) {
       throw new Error("Seneca Epistulae occurrences did not render.");
@@ -822,13 +947,12 @@ async function main() {
       throw new Error("Seneca source panel did not open.");
     }
     return {
-      bannerText,
-      contractText: await readText(".authority-reading-contract"),
+      contractText,
       sourceHeading: await readText(".authority-source-head h5"),
     };
   });
 
-  await test("boethius clean-noisy split lane", async () => {
+  await test("boethius works tree lane", async () => {
     await reopenAuthorityLens();
     await selectAuthorityAuthor("boethius", "Boethius");
     if (!(await openAuthorityView("drilldown"))) {
@@ -838,8 +962,28 @@ async function main() {
     if (!workReady) {
       throw new Error("Boethius work cards did not render.");
     }
+    const contractText = await readText(".authority-reading-contract");
+    if (!contractText || !contractText.includes("Works-tree entry")) {
+      throw new Error("Boethius works-tree contract missing.");
+    }
     await click('[data-authority-work="Consolation of Philosophy"]');
-    const bannerText = await readText(".authority-flat-banner");
+    const workSurfaceReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0 || document.querySelectorAll('[data-authority-node]').length > 0`, 8000);
+    if (!workSurfaceReady) {
+      throw new Error("Boethius work tree did not expose a node or occurrence surface.");
+    }
+    await evaluate(`(() => {
+      const preferred = document.querySelector('[data-authority-node="work_only"]');
+      if (preferred) {
+        preferred.click();
+        return 'work_only';
+      }
+      const candidate = document.querySelector('[data-authority-node]');
+      if (candidate) {
+        candidate.click();
+        return candidate.getAttribute('data-authority-node') || 'node';
+      }
+      return null;
+    })()`);
     const rowsReady = await waitFor(`document.querySelectorAll('[data-authority-occurrence-key]').length > 0`, 8000);
     if (!rowsReady) {
       throw new Error("Boethius Consolation occurrences did not render.");
@@ -850,18 +994,19 @@ async function main() {
       throw new Error("Boethius source panel did not open.");
     }
     return {
-      bannerText,
-      contractText: await readText(".authority-reading-contract"),
+      contractText,
       sourceHeading: await readText(".authority-source-head h5"),
     };
   });
 
-  console.log(JSON.stringify({
+  const payload = {
     ok: failures.length === 0,
     resultCount: results.length,
     results,
     failures,
-  }, null, 2));
+  };
+  writeSmokeArtifacts(payload);
+  console.log(JSON.stringify(payload, null, 2));
 
   ws.close();
   process.exit(failures.length ? 1 : 0);

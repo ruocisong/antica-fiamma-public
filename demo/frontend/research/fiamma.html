@@ -1,0 +1,1942 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fiamma: Dante and the Fire Motif in the Commedia</title>
+    <meta
+      name="description"
+      content="A long-lived Segni de l’antica fiamma research room tracing the fire motif in Dante’s Commedia through documented lexicon construction, levels of pertinence, thematic distribution, and return to close reading." />
+    <meta property="og:title" content="Fiamma: Dante and the Fire Motif in the Commedia" />
+    <meta
+      property="og:description"
+      content="A philologically anchored Segni de l’antica fiamma research room, centred on lexicon construction, levels of pertinence, semantic-field modelling, and return to close reading." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ddpcommentary.com/research/fiamma.html" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://ddpcommentary.com/research/fiamma.html" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css?v=20260512c" />
+    <style>
+      :root {
+        --fiamma-brown: #8c3b2a;
+        --fiamma-red: #a2231d;
+        --fiamma-red-soft: rgba(162, 35, 29, 0.1);
+        --fiamma-line: rgba(93, 75, 49, 0.14);
+        --fiamma-bg-soft: rgba(255, 255, 255, 0.72);
+      }
+
+      body.fiamma-research-page {
+        background:
+          linear-gradient(180deg, rgba(249, 244, 235, 0.96), rgba(239, 230, 214, 0.96)),
+          radial-gradient(circle at 12% 0%, rgba(54, 88, 79, 0.1), transparent 34%),
+          radial-gradient(circle at 92% 12%, rgba(162, 35, 29, 0.1), transparent 32%),
+          #f0e6d6;
+      }
+
+      body.fiamma-research-page::before {
+        background:
+          radial-gradient(circle at 14% 6%, rgba(255, 244, 216, 0.42), transparent 32%),
+          repeating-linear-gradient(102deg, rgba(92, 69, 38, 0.016) 0 1px, transparent 1px 13px);
+      }
+
+      .fiamma-room-shell {
+        width: min(1480px, calc(100vw - 28px));
+        padding-top: 28px;
+        padding-bottom: 72px;
+      }
+
+      .fiamma-room-hero {
+        grid-template-columns: minmax(0, 1.28fr) minmax(330px, 0.72fr);
+        align-items: start;
+        gap: 24px;
+        margin-bottom: 26px;
+      }
+
+      .fiamma-room-copy,
+      .fiamma-room-note {
+        max-width: 56rem;
+      }
+
+      .fiamma-room-copy {
+        font-size: 1.08rem;
+        line-height: 1.72;
+        font-family: var(--ui-font);
+        display: block;
+        text-wrap: auto;
+        word-spacing: normal;
+        letter-spacing: normal;
+        text-align: left;
+      }
+
+      .fiamma-room-note,
+      .fiamma-hero-mini-note {
+        margin: 12px 0 0;
+        color: var(--muted);
+        line-height: 1.68;
+        font-family: var(--ui-font);
+        display: block;
+        text-wrap: auto;
+      }
+
+      .fiamma-inline-ital {
+        font-style: italic;
+        font-family: inherit;
+        letter-spacing: normal;
+      }
+
+      .fiamma-nav {
+        margin-top: 18px;
+      }
+
+      .fiamma-nav a {
+        white-space: nowrap;
+      }
+
+      .fiamma-hero-stats {
+        display: grid;
+        align-content: start;
+        gap: 14px;
+      }
+
+      .fiamma-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .fiamma-stat-value {
+        white-space: nowrap;
+      }
+
+      .fiamma-stat-value .fiamma-location-short {
+        font-style: italic;
+      }
+
+      .fiamma-panel {
+        margin-bottom: 24px;
+      }
+
+      .fiamma-micro-panel {
+        margin-top: -2px;
+        margin-bottom: 22px;
+      }
+
+      .fiamma-micro-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .fiamma-micro-card {
+        padding: 14px 16px;
+        border: 1px solid var(--fiamma-line);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .fiamma-micro-label {
+        margin: 0 0 4px;
+        color: var(--muted);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .fiamma-micro-text {
+        margin: 0;
+        color: var(--ink);
+        line-height: 1.58;
+      }
+
+      .fiamma-panel .panel-head {
+        align-items: end;
+        gap: 18px;
+      }
+
+      .fiamma-panel .panel-note {
+        max-width: 35rem;
+        line-height: 1.62;
+      }
+
+      .fiamma-breakout-panel {
+        position: relative;
+        left: 50%;
+        width: calc(100vw - 20px);
+        margin-left: calc(-50vw + 10px);
+        padding-left: clamp(18px, 3vw, 30px);
+        padding-right: clamp(18px, 3vw, 30px);
+        border-radius: 24px;
+      }
+
+      .fiamma-curve-root,
+      .fiamma-heatmap-shell,
+      .fiamma-figure-shell,
+      .fiamma-detail-summary,
+      .fiamma-line-list,
+      .fiamma-table-wrap {
+        width: 100%;
+      }
+
+      .fiamma-curve-root,
+      .fiamma-figure-shell {
+        min-height: 220px;
+      }
+
+      .fiamma-chart-grid {
+        stroke: rgba(93, 75, 49, 0.12);
+        stroke-width: 1;
+      }
+
+      .fiamma-chart-boundary {
+        stroke: rgba(93, 75, 49, 0.26);
+        stroke-width: 1.2;
+        stroke-dasharray: 4 6;
+      }
+
+      .fiamma-chart-axis,
+      .fiamma-chart-axis-label,
+      .fiamma-chart-annotation {
+        fill: var(--muted);
+        font-family: var(--ui-font);
+      }
+
+      .fiamma-chart-axis {
+        font-size: 12px;
+        text-anchor: end;
+      }
+
+      .fiamma-chart-axis-label {
+        font-size: 13px;
+        text-anchor: middle;
+      }
+
+      .fiamma-chart-annotation {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .fiamma-chart-smooth {
+        fill: none;
+        stroke-width: 5;
+        opacity: 0.24;
+      }
+
+      .fiamma-chart-actual {
+        fill: none;
+        stroke-width: 2.8;
+      }
+
+      .fiamma-chart-point {
+        cursor: pointer;
+        stroke: rgba(31, 29, 25, 0.84);
+        stroke-width: 1.15;
+        transition: transform 140ms ease, stroke-width 140ms ease, opacity 140ms ease;
+      }
+
+      .fiamma-chart-point:hover,
+      .fiamma-chart-point:focus-visible,
+      .fiamma-chart-point.is-active {
+        stroke-width: 2.2;
+      }
+
+      .fiamma-legend {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .fiamma-legend-bar {
+        flex: 1;
+        height: 12px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(156, 46, 24, 0.08), rgba(156, 46, 24, 0.92));
+      }
+
+      .fiamma-heatmap-shell {
+        overflow-x: clip;
+      }
+
+      .fiamma-heatmap-grid {
+        display: grid;
+        grid-template-columns: clamp(92px, 8vw, 136px) repeat(34, minmax(0, 1fr));
+        gap: clamp(5px, 0.46vw, 8px);
+        width: 100%;
+        min-width: 0;
+        align-items: center;
+      }
+
+      .fiamma-heatmap-label-head {
+        min-height: 24px;
+      }
+
+      .fiamma-heatmap-col-head {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .fiamma-heatmap-row-label {
+        padding-right: 8px;
+        color: var(--ink);
+        font-size: 0.92rem;
+        font-weight: 700;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .fiamma-heatmap-cell,
+      .fiamma-heatmap-empty {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: clamp(46px, 4vw, 58px);
+        border-radius: clamp(12px, 1vw, 16px);
+      }
+
+      .fiamma-heatmap-cell {
+        border: 1px solid rgba(93, 75, 49, 0.14);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        font-size: 0.82rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+      }
+
+      .fiamma-heatmap-cell:hover,
+      .fiamma-heatmap-cell:focus-visible {
+        transform: translateY(-1px);
+        border-color: rgba(140, 59, 42, 0.42);
+        box-shadow: 0 10px 20px rgba(47, 35, 18, 0.08);
+      }
+
+      .fiamma-heatmap-cell.is-active {
+        border-color: rgba(140, 59, 42, 0.8);
+        box-shadow: 0 0 0 2px rgba(140, 59, 42, 0.16);
+      }
+
+      .fiamma-heatmap-empty {
+        border: 1px dashed rgba(93, 75, 49, 0.08);
+        background: rgba(255, 255, 255, 0.34);
+      }
+
+      .fiamma-lines-panel,
+      .fiamma-table-panel {
+        scroll-margin-top: 18px;
+      }
+
+      .fiamma-detail-summary {
+        margin-bottom: 16px;
+      }
+
+      .fiamma-metric-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .fiamma-metric {
+        padding: 12px 14px;
+        border: 1px solid var(--fiamma-line);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.68);
+      }
+
+      .fiamma-metric-label {
+        margin: 0 0 4px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .fiamma-metric-value {
+        margin: 0;
+        color: var(--ink);
+        font-size: 1.06rem;
+        font-weight: 700;
+      }
+
+      .fiamma-line-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .fiamma-line-item {
+        padding: 14px 16px;
+        border: 1px solid var(--fiamma-line);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.56);
+      }
+
+      .fiamma-line-meta {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: nowrap;
+        max-width: 100%;
+        white-space: nowrap;
+        margin-right: 10px;
+        color: var(--ink);
+        font-size: 0.86rem;
+        font-weight: 500;
+      }
+
+      .fiamma-line-score {
+        color: var(--fiamma-brown);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .fiamma-line-text {
+        margin: 0;
+        color: var(--ink);
+        line-height: 1.62;
+        font-family: var(--ui-font);
+        font-weight: 700;
+      }
+
+      .fiamma-line-text-inline {
+        color: var(--ink);
+      }
+
+      .fiamma-line-anchor {
+        font-weight: inherit;
+      }
+
+      .fiamma-location-anchor {
+        font-weight: 500;
+      }
+
+      .fiamma-line-anchor,
+      .fiamma-location-anchor,
+      .fiamma-table-anchor {
+        color: inherit;
+        text-decoration: none;
+        transition: color 140ms ease, text-decoration-color 140ms ease;
+      }
+
+      .fiamma-line-anchor:hover,
+      .fiamma-line-anchor:focus-visible,
+      .fiamma-location-anchor:hover,
+      .fiamma-location-anchor:focus-visible,
+      .fiamma-table-anchor:hover,
+      .fiamma-table-anchor:focus-visible {
+        color: var(--fiamma-brown);
+        text-decoration: underline;
+        text-decoration-color: rgba(140, 59, 42, 0.34);
+        text-underline-offset: 0.18em;
+      }
+
+      .fiamma-location-short {
+        font-style: italic;
+      }
+
+      .fiamma-location-anchor,
+      .fiamma-table-anchor {
+        white-space: nowrap;
+      }
+
+      .fiamma-secondary-grid {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+        gap: 24px;
+      }
+
+      #fiamma-cloud .fiamma-figure-shell {
+        max-width: 380px;
+        min-height: 0;
+        margin: 0 auto;
+      }
+
+      #fiamma-cloud .panel-head {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 10px;
+      }
+
+      #fiamma-cloud .panel-title-block {
+        max-width: 18rem;
+      }
+
+      #fiamma-cloud .panel-title-block h2 {
+        margin-top: 2px;
+      }
+
+      #fiamma-cloud .panel-note,
+      #fiamma-cloud .fiamma-filter-detail {
+        max-width: 30rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #fiamma-cloud .panel-note {
+        margin-top: 0;
+      }
+
+      .fiamma-figure-shell {
+        position: relative;
+        border: 1px solid var(--fiamma-line);
+        border-radius: 24px;
+        background:
+          linear-gradient(180deg, rgba(255, 254, 251, 0.96), rgba(249, 244, 235, 0.92));
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      }
+
+      .fiamma-figure-stage {
+        position: relative;
+        width: 100%;
+      }
+
+      .fiamma-figure-stage img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .fiamma-hotspot {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        border: 0;
+        border-radius: 999px;
+        background: rgba(162, 35, 29, 0.015);
+        box-shadow: 0 0 0 1px rgba(162, 35, 29, 0.05);
+        cursor: pointer;
+        transition: box-shadow 140ms ease, background 140ms ease, transform 140ms ease;
+      }
+
+      .fiamma-hotspot:hover,
+      .fiamma-hotspot:focus-visible,
+      .fiamma-hotspot.is-active {
+        background: rgba(162, 35, 29, 0.05);
+        box-shadow:
+          0 0 0 2px rgba(162, 35, 29, 0.24),
+          0 0 0 9px rgba(162, 35, 29, 0.07);
+      }
+
+      .fiamma-hotspot.is-active {
+        transform: translate(-50%, -50%) scale(1.04);
+      }
+
+      .fiamma-filter-detail {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .fiamma-reading-note {
+        margin-top: 14px;
+        padding: 13px 14px;
+        border-left: 3px solid rgba(140, 59, 42, 0.28);
+        background: rgba(255, 252, 247, 0.76);
+        border-radius: 0 14px 14px 0;
+      }
+
+      .fiamma-reading-note p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.58;
+      }
+
+      .fiamma-filter-head {
+        display: grid;
+        gap: 4px;
+      }
+
+      .fiamma-filter-head h3 {
+        margin: 0;
+        font-family: var(--serif-font);
+        font-size: 1.24rem;
+      }
+
+      .fiamma-filter-meta {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.56;
+      }
+
+      .fiamma-loading-note,
+      .fiamma-filter-empty {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .fiamma-table-wrap {
+        overflow-x: auto;
+        border: 1px solid rgba(93, 75, 49, 0.1);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      }
+
+      .fiamma-score-table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: collapse;
+        font-family: var(--ui-font);
+      }
+
+      .fiamma-score-table th,
+      .fiamma-score-table td {
+        padding: 13px 14px;
+        border-bottom: 1px solid rgba(93, 75, 49, 0.12);
+        vertical-align: top;
+      }
+
+      .fiamma-score-table th {
+        color: var(--ink);
+        font-size: 0.88rem;
+        font-weight: 700;
+        text-align: left;
+        background: rgba(255, 252, 247, 0.92);
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+
+      .fiamma-score-table tbody tr {
+        cursor: pointer;
+        transition: background 140ms ease;
+      }
+
+      .fiamma-score-table tbody tr:hover,
+      .fiamma-score-table tbody tr.is-active {
+        background: rgba(140, 59, 42, 0.05);
+      }
+
+      .fiamma-score-table td {
+        color: var(--muted);
+        font-size: 0.98rem;
+        line-height: 1.55;
+      }
+
+      .fiamma-score-table td.fiamma-cell-location {
+        color: var(--ink);
+        white-space: nowrap;
+      }
+
+      .fiamma-score-table td.fiamma-cell-metric {
+        color: var(--ink);
+        font-family: var(--ui-font);
+        font-size: 0.88rem;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .fiamma-score-table td.fiamma-cell-text {
+        min-width: 420px;
+        max-width: 720px;
+        color: var(--ink);
+        font-family: var(--ui-font);
+        font-weight: 700;
+      }
+
+      .fiamma-table-note {
+        margin: 12px 0 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .fiamma-prose-section {
+        margin-bottom: 20px;
+      }
+
+      .fiamma-prose-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+        gap: 18px;
+      }
+
+      .fiamma-method-card {
+        display: grid;
+        gap: 10px;
+        padding: 16px 18px;
+        border: 1px solid var(--fiamma-line);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .fiamma-method-card h3 {
+        margin: 0;
+        font-family: var(--serif-font);
+        font-size: 1.1rem;
+      }
+
+      .fiamma-method-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .fiamma-method-item {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .fiamma-method-item strong {
+        color: var(--ink);
+      }
+
+      .fiamma-reference-link {
+        text-decoration: underline;
+        text-underline-offset: 0.16em;
+      }
+
+      .fiamma-prose-block {
+        display: grid;
+        gap: 12px;
+      }
+
+      .fiamma-prose-block p,
+      .fiamma-environment-note p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.66;
+      }
+
+      .fiamma-lexicon-card {
+        display: grid;
+        gap: 12px;
+        padding: 16px 18px;
+        border: 1px solid var(--fiamma-line);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .fiamma-lexicon-card h3,
+      .fiamma-environment-note h3 {
+        margin: 0;
+        font-family: var(--serif-font);
+        font-size: 1.1rem;
+      }
+
+      .fiamma-lexicon-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .fiamma-lexicon-badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .fiamma-lexicon-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(140, 59, 42, 0.14);
+        background: rgba(140, 59, 42, 0.07);
+        color: var(--ink);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .fiamma-environment-note {
+        display: grid;
+        gap: 12px;
+        padding: 18px;
+        border: 1px solid var(--fiamma-line);
+        border-radius: 20px;
+        background:
+          linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(247, 242, 233, 0.92));
+      }
+
+      /* Keep this research page independent from the global homepage hero skin. */
+      .fiamma-room-shell {
+        width: min(1280px, calc(100vw - 32px));
+        padding-top: 22px;
+      }
+
+      .fiamma-room-hero {
+        --hero-left: 0;
+        --hero-top: 0;
+        --hero-search-top: 0;
+        position: relative;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1.04fr) minmax(340px, 0.96fr);
+        gap: clamp(24px, 4vw, 48px);
+        align-items: stretch;
+        min-height: 0;
+        margin-bottom: 20px;
+        padding: clamp(26px, 4vw, 52px) !important;
+        overflow: hidden;
+        border: 1px solid rgba(93, 75, 49, 0.16);
+        border-radius: 18px;
+        background:
+          linear-gradient(135deg, rgba(255, 252, 245, 0.96), rgba(244, 234, 216, 0.9)),
+          radial-gradient(circle at 86% 14%, rgba(162, 35, 29, 0.12), transparent 34%),
+          radial-gradient(circle at 8% 88%, rgba(54, 88, 79, 0.12), transparent 32%);
+        box-shadow: 0 24px 58px rgba(72, 46, 24, 0.12);
+      }
+
+      .fiamma-room-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.34), transparent 54%),
+          repeating-linear-gradient(100deg, rgba(93, 75, 49, 0.025) 0 1px, transparent 1px 13px);
+      }
+
+      .fiamma-room-hero::after {
+        content: none !important;
+      }
+
+      .fiamma-room-hero > div:first-child,
+      .fiamma-room-hero > .fiamma-hero-stats {
+        position: relative !important;
+        inset: auto !important;
+        z-index: 1;
+        width: auto !important;
+        max-width: none !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+
+      .fiamma-room-hero > div:first-child {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 14px;
+        order: 2;
+      }
+
+      .fiamma-room-hero .eyebrow-row {
+        order: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0;
+        text-shadow: none;
+      }
+
+      .fiamma-room-hero .eyebrow-row .eyebrow {
+        display: inline-flex;
+        margin: 0;
+        color: var(--fiamma-red);
+      }
+
+      .fiamma-room-hero .guide-button-inline {
+        padding: 0;
+        color: #36584f;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration-color: rgba(54, 88, 79, 0.28);
+      }
+
+      .fiamma-room-hero h1 {
+        order: 1;
+        max-width: 14ch;
+        color: var(--ink);
+        font-family: var(--serif-font);
+        font-size: clamp(2rem, 3.45vw, 3.8rem);
+        font-weight: 700;
+        line-height: 0.98;
+        letter-spacing: 0;
+        text-shadow: none;
+      }
+
+      .fiamma-room-hero h1::first-letter {
+        color: inherit;
+      }
+
+      .fiamma-room-copy {
+        order: 2;
+        max-width: 49rem;
+        margin-top: 4px;
+        color: #3d3932;
+        font-size: clamp(1rem, 1.25vw, 1.18rem);
+        line-height: 1.66;
+      }
+
+      .fiamma-room-note {
+        order: 3;
+        max-width: 46rem;
+        margin-top: 0;
+        color: #38332d;
+        font-size: 0.98rem;
+      }
+
+      .fiamma-nav {
+        order: 5;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: auto 0 0;
+        padding-top: 18px;
+      }
+
+      .fiamma-nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 7px 10px;
+        border: 1px solid rgba(93, 75, 49, 0.14);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.56);
+        color: #5b332c;
+        font-size: 0.78rem;
+        font-weight: 700;
+        line-height: 1.2;
+        text-decoration: none;
+        transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+      }
+
+      .fiamma-nav a:hover,
+      .fiamma-nav a:focus-visible {
+        transform: translateY(-1px);
+        border-color: rgba(140, 59, 42, 0.32);
+        background: rgba(140, 59, 42, 0.09);
+      }
+
+      .fiamma-hero-stats {
+        display: grid !important;
+        grid-template-rows: auto;
+        gap: 14px;
+        align-content: start;
+        order: 1;
+      }
+
+      .fiamma-hero-art {
+        position: relative;
+        aspect-ratio: 876 / 978;
+        min-height: 0;
+        margin: 0;
+        overflow: hidden;
+        border: 1px solid rgba(46, 39, 32, 0.22);
+        border-radius: 14px;
+        background: #211a13;
+        box-shadow: 0 20px 42px rgba(47, 35, 18, 0.18);
+      }
+
+      .fiamma-hero-art img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        filter: saturate(0.92) contrast(1.02);
+      }
+
+      .fiamma-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .fiamma-stat-grid .stat-card {
+        min-width: 0;
+        padding: 13px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.68);
+        box-shadow: none;
+      }
+
+      .fiamma-stat-grid .stat-label {
+        margin-bottom: 7px;
+        color: rgba(93, 75, 49, 0.72);
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+      }
+
+      .fiamma-stat-grid .stat-value {
+        color: var(--ink);
+        font-size: clamp(1rem, 1.4vw, 1.28rem);
+        line-height: 1.08;
+      }
+
+      .fiamma-hero-mini-note {
+        order: 4;
+        margin: 0;
+        padding: 13px 14px;
+        border-left: 3px solid rgba(54, 88, 79, 0.28);
+        border-radius: 0 10px 10px 0;
+        background: rgba(255, 255, 255, 0.48);
+        color: #342f2a;
+        font-size: 0.92rem;
+      }
+
+      .fiamma-micro-panel {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .fiamma-micro-card,
+      .fiamma-metric,
+      .fiamma-line-item,
+      .fiamma-lexicon-card,
+      .fiamma-method-card,
+      .fiamma-environment-note,
+      .fiamma-figure-shell,
+      .fiamma-table-wrap {
+        border-radius: 10px;
+      }
+
+      .fiamma-micro-card,
+      .fiamma-lexicon-card,
+      .fiamma-method-card {
+        background: rgba(255, 255, 255, 0.54);
+        box-shadow: none;
+      }
+
+      .fiamma-panel {
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, rgba(255, 252, 247, 0.92), rgba(248, 241, 229, 0.84));
+        box-shadow: 0 16px 34px rgba(63, 45, 25, 0.08);
+      }
+
+      .fiamma-panel .panel-head {
+        align-items: start;
+        padding-bottom: 14px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid rgba(93, 75, 49, 0.1);
+      }
+
+      .fiamma-panel .panel-note {
+        max-width: 42rem;
+        margin-top: 0;
+        color: #38332d;
+      }
+
+      .fiamma-breakout-panel {
+        left: auto;
+        width: 100%;
+        margin-left: 0;
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .fiamma-curve-root {
+        overflow-x: auto;
+      }
+
+      .fiamma-curve-svg {
+        display: block;
+        width: 100%;
+        min-width: 860px;
+        height: auto;
+      }
+
+      .fiamma-table-wrap {
+        border-radius: 10px;
+      }
+
+      @media (max-width: 1080px) {
+        .fiamma-secondary-grid,
+        .fiamma-prose-grid,
+        .fiamma-micro-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .fiamma-room-shell {
+          width: min(100% - 24px, 760px);
+          padding-top: 14px;
+        }
+
+        .fiamma-breakout-panel {
+          left: 0;
+          width: auto;
+          margin-left: 0;
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+
+        .fiamma-room-hero,
+        .fiamma-panel .panel-head {
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+
+        .fiamma-room-hero {
+          gap: 20px;
+          padding: 24px !important;
+        }
+
+        .fiamma-room-hero h1 {
+          max-width: 14ch;
+          font-size: clamp(2.2rem, 7.8vw, 3.45rem);
+        }
+
+        .fiamma-hero-art {
+          width: min(100%, 520px);
+        }
+
+        .fiamma-hero-stats .fiamma-stat-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .fiamma-heatmap-shell,
+        .fiamma-table-wrap {
+          overflow-x: auto;
+        }
+
+        .fiamma-heatmap-grid {
+          grid-template-columns: 92px repeat(34, minmax(24px, 1fr));
+          min-width: 1180px;
+        }
+
+        .fiamma-metric-grid,
+        .fiamma-stat-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .fiamma-room-shell {
+          width: min(100% - 20px, 520px);
+        }
+
+        .fiamma-room-hero {
+          padding: 20px !important;
+          border-radius: 14px;
+        }
+
+        .fiamma-room-hero h1 {
+          font-size: clamp(2rem, 10vw, 2.85rem);
+        }
+
+        .fiamma-hero-art {
+          width: 100%;
+        }
+
+        .fiamma-nav a {
+          min-height: 32px;
+          padding: 6px 9px;
+          font-size: 0.74rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="fiamma-research-page">
+    <main class="page-shell fiamma-room-shell" id="top">
+      <header class="hero fiamma-room-hero">
+        <div>
+          <div class="eyebrow-row">
+            <p class="eyebrow">Philological Case Study</p>
+            <a class="guide-button guide-button-inline" href="/index.html">→ Segni de l’antica fiamma</a>
+          </div>
+          <h1>Fiamma: Dante and the Fire Motif in the <em>Commedia</em></h1>
+          <p class="hero-copy fiamma-room-copy">
+            This research room studies the fire motif in Dante’s <em class="fiamma-inline-ital">Commedia</em> through a controlled lexical model anchored in the poem itself. It follows the distribution and transformation of the wider fire field across the three <em class="fiamma-inline-ital">cantiche</em>, with <em class="fiamma-inline-ital">fiamma</em> as one of its guiding terms.
+          </p>
+          <p class="fiamma-room-note">
+            Within Segni de l’antica fiamma, the page functions as a long-lived scholarly research room in which lexical choices, local contexts, and line-level evidence remain continuously available to reading.
+          </p>
+          <p class="fiamma-hero-mini-note">
+            The modules below support lexical inspection at several scales. Heatmap, evidence table, selected lines, and semantic field all help move from poem-wide patterning back to readable local evidence within the same commentary environment.
+          </p>
+          <nav class="static-page-nav fiamma-nav" aria-label="Fiamma sections">
+            <a href="#fiamma-framing">Framing</a>
+            <a href="#fiamma-lexicon">Lexicon</a>
+            <a href="#fiamma-methodology">Methodology</a>
+            <a href="#fiamma-heatmap">Heatmap</a>
+            <a href="#fiamma-curves">Curve</a>
+            <a href="#fiamma-lines">Lines</a>
+            <a href="#fiamma-table">Evidence Table</a>
+            <a href="#fiamma-cloud">Lexical Figure</a>
+            <a href="#fiamma-map">Semantic Field</a>
+            <a href="#fiamma-environment">Environment</a>
+          </nav>
+        </div>
+        <div class="hero-stats fiamma-hero-stats">
+          <figure class="fiamma-hero-art" aria-label="Visual frontispiece for the Fiamma research room">
+            <img src="/static/assets/fiamma-dante-laptop-soft.png" alt="Dante in a red robe working at a laptop while flame rises from the screen." />
+          </figure>
+        </div>
+      </header>
+
+      <section class="panel fiamma-panel fiamma-prose-section" id="fiamma-framing">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Framing</p>
+            <h2>Why Fiamma</h2>
+          </div>
+          <p class="panel-note">The fire motif appears here as both a thematic object and a lexical problem: a field of words whose distribution can be traced across the poem and whose local force emerges in context.</p>
+        </div>
+        <div class="fiamma-prose-grid">
+          <div class="fiamma-prose-block">
+            <p>In Dante’s <em>Commedia</em>, fire exceeds any single stable meaning. It names literal flame, punitive and purgative fire, desire, radiance, revelation, warmth, animation, and forms of theological perception. The motif therefore sustains a mode of reading that can move between lexical recurrence, thematic distribution, and local interpretive pressure.</p>
+            <p>This page approaches <em>fiamma</em> and the wider field of fire as a controlled philological case study supported by computational modelling. It offers a durable frame for making distributional patterning visible at poem scale and returning that patterning to the lines, passages, and semantic transitions that produce it.</p>
+          </div>
+          <div class="fiamma-lexicon-card">
+            <h3>Interpretive Aim</h3>
+          <p>The governing principle of this module is interpretive transparency. Poem-wide views matter here because their lexical premises, contextual limits, and line-level consequences remain inspectable inside the commentary environment.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel fiamma-panel fiamma-prose-section" id="fiamma-lexicon">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Lexicon</p>
+            <h2>Lexicon Construction and Levels of Pertinence</h2>
+          </div>
+          <p class="panel-note">The fire lexicon used here is built from attested lexical material in the <em>Commedia</em> and maintained as a constrained scholarly configuration inside the commentary environment.</p>
+        </div>
+        <div class="fiamma-prose-grid">
+          <div class="fiamma-prose-block">
+            <p>The present lexicon is organised from words and forms that can be documented within Dante’s own text. Its boundaries are negotiated through corpus evidence, philological judgment, and interpretive purpose. Each inclusion can therefore be explained, inspected, and, when necessary, revised. The page treats lexical modelling as a documented scholarly choice whose terms, local context windows, and pertinence levels remain available for comparison.</p>
+            <p>This work is informed by philological discussion of the semantic field of <em>fuoco</em>, especially <a class="fiamma-table-anchor fiamma-reference-link" href="https://doi.org/10.1179/ita.1991.11.1.29" target="_blank" rel="noreferrer">Pertile (1991)</a>, with its reconstruction of the fire and heat lexicon, its attention to lexical distribution across the three cantiche, and its account of the semantic and theological transformation carried by these terms. That discussion anchors the present lexicon without converting the field into a fixed, closed list.</p>
+          </div>
+          <div class="fiamma-lexicon-card">
+            <h3>Three Levels of Pertinence</h3>
+            <div class="fiamma-lexicon-badge-row">
+              <span class="fiamma-lexicon-badge">Level 1 · direct fire terms</span>
+              <span class="fiamma-lexicon-badge">Level 2 · thermal and combustive field</span>
+              <span class="fiamma-lexicon-badge">Level 3 · context-dependent neighbours</span>
+            </div>
+            <p>A first level gathers directly attested fire terms and closely related flame forms. A second level includes terms from the broader thermal or combustive field that often participate in Dante’s fire imagery. A third level records neighbouring words whose relevance depends more explicitly on local context, commentary inspection, and interpretive justification.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel fiamma-panel fiamma-prose-section" id="fiamma-methodology">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Methodology</p>
+            <h2>Line Scoring and Local Context</h2>
+          </div>
+          <p class="panel-note">FIS remains compact and inspectable inside the same commentary environment.</p>
+        </div>
+        <div class="fiamma-prose-grid">
+          <div class="fiamma-prose-block">
+            <p>FIS, the Fire-Intensity Score, names the current line-level fire score for the active lexical configuration. It offers a compact indication of how strongly a line participates in the present fire field.</p>
+            <p>The score remains legible because its local basis is kept visible. Lexical presence, semantic similarity, contextual similarity, and the local penalty can still be read alongside the current line score as part of the same documented configuration.</p>
+          </div>
+          <div class="fiamma-lexicon-card fiamma-method-card">
+            <h3>Four Components of the Fire-Intensity Score</h3>
+            <div class="fiamma-method-list">
+              <p class="fiamma-method-item"><strong>L</strong> lexical presence in the line.</p>
+              <p class="fiamma-method-item"><strong>S</strong> semantic similarity to the fire prototype.</p>
+              <p class="fiamma-method-item"><strong>C</strong> contextual similarity across the three-line window.</p>
+              <p class="fiamma-method-item"><strong>D</strong> local penalty where abstract fire appears without literal fire nearby.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel fiamma-panel fiamma-breakout-panel" id="fiamma-heatmap">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Distribution</p>
+            <h2>Heatmap of Canto Distribution</h2>
+          </div>
+          <p class="panel-note">The heatmap offers a canto-scale view of the fire field across the whole <em>Commedia</em>. It supports inspection of concentrations, transitions, and cantica-level asymmetries before reading the lines that produce them.</p>
+        </div>
+        <div class="fiamma-legend" aria-hidden="true">
+          <span>Lighter</span>
+          <div class="fiamma-legend-bar"></div>
+          <span>Higher flame total</span>
+        </div>
+        <div id="fiamma-heatmap-root" class="fiamma-heatmap-shell">
+          <p class="fiamma-loading-note">Loading heatmap…</p>
+        </div>
+      </section>
+
+      <section class="panel fiamma-panel fiamma-breakout-panel" id="fiamma-curves">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Canto Rhythm</p>
+            <h2>Intensity Across the Poem</h2>
+          </div>
+          <p class="panel-note">The curve translates canto totals into a continuous profile across the poem. It helps situate peaks, lulls, and transitions in relation to Dante’s larger movement from <em>Inferno</em> through <em>Purgatorio</em> to <em>Paradiso</em>.</p>
+        </div>
+        <div id="fiamma-curve-root" class="fiamma-curve-root">
+          <p class="fiamma-loading-note">Loading flame curve…</p>
+        </div>
+      </section>
+
+      <section class="panel fiamma-panel fiamma-lines-panel" id="fiamma-lines">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Close Reading</p>
+            <h2 id="fiamma-detail-title">Loading canto detail…</h2>
+          </div>
+          <p class="panel-note" id="fiamma-detail-meta">Loading local line profile…</p>
+        </div>
+        <div id="fiamma-detail-summary" class="fiamma-detail-summary"></div>
+        <div id="fiamma-detail-lines" class="fiamma-line-list">
+          <p class="fiamma-loading-note">Loading line detail…</p>
+        </div>
+      </section>
+
+      <section class="panel fiamma-panel fiamma-table-panel" id="fiamma-table">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Inspectable Evidence</p>
+            <h2>Scored Lines and Lexical Evidence</h2>
+          </div>
+          <p class="panel-note">The table presents the current line set in a form suitable for inspection. Location, FIS, and line text remain visible together so that ranking can be read as a transparent editorial and modelling decision.</p>
+        </div>
+        <div id="fiamma-score-table-root" class="fiamma-table-wrap">
+          <p class="fiamma-loading-note">Loading scored lines…</p>
+        </div>
+        <p class="fiamma-table-note">Within this module the table keeps poem-wide claims grounded in individual lines and shows how the current lexical configuration can be checked against the text. FIS names the current line-level fire score, while the component columns document the lexical, semantic, contextual, and penalising terms through which the score is assembled in the present configuration.</p>
+      </section>
+
+      <div class="fiamma-secondary-grid">
+        <section class="panel fiamma-panel" id="fiamma-cloud">
+          <div class="panel-head">
+            <div class="panel-title-block">
+              <p class="panel-kicker">Lexical Concentration</p>
+            <h2>Lexical Figure</h2>
+            </div>
+            <p class="panel-note">This smaller side figure offers a compact view of recurrent terms within the current fire field. Its role is supplementary: it registers lexical concentration and remains subordinate to the heatmap, the evidence table, and line-level reading.</p>
+          </div>
+          <div id="fiamma-wordcloud-root" class="fiamma-figure-shell">
+            <p class="fiamma-loading-note">Loading word cloud…</p>
+          </div>
+          <div id="fiamma-word-detail" class="fiamma-filter-detail">
+            <p class="fiamma-filter-empty">Choose a hotspot in the cloud to inspect the lines carrying that word.</p>
+          </div>
+        </section>
+
+        <section class="panel fiamma-panel" id="fiamma-map">
+          <div class="panel-head">
+            <div class="panel-title-block">
+              <p class="panel-kicker">Semantic Field Negotiation</p>
+              <h2>Semantic Field</h2>
+            </div>
+            <p class="panel-note">The semantic field figure traces proximity and clustering within the fire lexicon and its immediate neighbours. Distance offers one view onto lexical pressure within the present research configuration.</p>
+          </div>
+          <div id="fiamma-map-root" class="fiamma-figure-shell">
+            <p class="fiamma-loading-note">Loading semantic field…</p>
+          </div>
+          <div class="fiamma-reading-note">
+            <p>This figure records one view of lexical proximity within the current research configuration. It does not separate Dante’s fire vocabulary into fixed semantic classes. The line layer and commentary links remain the place where each local grouping must be tested.</p>
+          </div>
+          <div id="fiamma-map-detail" class="fiamma-filter-detail">
+            <p class="fiamma-filter-empty">Choose a hotspot in the semantic field to inspect its line cluster.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel fiamma-panel" id="fiamma-environment">
+        <div class="panel-head">
+          <div class="panel-title-block">
+            <p class="panel-kicker">Commentary Environment</p>
+            <h2>Research Room within Segni de l’antica fiamma</h2>
+          </div>
+          <p class="panel-note">This page belongs to an existing scholarly commentary environment in which lexical evidence, contextual settings, and line-level reading remain available together over time.</p>
+        </div>
+        <div class="fiamma-environment-note">
+          <h3>Inspectable, configurable, documentable</h3>
+          <p>Within Segni de l’antica fiamma, the fire module can be inspected, documented, and compared across lexical or methodological configurations. Lexical versions, pertinence levels, weighting schemes, and local context settings can remain part of the scholarly record across later revisions.</p>
+          <p>The current page records one documented research configuration inside a larger commentary environment. Its stable interpretive core remains the same across later updates: the <em>Commedia</em> as primary object, the fire field as a controlled lexical case study, and close reading as the final horizon of explanation.</p>
+        </div>
+      </section>
+
+      <section class="panel fiamma-panel fiamma-micro-panel" id="fiamma-version">
+        <div class="fiamma-micro-grid">
+          <article class="fiamma-micro-card">
+            <p class="fiamma-micro-label">Publication</p>
+            <p class="fiamma-micro-text">This page accompanies an ongoing line of scholarly publication, while remaining oriented toward the longer life of the research room itself.</p>
+          </article>
+          <article class="fiamma-micro-card">
+            <p class="fiamma-micro-label">Current Version</p>
+            <p class="fiamma-micro-text">The present view records one documented lexical configuration. Figures, coordinate layers, and images may be updated later without changing the page’s interpretive frame.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const CANTICHE = [
+          { name: "Inferno", slug: "inferno", count: 34, short: "Inf.", color: "#c5413d" },
+          { name: "Purgatorio", slug: "purgatorio", count: 33, short: "Purg.", color: "#db8b0c" },
+          { name: "Paradiso", slug: "paradiso", count: 33, short: "Par.", color: "#2f88e3" },
+        ];
+        const STOPWORDS = new Set([
+          "che", "per", "del", "poi", "nel", "sua", "dal", "suo", "col", "non", "tra", "con", "cui", "dei", "dai",
+          "delle", "della", "dello", "degli", "gli", "quel", "quella", "questa", "questo", "sono", "tutto", "dove",
+          "come", "piu", "più", "ogni", "ogne", "ella", "quivi", "dentro", "fuor", "presso", "quando", "poscia",
+          "sempre", "tanto", "quasi", "tutta", "tutte", "tutti", "mille", "prima", "primo", "tal", "onde", "gia",
+          "già", "uno", "una", "due", "tre", "voi", "noi", "lui", "lei", "loro", "quindi", "pero", "però", "cosi",
+          "così", "ancor", "molto", "nulla", "dico", "disse", "dissi", "esser", "essere", "fatto", "fare",
+        ]);
+        const WORDCLOUD_HOTSPOTS = [
+          { key: "fiamma", label: "fiamma", x: 23.8, y: 21.0, size: 22.5 },
+          { key: "foco", label: "foco", x: 39.7, y: 55.3, size: 20.0 },
+          { key: "faville", label: "faville", x: 56.0, y: 29.0, size: 15.0 },
+          { key: "amore", label: "amore", x: 83.0, y: 15.6, size: 17.2 },
+          { key: "fiamme", label: "fiamme", x: 83.8, y: 46.8, size: 16.4 },
+          { key: "ardore", label: "ardore", x: 10.0, y: 84.8, size: 13.2 },
+          { key: "scintilla", label: "scintilla", x: 32.5, y: 70.2, size: 12.8 },
+          { key: "nube", label: "nube", x: 12.2, y: 42.0, size: 9.8 },
+          { key: "incendio", label: "incendio", x: 76.8, y: 37.4, size: 12.8 },
+          { key: "dentro", label: "dentro", x: 55.5, y: 13.6, size: 13.5 },
+          { key: "ardente", label: "ardente", x: 49.0, y: 88.4, size: 19.0 },
+          { key: "occhi", label: "occhi", x: 59.2, y: 78.0, size: 8.2 },
+        ];
+        const SEMANTIC_HOTSPOTS = [
+          { key: "foco", label: "foco", x: 61.7, y: 17.3, size: 5.8 },
+          { key: "fiamma", label: "fiamma", x: 42.1, y: 21.9, size: 8.4 },
+          { key: "incendio", label: "incendio", x: 53.3, y: 19.1, size: 4.2 },
+          { key: "veggio", label: "veggio", x: 35.3, y: 16.7, size: 4.0 },
+          { key: "scintilla", label: "scintilla", x: 30.8, y: 27.2, size: 4.2 },
+          { key: "favilla", label: "favilla", x: 35.1, y: 35.2, size: 4.9 },
+          { key: "fiamme", label: "fiamme", x: 45.9, y: 35.1, size: 4.9 },
+          { key: "occhi", label: "occhi", x: 56.1, y: 28.0, size: 4.4 },
+          { key: "disse", label: "disse", x: 71.5, y: 36.4, size: 4.2 },
+          { key: "ardente", label: "ardente", x: 11.6, y: 47.3, size: 5.5 },
+          { key: "ardor", label: "ardor", x: 14.4, y: 52.1, size: 4.4 },
+          { key: "ardore", label: "ardore", x: 3.5, y: 61.4, size: 4.5 },
+          { key: "ardesse", label: "ardesse", x: 5.7, y: 68.6, size: 3.4 },
+          { key: "arde", label: "arde", x: 10.5, y: 72.9, size: 3.4 },
+          { key: "ogne", label: "ogne", x: 26.1, y: 77.2, size: 3.6 },
+          { key: "parea", label: "parea", x: 26.8, y: 58.2, size: 3.8 },
+          { key: "accese", label: "accese", x: 34.7, y: 85.8, size: 3.4 },
+          { key: "nube", label: "nube", x: 43.5, y: 80.9, size: 3.6 },
+          { key: "sole", label: "sole", x: 62.6, y: 94.1, size: 3.8 },
+          { key: "amor", label: "amor", x: 58.7, y: 48.4, size: 4.6 },
+          { key: "faville", label: "faville", x: 37.6, y: 42.2, size: 4.4 },
+          { key: "affetto", label: "affetto", x: 48.6, y: 41.0, size: 4.0 },
+        ];
+        const state = {
+          selectedKey: null,
+          activeWord: null,
+          activeMapWord: null,
+        };
+        let model = null;
+
+        function escapeHtml(value) {
+          return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+
+        function parseDelimited(text, delimiter) {
+          const rows = [];
+          let current = "";
+          let row = [];
+          let inQuotes = false;
+          for (let index = 0; index < text.length; index += 1) {
+            const char = text[index];
+            const next = text[index + 1];
+            if (char === "\"") {
+              if (inQuotes && next === "\"") {
+                current += "\"";
+                index += 1;
+              } else {
+                inQuotes = !inQuotes;
+              }
+            } else if (char === delimiter && !inQuotes) {
+              row.push(current);
+              current = "";
+            } else if ((char === "\n" || char === "\r") && !inQuotes) {
+              if (char === "\r" && next === "\n") index += 1;
+              row.push(current);
+              if (row.some((value) => value.length > 0)) rows.push(row);
+              row = [];
+              current = "";
+            } else {
+              current += char;
+            }
+          }
+          if (current.length > 0 || row.length > 0) {
+            row.push(current);
+            rows.push(row);
+          }
+          const [header, ...body] = rows;
+          return body.map((values) => Object.fromEntries(header.map((key, index) => [key, values[index] ?? ""])));
+        }
+
+        function normalizeWord(text) {
+          return String(text || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[’']/g, "")
+            .replace(/[^a-z]/g, "");
+        }
+
+        function parseReference(text) {
+          const match = String(text || "").toLowerCase().match(/<(inf|purg|par)\.\s*(\d+)\.(\d+)>/);
+          if (!match) return null;
+          const [, short, canto, line] = match;
+          const map = { inf: "Inferno", purg: "Purgatorio", par: "Paradiso" };
+          return { cantica: map[short], canto: Number(canto), line: Number(line), short };
+        }
+
+        function cleanLineText(text) {
+          return String(text || "")
+            .replace(/<(inf|purg|par)\.\s*\d+\.\d+>/i, "")
+            .replace(/""/g, "\"")
+            .replace(/^["“”]+/, "")
+            .replace(/["“”]+$/, "")
+            .trim();
+        }
+
+        function tokenize(text) {
+          return cleanLineText(text)
+            .toLowerCase()
+            .replace(/[’']/g, "")
+            .replace(/[^a-zàèéìòóù\s]/g, " ")
+            .split(/\s+/)
+            .map(normalizeWord)
+            .filter((token) => token.length > 2 && !STOPWORDS.has(token));
+        }
+
+        function shortLabelFor(cantica) {
+          return realmMeta(cantica)?.short || cantica;
+        }
+
+        function realmMeta(canticaName) {
+          return CANTICHE.find((cantica) => cantica.name === canticaName) || null;
+        }
+
+        function locationDisplay(cantica, canto, line) {
+          return `${shortLabelFor(cantica)} ${canto}, ${line}`;
+        }
+
+        function locationHtml(cantica, canto, line) {
+          return `<span class="fiamma-location-short">${escapeHtml(shortLabelFor(cantica))}</span> ${escapeHtml(`${canto}, ${line}`)}`;
+        }
+
+        function cantoHtml(cantica, canto) {
+          return `<span class="fiamma-location-short">${escapeHtml(shortLabelFor(cantica))}</span> ${escapeHtml(String(canto))}`;
+        }
+
+        function makeWorkbenchHref(canticaSlug, canto, lineNumber = null) {
+          const sample = `${canticaSlug}${Number(canto)}`;
+          const params = new URLSearchParams({ sample });
+          if (lineNumber) params.set("line", String(Number(lineNumber)));
+          return `/index.html?${params.toString()}#coverage-section`;
+        }
+
+        function savitzkyGolay(values) {
+          if (values.length < 5) return values.slice();
+          const weights = [-3, 12, 17, 12, -3];
+          const divisor = 35;
+          return values.map((_, index) => {
+            let sum = 0;
+            for (let offset = -2; offset <= 2; offset += 1) {
+              const target = values[index + offset];
+              if (Number.isFinite(target)) {
+                sum += target * weights[offset + 2];
+              }
+            }
+            return Math.max(sum / divisor, 0);
+          });
+        }
+
+        function pathFromSeries(points, xScale, yScale) {
+          return points.map((point, index) => `${index === 0 ? "M" : "L"} ${xScale(point.x)} ${yScale(point.y)}`).join(" ");
+        }
+
+        function buildModel(scoreRows) {
+          const cantoMap = new Map();
+          const tokenFrequency = new Map();
+          const tokenLineMap = new Map();
+          let globalIndex = 1;
+
+          CANTICHE.forEach((cantica) => {
+            for (let canto = 1; canto <= cantica.count; canto += 1) {
+              cantoMap.set(`${cantica.name}:${canto}`, {
+                cantica: cantica.name,
+                canto,
+                slug: cantica.slug,
+                short: cantica.short,
+                color: cantica.color,
+                total: 0,
+                lines: [],
+                globalIndex,
+              });
+              globalIndex += 1;
+            }
+          });
+
+          const rankedRows = [];
+          scoreRows.forEach((row) => {
+            const ref = parseReference(row.text);
+            if (!ref) return;
+            const key = `${ref.cantica}:${ref.canto}`;
+            const canto = cantoMap.get(key);
+            if (!canto) return;
+            const tokens = tokenize(row.text);
+            const line = {
+              key,
+              ref: `${ref.short}.${ref.canto}.${ref.line}`,
+              cantica: ref.cantica,
+              canto: ref.canto,
+              line: ref.line,
+              slug: canto.slug,
+              short: canto.short,
+              text: cleanLineText(row.text),
+              score: Number(row.F_score || 0),
+              L: Number(row.L || 0),
+              S: Number(row.S || 0),
+              C: Number(row.C || 0),
+              D: Number(row.D || 0),
+              tokens,
+            };
+            canto.total += line.score;
+            canto.lines.push(line);
+            rankedRows.push(line);
+
+            tokens.forEach((token) => {
+              tokenFrequency.set(token, (tokenFrequency.get(token) || 0) + 1);
+            });
+            Array.from(new Set(tokens)).forEach((token) => {
+              const matches = tokenLineMap.get(token) || [];
+              matches.push(line);
+              tokenLineMap.set(token, matches);
+            });
+          });
+
+          const allCantos = Array.from(cantoMap.values()).map((canto) => {
+            canto.total = Number(canto.total.toFixed(4));
+            canto.lines.sort((left, right) => right.score - left.score || left.line - right.line);
+            canto.topLine = canto.lines[0] || null;
+            return canto;
+          });
+          const groupedByCantica = CANTICHE.map((cantica) => {
+            const points = allCantos.filter((item) => item.cantica === cantica.name);
+            return { ...cantica, points, smooth: savitzkyGolay(points.map((point) => point.total)) };
+          });
+          rankedRows.sort((left, right) => right.score - left.score || left.canto - right.canto || left.line - right.line);
+          const maxTotal = Math.max(...allCantos.map((canto) => canto.total), 0);
+          const peakCanto = allCantos.reduce((best, canto) => (canto.total > best.total ? canto : best), allCantos[0]);
+          const topWord = Array.from(tokenFrequency.entries()).sort((left, right) => right[1] - left[1])[0]?.[0] || "—";
+
+          return {
+            cantoMap,
+            allCantos,
+            groupedByCantica,
+            rankedRows,
+            maxTotal,
+            peakCanto,
+            topWord,
+            tokenLineMap,
+          };
+        }
+
+        function renderHeroStats() {
+          const scored = document.getElementById("fiamma-stat-scored");
+          const peak = document.getElementById("fiamma-stat-peak");
+          const line = document.getElementById("fiamma-stat-line");
+          const word = document.getElementById("fiamma-stat-word");
+          if (!scored || !peak || !line || !word) return;
+          scored.textContent = String(model.rankedRows.length);
+          peak.innerHTML = `<span class="fiamma-stat-value">${cantoHtml(model.peakCanto.cantica, model.peakCanto.canto)}</span>`;
+          line.innerHTML = `<span class="fiamma-stat-value">${locationHtml(model.rankedRows[0].cantica, model.rankedRows[0].canto, model.rankedRows[0].line)}</span>`;
+          word.textContent = model.topWord;
+        }
+
+        function renderCurve() {
+          const root = document.getElementById("fiamma-curve-root");
+          const width = 1560;
+          const height = 420;
+          const margin = { top: 26, right: 32, bottom: 62, left: 58 };
+          const innerWidth = width - margin.left - margin.right;
+          const innerHeight = height - margin.top - margin.bottom;
+          const xScale = (value) => margin.left + ((value - 1) / 99) * innerWidth;
+          const yScale = (value) => margin.top + innerHeight - (value / (model.maxTotal || 1)) * innerHeight;
+          const gridLines = Array.from({ length: 7 }, (_, index) => {
+            const value = (model.maxTotal / 6) * index;
+            return `
+              <line x1="${margin.left}" x2="${width - margin.right}" y1="${yScale(value)}" y2="${yScale(value)}" class="fiamma-chart-grid"></line>
+              <text x="${margin.left - 10}" y="${yScale(value) + 4}" class="fiamma-chart-axis">${value.toFixed(0)}</text>
+            `;
+          }).join("");
+          const boundaries = `
+            <line x1="${xScale(34.5)}" x2="${xScale(34.5)}" y1="${margin.top}" y2="${height - margin.bottom}" class="fiamma-chart-boundary"></line>
+            <line x1="${xScale(67.5)}" x2="${xScale(67.5)}" y1="${margin.top}" y2="${height - margin.bottom}" class="fiamma-chart-boundary"></line>
+          `;
+          const series = model.groupedByCantica.map((group) => {
+            const actualPoints = group.points.map((point) => ({ x: point.globalIndex, y: point.total }));
+            const smoothPoints = group.points.map((point, index) => ({ x: point.globalIndex, y: group.smooth[index] }));
+            const peak = group.points.reduce((best, point) => (point.total > best.total ? point : best), group.points[0]);
+            return `
+              <path d="${pathFromSeries(smoothPoints, xScale, yScale)}" class="fiamma-chart-smooth" style="stroke:${group.color};"></path>
+              <path d="${pathFromSeries(actualPoints, xScale, yScale)}" class="fiamma-chart-actual" style="stroke:${group.color};"></path>
+              ${group.points.map((point) => `
+                <circle
+                  cx="${xScale(point.globalIndex)}"
+                  cy="${yScale(point.total)}"
+                  r="${state.selectedKey === `${point.cantica}:${point.canto}` ? 7 : 4.1}"
+                  class="fiamma-chart-point${state.selectedKey === `${point.cantica}:${point.canto}` ? " is-active" : ""}"
+                  style="fill:${group.color};"
+                  data-key="${point.cantica}:${point.canto}"
+                  tabindex="0"
+                  role="button"
+                  aria-label="${point.cantica} ${point.canto}, flame total ${point.total.toFixed(2)}"></circle>
+              `).join("")}
+              <text x="${xScale(peak.globalIndex) + 12}" y="${yScale(peak.total) - 12}" class="fiamma-chart-annotation">${group.short} ${peak.canto}</text>
+            `;
+          }).join("");
+          root.innerHTML = `
+            <svg viewBox="0 0 ${width} ${height}" class="fiamma-curve-svg" aria-label="Flame energy across 100 canti">
+              ${gridLines}
+              ${boundaries}
+              ${series}
+              <text x="${width / 2}" y="${height - 12}" class="fiamma-chart-axis-label">Canto progression across Inferno, Purgatorio, and Paradiso</text>
+            </svg>
+          `;
+          root.querySelectorAll(".fiamma-chart-point").forEach((node) => {
+            const activate = () => {
+              state.selectedKey = node.dataset.key;
+              renderSelection();
+              renderScoreTable();
+            };
+            node.addEventListener("click", activate);
+            node.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                activate();
+              }
+            });
+          });
+        }
+
+        function heatColor(total) {
+          if (!model.maxTotal || total <= 0) {
+            return { background: "rgba(140, 59, 42, 0.05)", color: "var(--muted)" };
+          }
+          const ratio = total / model.maxTotal;
+          const alpha = 0.1 + ratio * 0.86;
+          return {
+            background: `rgba(156, 46, 24, ${alpha.toFixed(3)})`,
+            color: ratio > 0.58 ? "#fffaf4" : "var(--ink)",
+          };
+        }
+
+        function renderHeatmap() {
+          const root = document.getElementById("fiamma-heatmap-root");
+          const grid = document.createElement("div");
+          grid.className = "fiamma-heatmap-grid";
+          grid.innerHTML = `<div class="fiamma-heatmap-label-head"></div>${Array.from({ length: 34 }, (_, index) => `<div class="fiamma-heatmap-col-head">${index + 1}</div>`).join("")}`;
+          CANTICHE.forEach((cantica) => {
+            grid.insertAdjacentHTML("beforeend", `<div class="fiamma-heatmap-row-label">${cantica.name}</div>`);
+            for (let canto = 1; canto <= 34; canto += 1) {
+              if (canto > cantica.count) {
+                grid.insertAdjacentHTML("beforeend", `<div class="fiamma-heatmap-empty"></div>`);
+                continue;
+              }
+              const key = `${cantica.name}:${canto}`;
+              const cantoData = model.cantoMap.get(key);
+              const colors = heatColor(cantoData.total);
+              grid.insertAdjacentHTML("beforeend", `
+                <button
+                  type="button"
+                  class="fiamma-heatmap-cell${state.selectedKey === key ? " is-active" : ""}"
+                  data-key="${key}"
+                  style="background:${colors.background}; color:${colors.color};"
+                  aria-label="${cantica.name} ${canto}, flame total ${cantoData.total.toFixed(2)}"
+                  title="${cantica.name} ${canto} — flame total ${cantoData.total.toFixed(2)}">
+                  ${canto}
+                </button>
+              `);
+            }
+          });
+          root.replaceChildren(grid);
+          root.querySelectorAll(".fiamma-heatmap-cell").forEach((cell) => {
+            cell.addEventListener("click", () => {
+              state.selectedKey = cell.dataset.key;
+              renderSelection();
+              renderScoreTable();
+              document.getElementById("fiamma-lines").scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          });
+        }
+
+        function renderLineCards(lines) {
+          return lines.map((line) => `
+            <article class="fiamma-line-item">
+              <p class="fiamma-line-text fiamma-line-text-inline">
+                <span class="fiamma-line-meta">
+                  <a class="fiamma-location-anchor" href="${makeWorkbenchHref(line.slug, line.canto, line.line)}" target="_blank" rel="noreferrer">${locationHtml(line.cantica, line.canto, line.line)}</a>
+                  <span class="fiamma-line-score">FIS=${line.score.toFixed(3)}</span>
+                </span>
+                <a class="fiamma-line-anchor" href="${makeWorkbenchHref(line.slug, line.canto, line.line)}" target="_blank" rel="noreferrer">${escapeHtml(line.text)}</a>
+              </p>
+            </article>
+          `).join("");
+        }
+
+        function renderSelection() {
+          const canto = model.cantoMap.get(state.selectedKey);
+          document.getElementById("fiamma-detail-title").textContent = `${canto.cantica} ${canto.canto}`;
+          document.getElementById("fiamma-detail-meta").textContent = `${canto.lines.length} scored line${canto.lines.length === 1 ? "" : "s"} in the current lexical configuration. FIS gives the present line-level fire score. Each location and line remains directly available for commentary inspection.`;
+          document.getElementById("fiamma-detail-summary").innerHTML = `
+            <div class="fiamma-metric-grid">
+              <article class="fiamma-metric">
+                <p class="fiamma-metric-label">Flame Total</p>
+                <p class="fiamma-metric-value">${canto.total.toFixed(2)}</p>
+              </article>
+              <article class="fiamma-metric">
+                <p class="fiamma-metric-label">Top Line</p>
+                <p class="fiamma-metric-value">${canto.topLine ? locationDisplay(canto.cantica, canto.canto, canto.topLine.line) : "—"}</p>
+              </article>
+              <article class="fiamma-metric">
+                <p class="fiamma-metric-label">Open Canto</p>
+                <p class="fiamma-metric-value"><a class="fiamma-table-anchor" href="${makeWorkbenchHref(canto.slug, canto.canto)}" target="_blank" rel="noreferrer">Open canto in commentary</a></p>
+              </article>
+            </div>
+          `;
+          document.getElementById("fiamma-detail-lines").innerHTML = canto.lines.length
+            ? renderLineCards(canto.lines.slice(0, 10))
+            : `<p class="fiamma-filter-empty">This canto has no scored lines in the current lexical configuration.</p>`;
+          renderCurve();
+          renderHeatmap();
+        }
+
+        function renderScoreTable() {
+          const root = document.getElementById("fiamma-score-table-root");
+          const rows = model.rankedRows.slice(0, 28);
+          root.innerHTML = `
+            <table class="fiamma-score-table" aria-label="Scored fire lines">
+              <thead>
+                <tr>
+                  <th>Location</th>
+                  <th>FIS</th>
+                  <th>Text</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows.map((row) => `
+                  <tr class="${state.selectedKey === row.key ? "is-active" : ""}" data-key="${row.key}">
+                    <td class="fiamma-cell-location"><a class="fiamma-table-anchor" href="${makeWorkbenchHref(row.slug, row.canto, row.line)}" target="_blank" rel="noreferrer">${locationHtml(row.cantica, row.canto, row.line)}</a></td>
+                    <td class="fiamma-cell-metric">${row.score.toFixed(3)}</td>
+                    <td class="fiamma-cell-text"><a class="fiamma-table-anchor" href="${makeWorkbenchHref(row.slug, row.canto, row.line)}" target="_blank" rel="noreferrer">${escapeHtml(row.text)}</a></td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          `;
+          root.querySelectorAll("tbody tr").forEach((row) => {
+            row.addEventListener("click", (event) => {
+              if (event.target.closest("a")) return;
+              state.selectedKey = row.dataset.key;
+              renderSelection();
+              renderScoreTable();
+              document.getElementById("fiamma-lines").scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          });
+        }
+
+        function renderFigure(rootId, imageSrc, hotspots, activeKey, detailId, type) {
+          const root = document.getElementById(rootId);
+          root.innerHTML = `
+            <div class="fiamma-figure-stage">
+              <img src="${imageSrc}" alt="">
+              ${hotspots.map((spot) => `
+                <button
+                  type="button"
+                  class="fiamma-hotspot${activeKey === spot.key ? " is-active" : ""}"
+                  data-key="${spot.key}"
+                  aria-label="${escapeHtml(spot.label)}"
+                  title="${escapeHtml(spot.label)}"
+                  style="left:${spot.x}%; top:${spot.y}%; width:${spot.size}%; height:${spot.size}%;"></button>
+              `).join("")}
+            </div>
+          `;
+          root.querySelectorAll("[data-key]").forEach((button) => {
+            button.addEventListener("click", () => {
+              if (type === "word") {
+                state.activeWord = button.dataset.key;
+                renderWordCloud();
+                renderWordDetail();
+              } else {
+                state.activeMapWord = button.dataset.key;
+                renderSemanticMap();
+                renderMapDetail();
+              }
+            });
+          });
+          document.getElementById(detailId).dataset.ready = "true";
+        }
+
+        function renderWordCloud() {
+          renderFigure("fiamma-wordcloud-root", "/static/research/fiamma-wordcloud.png", WORDCLOUD_HOTSPOTS, state.activeWord, "fiamma-word-detail", "word");
+        }
+
+        function renderSemanticMap() {
+          renderFigure("fiamma-map-root", "/static/research/fiamma-umap.png", SEMANTIC_HOTSPOTS, state.activeMapWord, "fiamma-map-detail", "map");
+        }
+
+        function renderTokenDetail(targetId, tokenKey, emptyText) {
+          const detail = document.getElementById(targetId);
+          if (!tokenKey) {
+            detail.innerHTML = `<p class="fiamma-filter-empty">${emptyText}</p>`;
+            return;
+          }
+          const matches = (model.tokenLineMap.get(tokenKey) || [])
+            .slice()
+            .sort((left, right) => right.score - left.score || left.canto - right.canto || left.line - right.line)
+            .slice(0, 8);
+          detail.innerHTML = `
+            <div class="fiamma-filter-head">
+              <h3>${escapeHtml(tokenKey)}</h3>
+              <p class="fiamma-filter-meta">${matches.length} scored line${matches.length === 1 ? "" : "s"} shown from the current lexical configuration. The line list keeps lexical concentration tied to textual evidence.</p>
+            </div>
+            <div class="fiamma-line-list">
+              ${matches.length ? renderLineCards(matches) : `<p class="fiamma-filter-empty">No scored lines were found for this token in the current lexical configuration.</p>`}
+            </div>
+          `;
+        }
+
+        function renderWordDetail() {
+          renderTokenDetail("fiamma-word-detail", state.activeWord, "Choose a hotspot in the cloud to inspect the lines in which that word participates in the present fire field.");
+        }
+
+        function renderMapDetail() {
+          renderTokenDetail("fiamma-map-detail", state.activeMapWord, "Choose a hotspot in the semantic field to inspect the local line cluster in which that term is negotiated.");
+        }
+
+        async function init() {
+          const scoreCsv = await fetch("/static/research/fire_intensity_v8_3.csv").then((response) => response.text());
+          model = buildModel(parseDelimited(scoreCsv, ","));
+          state.selectedKey = `${model.peakCanto.cantica}:${model.peakCanto.canto}`;
+          state.activeWord = WORDCLOUD_HOTSPOTS[0].key;
+          state.activeMapWord = SEMANTIC_HOTSPOTS[0].key;
+          renderHeroStats();
+          renderSelection();
+          renderScoreTable();
+          renderWordCloud();
+          renderWordDetail();
+          renderSemanticMap();
+          renderMapDetail();
+        }
+
+        init().catch((error) => {
+          const message = escapeHtml(error?.message || "Unknown error");
+          document.getElementById("fiamma-curve-root").innerHTML = `<p class="fiamma-filter-empty">The Dante fire exports could not be loaded: ${message}</p>`;
+          document.getElementById("fiamma-heatmap-root").innerHTML = `<p class="fiamma-filter-empty">The heatmap data could not be loaded.</p>`;
+          document.getElementById("fiamma-detail-lines").innerHTML = `<p class="fiamma-filter-empty">The line detail layer could not be loaded.</p>`;
+          document.getElementById("fiamma-score-table-root").innerHTML = `<p class="fiamma-filter-empty">The scored-line table could not be loaded.</p>`;
+          document.getElementById("fiamma-wordcloud-root").innerHTML = `<p class="fiamma-filter-empty">The word cloud could not be loaded.</p>`;
+          document.getElementById("fiamma-map-root").innerHTML = `<p class="fiamma-filter-empty">The semantic field could not be loaded.</p>`;
+        });
+      })();
+    </script>
+  </body>
+</html>

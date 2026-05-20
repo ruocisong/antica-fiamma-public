@@ -68,6 +68,50 @@
       };
     }
 
+    function getAuthorityCantoIndexMeta(sampleId) {
+      const entry = state.manifestMap.get(sampleId);
+      if (!entry) {
+        return null;
+      }
+      return {
+        sampleId,
+        available: true,
+        storePath: `./data/${sampleId}/records/authority_canto_index.json`,
+      };
+    }
+
+    async function ensureSampleAuthorityCantoIndexLoaded(sampleId = state.currentSampleEntry?.id) {
+      if (!sampleId) {
+        return null;
+      }
+      if (state.sampleAuthorityCantoIndexCache.has(sampleId)) {
+        return state.sampleAuthorityCantoIndexCache.get(sampleId);
+      }
+
+      const meta = getAuthorityCantoIndexMeta(sampleId);
+      if (!meta?.available) {
+        state.sampleAuthorityCantoIndexCache.set(sampleId, null);
+        return null;
+      }
+
+      if (!state.sampleAuthorityCantoIndexPromises.has(sampleId)) {
+        const request = fetchJson(meta.storePath)
+          .then((payload) => {
+            state.sampleAuthorityCantoIndexCache.set(sampleId, payload);
+            return payload;
+          })
+          .catch(() => {
+            state.sampleAuthorityCantoIndexCache.set(sampleId, null);
+            return null;
+          })
+          .finally(() => {
+            state.sampleAuthorityCantoIndexPromises.delete(sampleId);
+          });
+        state.sampleAuthorityCantoIndexPromises.set(sampleId, request);
+      }
+      return state.sampleAuthorityCantoIndexPromises.get(sampleId);
+    }
+
     async function ensureSampleRecordWorkMentionStoreLoaded(sampleId = state.currentSampleEntry?.id) {
       if (!sampleId) {
         return null;
@@ -116,6 +160,10 @@
           ...record,
           raw_work_mentions: Array.isArray(mention.raw_work_mentions) ? mention.raw_work_mentions : [],
           raw_work_surface_count: Number.isFinite(mention.raw_work_surface_count) ? mention.raw_work_surface_count : 0,
+          authority_author_facet_ids: Array.isArray(mention.authority_author_facet_ids) ? mention.authority_author_facet_ids : [],
+          authority_work_facet_ids: Array.isArray(mention.authority_work_facet_ids) ? mention.authority_work_facet_ids : [],
+          authority_authors: Array.isArray(mention.authority_authors) ? mention.authority_authors : [],
+          authority_works: Array.isArray(mention.authority_works) ? mention.authority_works : [],
         };
       }
       return {
@@ -487,6 +535,8 @@
       ensureSampleRecordStoreLoaded,
       ensureSampleRecordSummaryStoreLoaded,
       ensureSampleFullTextStoreLoaded,
+      ensureSampleRecordWorkMentionStoreLoaded,
+      ensureSampleAuthorityCantoIndexLoaded,
       resolveLineRecords,
       hydrateLinePayload,
       ensureAuthorityLayerLoaded,

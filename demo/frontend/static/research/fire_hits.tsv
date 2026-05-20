@@ -1,0 +1,309 @@
+cantica	canto	line_in_canto	ref	score	label	true_score	abstract_score	pseudo_penalty	true_fire_families	abstract_fire_families	matched_forms	text
+Inferno	6	75	<inf. 6.75>	1.5	mixed	1.0	0.5	0.0	favilla	accendere	accesi, faville	le tre faville c’hanno i cuori accesi».
+Inferno	23	39	<inf. 23.39>	1.5	mixed	1.0	0.5	0.0	fiamma	accendere	accese, fiamme	e vede presso a sé le fiamme accese,
+Paradiso	3	69	<par. 3.69>	1.5	mixed	1.0	0.5	0.0	foco	ardere	arder, foco	ch’arder parea d’amor nel primo foco:
+Paradiso	5	1	<par. 5.1>	1.5	mixed	1.0	0.5	0.0	fiammeggiare	caldo	caldo, fiammeggio	«S’io ti fiammeggio nel caldo d’amore
+Paradiso	10	130	<par. 10.130>	1.5	mixed	1.0	0.5	0.0	fiammeggiare	ardente	ardente, fiammeggiar	Vedi oltre fiammeggiar l’ardente spiro
+Paradiso	20	115	<par. 20.115>	1.5	mixed	1.0	0.5	0.0	foco	accendere	accese, foco	e credendo s’accese in tanto foco
+Paradiso	26	15	<par. 26.15>	1.5	mixed	1.0	0.5	0.0	foco	ardere	ardo, foco	quand’ ella entrò col foco ond’ io sempr’ ardo.
+Paradiso	28	91	<par. 28.91>	1.5	mixed	1.0	0.5	0.0	incendio	scintilla	incendio, scintilla	L’incendio suo seguiva ogne scintilla;
+Purgatorio	15	106	<purg. 15.106>	1.5	mixed	1.0	0.5	0.0	foco	accendere	accese, foco	Poi vidi genti accese in foco d’ira
+Purgatorio	21	94	<purg. 21.94>	1.5	mixed	1.0	0.5	0.0	favilla	ardore	ardor, faville	Al mio ardor fuor seme le faville,
+Purgatorio	21	95	<purg. 21.95>	1.5	mixed	1.0	0.5	0.0	fiamma	scaldare	fiamma, scaldar	che mi scaldar, de la divina fiamma
+Purgatorio	25	137	<purg. 25.137>	1.5	mixed	1.0	0.5	0.0	foco	brusciare	abbruscia, foco	per tutto il tempo che ’l foco li abbruscia:
+Purgatorio	26	18	<purg. 26.18>	1.5	mixed	1.0	0.5	0.0	foco	ardere	ardo, foco	rispondi a me che ’n sete e ’n foco ardo.
+Purgatorio	27	96	<purg. 27.96>	1.5	mixed	1.0	0.5	0.0	foco	ardente	ardente, foco	che di foco d’amor par sempre ardente,
+Purgatorio	29	34	<purg. 29.34>	1.5	mixed	1.0	0.5	0.0	foco	accendere	acceso, foco	dinanzi a noi, tal quale un foco acceso,
+Purgatorio	31	118	<purg. 31.118>	1.5	mixed	1.0	0.5	0.0	fiamma	caldo	caldi, fiamma	Mille disiri più che fiamma caldi
+Inferno	1	119	<inf. 1.119>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	nel foco, perché speran di venire
+Inferno	2	93	<inf. 2.93>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	né fiamma d’esto ’ncendio non m’assale.
+Inferno	3	99	<inf. 3.99>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamme	che ’ntorno a li occhi avea di fiamme rote.
+Inferno	4	68	<inf. 4.68>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	di qua dal sonno, quand’ io vidi un foco
+Inferno	8	4	<inf. 8.4>	1.0	true_anchor	1.0	0.0	0.0	fiammetta		fiammette	per due fiammette che i vedemmo porre,
+Inferno	8	9	<inf. 8.9>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	quell’ altro foco? e chi son quei che ’l fenno?».
+Inferno	8	72	<inf. 8.72>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	vermiglie come se di foco uscite
+Inferno	8	73	<inf. 8.73>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	fossero». Ed ei mi disse: «Il foco etterno
+Inferno	9	118	<inf. 9.118>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamme	ché tra li avelli fiamme erano sparte,
+Inferno	10	22	<inf. 10.22>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	«O Tosco che per la città del foco
+Inferno	11	36	<inf. 11.36>	1.0	true_anchor	1.0	0.0	0.0	incendio		incendi	ruine, incendi e tollette dannose;
+Inferno	13	67	<inf. 13.67>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiammò	infiammò contra me li animi tutti;
+Inferno	13	68	<inf. 13.68>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiammar	e li ’nfiammati infiammar sì Augusto,
+Inferno	14	29	<inf. 14.29>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	piovean di foco dilatate falde,
+Inferno	14	33	<inf. 14.33>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamme	fiamme cadere infino a terra salde,
+Inferno	14	90	<inf. 14.90>	1.0	true_anchor	1.0	0.0	0.0	fiammella		fiammelle	che sovra sé tutte fiammelle ammorta».
+Inferno	15	3	<inf. 15.3>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	sì che dal foco salva l’acqua e li argini.
+Inferno	15	39	<inf. 15.39>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	sanz’ arrostarsi quando ’l foco il feggia.
+Inferno	16	11	<inf. 16.11>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamme	ricenti e vecchie, da le fiamme incese!
+Inferno	16	16	<inf. 16.16>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	E se non fosse il foco che saetta
+Inferno	16	46	<inf. 16.46>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	S’i’ fossi stato dal foco coperto,
+Inferno	17	33	<inf. 17.33>	1.0	true_anchor	1.0	0.0	0.0	fiammella		fiammella	per ben cessar la rena e la fiammella.
+Inferno	17	53	<inf. 17.53>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	ne’ quali ’l doloroso foco casca,
+Inferno	17	122	<inf. 17.122>	1.0	true_anchor	1.0	0.0	0.0	foco		fuochi	però ch’i’ vidi fuochi e senti’ pianti;
+Inferno	19	28	<inf. 19.28>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiar	Qual suole il fiammeggiar de le cose unte
+Inferno	19	33	<inf. 19.33>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	diss’ io, «e cui più roggia fiamma succia?».
+Inferno	21	16	<inf. 21.16>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	tal, non per foco ma per divin’ arte,
+Inferno	26	31	<inf. 26.31>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamme	di tante fiamme tutta risplendea
+Inferno	26	38	<inf. 26.38>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	ch’el vedesse altro che la fiamma sola,
+Inferno	26	42	<inf. 26.42>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	e ogne fiamma un peccatore invola.
+Inferno	26	47	<inf. 26.47>	1.0	true_anchor	1.0	0.0	0.0	foco		fuochi	disse: «Dentro dai fuochi son li spirti;
+Inferno	26	52	<inf. 26.52>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	chi è ’n quel foco che vien sì diviso
+Inferno	26	58	<inf. 26.58>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	e dentro da la lor fiamma si geme
+Inferno	26	64	<inf. 26.64>	1.0	true_anchor	1.0	0.0	0.0	favilla		faville	«S’ei posson dentro da quelle faville
+Inferno	26	68	<inf. 26.68>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	fin che la fiamma cornuta qua vegna;
+Inferno	26	76	<inf. 26.76>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	Poi che la fiamma fu venuta quivi
+Inferno	26	79	<inf. 26.79>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	«O voi che siete due dentro ad un foco,
+Inferno	26	85	<inf. 26.85>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	Lo maggior corno de la fiamma antica
+Inferno	27	1	<inf. 27.1>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	Già era dritta in sù la fiamma e queta
+Inferno	27	14	<inf. 27.14>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	dal principio nel foco, in suo linguaggio
+Inferno	27	58	<inf. 27.58>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Poscia che ’l foco alquanto ebbe rugghiato
+Inferno	27	63	<inf. 27.63>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	questa fiamma staria sanza più scosse;
+Inferno	27	127	<inf. 27.127>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	disse: “Questi è d’i rei del foco furo”;
+Inferno	27	131	<inf. 27.131>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	la fiamma dolorando si partio,
+Inferno	29	110	<inf. 29.110>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	rispuose l’un, «mi fé mettere al foco;
+Inferno	30	110	<inf. 30.110>	1.0	true_anchor	1.0	0.0	0.0	foco		fuoco	al fuoco, non l’avei tu così presto;
+Paradiso	1	34	<par. 1.34>	1.0	true_anchor	1.0	0.0	0.0	favilla, fiamma		favilla, fiamma	Poca favilla gran fiamma seconda:
+Paradiso	1	60	<par. 1.60>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	com’ ferro che bogliente esce del foco;
+Paradiso	1	80	<par. 1.80>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	de la fiamma del sol, che pioggia o fiume
+Paradiso	1	115	<par. 1.115>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Questi ne porta il foco inver’ la luna;
+Paradiso	1	134	<par. 1.134>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	foco di nube, sì l’impeto primo
+Paradiso	1	141	<par. 1.141>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	com’ a terra quïete in foco vivo».
+Paradiso	3	52	<par. 3.52>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiammati	Li nostri affetti, che solo infiammati
+Paradiso	4	77	<par. 4.77>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	ma fa come natura face in foco,
+Paradiso	4	140	<par. 4.140>	1.0	true_anchor	1.0	0.0	0.0	favilla		faville	di faville d’amor così divini,
+Paradiso	7	8	<par. 7.8>	1.0	true_anchor	1.0	0.0	0.0	favilla		faville	e quasi velocissime faville
+Paradiso	7	18	<par. 7.18>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	tal, che nel foco faria l’uom felice:
+Paradiso	7	60	<par. 7.60>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	ne la fiamma d’amor non è adulto.
+Paradiso	7	124	<par. 7.124>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Tu dici: “Io veggio l’acqua, io veggio il foco,
+Paradiso	8	16	<par. 8.16>	1.0	true_anchor	1.0	0.0	0.0	favilla, fiamma		favilla, fiamma	E come in fiamma favilla si vede,
+Paradiso	9	77	<par. 9.77>	1.0	true_anchor	1.0	0.0	0.0	foco		fuochi	sempre col canto di quei fuochi pii
+Paradiso	10	103	<par. 10.103>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiare	Quell’ altro fiammeggiare esce del riso
+Paradiso	12	2	<par. 12.2>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	la benedetta fiamma per dir tolse,
+Paradiso	12	23	<par. 12.23>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiarsi	sì del cantare e sì del fiammeggiarsi
+Paradiso	12	143	<par. 12.143>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiammata	mi mosse l’infiammata cortesia
+Paradiso	14	52	<par. 14.52>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	Ma sì come carbon che fiamma rende,
+Paradiso	14	66	<par. 14.66>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamme	anzi che fosser sempiterne fiamme.
+Paradiso	15	14	<par. 15.14>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	discorre ad ora ad or sùbito foco,
+Paradiso	15	24	<par. 15.24>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	che parve foco dietro ad alabastro.
+Paradiso	16	29	<par. 16.29>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	carbone in fiamma, così vid’ io quella
+Paradiso	16	38	<par. 16.38>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	e trenta fiate venne questo foco
+Paradiso	17	7	<par. 17.7>	1.0	true_anchor	1.0	0.0	0.0	vampa		vampa	Per che mia donna «Manda fuor la vampa
+Paradiso	17	83	<par. 17.83>	1.0	true_anchor	1.0	0.0	0.0	favilla		faville	parran faville de la sua virtute
+Paradiso	18	25	<par. 18.25>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiar	così nel fiammeggiar del folgór santo,
+Paradiso	18	36	<par. 18.36>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	che fa in nube il suo foco veloce».
+Paradiso	18	101	<par. 18.101>	1.0	true_anchor	1.0	0.0	0.0	favilla		faville	surgono innumerabili faville,
+Paradiso	18	108	<par. 18.108>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	rappresentare a quel distinto foco.
+Paradiso	19	100	<par. 19.100>	1.0	true_anchor	1.0	0.0	0.0	incendio		incendi	Poi si quetaro quei lucenti incendi
+Paradiso	19	131	<par. 19.131>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	di quei che guarda l’isola del foco,
+Paradiso	20	34	<par. 20.34>	1.0	true_anchor	1.0	0.0	0.0	foco		fuochi	perché d’i fuochi ond’ io figura fommi,
+Paradiso	20	148	<par. 20.148>	1.0	true_anchor	1.0	0.0	0.0	fiammetta		fiammette	con le parole mover le fiammette.
+Paradiso	21	69	<par. 21.69>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiar	sì come il fiammeggiar ti manifesta.
+Paradiso	21	88	<par. 21.88>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggio	Quinci vien l’allegrezza ond’ io fiammeggio;
+Paradiso	21	90	<par. 21.90>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	la chiarità de la fiamma pareggio.
+Paradiso	21	136	<par. 21.136>	1.0	true_anchor	1.0	0.0	0.0	fiammella		fiammelle	A questa voce vid’ io più fiammelle
+Paradiso	22	46	<par. 22.46>	1.0	true_anchor	1.0	0.0	0.0	foco		fuochi	Questi altri fuochi tutti contemplanti
+Paradiso	22	110	<par. 22.110>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	nel foco il dito, in quant’ io vidi ’l segno
+Paradiso	23	40	<par. 23.40>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Come foco di nube si diserra
+Paradiso	23	90	<par. 23.90>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	l’animo ad avvisar lo maggior foco;
+Paradiso	23	119	<par. 23.119>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	di seguitar la coronata fiamma
+Paradiso	23	123	<par. 23.123>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiamma	per l’animo che ’nfin di fuor s’infiamma;
+Paradiso	24	20	<par. 24.20>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	vid’ ïo uscire un foco sì felice,
+Paradiso	24	31	<par. 24.31>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Poscia fermato, il foco benedetto
+Paradiso	24	145	<par. 24.145>	1.0	true_anchor	1.0	0.0	0.0	favilla		favilla	Quest’ è ’l principio, quest’ è la favilla
+Paradiso	24	146	<par. 24.146>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	che si dilata in fiamma poi vivace,
+Paradiso	25	37	<par. 25.37>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Questo conforto del foco secondo
+Paradiso	25	80	<par. 25.80>	1.0	true_anchor	1.0	0.0	0.0	incendio		incendio	di quello incendio tremolava un lampo
+Paradiso	25	121	<par. 25.121>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	tal mi fec’ ïo a quell’ ultimo foco
+Paradiso	25	130	<par. 25.130>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiammato	A questa voce l’infiammato giro
+Paradiso	26	2	<par. 26.2>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	de la fulgida fiamma che lo spense
+Paradiso	28	4	<par. 28.4>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	come in lo specchio fiamma di doppiero
+Paradiso	28	25	<par. 28.25>	1.0	true_anchor	1.0	0.0	0.0	igne		igne	distante intorno al punto un cerchio d’igne
+Paradiso	28	37	<par. 28.37>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	e quello avea la fiamma più sincera
+Paradiso	28	38	<par. 28.38>	1.0	true_anchor	1.0	0.0	0.0	favilla		favilla	cui men distava la favilla pura,
+Paradiso	30	54	<par. 30.54>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	per far disposto a sua fiamma il candelo».
+Paradiso	30	64	<par. 30.64>	1.0	true_anchor	1.0	0.0	0.0	favilla		faville	Di tal fiumana uscian faville vive,
+Paradiso	30	70	<par. 30.70>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiamma	«L’alto disio che mo t’infiamma e urge,
+Paradiso	30	95	<par. 30.95>	1.0	true_anchor	1.0	0.0	0.0	favilla		faville	li fiori e le faville, sì ch’io vidi
+Paradiso	31	13	<par. 31.13>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	Le facce tutte avean di fiamma viva
+Paradiso	31	125	<par. 31.125>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiamma	che mal guidò Fetonte, più s’infiamma,
+Paradiso	31	129	<par. 31.129>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	per igual modo allentava la fiamma;
+Paradiso	32	105	<par. 32.105>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	innamorato sì che par di foco?».
+Paradiso	33	71	<par. 33.71>	1.0	true_anchor	1.0	0.0	0.0	favilla		favilla	ch’una favilla sol de la tua gloria
+Paradiso	33	119	<par. 33.119>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	parea reflesso, e ’l terzo parea foco
+Purgatorio	1	25	<purg. 1.25>	1.0	true_anchor	1.0	0.0	0.0	fiammella		fiammelle	Goder pareva ’l ciel di lor fiammelle:
+Purgatorio	3	16	<purg. 3.16>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiava	Lo sol, che dietro fiammeggiava roggio,
+Purgatorio	6	38	<purg. 6.38>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	perché foco d’amor compia in un punto
+Purgatorio	8	77	<purg. 8.77>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	quanto in femmina foco d’amor dura,
+Purgatorio	9	30	<purg. 9.30>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	e me rapisse suso infino al foco.
+Purgatorio	9	101	<purg. 9.101>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiante	porfido mi parea, sì fiammeggiante
+Purgatorio	18	28	<purg. 18.28>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Poi, come ’l foco movesi in altura
+Purgatorio	18	80	<purg. 18.80>	1.0	true_anchor	1.0	0.0	0.0	infiammare		infiamma	che ’l sole infiamma allor che quel da Roma
+Purgatorio	22	12	<purg. 22.12>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	pur che la fiamma sua paresse fore;
+Purgatorio	23	46	<purg. 23.46>	1.0	true_anchor	1.0	0.0	0.0	favilla		favilla	Questa favilla tutta mi raccese
+Purgatorio	25	97	<purg. 25.97>	1.0	true_anchor	1.0	0.0	0.0	fiammella		fiammella	e simigliante poi a la fiammella
+Purgatorio	25	98	<purg. 25.98>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	che segue il foco là ’vunque si muta,
+Purgatorio	25	112	<purg. 25.112>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	Quivi la ripa fiamma in fuor balestra,
+Purgatorio	25	116	<purg. 25.116>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	ad uno ad uno; e io temëa ’l foco
+Purgatorio	25	124	<purg. 25.124>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	e vidi spirti per la fiamma andando;
+Purgatorio	26	8	<purg. 26.8>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	parer la fiamma; e pur a tanto indizio
+Purgatorio	26	102	<purg. 26.102>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	né, per lo foco, in là più m’appressai.
+Purgatorio	26	134	<purg. 26.134>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	che presso avea, disparve per lo foco,
+Purgatorio	26	148	<purg. 26.148>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Poi s’ascose nel foco che li affina.
+Purgatorio	27	7	<purg. 27.7>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	Fuor de la fiamma stava in su la riva,
+Purgatorio	27	11	<purg. 27.11>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	anime sante, il foco: intrate in esso,
+Purgatorio	27	17	<purg. 27.17>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	guardando il foco e imaginando forte
+Purgatorio	27	26	<purg. 27.26>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	di questa fiamma stessi ben mille anni,
+Purgatorio	27	46	<purg. 27.46>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	Poi dentro al foco innanzi mi si mise,
+Purgatorio	27	127	<purg. 27.127>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	e disse: «Il temporal foco e l’etterno
+Purgatorio	29	52	<purg. 29.52>	1.0	true_anchor	1.0	0.0	0.0	fiammeggiare		fiammeggiava	Di sopra fiammeggiava il bello arnese
+Purgatorio	29	73	<purg. 29.73>	1.0	true_anchor	1.0	0.0	0.0	fiammella		fiammelle	e vidi le fiammelle andar davante,
+Purgatorio	29	102	<purg. 29.102>	1.0	true_anchor	1.0	0.0	0.0	igne		igne	venir con vento e con nube e con igne;
+Purgatorio	29	123	<purg. 29.123>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	ch’a pena fora dentro al foco nota;
+Purgatorio	30	33	<purg. 30.33>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	vestita di color di fiamma viva.
+Purgatorio	30	48	<purg. 30.48>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamma	conosco i segni de l’antica fiamma’.
+Purgatorio	30	90	<purg. 30.90>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	sì che par foco fonder la candela;
+Purgatorio	32	18	<purg. 32.18>	1.0	true_anchor	1.0	0.0	0.0	fiamma		fiamme	col sole e con le sette fiamme al volto.
+Purgatorio	32	110	<purg. 32.110>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	foco di spessa nube, quando piove
+Purgatorio	33	9	<purg. 33.9>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	rispuose, colorata come foco:
+Purgatorio	33	97	<purg. 33.97>	1.0	true_anchor	1.0	0.0	0.0	foco		foco	e se dal fummo foco s’argomenta,
+Inferno	8	74	<inf. 8.74>	0.5	abstract_only	0.0	0.5	0.0		affocare	affoca	ch’entro l’affoca le dimostra rosse,
+Inferno	9	119	<inf. 9.119>	0.5	abstract_only	0.0	0.5	0.0		accendere	accesi	per le quali eran sì del tutto accesi,
+Paradiso	1	79	<par. 1.79>	0.5	abstract_only	0.0	0.5	0.0		accendere	acceso	parvemi tanto allor del cielo acceso
+Paradiso	22	47	<par. 22.47>	0.5	abstract_only	0.0	0.5	0.0		accendere, caldo	accesi, caldo	uomini fuoro, accesi di quel caldo
+Purgatorio	8	78	<purg. 8.78>	0.5	abstract_only	0.0	0.5	0.0		accendere	accende	se l’occhio o ’l tatto spesso non l’accende.
+Purgatorio	9	31	<purg. 9.31>	0.5	abstract_only	0.0	0.5	0.0		ardere	ardesse	Ivi parea che ella e io ardesse;
+Purgatorio	22	11	<purg. 22.11>	0.5	abstract_only	0.0	0.5	0.0		accendere	accese, acceso	acceso di virtù, sempre altro accese,
+Purgatorio	27	18	<purg. 27.18>	0.5	abstract_only	0.0	0.5	0.0		accendere	accesi	umani corpi già veduti accesi.
+Paradiso	1	59	<par. 1.59>	0.4	abstract_only	0.0	0.5	0.1		sfavillare	sfavillar	ch’io nol vedessi sfavillar dintorno,
+Paradiso	20	35	<par. 20.35>	0.4	abstract_only	0.0	0.5	0.1		scintilla	scintilla	quelli onde l’occhio in testa mi scintilla,
+Paradiso	24	147	<par. 24.147>	0.4	abstract_only	0.0	0.5	0.1		scintilla	scintilla	e come stella in cielo in me scintilla».
+Paradiso	28	90	<par. 28.90>	0.4	abstract_only	0.0	0.5	0.1		sfavillare	sfavillaro	che bolle, come i cerchi sfavillaro.
+Inferno	2	84	<inf. 2.84>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardi	de l’ampio loco ove tornar tu ardi”.
+Inferno	9	68	<inf. 9.68>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardori	impetüoso per li avversi ardori,
+Inferno	14	37	<inf. 14.37>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	tale scendeva l’etternale ardore;
+Inferno	14	38	<inf. 14.38>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accendea	onde la rena s’accendea, com’ esca
+Inferno	15	27	<inf. 15.27>	0.15	abstract_only_penalized	0.0	0.5	0.35		brusciare	abbrusciato	sì che ’l viso abbrusciato non difese
+Inferno	16	49	<inf. 16.49>	0.15	abstract_only_penalized	0.0	0.5	0.35		brusciare	brusciato	ma perch’ io mi sarei brusciato e cotto,
+Inferno	17	110	<inf. 17.110>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scaldata	sentì spennar per la scaldata cera,
+Inferno	19	25	<inf. 19.25>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accese	Le piante erano a tutti accese intrambe;
+Inferno	24	101	<inf. 24.101>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accese	com’ el s’accese e arse, e cener tutto
+Inferno	25	64	<inf. 25.64>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	come procede innanzi da l’ardore,
+Inferno	25	83	<inf. 25.83>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	acceso	de li altri due, un serpentello acceso,
+Inferno	26	97	<inf. 26.97>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	vincer potero dentro a me l’ardore
+Inferno	27	24	<inf. 27.24>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardo	vedi che non incresce a me, e ardo!
+Inferno	29	74	<inf. 29.74>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scaldar	com’ a scaldar si poggia tegghia a tegghia,
+Inferno	29	117	<inf. 29.117>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardere	ardere a tal che l’avea per figliuolo.
+Paradiso	1	83	<par. 1.83>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accesero	di lor cagion m’accesero un disio
+Paradiso	2	40	<par. 2.40>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accender	accender ne dovria più il disio
+Paradiso	2	101	<par. 2.101>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accenda	ti stea un lume che i tre specchi accenda
+Paradiso	3	1	<par. 3.1>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scaldò	Quel sol che pria d’amor mi scaldò ’l petto,
+Paradiso	3	18	<par. 3.18>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accese	a quel ch’accese amor tra l’omo e ’l fonte.
+Paradiso	3	24	<par. 3.24>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardea	che, sorridendo, ardea ne li occhi santi.
+Paradiso	3	110	<par. 3.110>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	da la mia destra parte e che s’accende
+Paradiso	4	120	<par. 4.120>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scalda	e scalda sì, che più e più m’avviva,
+Paradiso	5	9	<par. 5.9>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	che, vista, sola e sempre amore accende;
+Paradiso	5	119	<par. 5.119>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accesi	noi semo accesi; e però, se disii
+Paradiso	7	65	<par. 7.65>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere, sfavillare	ardendo, sfavilla	ogne livore, ardendo in sé, sfavilla
+Paradiso	7	74	<par. 7.74>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardor	ché l’ardor santo ch’ogne cosa raggia,
+Paradiso	10	76	<par. 10.76>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardenti	Poi, sì cantando, quelli ardenti soli
+Paradiso	10	83	<par. 10.83>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	lo raggio de la grazia, onde s’accende
+Paradiso	11	37	<par. 11.37>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	L’un fu tutto serafico in ardore;
+Paradiso	14	40	<par. 14.40>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	La sua chiarezza séguita l’ardore;
+Paradiso	14	41	<par. 14.41>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardor	l’ardor la visïone, e quella è tanta,
+Paradiso	14	50	<par. 14.50>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere, ardore	accende, ardor	crescer l’ardor che di quella s’accende,
+Paradiso	14	86	<par. 14.86>	0.15	abstract_only_penalized	0.0	0.5	0.35		affocare	affocato	per l’affocato riso de la stella,
+Paradiso	14	92	<par. 14.92>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardor	l’ardor del sacrificio, ch’io conobbi
+Paradiso	15	17	<par. 15.17>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	se non che da la parte ond’ e’ s’accende
+Paradiso	15	34	<par. 15.34>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardeva	ché dentro a li occhi suoi ardeva un riso
+Paradiso	15	43	<par. 15.43>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	E quando l’arco de l’ardente affetto
+Paradiso	18	105	<par. 18.105>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	sì come ’l sol che l’accende sortille;
+Paradiso	19	5	<par. 19.5>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere, ardere	acceso, ardesse	raggio di sole ardesse sì acceso,
+Paradiso	20	4	<par. 20.4>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	lo ciel, che sol di lui prima s’accende,
+Paradiso	20	14	<par. 20.14>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	quanto parevi ardente in que’ flailli,
+Paradiso	20	85	<par. 20.85>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	acceso	Poi appresso, con l’occhio più acceso,
+Paradiso	21	8	<par. 21.8>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	de l’etterno palazzo più s’accende,
+Paradiso	21	14	<par. 21.14>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	che sotto ’l petto del Leone ardente
+Paradiso	21	36	<par. 21.36>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scaldar	si movono a scaldar le fredde piume;
+Paradiso	22	32	<par. 22.32>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	arde	com’ io la carità che tra noi arde,
+Paradiso	22	54	<par. 22.54>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardor	ch’io veggio e noto in tutti li ardor vostri,
+Paradiso	23	8	<par. 23.8>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	e con ardente affetto il sole aspetta,
+Paradiso	23	22	<par. 23.22>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardesse	Pariemi che ’l suo viso ardesse tutto,
+Paradiso	23	29	<par. 23.29>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accendea	un sol che tutte quante l’accendea,
+Paradiso	23	83	<par. 23.83>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardenti	folgorate di sù da raggi ardenti,
+Paradiso	24	29	<par. 24.29>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	divota, per lo tuo ardente affetto
+Paradiso	24	82	<par. 24.82>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	acceso	Così spirò di quello amore acceso;
+Paradiso	24	102	<par. 24.102>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scalda	non scalda ferro mai né batte incude».
+Paradiso	24	138	<par. 24.138>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	poi che l’ardente Spirto vi fé almi;
+Paradiso	25	82	<par. 25.82>	0.15	abstract_only_penalized	0.0	0.5	0.35		avvampare	avvampo	Indi spirò: «L’amore ond’ ïo avvampo
+Paradiso	25	108	<par. 25.108>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	qual conveniesi al loro ardente amore.
+Paradiso	26	29	<par. 26.29>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	così accende amore, e tanto maggio
+Paradiso	26	90	<par. 26.90>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardeva	un disio di parlare ond’ ïo ardeva.
+Paradiso	27	11	<par. 27.11>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accese	stavano accese, e quella che pria venne
+Paradiso	27	90	<par. 27.90>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardea	ad essa li occhi più che mai ardea;
+Paradiso	27	110	<par. 27.110>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	che la mente divina, in che s’accende
+Paradiso	28	17	<par. 28.17>	0.15	abstract_only_penalized	0.0	0.5	0.35		affocare	affoca	acuto sì, che ’l viso ch’elli affoca
+Paradiso	28	45	<par. 28.45>	0.15	abstract_only_penalized	0.0	0.5	0.35		affocare	affocato	per l’affocato amore ond’ elli è punto».
+Paradiso	29	48	<par. 29.48>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardori	nel tuo disïo già son tre ardori.
+Paradiso	29	113	<par. 29.113>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accender	sì ch’a pugnar per accender la fede
+Paradiso	31	17	<par. 31.17>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	porgevan de la pace e de l’ardore
+Paradiso	31	100	<par. 31.100>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardo	E la regina del cielo, ond’ ïo ardo
+Paradiso	31	142	<par. 31.142>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardenti	che ’ miei di rimirar fé più ardenti.
+Paradiso	33	48	<par. 33.48>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardor	l’ardor del desiderio in me finii.
+Paradiso	33	99	<par. 33.99>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accesa	e sempre di mirar faceasi accesa.
+Purgatorio	4	6	<purg. 4.6>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accenda	ch’un’anima sovr’ altra in noi s’accenda.
+Purgatorio	5	37	<purg. 5.37>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accesi	Vapori accesi non vid’ io sì tosto
+Purgatorio	8	26	<purg. 8.26>	0.15	abstract_only_penalized	0.0	0.5	0.35		affocare	affocate	due angeli con due spade affocate,
+Purgatorio	8	84	<purg. 8.84>	0.15	abstract_only_penalized	0.0	0.5	0.35		avvampare	avvampa	che misuratamente in core avvampa.
+Purgatorio	8	90	<purg. 8.90>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	arde	di che ’l polo di qua tutto quanto arde».
+Purgatorio	13	19	<purg. 13.19>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scaldi	Tu scaldi il mondo, tu sovr’ esso luci;
+Purgatorio	15	57	<purg. 15.57>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	arde	e più di caritate arde in quel chiostro».
+Purgatorio	15	70	<purg. 15.70>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	Tanto si dà quanto trova d’ardore;
+Purgatorio	18	71	<purg. 18.71>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	surga ogne amor che dentro a voi s’accende,
+Purgatorio	18	78	<purg. 18.78>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	arda	fatta com’ un secchion che tuttor arda;
+Purgatorio	19	111	<purg. 19.111>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accese	per che di questa in me s’accese amore.
+Purgatorio	21	134	<purg. 21.134>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scalda	comprender de l’amor ch’a te mi scalda,
+Purgatorio	22	120	<purg. 22.120>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardente	ardente	drizzando pur in sù l’ardente corno,
+Purgatorio	23	67	<purg. 23.67>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accende	Di bere e di mangiar n’accende cura
+Purgatorio	25	13	<purg. 25.13>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	accesa	tal era io con voglia accesa e spenta
+Purgatorio	25	122	<purg. 25.122>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardore	ardore	al grande ardore allora udi’ cantando,
+Purgatorio	26	28	<purg. 26.28>	0.15	abstract_only_penalized	0.0	0.5	0.35		accendere	acceso	ché per lo mezzo del cammino acceso
+Purgatorio	28	44	<purg. 28.44>	0.15	abstract_only_penalized	0.0	0.5	0.35		scaldare	scaldi	ti scaldi, s’i’ vo’ credere a’ sembianti
+Purgatorio	29	61	<purg. 29.61>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardi	La donna mi sgridò: «Perché pur ardi
+Purgatorio	29	150	<purg. 29.150>	0.15	abstract_only_penalized	0.0	0.5	0.35		ardere	ardesser	che tutti ardesser di sopra da’ cigli.
+Inferno	23	99	<inf. 23.99>	0.05	abstract_only_penalized	0.0	0.5	0.45		sfavillare	sfavilla	e che pena è in voi che sì sfavilla?».
+Paradiso	9	113	<par. 9.113>	0.05	abstract_only_penalized	0.0	0.5	0.45		scintilla	scintilla	che qui appresso me così scintilla
+Paradiso	14	76	<par. 14.76>	0.05	abstract_only_penalized	0.0	0.5	0.45		sfavillare	sfavillar	Oh vero sfavillar del Santo Spiro!
+Paradiso	14	110	<par. 14.110>	0.05	abstract_only_penalized	0.0	0.5	0.45		scintillare	scintillando	si movien lumi, scintillando forte
+Paradiso	18	71	<par. 18.71>	0.05	abstract_only_penalized	0.0	0.5	0.45		sfavillare	sfavillar	lo sfavillar de l’amor che lì era
+Paradiso	21	41	<par. 21.41>	0.05	abstract_only_penalized	0.0	0.5	0.45		sfavillare	sfavillar	in quello sfavillar che ’nsieme venne,
+Paradiso	27	54	<par. 27.54>	0.05	abstract_only_penalized	0.0	0.5	0.45		disfavillare	disfavillo	ond’ io sovente arrosso e disfavillo.
+Paradiso	28	89	<par. 28.89>	0.05	abstract_only_penalized	0.0	0.5	0.45		disfavillare	disfavilla	non altrimenti ferro disfavilla
+Paradiso	31	29	<par. 31.29>	0.05	abstract_only_penalized	0.0	0.5	0.45		scintillare	scintillando	scintillando a lor vista, sì li appaga!
+Purgatorio	15	99	<purg. 15.99>	0.05	abstract_only_penalized	0.0	0.5	0.45		disfavillare	disfavilla	e onde ogne scïenza disfavilla,
+Inferno	3	87	<inf. 3.87>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	ne le tenebre etterne, in caldo e ’n gelo.
+Inferno	9	131	<inf. 9.131>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldi	e i monimenti son più e men caldi».
+Inferno	14	31	<inf. 14.31>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	calde	Quali Alessandro in quelle parti calde
+Inferno	15	9	<inf. 15.9>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	anzi che Carentana il caldo senta:
+Inferno	17	48	<inf. 17.48>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	quando a’ vapori, e quando al caldo suolo:
+Inferno	22	54	<inf. 22.54>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	di ch’io rendo ragione in questo caldo».
+Inferno	22	142	<inf. 22.142>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	Lo caldo sghermitor sùbito fue;
+Inferno	25	61	<inf. 25.61>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	calda	Poi s’appiccar, come di calda cera
+Paradiso	2	106	<par. 2.106>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldi	Or, come ai colpi de li caldi rai
+Paradiso	4	12	<par. 4.12>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	più caldo assai che per parlar distinto.
+Paradiso	5	134	<par. 5.134>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	per troppa luce, come ’l caldo ha róse
+Paradiso	6	66	<par. 6.66>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	sì ch’al Nil caldo si sentì del duolo.
+Paradiso	9	93	<par. 9.93>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	che fé del sangue suo già caldo il porto.
+Paradiso	11	46	<par. 11.46>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	onde Perugia sente freddo e caldo
+Paradiso	13	79	<par. 13.79>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	Però se ’l caldo amor la chiara vista
+Paradiso	15	77	<par. 15.77>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	col caldo e con la luce è sì iguali,
+Paradiso	19	19	<par. 19.19>	0.0	abstract_only_penalized	0.0	0.5	0.5		calor	calor	Così un sol calor di molte brage
+Paradiso	20	95	<par. 20.95>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	da caldo amore e da viva speranza,
+Paradiso	21	51	<par. 21.51>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	mi disse: «Solvi il tuo caldo disio».
+Paradiso	21	116	<par. 21.116>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldi	lievemente passava caldi e geli,
+Paradiso	31	140	<par. 31.140>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	nel caldo suo caler fissi e attenti,
+Paradiso	33	8	<par. 33.8>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	per lo cui caldo ne l’etterna pace
+Purgatorio	3	31	<purg. 3.31>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldi	A sofferir tormenti, caldi e geli
+Purgatorio	4	84	<purg. 4.84>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	calda	vedevan lui verso la calda parte.
+Purgatorio	19	1	<purg. 19.1>	0.0	abstract_only_penalized	0.0	0.5	0.5		calor	calor	Ne l’ora che non può ’l calor dïurno
+Purgatorio	25	77	<purg. 25.77>	0.0	abstract_only_penalized	0.0	0.5	0.5		calor	calor	guarda il calor del sole che si fa vino,
+Purgatorio	28	99	<purg. 28.99>	0.0	abstract_only_penalized	0.0	0.5	0.5		calor	calor	che quanto posson dietro al calor vanno,
+Purgatorio	30	72	<purg. 30.72>	0.0	abstract_only_penalized	0.0	0.5	0.5		caldo	caldo	e ’l più caldo parlar dietro reserva:

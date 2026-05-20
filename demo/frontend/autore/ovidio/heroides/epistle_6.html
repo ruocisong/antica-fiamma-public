@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Epistle 6 / Heroides</title>
+    <meta name="description" content="Epistle 6 — a branch of Heroides by Ovidio in the Segni de l’antica fiamma Authority Layer." />
+    <meta property="og:title" content="Epistle 6 / Heroides" />
+    <meta property="og:description" content="Epistle 6 — a branch of Heroides by Ovidio in the Segni de l’antica fiamma Authority Layer." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ddpcommentary.com/autore/ovidio/heroides/epistle_6.html" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://ddpcommentary.com/autore/ovidio/heroides/epistle_6.html" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css?v=20260415d" />
+  </head>
+  <body class="help-popup-page">
+    <main class="help-popup-shell">
+      <div class="quick-jump-card-head" style="margin-bottom: 12px;">
+        <p class="panel-kicker">Autore · Branch</p>
+        <div class="ui-language-toggle" aria-label="Epistle 6 / Heroides language switch">
+          <button type="button" class="ui-language-chip" data-lang-target="branch-ovidio-heroides-epistle_6" data-lang-value="en">EN</button>
+          <button type="button" class="ui-language-chip" data-lang-target="branch-ovidio-heroides-epistle_6" data-lang-value="bilingual">中文</button>
+        </div>
+      </div>
+      <div class="help-popup-head">
+        <h1>Epistle 6 / Heroides</h1>
+        <a class="ghost-link-button" id="branch-ovidio-heroides-epistle_6-back-link" href="../heroides.html">Back</a>
+      </div>
+      <div class="static-page-content" data-static-lang="en">
+
+      <p class="help-modal-lead">
+        This page isolates <strong>Epistle 6</strong> inside <strong>Heroides</strong> for
+        <strong>Ovidio</strong>. It only exists where the authority data already exposes a real branch.
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>Branch Snapshot</h3>
+          <p class="help-paragraph">
+            Source kind: <strong>prose_locator</strong>. Status: <strong>prose_locator</strong>.
+            Count: <strong>1</strong>. Child nodes: <strong>1</strong>.
+          </p>
+          <p class="help-paragraph">No extra branch summary attached.</p>
+        </section>
+        <section class="help-section">
+          <h3>Sample Occurrences</h3>
+          <ul class="help-list"><li><strong>Guido da Pisa</strong> · Inferno 9 94-97</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>Return Paths</h3>
+          <p class="help-paragraph">
+            Return to <a href="../heroides.html">Heroides</a>,
+            <a href="../../ovidio.html">Ovidio</a>, or
+            <a href="/authority.html">Authority</a>.
+          </p>
+        </section>
+      </div>
+
+      </div>
+      <div class="static-page-content" data-static-lang="bilingual" hidden>
+
+      <p class="help-modal-lead">
+        这页把 <strong>Heroides</strong> 里的 <strong>Epistle 6</strong> 单独拎出来。只有 authority 数据里已经长出真实 branch 的地方，才会有这种页面。
+      </p>
+      <div class="help-modal-body">
+        <section class="help-section">
+          <h3>分支快照</h3>
+          <p class="help-paragraph">
+            来源类型：<strong>prose_locator</strong>。状态：<strong>prose_locator</strong>。
+            计数：<strong>1</strong>。下层节点数：<strong>1</strong>。
+          </p>
+          <p class="help-paragraph">当前还没有额外 branch summary。</p>
+        </section>
+        <section class="help-section">
+          <h3>样本出处</h3>
+          <ul class="help-list"><li><strong>Guido da Pisa</strong> · Inferno 9 94-97</li></ul>
+        </section>
+        <section class="help-section">
+          <h3>返回路径</h3>
+          <p class="help-paragraph">
+            可以回到 <a href="../heroides.html">Heroides</a>、
+            <a href="../../ovidio.html">Ovidio</a>，或者
+            <a href="/authority.html">Authority 页面</a>。
+          </p>
+        </section>
+      </div>
+
+      </div>
+    </main>
+    <script>
+      (function () {
+        function getLanguage() {
+          const params = new URLSearchParams(window.location.search);
+          const requested = params.get("ui_lang");
+          if (requested === "bilingual") return "bilingual";
+          if (requested === "en") return "en";
+          try {
+            const stored = window.localStorage.getItem("ddp-ui-language");
+            return stored === "bilingual" ? "bilingual" : "en";
+          } catch (error) {
+            return "en";
+          }
+        }
+        function applyLanguage(language) {
+          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          document.querySelectorAll('[data-lang-target="branch-ovidio-heroides-epistle_6"]').forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.langValue === language);
+          });
+          document.querySelectorAll("[data-static-lang]").forEach((block) => {
+            block.hidden = block.dataset.staticLang !== language;
+          });
+          const url = new URL(window.location.href);
+          url.searchParams.set("ui_lang", language);
+          window.history.replaceState({}, "", url);
+          try {
+            window.localStorage.setItem("ddp-ui-language", language);
+          } catch (error) {
+          }
+          const back = document.getElementById("branch-ovidio-heroides-epistle_6-back-link");
+          const backUrl = new URL(back.getAttribute("href"), window.location.href);
+          backUrl.searchParams.set("ui_lang", language);
+          back.href = backUrl.pathname + backUrl.search;
+        }
+        const initial = getLanguage();
+        applyLanguage(initial);
+        document.querySelectorAll('[data-lang-target="branch-ovidio-heroides-epistle_6"]').forEach((button) => {
+          button.addEventListener("click", () => applyLanguage(button.dataset.langValue === "bilingual" ? "bilingual" : "en"));
+        });
+      })();
+    </script>
+  </body>
+    </html>
