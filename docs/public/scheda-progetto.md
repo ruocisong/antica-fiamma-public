@@ -68,18 +68,18 @@ Il progetto è attualmente un prototipo pubblico funzionante:
 
 Lo sviluppo è autonomo e assistito da strumenti di AI coding, con controllo di versione, revisione manuale e documentazione progressiva.
 
-## Richiesta Attuale
+## Stato Di Consolidamento
 
-La richiesta non è, in questa fase, hosting infrastrutturale in senso stretto.
+Il progetto è attualmente mantenuto dall'autrice come prototipo pubblico autonomo.
 
-Sarebbe invece utile un confronto metodologico su:
+La documentazione pubblica rende espliciti:
 
-- documentazione secondo criteri DH
-- scelte tecnologiche e implementative
-- sostenibilità del progetto
-- confine tra fonte, interfaccia e dati runtime
-- gestione della questione dei diritti
-- possibilità di rendere il prototipo più ispezionabile, riusabile e discutibile in un contesto DH
+- il rapporto con il Dartmouth Dante Project
+- le scelte tecnologiche e implementative
+- la separazione tra interfaccia pubblica e dati runtime
+- la sostenibilità dell'attuale modello di manutenzione
+- lo stato dei diritti e dei permessi
+- la possibilità di discutere il prototipo in un contesto DH mantenendo distinti consulenza metodologica, hosting infrastrutturale e responsabilità istituzionale
 
 ## Documenti Collegati
 

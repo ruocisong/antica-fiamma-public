@@ -1,6 +1,6 @@
 # Data Boundary
 
-This note explains what the public-facing `ddp-workbench-public` repository does and does not contain at the data level.
+This note explains the data scope of the public-facing `ddp-workbench-public` repository.
 
 ## Included Here
 
@@ -16,9 +16,9 @@ This repository includes:
 - public documentation about interface structure, scope, data boundary, and source attribution
 - selected source-capture utilities under [`src/ddp_scraper`](../../src/ddp_scraper)
 
-## Not Included Here
+## Maintained Outside This Repository
 
-This repository does **not** version the heavy runtime payloads delivered to the live interface.
+Heavy runtime payloads delivered to the live interface are maintained outside this public repository.
 
 In particular, it excludes:
 
@@ -45,7 +45,7 @@ This keeps the public repo readable. It also keeps the relationship between sour
 
 Antica Fiamma is built with the Dartmouth Dante Project as its commentary source.
 
-This repository represents an additional scholarly interface layer. It is not a replacement archive, and it should not obscure the source relationship. The public pages credit the Dartmouth Dante Project explicitly while distinguishing DDP as source archive from Antica Fiamma as reading environment.
+This repository represents an additional scholarly interface layer. The public pages credit the Dartmouth Dante Project explicitly while distinguishing DDP as source archive from Antica Fiamma as reading environment.
 
 ## Practical Consequence
 
@@ -57,4 +57,4 @@ A reader can inspect:
 - how selected build and deployment scripts are organized
 - how the project describes its source and reuse boundary
 
-A reader should not expect this repository alone to reproduce the full live runtime corpus.
+A reader can use this repository to inspect the public shell and documentation while treating the full live runtime corpus as a separately maintained data layer.

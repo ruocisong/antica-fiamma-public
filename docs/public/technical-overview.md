@@ -19,7 +19,7 @@ The public repository contains:
 - smoke checks
 - selected source-capture utilities
 
-The public repository does not contain the heavy runtime data payloads used by the live interface.
+The heavy runtime data payloads used by the live interface are maintained outside the public repository.
 
 ## Front-End Shell
 
@@ -157,15 +157,17 @@ For DH documentation purposes, the important point is not the label "vibe coding
 
 The present documentation work is part of that consolidation. The goal is to make the project inspectable by others rather than dependent on the author's memory of how the prototype was assembled.
 
-## Current Technical Limits
+## Current Technical Scope
 
-The current public repository should not be read as a full reproducibility package.
+The current public repository is scoped as an inspectable public shell rather than a full corpus distribution.
 
-Known limits include:
+The scope is defined by several current choices:
 
 - heavy runtime data is external to the repository
-- formal reuse permission for the commentary source is pending
-- some generated static pages are produced from internal build layers not fully distributed here
-- the public shell is still evolving as the project name, domains, and research rooms settle
+- source and permissions status is documented in the public notes
+- generated deployment output is ignored rather than versioned
+- selected generated static pages are included when they are part of the public interface
+- internal research workspaces remain outside the public repository
+- public documentation is updated as domains, research rooms, and interface layers stabilize
 
-These limits are documented so that the project can be discussed honestly as a working DH prototype rather than presented as a finished institutional platform.
+This scope makes the repository readable as a DH project shell. It shows the interface, deployment path, selected build logic, and maintenance boundary while keeping generated payload distribution separate.

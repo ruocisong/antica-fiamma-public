@@ -2,7 +2,7 @@
 
 This note gives short demonstration routes through Antica Fiamma.
 
-They are meant for a first meeting or quick project review. A visitor should not have to discover the structure of the interface unaided.
+They are written for a first meeting or quick project review, giving visitors a guided path through the structure of the interface.
 
 ## Path 1: From Line To Commentary
 

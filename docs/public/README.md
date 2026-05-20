@@ -2,7 +2,7 @@
 
 This directory contains public-facing documentation for **Antica Fiamma**.
 
-It is meant for readers who want more context than the repository root README can hold, but who should not have to read internal planning notes or generated data.
+It is written for readers who want more context than the repository root README can hold, without requiring access to internal planning notes or generated data.
 
 ## Documents
 
@@ -11,9 +11,9 @@ It is meant for readers who want more context than the repository root README ca
 - [`repository-guide.md`](./repository-guide.md): how to read the public repository.
 - [`interface-layers.md`](./interface-layers.md): what the main public interface layers do.
 - [`data-boundary.md`](./data-boundary.md): what the public repository includes and excludes.
-- [`rights-and-permissions.md`](./rights-and-permissions.md): current source, permissions, and risk-reduction posture.
+- [`rights-and-permissions.md`](./rights-and-permissions.md): current source, permissions, and data-governance posture.
 - [`technical-overview.md`](./technical-overview.md): technological and implementative choices.
-- [`sustainability-and-maintenance.md`](./sustainability-and-maintenance.md): maintenance, hosting, and institutional-responsibility questions.
+- [`sustainability-and-maintenance.md`](./sustainability-and-maintenance.md): current maintenance model, hosting boundary, and sustainability arrangements.
 - [`demo-paths.md`](./demo-paths.md): short routes for a first demonstration.
 - [`public-repository-boundary.md`](./public-repository-boundary.md): checklist for keeping the public repository clean.
 

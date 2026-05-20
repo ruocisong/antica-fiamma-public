@@ -1,72 +1,90 @@
 # Sustainability And Maintenance
 
-This note addresses the sustainability questions raised by any possible discussion of institutional support, affiliation, or hosting.
+This note records the current sustainability and maintenance arrangements for **Antica Fiamma**.
+
+It is a public-facing statement of what is already in place: how the site is maintained, how the public repository is bounded, how generated materials are handled, and how future collaborations can be added through explicit agreements.
 
 ## Current Maintenance Model
 
 Antica Fiamma is currently maintained by Ruoci Song as an autonomous research project.
 
-The present public infrastructure includes:
+The public infrastructure currently includes:
 
-- a public domain: [anticafiamma.it](https://anticafiamma.it)
+- a primary public domain: [anticafiamma.it](https://anticafiamma.it)
 - a mirror / transition domain: [ddpcommentary.com](https://ddpcommentary.com)
-- a public GitHub repository
+- a public GitHub repository for the inspectable shell
 - a Cloudflare Pages deployment path
 - an external runtime data layer for heavy payloads
-- local build scripts and public smoke checks
+- local build scripts for generated interface data and authority pages
+- public smoke checks for selected interface paths
+- documentation for source, data boundary, deployment, and interface structure
 
-This is enough for a working prototype. It is not yet a formally governed institutional service.
+This arrangement keeps the working prototype public, inspectable, and maintainable under the author's current project stewardship.
 
-## Hosting And Institutional Responsibility
+## Hosting And Stewardship
 
-"Hosting" can mean several different things.
+The current site operation remains with the project author.
 
-At the present stage, the project is **not** asking an institution to assume infrastructure costs, server maintenance, legal responsibility, or long-term platform ownership.
+This keeps day-to-day infrastructure, domains, deployment, and repository maintenance in a clearly documented author-maintained frame. Scholarly advice, public discussion, or future collaboration can be added without blurring the current operational responsibility.
 
-The more immediate request is methodological:
+If an institutional role is defined later, it can be recorded as a separate agreement covering scope, governance, resources, rights, and maintenance.
 
-- advice on DH documentation standards
-- review of technological and implementative choices
-- guidance on rights and data-boundary wording
-- advice on whether and how the project could become reusable research infrastructure
-- possible discussion in a seminar, lab, or advisory context
+## Public Repository Boundary
 
-Any future institutional hosting would require a separate discussion of resources, governance, maintenance, rights, security, and public responsibility.
+The public repository supports sustainability by keeping the project shell legible and bounded.
 
-## Sustainability Questions To Resolve
+It includes:
 
-Before the project could be described as institutionally hosted or supported, several questions would need to be answered:
+- public HTML pages
+- public styles, modules, and assets
+- generated static authority pages
+- public research-room assets
+- selected build scripts
+- smoke checks
+- deployment packaging
+- public documentation
 
-- Who maintains the public site?
-- Who pays for domains, storage, and deployment if they exceed free or personal tiers?
-- Who is responsible if the external source archive changes its terms?
-- What happens if full commentary reuse permission is not granted?
-- What minimal public version can remain available under a lower-risk data configuration?
-- How are bugs, broken links, and stale generated pages handled?
-- How should versions be cited?
-- Can future contributors safely work on documentation, interface, or data review without exposing private research materials?
+It excludes:
 
-## Current Risk-Reduction Measures
+- heavy runtime data payloads
+- generated deployment output
+- local snapshots and legacy data stores
+- internal research threads
+- publication drafts
+- local upload state and operational scratch files
 
-The current public repository already reduces some risks:
+This separation makes the repository easier to review, maintain, and share.
 
-- heavy runtime data is not versioned in GitHub
-- generated deployment output is ignored
-- internal research threads and publication drafts are excluded
-- the source archive / interface layer distinction is documented
-- public shell documentation is separated from internal operating notes
-- smoke checks exist for selected public paths
+## Data And Source Safeguards
 
-## Possible Next Steps
+The project documents its source relationship with the Dartmouth Dante Project and keeps DDP visible as source archive.
 
-The project can become more sustainable through staged work:
+The current public repository keeps heavy runtime commentary payloads outside GitHub. Rights-sensitive layers are therefore separated from the public shell. If source or permission conditions call for a reduced version, the interface can continue as a line-first reading environment with a smaller, rights-cleared, or differently sourced data layer.
 
-- complete the public documentation set
-- prepare a reduced rights-safe demo configuration
-- document versioned releases
-- add a short citation note
-- define a minimal maintenance checklist
-- decide what parts could accept external review or contribution
-- clarify whether the project should remain an individual research interface or seek a formal institutional frame
+## Maintenance Practices Already In Place
 
-The immediate goal is not to solve all sustainability questions at once. The goal is to make them visible enough that a DH advisor can respond concretely.
+Current maintenance practices include:
+
+- Git-based version control
+- a separate public repository for the shareable shell
+- `.gitignore` rules excluding data payloads, reports, snapshots, and generated build output
+- Cloudflare Pages packaging through `deployment_output/PREPARE_PAGES_SHELL.py`
+- generated authority pages kept in stable public directories
+- public documentation for interface layers and data boundary
+- smoke checks for selected front-end behavior
+- manual review before public documentation updates are pushed
+
+These measures make the project inspectable as a working DH prototype with an explicit maintenance boundary.
+
+## Consolidation Path
+
+The current consolidation path is staged:
+
+- keep the public shell and runtime data clearly separated
+- maintain source attribution and rights documentation
+- preserve a reduced public path if source permissions require it
+- keep generated pages and deployment output distinguishable
+- expand documentation where new public rooms or interface layers are added
+- record any future institutional roles through explicit agreements
+
+The project is therefore sustainable at its present scale as an author-maintained research interface. Any broader institutional frame can build on this documented arrangement.

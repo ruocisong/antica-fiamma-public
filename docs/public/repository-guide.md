@@ -17,7 +17,7 @@ The repository name still records an earlier working phase. The public-facing pr
 
 This repository is a public project shell. It is meant to make the live interface, public documentation, selected method-facing code, and deployment path inspectable.
 
-It is not the full internal research workspace. It does not version the large runtime data payloads, local snapshots, thread-specific working notes, publication drafts, or private operating material that sit behind the broader project.
+It is scoped as the public project shell. Large runtime data payloads, local snapshots, thread-specific working notes, publication drafts, and private operating material remain in the internal working environment.
 
 The best metaphor is architectural rather than archival: this repository is the entrance hall and public floor plan, not the whole studio.
 
@@ -119,7 +119,7 @@ See [`demo/runtime_checks/README.md`](../../demo/runtime_checks/README.md).
 
 Cloudflare Pages packaging.
 
-Only the packaging script belongs in Git. The generated `pages_shell_build/` folder is build output and should remain ignored.
+Only the packaging script belongs in Git. The generated `pages_shell_build/` folder is build output and remains ignored.
 
 See [`deployment_output/README.md`](../../deployment_output/README.md).
 
@@ -127,11 +127,11 @@ See [`deployment_output/README.md`](../../deployment_output/README.md).
 
 Selected source-capture utilities.
 
-They remain here for lineage transparency, not as a complete public data-release mechanism.
+They remain here for lineage transparency. Runtime corpus distribution is handled outside this public repository.
 
 See [`src/ddp_scraper/README.md`](../../src/ddp_scraper/README.md).
 
-## What Is Not Included
+## Maintained Outside This Repository
 
 This public repository excludes:
 
@@ -146,9 +146,9 @@ This public repository excludes:
 
 ## Reading The Boundary
 
-The repository should be readable by two kinds of visitors:
+The repository is designed for two kinds of visitors:
 
-- A humanities reader should be able to understand what the site is, where to click first, how it relates to DDP, and why the interface matters.
-- A technical reader should be able to see the public shell structure, deployment path, selected build logic, and data boundary without assuming this is a complete reproducible data dump.
+- A humanities reader can understand what the site is, where to click first, how it relates to DDP, and why the interface matters.
+- A technical reader can see the public shell structure, deployment path, selected build logic, and data boundary while recognizing that corpus payloads are maintained separately.
 
 That double audience is intentional.

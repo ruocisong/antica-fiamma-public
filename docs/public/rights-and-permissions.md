@@ -1,38 +1,40 @@
 # Rights And Permissions Note
 
-This note records the current rights and permissions posture for **Antica Fiamma**.
+This note records the current source, rights, and permissions posture for **Antica Fiamma**.
 
-It is intentionally conservative. The aim is to make the source relationship, public boundary, and possible risk-reduction paths visible before any institutional affiliation or hosting question is considered.
+It is a public statement of the project's current safeguards: source attribution, data separation, permission status, and reduced-version readiness.
 
 ## Source Relationship
 
 Antica Fiamma uses the Dartmouth Dante Project as its commentary source.
 
-The project does not present itself as a replacement archive. It builds an interface layer around DDP-derived commentary material and keeps the source relationship explicit in the public site and documentation.
+The project presents DDP as the source archive and Antica Fiamma as an interface layer around DDP-derived commentary material. The source relationship remains explicit in the public site and documentation.
 
-## Current Permission Status
+## Permission Status
 
 The project author has contacted the Dartmouth Dante Project team regarding formal reuse permission.
 
-The response received so far indicates that the Dartmouth Dante Project site is undergoing an upgrade and that a more definite reply may not be possible until the following academic year. This means the permission situation should be treated as pending.
+The response received so far indicates that the Dartmouth Dante Project site is undergoing an upgrade and that a more definite reply may not be possible until the following academic year. The project therefore documents this permission status openly and keeps the public repository separate from the heavy runtime commentary payloads.
 
-## Current Public Posture
+## Public Presentation
 
-While formal reuse permission remains pending, the project should be described carefully:
+The project is presented as:
 
-- as a working research prototype
-- as a line-first interface built with DDP as source archive
-- as a project under documentation and methodological review
-- not as a finalized data republication
-- not as an institutionalized hosted service
+- a working research prototype
+- a line-first interface built with DDP as source archive
+- a documented public shell
+- a scholarly interface layer rather than a source archive replacement
+- a project with explicit data and rights boundaries
 
-The public repository does not version the heavy runtime commentary payloads.
+The public repository keeps the heavy runtime commentary payloads outside GitHub.
 
-## Risk-Sensitive Layer
+## Rights-Sensitive Layer
 
 The rights-sensitive layer is the commentary record payload, especially where full commentary text is involved.
 
-The interface architecture is modular enough that this layer can be reduced, removed, or replaced if permission conditions require it. In that case, the project could still preserve:
+The interface architecture separates this layer from the public shell. This means the project can preserve its main public structure even if the commentary payload is reduced, replaced, or removed under future permission conditions.
+
+A reduced version can still preserve:
 
 - the line-first reading shell
 - the guide, tour, and methodological documentation
@@ -40,21 +42,21 @@ The interface architecture is modular enough that this layer can be reduced, rem
 - the Fiamma research room and its own research assets
 - selected demo paths using a smaller or rights-cleared corpus
 
-This distinction matters because the project is not identical with one data payload. The core scholarly contribution is the reading interface and its method of organizing line, commentary, word, comparison, and authority paths.
+This distinction matters because the project has a durable interface layer as well as a data layer. The core scholarly contribution is the reading interface and its method of organizing line, commentary, word, comparison, and authority paths.
 
-## Institutional Implication
+## Institutional Boundary
 
-Any future institutional affiliation, hosting, or public endorsement should take this rights status into account.
+The current public presentation records the project as author-maintained.
 
-At the present stage, the safest request is for methodological advice and documentation review rather than infrastructure hosting. If the project later enters a formal institutional context, questions of rights, governance, maintenance, public wording, and data distribution should be revisited explicitly.
+Any future institutional role can be added through explicit terms covering source permission, public wording, governance, maintenance, and data distribution.
 
-## Practical Checklist
+## Current Safeguards
 
-Before presenting the project as institutionally supported:
+The current public safeguards are:
 
-- confirm the current Dartmouth Dante Project permission position
-- decide whether the full commentary layer can remain public
-- prepare a reduced public version if needed
-- keep DDP attribution visible
-- preserve the distinction between source archive and interface layer
-- document which data is public, which is external, and which is excluded from GitHub
+- DDP attribution remains visible
+- the source archive / interface layer distinction is documented
+- heavy runtime commentary payloads are excluded from GitHub
+- public shell and rights-sensitive data are separated
+- the permission status is recorded rather than hidden
+- the interface can be reduced if future permission conditions require it

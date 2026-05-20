@@ -55,7 +55,7 @@ It contains:
 - selected source-capture utilities kept for lineage transparency
 - public documentation about the repository, interface layers, and data boundary
 
-It does not contain:
+Excluded from this public repository:
 
 - the heavy runtime data payloads under `demo/frontend/data/`
 - report output under `demo/frontend/reports/`
@@ -73,9 +73,9 @@ Start here if you are reading the repository as a project artifact.
 - [`docs/public/project-dossier.md`](docs/public/project-dossier.md): compact dossier for a preliminary DH conversation.
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md): the public interface layers and what each one does.
 - [`docs/public/data-boundary.md`](docs/public/data-boundary.md): what is included, what is excluded, and why.
-- [`docs/public/rights-and-permissions.md`](docs/public/rights-and-permissions.md): current source, permission, and risk-reduction posture.
+- [`docs/public/rights-and-permissions.md`](docs/public/rights-and-permissions.md): current source, permission, and data-governance posture.
 - [`docs/public/technical-overview.md`](docs/public/technical-overview.md): technological and implementative choices.
-- [`docs/public/sustainability-and-maintenance.md`](docs/public/sustainability-and-maintenance.md): maintenance, hosting, and institutional-responsibility questions.
+- [`docs/public/sustainability-and-maintenance.md`](docs/public/sustainability-and-maintenance.md): current maintenance model, hosting boundary, and sustainability arrangements.
 - [`docs/public/demo-paths.md`](docs/public/demo-paths.md): short routes for a first demonstration.
 - [`docs/public/public-repository-boundary.md`](docs/public/public-repository-boundary.md): the public repository boundary checklist.
 
@@ -103,9 +103,9 @@ Main directories:
 
 ## Data And Rights Boundary
 
-Antica Fiamma uses the Dartmouth Dante Project as its commentary source. The public site credits that relationship explicitly and treats DDP as the source archive, not as a hidden backend.
+Antica Fiamma uses the Dartmouth Dante Project as its commentary source. The public site credits that relationship explicitly and treats DDP as the visible source archive for the commentary layer.
 
-The full text of commentary records belongs to the source context from which it is drawn. This public repository therefore separates the visible interface shell from the heavier runtime data payloads used by the live site. The repository is meant to document the scholarly interface, selected method-facing code, and public deployment path; it is not meant to distribute every generated data object.
+The full text of commentary records belongs to the source context from which it is drawn. This public repository therefore separates the visible interface shell from the heavier runtime data payloads used by the live site. The repository documents the scholarly interface, selected method-facing code, and public deployment path while keeping generated data distribution outside GitHub.
 
 For the detailed boundary, see [`docs/public/data-boundary.md`](docs/public/data-boundary.md).
 

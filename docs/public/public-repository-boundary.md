@@ -6,7 +6,7 @@ The repository name preserves an earlier working phase. The public project name 
 
 ## Public Purpose
 
-The public repository should provide:
+The public repository provides:
 
 - a clear project identity
 - live site links for Antica Fiamma
@@ -15,7 +15,7 @@ The public repository should provide:
 - enough build and deployment logic to understand how the shell reaches Cloudflare Pages
 - a clear boundary around data, rights, generated payloads, and internal research work
 
-It should not expose the full internal studio floor.
+It keeps the public project entrance separate from the internal studio floor.
 
 ## Keep
 
@@ -56,7 +56,7 @@ It should not expose the full internal studio floor.
 
 - What Antica Fiamma is
 - Where the live site is: [anticafiamma.it](https://anticafiamma.it) and [ddpcommentary.com](https://ddpcommentary.com)
-- What public pages a visitor should read first
+- What public pages a visitor can read first
 - How Antica Fiamma relates to the Dartmouth Dante Project
 - Which interface layers are present
 - What is included in this public repository
@@ -95,7 +95,7 @@ docs/
 
 ## Current Position
 
-The public repository should feel like a stable project entrance. It can show method and structure without exposing every working note, experiment, or generated payload.
+The public repository is maintained as a stable project entrance. It shows method and structure while keeping working notes, experiments, and generated payloads in the appropriate internal or runtime layers.
 
 The strongest public path is now:
 
