@@ -69,8 +69,14 @@ It does not contain:
 Start here if you are reading the repository as a project artifact.
 
 - [`docs/public/repository-guide.md`](docs/public/repository-guide.md): how to read this public repository.
+- [`docs/public/scheda-progetto.md`](docs/public/scheda-progetto.md): Italian project sheet for a first conversation.
+- [`docs/public/project-dossier.md`](docs/public/project-dossier.md): compact dossier for a preliminary DH conversation.
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md): the public interface layers and what each one does.
 - [`docs/public/data-boundary.md`](docs/public/data-boundary.md): what is included, what is excluded, and why.
+- [`docs/public/rights-and-permissions.md`](docs/public/rights-and-permissions.md): current source, permission, and risk-reduction posture.
+- [`docs/public/technical-overview.md`](docs/public/technical-overview.md): technological and implementative choices.
+- [`docs/public/sustainability-and-maintenance.md`](docs/public/sustainability-and-maintenance.md): maintenance, hosting, and institutional-responsibility questions.
+- [`docs/public/demo-paths.md`](docs/public/demo-paths.md): short routes for a first demonstration.
 - [`docs/public/public-repository-boundary.md`](docs/public/public-repository-boundary.md): the public repository boundary checklist.
 
 Module-level guides:

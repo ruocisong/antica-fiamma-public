@@ -36,8 +36,14 @@ The same public pages are also reachable from `https://ddpcommentary.com` during
 
 Repository notes after that:
 
+- [scheda-progetto.md](./scheda-progetto.md)
+- [project-dossier.md](./project-dossier.md)
 - [interface-layers.md](./interface-layers.md)
 - [data-boundary.md](./data-boundary.md)
+- [rights-and-permissions.md](./rights-and-permissions.md)
+- [technical-overview.md](./technical-overview.md)
+- [sustainability-and-maintenance.md](./sustainability-and-maintenance.md)
+- [demo-paths.md](./demo-paths.md)
 - [public-repository-boundary.md](./public-repository-boundary.md)
 
 ## Main Directories
