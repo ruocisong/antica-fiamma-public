@@ -1,36 +1,44 @@
 # Repository Guide
 
-This note explains how to read the public-facing `ddp-workbench-public` repository after the project's current shift into **Antica Fiamma**.
+This guide explains how to read the public `ddp-workbench-public` repository now that the project is presented publicly as **Antica Fiamma**.
 
-## What This Repository Is
+## Public Identity
 
-This repository is a public project shell for Antica Fiamma.
+Antica Fiamma is the project name.
 
-It makes four things visible:
+Live entrances:
 
-- the shape of the live public interface
-- the main public pages and reading surfaces
-- selected build and deployment logic
-- the data and rights boundary around the public shell
+- [anticafiamma.it](https://anticafiamma.it)
+- [ddpcommentary.com](https://ddpcommentary.com)
 
-It is not the full internal research workspace. It does not version the heavy runtime payloads delivered separately to the live site.
+The repository name still records an earlier working phase. The public-facing project identity is now Antica Fiamma.
+
+## What This Repository Is For
+
+This repository is a public project shell. It is meant to make the live interface, public documentation, selected method-facing code, and deployment path inspectable.
+
+It is not the full internal research workspace. It does not version the large runtime data payloads, local snapshots, thread-specific working notes, publication drafts, or private operating material that sit behind the broader project.
+
+The best metaphor is architectural rather than archival: this repository is the entrance hall and public floor plan, not the whole studio.
 
 ## First Reading Path
 
-If you want to understand the project quickly, read in this order:
+For a fast external reading, use this order:
 
-- [README.md](../../README.md): project overview, live links, scope, and repository map
-- [About](https://ddpcommentary.com/about.html): project framing, source map, data statement, and reuse boundary
-- [Guide](https://ddpcommentary.com/guide.html): how to move through Antica Fiamma as a reader
-- [Interface Tour](https://ddpcommentary.com/reading-route.html): visual tour of the major panels
-- [Authority Layer](https://ddpcommentary.com/authority.html): explanation of author, work, personaggio, and source-facing navigation
-- [Fiamma Research Room](https://ddpcommentary.com/research/fiamma.html): public case-study room for Dante's fire vocabulary and motif
+- [README.md](../../README.md): project overview, live entrances, public scope, and repository map.
+- [About](https://anticafiamma.it/about.html): source map, data statement, rights posture, and colophon.
+- [Guide](https://anticafiamma.it/guide.html): practical reading guidance for the live interface.
+- [Interface Tour](https://anticafiamma.it/reading-route.html): visual walkthrough of the major panels.
+- [Authority Layer](https://anticafiamma.it/authority.html): author, work, personaggio, and source-facing navigation.
+- [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html): public research room for Dante's fire vocabulary and motif.
+
+The same public pages are also reachable from `https://ddpcommentary.com` during the domain transition.
 
 Repository notes after that:
 
 - [interface-layers.md](./interface-layers.md)
 - [data-boundary.md](./data-boundary.md)
-- [DDP_WORKBENCH_PUBLIC_MINIMUM.md](./DDP_WORKBENCH_PUBLIC_MINIMUM.md)
+- [public-repository-boundary.md](./public-repository-boundary.md)
 
 ## Main Directories
 
@@ -40,48 +48,82 @@ The public website shell.
 
 It contains:
 
-- `index.html`, the Antica Fiamma entrypoint
-- `about.html`, `guide.html`, `reading-route.html`, and `authority.html`
-- `research/fiamma.html`, the public fire-motif research room
-- static styles and client-side modules
-- generated static authority pages under `autore/` and `personaggio/`
-- public shell assets such as `_redirects`, `robots.txt`, `sitemap.xml`, and `favicon.svg`
+- `index.html`, the Antica Fiamma entrypoint.
+- `about.html`, `guide.html`, `reading-route.html`, and `authority.html`.
+- `research/fiamma.html`, the public fire-motif research room.
+- static styles, images, route-tour assets, and client-side modules.
+- generated static authority pages under `autore/` and `personaggio/`.
+- public shell assets such as `_redirects`, `robots.txt`, `sitemap.xml`, and `favicon.svg`.
 
-The heavy runtime data layer is intentionally excluded from this public repository.
+See [`demo/frontend/README.md`](../../demo/frontend/README.md).
+
+### [`demo/frontend/static/modules`](../../demo/frontend/static/modules)
+
+The client-side module area.
+
+The current public shell still uses `static/app.js` as the main browser entrypoint, but stable panel logic and runtime contracts have been split out around line-level, word-level, authority, records, routing, state, and loader responsibilities.
+
+See [`demo/frontend/static/modules/README.md`](../../demo/frontend/static/modules/README.md).
+
+### [`demo/frontend/autore`](../../demo/frontend/autore)
+
+Generated static author and work authority rooms.
+
+These pages make the authority layer linkable outside the main reading session. They are public interface pages, not private build artifacts.
+
+See [`demo/frontend/autore/README.md`](../../demo/frontend/autore/README.md).
+
+### [`demo/frontend/personaggio`](../../demo/frontend/personaggio)
+
+Generated static personaggio authority rooms.
+
+These pages keep personaggio navigation separate from author/work navigation unless the data explicitly models the relation.
+
+See [`demo/frontend/personaggio/README.md`](../../demo/frontend/personaggio/README.md).
+
+### [`demo/frontend/research`](../../demo/frontend/research)
+
+Public research rooms.
+
+The first room is the Fiamma research page, which turns a lexical and motif-level research configuration into a public-facing reading path.
+
+See [`demo/frontend/research/README.md`](../../demo/frontend/research/README.md).
 
 ### [`demo/build_demo_data.py`](../../demo/build_demo_data.py)
 
 The layered frontend-data build entrypoint.
 
-It remains in the public repository for methodological transparency. It helps show how the interface-facing data structures are prepared, but the full generated runtime payloads are not versioned here.
+It is retained for methodological transparency. The generated runtime payloads themselves are excluded from the public repository boundary.
 
 ### [`demo/build_authority_static_pages.py`](../../demo/build_authority_static_pages.py)
 
 The generator for static authority-facing HTML pages.
 
-It is included because authority rooms are part of the public interface, not merely an internal experiment.
+It is included because the authority layer is part of the public interface and because the generated pages need an inspectable build path.
 
 ### [`demo/runtime_checks`](../../demo/runtime_checks)
 
-Smoke checks used to sanity-check the public shell.
+Smoke checks and browser probes for the public shell.
 
-The broad shell smoke test verifies that the site structure and key client assets are present. Authority checks inspect the standalone authority layer.
+These checks are not a full test suite. They are practical release guards for the pages, assets, and interaction paths most likely to break during public-shell updates.
 
-### [`deployment_output/PREPARE_PAGES_SHELL.py`](../../deployment_output/PREPARE_PAGES_SHELL.py)
+See [`demo/runtime_checks/README.md`](../../demo/runtime_checks/README.md).
 
-The packaging script for Cloudflare Pages.
+### [`deployment_output`](../../deployment_output)
 
-It prepares the static public shell, including current public research pages.
+Cloudflare Pages packaging.
 
-### [`.github/workflows/deploy-pages-shell.yml`](../../.github/workflows/deploy-pages-shell.yml)
+Only the packaging script belongs in Git. The generated `pages_shell_build/` folder is build output and should remain ignored.
 
-The GitHub Actions workflow for deploying the public shell.
+See [`deployment_output/README.md`](../../deployment_output/README.md).
 
 ### [`src/ddp_scraper`](../../src/ddp_scraper)
 
 Selected source-capture utilities.
 
-These are included for lineage transparency because Antica Fiamma is built on DDP-derived commentary material. Their presence does not mean this repository is a complete data distribution.
+They remain here for lineage transparency, not as a complete public data-release mechanism.
+
+See [`src/ddp_scraper/README.md`](../../src/ddp_scraper/README.md).
 
 ## What Is Not Included
 
@@ -90,13 +132,17 @@ This public repository excludes:
 - heavy runtime payloads under `demo/frontend/data/`
 - report output directories under `demo/frontend/reports/`
 - local data snapshots and legacy runtime stores
+- generated deployment output under `deployment_output/pages_shell_build/`
 - internal thread prompts, overnight audits, and review workspaces
 - publication drafting folders
-- large experimental outputs for semantic or cross-canto research
-- local release wrappers and operational clutter not needed for public review
+- large experimental outputs for semantic, summary, authority-review, or cross-canto research
+- local uploader state, scratch files, and operating clutter not needed for public review
 
-## How To Think About The Boundary
+## Reading The Boundary
 
-The public repository should feel like the entrance hall: the live interface, public documentation, selected method-facing scripts, and deployment path are visible.
+The repository should be readable by two kinds of visitors:
 
-The internal working repository remains the studio floor: heavier generated data, experiments, drafts, audits, and thread-specific working materials live there instead.
+- A humanities reader should be able to understand what the site is, where to click first, how it relates to DDP, and why the interface matters.
+- A technical reader should be able to see the public shell structure, deployment path, selected build logic, and data boundary without assuming this is a complete reproducible data dump.
+
+That double audience is intentional.

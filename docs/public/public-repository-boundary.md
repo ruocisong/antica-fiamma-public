@@ -2,16 +2,33 @@
 
 This file records the intended scope of the public-facing `ddp-workbench-public` repository.
 
-The purpose is no longer to expose the entire working project. The purpose is to keep a clean public shell for Antica Fiamma: enough to understand the live site, inspect the main public layers, and follow the deployment path.
+The repository name preserves an earlier working phase. The public project name is **Antica Fiamma**.
+
+## Public Purpose
+
+The public repository should provide:
+
+- a clear project identity
+- live site links for Antica Fiamma
+- a readable map of the public interface
+- enough source structure to understand the shell
+- enough build and deployment logic to understand how the shell reaches Cloudflare Pages
+- a clear boundary around data, rights, generated payloads, and internal research work
+
+It should not expose the full internal studio floor.
 
 ## Keep
 
 - [`README.md`](../../README.md)
 - [`demo/frontend`](../../demo/frontend), excluding heavy runtime data, reports, snapshots, and internal experiments
+- [`demo/frontend/README.md`](../../demo/frontend/README.md)
+- [`demo/frontend/research`](../../demo/frontend/research)
+- [`demo/frontend/autore`](../../demo/frontend/autore)
+- [`demo/frontend/personaggio`](../../demo/frontend/personaggio)
+- [`demo/frontend/static/modules`](../../demo/frontend/static/modules)
 - [`demo/build_authority_static_pages.py`](../../demo/build_authority_static_pages.py)
 - [`demo/build_demo_data.py`](../../demo/build_demo_data.py)
-- [`demo/runtime_checks/app_shell_smoke.mjs`](../../demo/runtime_checks/app_shell_smoke.mjs)
-- [`demo/runtime_checks/authority_interaction_smoke.mjs`](../../demo/runtime_checks/authority_interaction_smoke.mjs)
+- [`demo/runtime_checks`](../../demo/runtime_checks)
 - [`demo/server.py`](../../demo/server.py)
 - [`src/ddp_scraper`](../../src/ddp_scraper), as selected lineage and preparation utilities
 - [`deployment_output/PREPARE_PAGES_SHELL.py`](../../deployment_output/PREPARE_PAGES_SHELL.py)
@@ -25,6 +42,7 @@ The purpose is no longer to expose the entire working project. The purpose is to
 - `demo/frontend/reports/`
 - `demo/frontend/data_snapshots/`
 - `demo/frontend/data_legacy_pre_page_state_v2/`
+- `deployment_output/pages_shell_build/`
 - local visual experiments not linked from the public site
 - authority review buckets and pressure-response documents
 - semantic-thread experiments and overnight outputs
@@ -37,7 +55,7 @@ The purpose is no longer to expose the entire working project. The purpose is to
 ## Public README Should Answer
 
 - What Antica Fiamma is
-- Where the live site is
+- Where the live site is: [anticafiamma.it](https://anticafiamma.it) and [ddpcommentary.com](https://ddpcommentary.com)
 - What public pages a visitor should read first
 - How Antica Fiamma relates to the Dartmouth Dante Project
 - Which interface layers are present
@@ -45,6 +63,7 @@ The purpose is no longer to expose the entire working project. The purpose is to
 - What data is intentionally excluded
 - How to preview the shell locally
 - How the Cloudflare Pages deployment is prepared
+- Which module README files explain the main repository areas
 
 ## Public Repo Shape
 
@@ -52,6 +71,7 @@ The purpose is no longer to expose the entire working project. The purpose is to
 README.md
 demo/
   frontend/
+    README.md
     index.html
     about.html
     guide.html
@@ -75,4 +95,13 @@ docs/
 
 ## Current Position
 
-The public repository should feel like a stable project entrance, not the whole internal studio floor. It can show method and structure without exposing every working note, experiment, or generated payload.
+The public repository should feel like a stable project entrance. It can show method and structure without exposing every working note, experiment, or generated payload.
+
+The strongest public path is now:
+
+- [Antica Fiamma](https://anticafiamma.it)
+- [About](https://anticafiamma.it/about.html)
+- [Guide](https://anticafiamma.it/guide.html)
+- [Interface Tour](https://anticafiamma.it/reading-route.html)
+- [Authority Layer](https://anticafiamma.it/authority.html)
+- [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html)
