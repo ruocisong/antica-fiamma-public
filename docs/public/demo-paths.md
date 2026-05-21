@@ -96,7 +96,7 @@ What this path demonstrates:
 
 Start:
 
-- [GitHub public repository](https://github.com/ruocisong/ddp-workbench-public)
+- the Antica Fiamma public repository root
 
 Route:
 

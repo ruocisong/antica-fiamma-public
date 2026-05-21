@@ -1,8 +1,8 @@
 # Antica Fiamma Public Repository Boundary
 
-This file records the intended scope of the public-facing `ddp-workbench-public` repository.
+This file records the intended scope of the public-facing **Antica Fiamma** repository.
 
-The repository name preserves an earlier working phase. The public project name is **Antica Fiamma**.
+The public project name is **Antica Fiamma**.
 
 ## Public Purpose
 

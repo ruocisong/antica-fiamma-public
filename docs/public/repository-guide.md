@@ -1,6 +1,6 @@
 # Repository Guide
 
-This guide explains how to read the public `ddp-workbench-public` repository now that the project is presented publicly as **Antica Fiamma**.
+This guide explains how to read the public **Antica Fiamma** repository.
 
 ## Public Identity
 
@@ -11,7 +11,7 @@ Live entrances:
 - [anticafiamma.it](https://anticafiamma.it)
 - [ddpcommentary.com](https://ddpcommentary.com)
 
-The repository name still records an earlier working phase. The public-facing project identity is now Antica Fiamma.
+The repository is presented under the public-facing project identity **Antica Fiamma**.
 
 ## What This Repository Is For
 

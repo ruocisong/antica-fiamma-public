@@ -17,7 +17,7 @@ Live entrances:
 
 Public repository:
 
-- [github.com/ruocisong/ddp-workbench-public](https://github.com/ruocisong/ddp-workbench-public)
+- Antica Fiamma public repository
 
 ## Scholarly Premise
 

@@ -1,6 +1,6 @@
 # Data Boundary
 
-This note explains the data scope of the public-facing `ddp-workbench-public` repository.
+This note explains the data scope of the public-facing **Antica Fiamma** repository.
 
 ## Included Here
 
