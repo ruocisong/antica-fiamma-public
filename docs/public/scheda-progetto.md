@@ -37,15 +37,12 @@ Antica Fiamma prova a trattare il verso come tavolo locale di lettura.
 
 ## Componenti Attuali
 
-- ingresso per cantica, canto e verso
-- Line Snapshot per orientarsi nella densità e nella pressione esegetica locale
-- schede di commento con ordinamento, fonti, date e testo espanso
-- confronto tra commenti
-- livello lessicale per parole dantesche selezionabili
-- campi interpretativi locali
-- echi cross-canto
-- livello di autorità per autori, opere e personaggi
-- stanze di ricerca pubbliche, a partire dal motivo del fuoco
+- livello di canto: browser dei canti, mappa dei versi, barre di densità e quick jump
+- livello di verso: Line Snapshot, pressione esegetica locale, campi interpretativi ed echi cross-canto
+- livello lessicale: Dante Word Locus Layer, occorrenze, micro-contesti, espansioni di frase e vocabolario interpretativo contrastivo
+- livello dei record di commento: schede di lettura, fonti, date, testo espanso, ordinamento e confronto
+- stanza di autorità: spazio parallelo per autori, opere, personaggi e fonti, collegato ai record di commento e ai contesti di verso
+- livello delle stanze di ricerca: percorsi pubblici di studio, a partire dal motivo del fuoco
 
 ## Stato Dei Dati
 

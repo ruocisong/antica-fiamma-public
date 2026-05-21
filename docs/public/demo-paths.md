@@ -66,11 +66,19 @@ What this path demonstrates:
 - a topic such as fire can become an interface path
 - motif-level exploration should remain accountable to line-level reading
 
+Concrete example:
+
+- open the Fiamma Research Room
+- follow one of the listed fire-family lines back toward the reading interface
+- compare the motif-level visualization with the local line and commentary context
+
+This path is useful for showing how the Cagliari fire-motif work and the larger interface belong to the same project without making the conference paper identical with the whole site.
+
 ## Path 4: From Commentary To Authority
 
 Start:
 
-- [Authority Layer](https://anticafiamma.it/authority.html)
+- [Authority Room](https://anticafiamma.it/authority.html)
 
 Route:
 

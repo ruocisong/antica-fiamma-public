@@ -157,6 +157,8 @@ For DH documentation purposes, the important point is not the label "vibe coding
 
 The present documentation work is part of that consolidation. The goal is to make the project inspectable by others rather than dependent on the author's memory of how the prototype was assembled.
 
+AI-assisted coding has supported implementation, refactoring, testing, and documentation work. It does not replace scholarly judgment, source attribution, rights decisions, philological framing, or final review of public-facing claims.
+
 ## Current Technical Scope
 
 The current public repository is scoped as an inspectable public shell rather than a full corpus distribution.

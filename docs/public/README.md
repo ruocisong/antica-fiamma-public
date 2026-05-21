@@ -6,6 +6,7 @@ It is written for readers who want more context than the repository root README 
 
 ## Documents
 
+- [`for-reviewers.md`](./for-reviewers.md): shortest reading path for a preliminary external review.
 - [`scheda-progetto.md`](./scheda-progetto.md): Italian one-page project sheet for a first conversation.
 - [`project-dossier.md`](./project-dossier.md): compact project dossier for preliminary DH discussion.
 - [`repository-guide.md`](./repository-guide.md): how to read the public repository.
@@ -23,7 +24,7 @@ It is written for readers who want more context than the repository root README 
 - [About](https://anticafiamma.it/about.html)
 - [Guide](https://anticafiamma.it/guide.html)
 - [Interface Tour](https://anticafiamma.it/reading-route.html)
-- [Authority Layer](https://anticafiamma.it/authority.html)
+- [Authority Room](https://anticafiamma.it/authority.html)
 - [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html)
 
 The mirror domain [ddpcommentary.com](https://ddpcommentary.com) carries the same public routes during the current transition.

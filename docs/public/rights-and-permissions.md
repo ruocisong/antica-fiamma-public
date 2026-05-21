@@ -12,7 +12,7 @@ The project presents DDP as the source archive and Antica Fiamma as an interface
 
 ## Permission Status
 
-The project author has contacted the Dartmouth Dante Project team regarding formal reuse permission.
+Status as of May 2026: the project author has contacted the Dartmouth Dante Project team regarding formal reuse permission.
 
 The response received so far indicates that the Dartmouth Dante Project site is undergoing an upgrade and that a more definite reply may not be possible until the following academic year. The project therefore documents this permission status openly and keeps the public repository separate from the heavy runtime commentary payloads.
 

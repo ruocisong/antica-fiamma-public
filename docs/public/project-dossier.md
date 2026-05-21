@@ -29,15 +29,16 @@ The project therefore treats the interface as a scholarly argument about reading
 
 ## Current Public Layers
 
-- **Main Entry**: canto and line entry into the poem.
-- **Analysis Layer / Line Snapshot**: a compact orientation layer after a line is selected.
-- **Close Reading / Commentary**: record-level reading with source, date, sorting, line span, and full-text expansion.
-- **Dante Word Locus Layer**: word-level routes through occurrence, micro-context, phrase expansion, and contrastive interpretive vocabulary.
-- **Interpretive Fields**: local commentary-side semantic groupings around a selected line.
-- **Cross-Canto Echoes**: text-first relations between lines elsewhere in the *Commedia*.
-- **Compare**: side-by-side reading of commentary records.
-- **Authority**: author, work, personaggio, and source-facing navigation, including static authority pages.
-- **Research Rooms**: public case-study pages, currently including the Fiamma room on Dante's fire vocabulary and motif.
+The interface combines reading scales with a parallel authority room:
+
+- **Canto-level entry**: canto browser, line map, density bars, and quick jump into the poem.
+- **Line-level reading**: Line Snapshot, local commentary pressure, Interpretive Fields, and Cross-Canto Echoes.
+- **Word-level reading**: Dante Word Locus Layer, Occurrence Explorer, Weighted Micro-Context Concurrence, Exact Local Phrase Expansions, and Contrastive Interpretive Vocabulary.
+- **Commentary-record reading**: Close Reading cards, source/date metadata, full-text expansion, sorting, and Compare.
+- **Authority room**: a parallel author/work/personaggio/source space connected to commentary records, line contexts, source-facing paths, and generated static authority rooms.
+- **Research-room reading**: public case-study rooms, currently including the Fiamma room on Dante's fire vocabulary and motif.
+
+These layers and rooms are parallel routes through the same reading infrastructure. They let the user change scale or move into authority navigation without losing the local textual anchor.
 
 ## Present State
 

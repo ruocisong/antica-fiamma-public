@@ -103,5 +103,5 @@ The strongest public path is now:
 - [About](https://anticafiamma.it/about.html)
 - [Guide](https://anticafiamma.it/guide.html)
 - [Interface Tour](https://anticafiamma.it/reading-route.html)
-- [Authority Layer](https://anticafiamma.it/authority.html)
+- [Authority Room](https://anticafiamma.it/authority.html)
 - [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html)

@@ -4,6 +4,15 @@ This note describes the public reading surfaces of **Antica Fiamma** in the orde
 
 For the visual tour, see [anticafiamma.it/reading-route.html](https://anticafiamma.it/reading-route.html). The same page is also available at [ddpcommentary.com/reading-route.html](https://ddpcommentary.com/reading-route.html).
 
+The interface can also be read by scale and by parallel room:
+
+- **Canto-level**: Main Entry, canto browser, line map, and quick jump.
+- **Line-level**: Line Snapshot, Interpretive Fields, and Cross-Canto Echoes.
+- **Word-level**: Dante Word Locus Layer and its occurrence, micro-context, phrase, and vocabulary panels.
+- **Commentary-record-level**: Close Reading, Commentary cards, full-text expansion, Compare.
+- **Authority room**: a parallel author/work/personaggio/source space connected to line contexts and commentary records.
+- **Research-room-level**: public case-study rooms such as the Fiamma room.
+
 ## Main Entry
 
 The Main Entry is the canto-level opening surface. It presents Dante's poem as a line map and lets the reader begin with a canto, a line, or a precise jump.
@@ -59,9 +68,9 @@ It lets readers hold multiple commentary records or interpretive traditions toge
 
 ## Authority
 
-Authority is the author-, work-, personaggio-, and source-oriented navigation layer.
+Authority is the author-, work-, personaggio-, and source-oriented room attached to the reading interface.
 
-It lets the commentary tradition appear not only as a stack of notes, but as a structured field of authors, works, inherited references, personaggi, and source-facing reading paths. The public site includes both an interactive authority layer and generated static authority rooms.
+It lets the commentary tradition appear not only as a stack of notes, but as a structured field of authors, works, inherited references, personaggi, and source-facing reading paths. The room can be entered from commentary records and line contexts, or directly through generated static authority pages.
 
 ## Research Rooms
 
@@ -80,7 +89,7 @@ For a first walkthrough:
 - start at [Antica Fiamma](https://anticafiamma.it)
 - read the [Interface Tour](https://anticafiamma.it/reading-route.html)
 - keep the [Guide](https://anticafiamma.it/guide.html) open as a practical map
-- use the [Authority Layer](https://anticafiamma.it/authority.html) when moving from commentary cards toward authors, works, and source paths
+- use the [Authority Room](https://anticafiamma.it/authority.html) when moving from commentary cards toward authors, works, and source paths
 - visit the [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html) to see how a focused research case can live inside the same public environment
 
 The mirror domain [ddpcommentary.com](https://ddpcommentary.com) carries the same public routes during the current transition.

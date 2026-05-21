@@ -29,13 +29,14 @@ For a fast external reading, use this order:
 - [About](https://anticafiamma.it/about.html): source map, data statement, rights posture, and colophon.
 - [Guide](https://anticafiamma.it/guide.html): practical reading guidance for the live interface.
 - [Interface Tour](https://anticafiamma.it/reading-route.html): visual walkthrough of the major panels.
-- [Authority Layer](https://anticafiamma.it/authority.html): author, work, personaggio, and source-facing navigation.
+- [Authority Room](https://anticafiamma.it/authority.html): author, work, personaggio, and source-facing navigation connected to the reading interface.
 - [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html): public research room for Dante's fire vocabulary and motif.
 
 The same public pages are also reachable from `https://ddpcommentary.com` during the domain transition.
 
 Repository notes after that:
 
+- [for-reviewers.md](./for-reviewers.md)
 - [scheda-progetto.md](./scheda-progetto.md)
 - [project-dossier.md](./project-dossier.md)
 - [interface-layers.md](./interface-layers.md)
@@ -75,7 +76,7 @@ See [`demo/frontend/static/modules/README.md`](../../demo/frontend/static/module
 
 Generated static author and work authority rooms.
 
-These pages make the authority layer linkable outside the main reading session. They are public interface pages, not private build artifacts.
+These pages make the authority room linkable outside the main reading session. They are public interface pages, not private build artifacts.
 
 See [`demo/frontend/autore/README.md`](../../demo/frontend/autore/README.md).
 
@@ -105,7 +106,7 @@ It is retained for methodological transparency. The generated runtime payloads t
 
 The generator for static authority-facing HTML pages.
 
-It is included because the authority layer is part of the public interface and because the generated pages need an inspectable build path.
+It is included because the authority room is part of the public interface and because the generated pages need an inspectable build path.
 
 ### [`demo/runtime_checks`](../../demo/runtime_checks)
 

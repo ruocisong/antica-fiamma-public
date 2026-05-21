@@ -18,7 +18,7 @@ If you are arriving from outside the codebase, start with the live pages rather 
 - [About](https://anticafiamma.it/about.html): project framing, source map, data statement, rights posture, and colophon.
 - [Guide](https://anticafiamma.it/guide.html): a reader-facing guide to moving through the interface without needing software vocabulary first.
 - [Interface Tour](https://anticafiamma.it/reading-route.html): a visual tour of the major panels and how they are used.
-- [Authority Layer](https://anticafiamma.it/authority.html): the author, work, personaggio, and source-facing layer.
+- [Authority Room](https://anticafiamma.it/authority.html): the author, work, personaggio, and source-facing room connected to the reading interface.
 - [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html): a public case study for Dante's fire vocabulary and the wider fire motif.
 
 Mirror links are available under the same paths at `https://ddpcommentary.com`.
@@ -27,17 +27,16 @@ Mirror links are available under the same paths at `https://ddpcommentary.com`.
 
 Antica Fiamma begins from Dante's poem. A reader can enter by canto, line, content word, commentary card, comparison path, authority page, or research room. The central design principle is that these are different scholarly reading acts, not just different UI filters.
 
-The public interface currently includes:
+The public interface combines reading scales with a parallel authority room:
 
-- **Main Entry**: canto and line entry into the poem.
-- **Analysis Layer / Line Snapshot**: a quick orientation layer for density, terms, span, and local commentary pressure after a line is selected.
-- **Close Reading / Commentary**: record-level reading with source, date, sorting, full-text expansion, and comparison paths.
-- **Dante Word Locus Layer**: word-centered routes through occurrence, micro-context, phrase expansion, and contrastive interpretive vocabulary.
-- **Interpretive Fields**: local commentary-side semantic groupings around a selected line.
-- **Cross-Canto Echoes**: text-first line relations elsewhere in the *Commedia*.
-- **Compare**: a side-by-side surface for holding multiple commentary records together.
-- **Authority**: author, work, personaggio, source, and static authority-room navigation.
-- **Research Rooms**: public case-study pages built inside the larger interface, beginning with the fire motif room.
+- **Canto-level entry**: canto browser, line map, density bars, and quick jump into the poem.
+- **Line-level reading**: Line Snapshot, local commentary pressure, Interpretive Fields, and Cross-Canto Echoes.
+- **Word-level reading**: Dante Word Locus Layer, Occurrence Explorer, Weighted Micro-Context Concurrence, Exact Local Phrase Expansions, and Contrastive Interpretive Vocabulary.
+- **Commentary-record reading**: Close Reading cards, source/date metadata, full-text expansion, sorting, and Compare.
+- **Authority room**: a parallel author/work/personaggio/source space connected to commentary records, line contexts, source-facing paths, and generated static authority rooms.
+- **Research-room reading**: public case-study rooms, beginning with the Fiamma room on Dante's fire vocabulary and motif.
+
+These layers and rooms are parallel entry points into the same reading infrastructure. A reader can move from canto to line, from line to word, from commentary record to authority, or from a research room back to the poem without treating any one surface as the whole project.
 
 ## What This Repository Is
 
@@ -69,6 +68,7 @@ Excluded from this public repository:
 Start here if you are reading the repository as a project artifact.
 
 - [`docs/public/repository-guide.md`](docs/public/repository-guide.md): how to read this public repository.
+- [`docs/public/for-reviewers.md`](docs/public/for-reviewers.md): shortest reading path for a preliminary external review.
 - [`docs/public/scheda-progetto.md`](docs/public/scheda-progetto.md): Italian project sheet for a first conversation.
 - [`docs/public/project-dossier.md`](docs/public/project-dossier.md): compact dossier for a preliminary DH conversation.
 - [`docs/public/interface-layers.md`](docs/public/interface-layers.md): the public interface layers and what each one does.
