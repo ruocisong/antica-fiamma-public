@@ -35,6 +35,8 @@ It keeps the public project entrance separate from the internal studio floor.
 - [`.github/workflows/deploy-pages-shell.yml`](../../.github/workflows/deploy-pages-shell.yml)
 - [`pyproject.toml`](../../pyproject.toml)
 - [`docs/public`](../../docs/public)
+- [`sample_runtime`](../../sample_runtime), as a rights-safe structural sample
+- [`LICENSE`](../../LICENSE), [`LICENSES.md`](../../LICENSES.md), [`CITATION.cff`](../../CITATION.cff), and [`.zenodo.json`](../../.zenodo.json)
 
 ## Exclude Or Keep Internal
 
@@ -64,6 +66,8 @@ It keeps the public project entrance separate from the internal studio floor.
 - How to preview the shell locally
 - How the Cloudflare Pages deployment is prepared
 - Which module README files explain the main repository areas
+- How to cite and license the repository artifact
+- Where to find the rights-safe sample runtime structure
 
 ## Public Repo Shape
 
@@ -91,6 +95,11 @@ deployment_output/
 .github/workflows/
 docs/
   public/
+sample_runtime/
+LICENSE
+LICENSES.md
+CITATION.cff
+.zenodo.json
 ```
 
 ## Current Position

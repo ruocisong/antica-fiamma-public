@@ -1,0 +1,41 @@
+{
+  "sample-record-001": {
+    "record_id": "sample-record-001",
+    "canto": "inferno1",
+    "span": {
+      "start_line": 1,
+      "end_line": 3
+    },
+    "commentator": "Synthetic commentator A",
+    "date_label": "example",
+    "source_archive": "Dartmouth Dante Project",
+    "source_url": "https://dante.dartmouth.edu/",
+    "record_text": "[synthetic placeholder: full source-derived commentary text is not redistributed in this sample]",
+    "record_text_policy": "synthetic_placeholder",
+    "ui_summary": "Example card showing how a line-reaching commentary record is represented in the static runtime layer.",
+    "authority_mentions": [
+      {
+        "surface": "Virgil",
+        "normalized_author": "Virgilio",
+        "normalized_work": "Aeneis",
+        "status": "sample"
+      }
+    ]
+  },
+  "sample-record-002": {
+    "record_id": "sample-record-002",
+    "canto": "inferno1",
+    "span": {
+      "start_line": 1,
+      "end_line": 1
+    },
+    "commentator": "Synthetic commentator B",
+    "date_label": "example",
+    "source_archive": "Dartmouth Dante Project",
+    "source_url": "https://dante.dartmouth.edu/",
+    "record_text": "[redacted structural placeholder]",
+    "record_text_policy": "redacted_placeholder",
+    "ui_summary": "Example single-line record showing how precise local coverage is encoded.",
+    "authority_mentions": []
+  }
+}

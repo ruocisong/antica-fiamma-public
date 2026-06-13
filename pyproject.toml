@@ -1,7 +1,7 @@
 [project]
-name = "ddp-scraper"
+name = "antica-fiamma-public"
 version = "0.1.0"
-description = "Minimal local scraper for the Dartmouth Dante Project search interface"
+description = "Public shell and selected preparation utilities for the Antica Fiamma static Dante reading interface"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use or cite this public repository, please cite it as below."
+title: "Antica Fiamma Public Shell"
+type: software
+authors:
+  - family-names: Song
+    given-names: Ruoci
+repository-code: "https://github.com/ruocisong/antica-fiamma-public"
+url: "https://anticafiamma.it"
+abstract: "Public-facing shell, selected build utilities, deployment wiring, documentation, and rights-safe runtime samples for Antica Fiamma, a static line-first Dante reading interface built with the Dartmouth Dante Project as its commentary source."
+license: MIT
+version: "0.1-code4lib-draft"
+date-released: "2026-06-13"
+keywords:
+  - Dante
+  - digital humanities
+  - static publication
+  - scholarly editions
+  - commentary archives
+  - Code4Lib

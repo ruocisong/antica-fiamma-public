@@ -28,6 +28,9 @@ The project is presented as:
 
 The public repository keeps the heavy runtime commentary payloads outside GitHub.
 
+It includes a small rights-safe runtime sample to document the structure of the
+static JSON assets without redistributing full DDP-derived commentary text.
+
 ## Rights-Sensitive Layer
 
 The rights-sensitive layer is the commentary record payload, especially where full commentary text is involved.
@@ -59,6 +62,7 @@ The current public safeguards are:
 - DDP attribution remains visible
 - the source archive / interface layer distinction is documented
 - heavy runtime commentary payloads are excluded from GitHub
+- sample runtime files use synthetic or redacted placeholders rather than full source-derived commentary text
 - public shell and rights-sensitive data are separated
 - the permission status is recorded rather than hidden
 - the interface has a defined reduced path: remove modern commentary material and retain public-domain commentary layers where available

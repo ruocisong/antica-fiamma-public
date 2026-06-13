@@ -11,6 +11,19 @@ The project is not a replacement for the Dartmouth Dante Project. It is a schola
 
 The public repository documents the interface and deployment shell. The full runtime data payloads used by the live site are intentionally not versioned here.
 
+## Publication Artifact
+
+For Code4Lib readers and other reviewers, this repository is the public
+artifact for the Antica Fiamma static publication shell. It contains the
+website shell, selected build and deployment code, public documentation,
+runtime checks, licensing notes, citation metadata, and a rights-safe sample
+of the JSON runtime structure.
+
+It does not redistribute the full Dartmouth Dante Project-derived commentary
+payload. The live interface keeps the Dartmouth Dante Project visible as the
+commentary source archive, while this repository documents the added static
+reading layer and its data boundary.
+
 ## Best First Reading Path
 
 If you are arriving from outside the codebase, start with the live pages rather than the file tree.
@@ -53,6 +66,8 @@ It contains:
 - Cloudflare Pages packaging and deployment wiring
 - selected source-capture utilities kept for lineage transparency
 - public documentation about the repository, interface layers, and data boundary
+- citation and licensing metadata for publication reuse
+- a rights-safe sample of the static runtime asset structure under [`sample_runtime`](sample_runtime)
 
 Excluded from this public repository:
 
@@ -78,6 +93,9 @@ Start here if you are reading the repository as a project artifact.
 - [`docs/public/sustainability-and-maintenance.md`](docs/public/sustainability-and-maintenance.md): current maintenance model, hosting boundary, and sustainability arrangements.
 - [`docs/public/demo-paths.md`](docs/public/demo-paths.md): short routes for a first demonstration.
 - [`docs/public/public-repository-boundary.md`](docs/public/public-repository-boundary.md): the public repository boundary checklist.
+- [`sample_runtime/README.md`](sample_runtime/README.md): rights-safe sample of runtime JSON asset structures.
+- [`LICENSES.md`](LICENSES.md): code, documentation, article, image, and data reuse boundary.
+- [`CITATION.cff`](CITATION.cff): citation metadata for the public artifact.
 
 Module-level guides:
 
@@ -100,6 +118,7 @@ Main directories:
 - [`deployment_output/PREPARE_PAGES_SHELL.py`](deployment_output/PREPARE_PAGES_SHELL.py): Cloudflare Pages shell packaging script.
 - [`.github/workflows/deploy-pages-shell.yml`](.github/workflows/deploy-pages-shell.yml): GitHub Actions deployment workflow.
 - [`src/ddp_scraper`](src/ddp_scraper): selected source-capture utilities.
+- [`sample_runtime`](sample_runtime): rights-safe structural sample of runtime JSON assets.
 
 ## Data And Rights Boundary
 
@@ -108,6 +127,12 @@ Antica Fiamma uses the Dartmouth Dante Project as its commentary source. The pub
 The full text of commentary records belongs to the source context from which it is drawn. This public repository therefore separates the visible interface shell from the heavier runtime data payloads used by the live site. The repository documents the scholarly interface, selected method-facing code, and public deployment path while keeping generated data distribution outside GitHub.
 
 For the detailed boundary, see [`docs/public/data-boundary.md`](docs/public/data-boundary.md).
+
+For license and reuse scope, see [`LICENSES.md`](LICENSES.md). In brief:
+source code is released under the MIT License; project documentation by Ruoci
+Song is available under CC BY 4.0 unless otherwise noted; source-derived
+runtime commentary payloads are not covered by this repository license and are
+not redistributed here.
 
 ## Local Preview
 

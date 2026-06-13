@@ -1,0 +1,35 @@
+{
+  "authors": [
+    {
+      "id": "virgilio",
+      "label": "Virgilio",
+      "display_name": "Virgil",
+      "page": "/autore/virgilio.html",
+      "works": [
+        {
+          "id": "aeneis",
+          "label": "Aeneis",
+          "page": "/autore/virgilio/aeneis.html",
+          "sample_mentions": [
+            {
+              "record_id": "sample-record-001",
+              "line_id": "inferno1:1",
+              "status": "sample"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "personaggi": [
+    {
+      "id": "virgilio",
+      "label": "Virgilio",
+      "page": "/personaggio/virgilio.html",
+      "status": "sample"
+    }
+  ],
+  "source_boundary": {
+    "note": "This compact authority sample shows route structure only. It is not a full authority dataset."
+  }
+}

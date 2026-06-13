@@ -1,0 +1,27 @@
+{
+  "project": "Antica Fiamma",
+  "sample_type": "rights_safe_runtime_structure",
+  "generated_for": "Code4Lib static publication artifact",
+  "generated_on": "2026-06-13",
+  "data_boundary": {
+    "full_runtime_payload_included": false,
+    "commentary_full_text_included": false,
+    "source_archive": "Dartmouth Dante Project",
+    "source_archive_url": "https://dante.dartmouth.edu/",
+    "note": "This sample documents static asset structure without redistributing the full DDP-derived commentary payload."
+  },
+  "assets": {
+    "line_payload": "line_payload.sample.json",
+    "record_store": "record_store.sample.json",
+    "authority": "authority.sample.json",
+    "coverage_counts": "coverage_counts.csv"
+  },
+  "runtime_pattern": {
+    "canto_overview": "/data/{canto}/overview.json",
+    "line_payload": "/data/{canto}/lines/{line_id}.json",
+    "record_store": "/data/{canto}/records/store.json",
+    "fulltext_store": "/data/{canto}/records/fulltext.json",
+    "authority_layer": "/data/authority/authors.json",
+    "search_index": "/data/search/index.json"
+  }
+}

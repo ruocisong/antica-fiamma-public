@@ -1,0 +1,21 @@
+{
+  "title": "Antica Fiamma Public Shell",
+  "description": "Public-facing shell, selected build utilities, deployment wiring, documentation, and rights-safe runtime samples for Antica Fiamma, a static line-first Dante reading interface built with the Dartmouth Dante Project as its commentary source.",
+  "creators": [
+    {
+      "name": "Song, Ruoci",
+      "affiliation": "University of Bologna"
+    }
+  ],
+  "keywords": [
+    "Dante",
+    "digital humanities",
+    "static publication",
+    "scholarly editions",
+    "commentary archives",
+    "Code4Lib"
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open"
+}

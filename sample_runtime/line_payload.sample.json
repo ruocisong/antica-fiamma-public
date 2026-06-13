@@ -1,0 +1,46 @@
+{
+  "line_id": "inferno1:1",
+  "canto": "inferno1",
+  "cantica": "Inferno",
+  "canto_number": 1,
+  "line_number": 1,
+  "poem": {
+    "text": "Nel mezzo del cammin di nostra vita",
+    "source_note": "Public-domain Dante text layer used here as a structural example."
+  },
+  "commentary_coverage": {
+    "records_reaching_line": [
+      "sample-record-001",
+      "sample-record-002"
+    ],
+    "coverage_count": 2,
+    "span_policy": "A record reaches a line when the selected line falls within the record's stored canto-line span."
+  },
+  "panels": {
+    "line_snapshot": {
+      "available": true,
+      "purpose": "Summarize the selected local reading unit."
+    },
+    "commentary_cards": {
+      "available": true,
+      "record_store": "record_store.sample.json"
+    },
+    "authority_routes": {
+      "available": true,
+      "authority_store": "authority.sample.json"
+    },
+    "word_routes": {
+      "available": true,
+      "sample_terms": [
+        "mezzo",
+        "cammin",
+        "vita"
+      ]
+    }
+  },
+  "source_boundary": {
+    "commentary_text_policy": "Full commentary text is omitted from this sample.",
+    "source_archive": "Dartmouth Dante Project",
+    "interface_layer": "Antica Fiamma"
+  }
+}

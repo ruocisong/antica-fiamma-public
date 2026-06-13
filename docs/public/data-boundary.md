@@ -15,6 +15,8 @@ This repository includes:
 - Cloudflare Pages deployment helpers
 - public documentation about interface structure, scope, data boundary, and source attribution
 - selected source-capture utilities under [`src/ddp_scraper`](../../src/ddp_scraper)
+- a rights-safe structural sample of runtime assets under [`sample_runtime`](../../sample_runtime)
+- citation and licensing metadata for repository-level reuse
 
 ## Maintained Outside This Repository
 
@@ -41,6 +43,11 @@ Antica Fiamma is a live research interface with a substantial runtime data layer
 
 This keeps the public repo readable. It also keeps the relationship between source archive, interface layer, generated runtime data, and internal research workspace from collapsing into one undifferentiated code dump.
 
+The [`sample_runtime`](../../sample_runtime) directory exists to make the
+runtime pattern inspectable without redistributing the full commentary corpus.
+It documents representative JSON shapes, coverage counts, and source-boundary
+fields while using synthetic or redacted commentary placeholders.
+
 ## Source Archive And Interface Layer
 
 Antica Fiamma is built with the Dartmouth Dante Project as its commentary source.
@@ -58,3 +65,7 @@ A reader can inspect:
 - how the project describes its source and reuse boundary
 
 A reader can use this repository to inspect the public shell and documentation while treating the full live runtime corpus as a separately maintained data layer.
+
+The sample runtime files should therefore be read as schema and publication
+boundary documentation, not as a substitute for the live data layer or as a
+redistribution of Dartmouth Dante Project commentary texts.
