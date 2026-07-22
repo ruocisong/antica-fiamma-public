@@ -112,13 +112,7 @@ It prepares:
 deployment_output/pages_shell_build/
 ```
 
-That generated folder is ignored by Git. The GitHub Actions workflow runs the packaging script and deploys the resulting shell.
-
-Workflow:
-
-```text
-.github/workflows/deploy-pages-shell.yml
-```
+That generated folder is ignored by Git. The public repository retains the packaging script for technical inspection, while production deployment is operated from the project's separate private repository.
 
 ## Local Preview
 

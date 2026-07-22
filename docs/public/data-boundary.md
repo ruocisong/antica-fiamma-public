@@ -12,7 +12,7 @@ This repository includes:
 - public images, styles, client modules, and route-tour assets
 - selected build scripts that explain how interface-facing structures are prepared
 - smoke tests for the public shell
-- Cloudflare Pages deployment helpers
+- inspectable Cloudflare Pages packaging helpers
 - public documentation about interface structure, scope, data boundary, and source attribution
 - selected source-capture utilities under [`src/ddp_scraper`](../../src/ddp_scraper)
 - a rights-safe structural sample of runtime assets under [`sample_runtime`](../../sample_runtime)
@@ -39,7 +39,7 @@ In particular, it excludes:
 
 The boundary is intentional.
 
-Antica Fiamma is a live research interface with a substantial runtime data layer. The public repository makes the public shell, public documentation, selected method-facing code, and deployment path legible without turning GitHub into the distribution channel for every generated payload.
+Antica Fiamma is a live research interface with a substantial runtime data layer. The public repository makes the public shell, public documentation, selected method-facing code, and static packaging method legible without turning GitHub into either the production deployment repository or the distribution channel for every generated payload.
 
 This keeps the public repo readable. It also keeps the relationship between source archive, interface layer, generated runtime data, and internal research workspace from collapsing into one undifferentiated code dump.
 

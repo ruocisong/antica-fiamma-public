@@ -14,7 +14,7 @@ The confirmed scope does **not** establish a general licence to redistribute the
 
 ## GitHub And Zenodo Release Boundaries
 
-The living GitHub repository contains project-owned source code, documentation, deployment wiring, and generated interface pages used by the authorised website. The Zenodo 1.0.0 archive is narrower: it omits generated author/work/personaggio pages that may cumulatively expose source-derived material. The complete DDP-derived commentary payload is excluded from both.
+The living public GitHub repository contains project-owned source code, documentation, inspectable deployment-packaging code, and generated interface pages used by the authorised website. Production deployment is operated from a separate private repository. The Zenodo 1.0.0 archive is narrower: it omits generated author/work/personaggio pages that may cumulatively expose source-derived material. The complete DDP-derived commentary payload is excluded from both.
 
 The Zenodo 1.0.0 release may include:
 

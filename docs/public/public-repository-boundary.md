@@ -12,7 +12,7 @@ The public repository provides:
 - live site links for Antica Fiamma
 - a readable map of the public interface
 - enough source structure to understand the shell
-- enough build and deployment logic to understand how the shell reaches Cloudflare Pages
+- enough build and packaging logic to understand the public shell format, without exposing the private production repository
 - a clear boundary around data, rights, generated payloads, and internal research work
 
 It keeps the public project entrance separate from the internal studio floor.
@@ -32,7 +32,6 @@ It keeps the public project entrance separate from the internal studio floor.
 - [`demo/server.py`](../../demo/server.py)
 - [`src/ddp_scraper`](../../src/ddp_scraper), as selected lineage and preparation utilities
 - [`deployment_output/PREPARE_PAGES_SHELL.py`](../../deployment_output/PREPARE_PAGES_SHELL.py)
-- [`.github/workflows/deploy-pages-shell.yml`](../../.github/workflows/deploy-pages-shell.yml)
 - [`pyproject.toml`](../../pyproject.toml)
 - [`docs/public`](../../docs/public)
 - [`sample_runtime`](../../sample_runtime), as a rights-safe structural sample
@@ -66,7 +65,7 @@ It keeps the public project entrance separate from the internal studio floor.
 - What is included in this public repository
 - What data is intentionally excluded
 - How to preview the shell locally
-- How the Cloudflare Pages deployment is prepared
+- How the Cloudflare Pages package is prepared, while production deployment remains private
 - Which module README files explain the main repository areas
 - How to cite and license the repository artifact
 - How the living GitHub repository differs from the fixed Zenodo 1.0.0 archive
@@ -95,7 +94,6 @@ demo/
 src/
   ddp_scraper/
 deployment_output/
-.github/workflows/
 docs/
   public/
 sample_runtime/
