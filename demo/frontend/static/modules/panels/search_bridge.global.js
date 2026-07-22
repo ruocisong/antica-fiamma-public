@@ -15,15 +15,40 @@
     ["paradiso", 2],
   ]);
 
+  const MIN_AUTO_PREFIX_LENGTH = 5;
+
   function normalizeQuickJumpQuery(value) {
     return String(value || "").trim().toLowerCase().replace(/[,./_-]+/g, " ").replace(/\s+/g, " ");
   }
 
+  function normalizeSearchTokenSurface(value) {
+    return String(value || "")
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9']/g, "")
+      .replace(/^'+|'+$/g, "");
+  }
+
+  function parseSearchTerms(query) {
+    const rawTokens = String(query || "").match(/[A-Za-zÀ-ÖØ-öø-ÿ0-9']+-?/g) || [];
+    return rawTokens
+      .map((rawToken) => {
+        const isPrefix = /-$/.test(rawToken);
+        const token = normalizeSearchTokenSurface(rawToken.replace(/-+$/g, ""));
+        return token ? { token, isPrefix } : null;
+      })
+      .filter(Boolean);
+  }
+
   function normalizeSearchTokens(query) {
+    const terms = parseSearchTerms(query);
+    if (terms.length) {
+      return terms.map((term) => term.token);
+    }
     return normalizeQuickJumpQuery(query)
       .split(/\s+/)
-      .map((token) => token.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9']/g, ""))
-      .map((token) => token.replace(/^'+|'+$/g, ""))
+      .map(normalizeSearchTokenSurface)
       .filter(Boolean);
   }
 
@@ -316,6 +341,54 @@
     return Number.isFinite(limit) ? sorted.slice(0, limit) : sorted;
   }
 
+  function collectPrefixTokens(tokenIndex, prefixes) {
+    const normalizedPrefixes = [...new Set((prefixes || [])
+      .map(normalizeSearchTokenSurface)
+      .filter((prefix) => prefix.length >= 3))];
+    if (!normalizedPrefixes.length) {
+      return [];
+    }
+    return Object.keys(tokenIndex || {})
+      .filter((token) => normalizedPrefixes.some((prefix) => token.startsWith(prefix)))
+      .sort((left, right) => left.length - right.length || left.localeCompare(right));
+  }
+
+  function runPrefixTokenSearch(searchIndex, prefixes, limit) {
+    const tokenIndex = searchIndex?.token_index || {};
+    const matchedTokens = collectPrefixTokens(tokenIndex, prefixes);
+    if (!matchedTokens.length) {
+      return [];
+    }
+
+    const groupedHits = new Map();
+    for (const token of matchedTokens) {
+      for (const [sourceKey, hit] of groupHitsBySource(token, tokenIndex[token] || [])) {
+        const existing = groupedHits.get(sourceKey);
+        if (!existing || compareSearchHitPriority(hit, existing) < 0) {
+          groupedHits.set(sourceKey, hit);
+        }
+      }
+    }
+
+    const results = [];
+    for (const primaryHit of groupedHits.values()) {
+      const result = buildHydratedResult(
+        searchIndex,
+        primaryHit.documentId,
+        primaryHit,
+        primaryHit.matchedText || primaryHit.matchedToken,
+        "prefix_token_normalized",
+        ""
+      );
+      if (result) {
+        results.push(result);
+      }
+    }
+
+    const sorted = sortResults(results);
+    return Number.isFinite(limit) ? sorted.slice(0, limit) : sorted;
+  }
+
   function runExactPhraseSearch(searchIndex, query, tokens, limit) {
     const tokenIndex = searchIndex?.token_index || {};
     const normalizedPhrase = normalizeSearchPhrase(query);
@@ -379,11 +452,19 @@
       return [];
     }
     const searchIndex = options.searchIndex || await shell.ensureSearchIndexLoaded();
+    const terms = parseSearchTerms(query);
     const tokens = normalizeSearchTokens(query);
     if (!tokens.length) {
       return [];
     }
     const limit = Number.isFinite(options.limit) ? options.limit : Number.POSITIVE_INFINITY;
+    const prefixTerms = terms.filter((term) => term.isPrefix).map((term) => term.token);
+    if (prefixTerms.length) {
+      return runPrefixTokenSearch(searchIndex, prefixTerms, limit);
+    }
+    if (tokens.length === 1 && tokens[0].length >= MIN_AUTO_PREFIX_LENGTH) {
+      return runPrefixTokenSearch(searchIndex, [tokens[0]], limit);
+    }
     if (tokens.length >= 2) {
       return runExactPhraseSearch(searchIndex, query, tokens, limit);
     }

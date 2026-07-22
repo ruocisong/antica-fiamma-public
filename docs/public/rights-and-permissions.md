@@ -1,68 +1,51 @@
-# Rights And Permissions Note
+# Rights And Permissions
 
-This note records the current source, rights, and permissions posture for **Antica Fiamma**.
-
-It is a public statement of the project's current safeguards: source attribution, data separation, permission status, and reduced-version readiness.
+This note records the verified rights posture for **Antica Fiamma 1.0.0**.
 
 ## Source Relationship
 
-Antica Fiamma uses the Dartmouth Dante Project as its commentary source.
+Antica Fiamma uses the Dartmouth Dante Project (DDP) as its commentary source. The live interface and public documentation identify DDP as the source archive and Antica Fiamma as an additional scholarly reading environment. Antica Fiamma is not an official DDP publication and does not replace the source archive.
 
-The project presents DDP as the source archive and Antica Fiamma as an interface layer around DDP-derived commentary material. The source relationship remains explicit in the public site and documentation.
+## Confirmed Permission Scope
 
-## Permission Status
+The project author holds written authorisation for the current academic, non-profit website use of DDP-derived material in Antica Fiamma. Documentation of that authorisation is retained in the project's private records; this public note does not reproduce private correspondence or expand its terms.
 
-Status as of May 2026: the project author has contacted the Dartmouth Dante Project team regarding formal reuse permission.
+The confirmed scope does **not** establish a general licence to redistribute the complete DDP-derived commentary corpus through GitHub, Zenodo, or another repository. Neither the public visibility of the authorised website nor the presence of deployable interface pages in this repository attaches the MIT or CC BY licence to DDP-derived content.
 
-The response received so far indicates that the Dartmouth Dante Project site is undergoing an upgrade and that a more definite reply may not be possible until the following academic year. The project therefore documents this permission status openly and keeps the public repository separate from the heavy runtime commentary payloads.
+## GitHub And Zenodo Release Boundaries
 
-## Public Presentation
+The living GitHub repository contains project-owned source code, documentation, deployment wiring, and generated interface pages used by the authorised website. The Zenodo 1.0.0 archive is narrower: it omits generated author/work/personaggio pages that may cumulatively expose source-derived material. The complete DDP-derived commentary payload is excluded from both.
 
-The project is presented as:
+The Zenodo 1.0.0 release may include:
 
-- a working research prototype
-- a line-first interface built with DDP as source archive
-- a documented public shell
-- a scholarly interface layer rather than a source archive replacement
-- a project with explicit data and rights boundaries
+- project-owned HTML, CSS, JavaScript, and Python code;
+- public methodological and technical documentation;
+- deployment packaging and runtime checks;
+- synthetic or redacted JSON examples;
+- aggregate coverage counts that do not reproduce commentary text;
+- project-created interface screenshots with source-sensitive reuse notes.
 
-The public repository keeps the heavy runtime commentary payloads outside GitHub.
+It excludes:
 
-It includes a small rights-safe runtime sample to document the structure of the
-static JSON assets without redistributing full DDP-derived commentary text.
+- the complete DDP-derived commentary payload;
+- bulk commentary full text or reconstructable exports;
+- third-party source files lacking a confirmed redistribution basis;
+- private research files, publication drafts, snapshots, reports, caches, credentials, and deployment residue.
 
-## Rights-Sensitive Layer
+## Layered Licences
 
-The rights-sensitive layer is the commentary record payload, especially where full commentary text is involved.
+- Project-owned software: MIT.
+- Project documentation by Ruoci Song: CC BY 4.0 unless otherwise noted.
+- Synthetic/redacted structural samples: CC BY 4.0 as documentation, without rights in source materials.
+- DDP-derived commentary and third-party materials: outside the repository licences; source-specific rights and the limited written website authorisation control.
 
-The interface architecture separates this layer from the public shell. This means the project can preserve its main public structure even if the commentary payload is reduced, replaced, or removed under future permission conditions.
+## Safeguards
 
-A reduced version is defined as a public version that removes modern commentary material while retaining the line-first interface and public-domain commentary layers where available.
+- DDP attribution remains visible.
+- Source archive, poem, project code, and derived reading layers remain conceptually distinct.
+- Heavy commentary payloads are excluded from GitHub and Zenodo.
+- Samples use synthetic or redacted placeholders.
+- Aggregate counts are labelled as runtime/interface units rather than independent commentary opinions.
+- A future broader release requires a separate rights review and cannot be inferred from this deposit.
 
-Such a version can still preserve:
-
-- the line-first reading shell
-- the guide, tour, and methodological documentation
-- the authority-page structure where public data allows
-- the Fiamma research room and its own research assets
-- selected demo paths using public-domain commentary material or another rights-cleared corpus
-
-This distinction matters because the project has a durable interface layer as well as a data layer. The core scholarly contribution is the reading interface and its method of organizing line, commentary, word, comparison, and authority paths.
-
-## Institutional Boundary
-
-The current public presentation records the project as author-maintained.
-
-Any future institutional role can be added through explicit terms covering source permission, public wording, governance, maintenance, and data distribution.
-
-## Current Safeguards
-
-The current public safeguards are:
-
-- DDP attribution remains visible
-- the source archive / interface layer distinction is documented
-- heavy runtime commentary payloads are excluded from GitHub
-- sample runtime files use synthetic or redacted placeholders rather than full source-derived commentary text
-- public shell and rights-sensitive data are separated
-- the permission status is recorded rather than hidden
-- the interface has a defined reduced path: remove modern commentary material and retain public-domain commentary layers where available
+See [`../../LICENSES.md`](../../LICENSES.md) for the repository-level licence statement.

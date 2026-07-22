@@ -11,7 +11,6 @@ Antica Fiamma is currently maintained by Ruoci Song as an autonomous research pr
 The public infrastructure currently includes:
 
 - a primary public domain, [anticafiamma.it](https://anticafiamma.it), registered and paid for by the project author
-- a mirror / transition domain, [ddpcommentary.com](https://ddpcommentary.com), registered and paid for by the project author
 - a public GitHub repository for the inspectable shell
 - a Cloudflare Pages deployment path currently maintained under the author's Cloudflare account on the free tier
 - an external runtime data layer for heavy payloads

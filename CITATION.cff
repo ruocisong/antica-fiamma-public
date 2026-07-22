@@ -1,20 +1,25 @@
 cff-version: 1.2.0
-message: "If you use or cite this public repository, please cite it as below."
-title: "Antica Fiamma Public Shell"
+message: "If you use this archived release, please cite DOI 10.5281/zenodo.21479971. Cite the live environment separately with an access date when relevant."
+title: "Antica Fiamma: Public Research Environment, Version 1.0.0"
 type: software
 authors:
   - family-names: Song
     given-names: Ruoci
+    affiliation: "University of Bologna"
+    orcid: "https://orcid.org/0009-0004-1263-2192"
 repository-code: "https://github.com/ruocisong/antica-fiamma-public"
 url: "https://anticafiamma.it"
-abstract: "Public-facing shell, selected build utilities, deployment wiring, documentation, and rights-safe runtime samples for Antica Fiamma, a static line-first Dante reading interface built with the Dartmouth Dante Project as its commentary source."
+doi: "10.5281/zenodo.21479971"
+abstract: "Versioned, rights-safe public release of Antica Fiamma, a continuously updated line-first research environment for Dante's Commedia. The release contains the public website shell, selected method code, runtime checks, documentation, and synthetic or redacted samples. It excludes the complete Dartmouth Dante Project-derived commentary payload."
 license: MIT
-version: "0.1-code4lib-draft"
-date-released: "2026-06-13"
+version: "1.0.0"
+date-released: "2026-07-22"
 keywords:
-  - Dante
+  - Dante Alighieri
+  - Divine Comedy
   - digital humanities
-  - static publication
-  - scholarly editions
-  - commentary archives
-  - Code4Lib
+  - digital philology
+  - commentary studies
+  - scholarly interface
+  - research software
+  - static web publication

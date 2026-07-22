@@ -56,7 +56,7 @@
           })
           .catch(() => {
             if (state.selectedLocus?.id === locusId && state.selectedLine === payload.line_number) {
-              elements.vocabularyPanel.innerHTML = `<div class="empty-state">当前 loci 还没有接到前端可消费的 Dante word-locus profile。</div>`;
+              elements.vocabularyPanel.innerHTML = `<div class="empty-state">当前 locus 还没有接到前端可消费的 Dante word-locus profile。</div>`;
             }
           });
         return;
@@ -73,6 +73,16 @@
       const concurrence = profile
         ? (profile.weighted_micro_context_concurrence?.top_terms || [])
             .filter((item) => isMeaningfulConcurrenceTerm(item.word, state.selectedLocus?.normalized_form))
+        : [];
+      const concurrenceLineGroups = profile
+        ? (profile.weighted_micro_context_concurrence?.line_evidence_groups || [])
+            .map((group) => ({
+              ...group,
+              terms: (group.terms || []).filter((term) =>
+                isMeaningfulConcurrenceTerm(term.word, state.selectedLocus?.normalized_form)
+              ),
+            }))
+            .filter((group) => group.terms.length)
         : [];
       const phraseExpansions = profile
         ? [...(profile.exact_local_phrase_expansions || [])]
@@ -100,14 +110,12 @@
           return `
             <article class="micro-context-card ${state.activeInterpretiveTerm === item.term ? "is-active" : ""}">
               <div class="micro-context-head">
-                <strong>${escapeHtml(item.term)}</strong>
+                <strong>${escapeHtml(item.displayTerm || item.term)}</strong>
                 <span class="pill">contrastive ${item.contrastiveScore.toFixed(1)}</span>
               </div>
               <p class="semantic-intro">${escapeHtml(getContrastiveBand(item.corpusShare))} · ${item.corpusLineCount} / ${state.corpusInterpretiveStats?.totalLines || 0} line profiles (${corpusPct}%)</p>
               <div class="locus-meta-row">
-                <span class="pill">${item.localRecordCount} local records</span>
-                <span class="pill">${item.occurrenceLineCount} loci for this word</span>
-                <span class="pill">rarity ${item.rarityScore.toFixed(1)}</span>
+                ${renderContrastiveEvidencePills(item)}
               </div>
               <div class="semantic-action-row">
                 <button type="button" class="ghost-button" data-interpretive-term="${escapeHtml(item.term)}">${state.activeInterpretiveTerm === item.term ? "取消过滤" : "过滤 related cards"}</button>
@@ -124,9 +132,29 @@
           </button>
         `;
       }).join("");
-      const concurrenceRows = concurrence.slice(0, 10)
-        .map(
-          (item) => `
+      const concurrenceRows = (concurrenceLineGroups.length
+        ? concurrenceLineGroups.slice(0, 10)
+            .map((group) => {
+              const terms = group.terms.map((term) => term.word).filter(Boolean);
+              const window = {
+                ...group,
+                weight: Number(group.group_score || 0),
+              };
+              return `
+                <article class="micro-context-card">
+                  <div class="micro-context-head">
+                    <strong>${escapeHtml(group.label || terms.join(" / "))}</strong>
+                    <span class="pill">score ${Number(group.group_score || 0).toFixed(1)}</span>
+                  </div>
+                  <div class="occurrence-list">
+                    ${renderConcurrenceWindowRow(window, terms) || `<div class="empty-state">当前共现行组还没有保留可展示的 sample window。</div>`}
+                  </div>
+                </article>
+              `;
+            })
+        : concurrence.slice(0, 10)
+            .map(
+              (item) => `
             <article class="micro-context-card">
               <div class="micro-context-head">
                 <strong>${escapeHtml(item.word)}</strong>
@@ -137,7 +165,7 @@
               </div>
             </article>
           `
-        )
+            ))
         .join("");
       const phraseRows = phraseExpansions.slice(0, 6).map((item) => renderPhraseExpansionCard(item)).join("");
       const contrastiveSectionMarkup = `
@@ -147,13 +175,13 @@
               <h4>Contrastive Interpretive Vocabulary</h4>
               ${renderHelpButton("contrastive-vocabulary", "Contrastive Interpretive Vocabulary 说明")}
             </div>
-            <p class="semantic-intro">这一层不再只看“这一词位附近出现了什么词”，而是把当前 loci 的局部 interpretive terms 放回全《神曲》 line profiles 里比较，优先显示更能区分这个 loci 的词。点击任一 term 会直接过滤并带你到下方 related cards。</p>
+            <p class="semantic-intro">这一层不再只看“这一词位附近出现了什么词”，而是把当前 locus 的局部 interpretive terms 放回全《神曲》 line profiles 里比较，优先显示更能区分这个 locus 的词。点击任一 term 会直接过滤并带你到下方 related cards。</p>
             ${state.activeInterpretiveTerm
               ? `<div class="semantic-filter-note">当前只显示 term <strong>${escapeHtml(state.activeInterpretiveTerm)}</strong> 命中的 commentary cards。<button class="ghost-button" type="button" id="clear-interpretive-filter">显示全部</button></div>`
               : ""}
             <div class="field-grid contrastive-grid">${
               researchProfile
-                ? (contrastiveRows || `<div class="empty-state">当前这个 loci 还没有足够稳定的 contrastive interpretive terms。</div>`)
+                ? (contrastiveRows || `<div class="empty-state">当前这个 locus 还没有足够稳定的 contrastive interpretive terms。</div>`)
                 : `<div class="empty-state">当前词位还没有接到可用的 interpretive commentary profile，所以这一层先不展开。</div>`
             }</div>
             ${relatedFieldRows
@@ -188,8 +216,8 @@
                 <h4>${familyIsActive ? "Occurrence Explorer (Word Family Pilot)" : "Occurrence Explorer"}</h4>
                 ${renderHelpButton("occurrence-explorer", "Occurrence Explorer 说明")}
               </div>
-              <p class="semantic-intro">${profile ? (familyIsActive ? `当前 loci 命中了 top-20 实词族 pilot，所以这里展示的是 <strong>${escapeHtml(family.label)}</strong> 的 family-level occurrences；它仍然只是保守词形聚合，不假装已经是完整 lemma system。` : "这里只列《神曲》内其他 exact-form occurrences；如果某个 canto 还没挂进 workbench，会保留坐标但禁用跳转。") : "这一层更偏向 Dante 原文词位本身的再出现。如果当前词位没有接到前端可消费的 Dante word-locus profile，这一部分就先诚实留空。 "}</p>
-              <div class="occurrence-list">${profile ? (occurrenceRows || `<div class="empty-state">当前这个词在已索引语料里没有别的 ${familyIsActive ? "family-level" : "exact-form"} occurrence。</div>`) : `<div class="empty-state">当前 loci 还没有接到前端可消费的 Dante word-locus profile。</div>`}</div>
+              <p class="semantic-intro">${profile ? (familyIsActive ? `当前 locus 命中了 top-20 实词族 pilot，所以这里展示的是 <strong>${escapeHtml(family.label)}</strong> 的 family-level occurrences；它仍然只是保守词形聚合，不假装已经是完整 lemma system。` : "这里只列《神曲》内其他 exact-form occurrences；如果某个 canto 还没挂进 workbench，会保留坐标但禁用跳转。") : "这一层更偏向 Dante 原文词位本身的再出现。如果当前词位没有接到前端可消费的 Dante word-locus profile，这一部分就先诚实留空。 "}</p>
+              <div class="occurrence-list">${profile ? (occurrenceRows || `<div class="empty-state">当前这个词在已索引语料里没有别的 ${familyIsActive ? "family-level" : "exact-form"} occurrence。</div>`) : `<div class="empty-state">当前 locus 还没有接到前端可消费的 Dante word-locus profile。</div>`}</div>
             </div>
           </div>
           <div class="vocabulary-section">
@@ -198,8 +226,8 @@
                 <h4>${familyIsActive ? "Weighted Micro-Context Concurrence (Family Pilot)" : "Weighted Micro-Context Concurrence"}</h4>
                 ${renderHelpButton("micro-context-concurrence", "Weighted Micro-Context Concurrence 说明")}
               </div>
-              <p class="semantic-intro">${profile ? `这是围绕 “<mark class="locus-target-highlight">${escapeHtml(state.selectedLocus.surface_form)}</mark>” 的小窗口 micro-context concurrence。这里会额外过滤 stopwords、function words 和低语义权重残留，只保留更像实义词的 concurrence terms。${familyIsActive ? `当前这组 concurrence 也是按 <strong>${escapeHtml(family.label)}</strong> 聚合后的 family-level 结果。` : ""}` : "这一层仍然是从 Dante 原文词位出发的局部窗口共现；如果当前词位没有接到前端可消费的 loci profile，就不会假装这里已经有结果。"}</p>
-              <div class="occurrence-list">${profile ? (concurrenceRows || `<div class="empty-state">当前这个词还没有足够稳定的 micro-context concurrence 结果。</div>`) : `<div class="empty-state">当前 loci 还没有可展开的 micro-context concurrence 结果。</div>`}</div>
+              <p class="semantic-intro">${profile ? `这是围绕 “<mark class="locus-target-highlight">${escapeHtml(state.selectedLocus.surface_form)}</mark>” 的小窗口 micro-context concurrence。这里会额外过滤 stopwords、function words 和低语义权重残留，只保留更像实义词的 concurrence terms。${familyIsActive ? `当前这组 concurrence 也是按 <strong>${escapeHtml(family.label)}</strong> 聚合后的 family-level 结果。` : ""}` : "这一层仍然是从 Dante 原文词位出发的局部窗口共现；如果当前词位没有接到前端可消费的 locus profile，就不会假装这里已经有结果。"}</p>
+              <div class="occurrence-list">${profile ? (concurrenceRows || `<div class="empty-state">当前这个词还没有足够稳定的 micro-context concurrence 结果。</div>`) : `<div class="empty-state">当前 locus 还没有可展开的 micro-context concurrence 结果。</div>`}</div>
             </div>
           </div>
         </div>
@@ -209,8 +237,8 @@
               <h4>${familyIsActive ? "Local Phrase Expansions (Family Pilot)" : "Exact Local Phrase Expansions"}</h4>
               ${renderHelpButton("phrase-expansions", "Exact Local Phrase Expansions 说明")}
             </div>
-            <p class="semantic-intro">${profile ? (familyIsActive ? `这里会把 <strong>${escapeHtml(family.label)}</strong> 相关的 local phrase expansions 合并展示；它仍然是 exact local phrase 的保守合集，不是完整 phrase-level loci system。` : "这里只展示 exact local phrase expansions；如果短语在别处有 exact occurrence，会给出 occurrence jump，但这还不是完整 phrase-level loci system。") : "这一层同样更偏向 Dante 原文词位长出来的局部短语。如果当前词位还没有可消费的 loci profile，这部分会先保留为空。 "}</p>
-            <div class="occurrence-list">${profile ? (phraseRows || `<div class="empty-state">当前这个词还没有可展示的 exact local phrase expansions。</div>`) : `<div class="empty-state">当前 loci 还没有可展示的 exact local phrase expansions。</div>`}</div>
+            <p class="semantic-intro">${profile ? (familyIsActive ? `这里会把 <strong>${escapeHtml(family.label)}</strong> 相关的 local phrase expansions 合并展示；它仍然是 exact local phrase 的保守合集，不是完整 phrase-level locus system。` : "这里只展示 exact local phrase expansions；如果短语在别处有 exact occurrence，会给出 occurrence jump，但这还不是完整 phrase-level locus system。") : "这一层同样更偏向 Dante 原文词位长出来的局部短语。如果当前词位还没有可消费的 locus profile，这部分会先保留为空。 "}</p>
+            <div class="occurrence-list phrase-expansion-grid">${profile ? (phraseRows || `<div class="empty-state">当前这个词还没有可展示的 exact local phrase expansions。</div>`) : `<div class="empty-state">当前 locus 还没有可展示的 exact local phrase expansions。</div>`}</div>
           </div>
         </div>
         ${contrastiveSectionMarkup}
@@ -298,7 +326,7 @@
                 ${fieldPills}
               </div>
               <div class="semantic-action-row">
-                <button type="button" class="ghost-button" data-occurrence-sample="${candidate.sample}" data-occurrence-line="${candidate.line_number}" data-occurrence-locus="${escapeHtml(candidate.jumpLocusNormalized || state.selectedLocus?.normalized_form || "")}">跳到这一 loci</button>
+                <button type="button" class="ghost-button" data-occurrence-sample="${candidate.sample}" data-occurrence-line="${candidate.line_number}" data-occurrence-locus="${escapeHtml(candidate.jumpLocusNormalized || state.selectedLocus?.normalized_form || "")}">跳到这一 locus</button>
               </div>
             </article>
           `;
@@ -311,7 +339,7 @@
           <h3>Candidate Echoes for “${escapeHtml(state.selectedLocus.surface_form)}”</h3>
           ${renderHelpButton("recurrence-candidates", "Candidate Echoes 说明")}
         </div>
-        <p class="semantic-intro">这里现在不再只是 boundary note，而是把当前词位的 top contrastive interpretive terms 放回全《神曲》 line profiles 里做 cross-canto ranking。它仍然只是 candidate semantic echo / recurrence hint，不是 philological verdict。${familyIsActive ? `当前 loci 同时开启了 <strong>${escapeHtml(family.label)}</strong> 的 word-family pilot，所以 ranking 也会把这一小组显性词形变化一并算入。` : ""}</p>
+        <p class="semantic-intro">这里现在不再只是 boundary note，而是把当前词位的 top contrastive interpretive terms 放回全《神曲》 line profiles 里做 cross-canto ranking。它仍然只是 candidate semantic echo / recurrence hint，不是 philological verdict。${familyIsActive ? `当前 locus 同时开启了 <strong>${escapeHtml(family.label)}</strong> 的 word-family pilot，所以 ranking 也会把这一小组显性词形变化一并算入。` : ""}</p>
         <div class="locus-meta-row">
           <span class="pill coverage-pill">Line ${payload.line_number}</span>
           ${familyIsActive ? `<span class="pill is-active">family pilot · ${escapeHtml(family.label)}</span>` : ""}
@@ -326,7 +354,7 @@
         <div class="vocabulary-section">
           <div>
             <h4>Cross-Canto Candidate Echoes</h4>
-            <div class="field-grid recurrence-grid">${candidateCards || `<div class="empty-state">当前这个 loci 还没有足够稳定的 cross-canto echo candidates。</div>`}</div>
+            <div class="field-grid recurrence-grid">${candidateCards || `<div class="empty-state">当前这个 locus 还没有足够稳定的 cross-canto echo candidates。</div>`}</div>
           </div>
         </div>
       `;

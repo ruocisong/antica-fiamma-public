@@ -4,15 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Personaggi / Character Atlas</title>
-    <meta name="description" content="Index of named characters (personaggi) in Dante&#x27;s Commedia tracked by the Segni de l’antica fiamma Authority Layer, with alias atlases and cross-links to author pages." />
+    <meta name="description" content="Index of named characters (personaggi) in Dante&#x27;s Commedia tracked by the Antica Fiamma Authority Layer, with alias atlases and cross-links to author pages." />
     <meta property="og:title" content="Personaggi / Character Atlas" />
-    <meta property="og:description" content="Index of named characters (personaggi) in Dante&#x27;s Commedia tracked by the Segni de l’antica fiamma Authority Layer, with alias atlases and cross-links to author pages." />
+    <meta property="og:description" content="Index of named characters (personaggi) in Dante&#x27;s Commedia tracked by the Antica Fiamma Authority Layer, with alias atlases and cross-links to author pages." />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ddpcommentary.com/personaggio/index.html" />
+    <meta property="og:url" content="https://anticafiamma.it/personaggio/index.html" />
     <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://ddpcommentary.com/personaggio/index.html" />
+    <link rel="canonical" href="https://anticafiamma.it/personaggio/index.html" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../static/styles.css?v=20260415d" />
+    <link rel="stylesheet" href="../static/styles.css?v=20260701a" />
   </head>
   <body class="help-popup-page">
     <main class="help-popup-shell">
@@ -28,7 +28,7 @@
         <a class="ghost-link-button" id="personaggio-index-back-link" href="../authority.html">Back</a>
       </div>
       <div class="static-page-content" data-static-lang="en">
-
+        
       <p class="help-modal-lead">
         The personaggio layer now stands as a completed district rather than a placeholder band. This directory keeps
         figure-level rooms distinct from the autore side while their interiors continue to grow thicker.
@@ -66,10 +66,10 @@
           <ul class="help-list"><li><a href="./sordello.html">Sordello</a></li></ul>
         </section>
       </div>
-
+    
       </div>
       <div class="static-page-content" data-static-lang="bilingual" hidden>
-
+        
       <p class="help-modal-lead">
         personaggio 这一层现在已经成区，而不再只是空占位。这个目录让 figure-level 房间继续和 autore 那边分开，同时允许房间内部继续长厚。
       </p>
@@ -104,25 +104,22 @@
           <ul class="help-list"><li><a href="./sordello.html">Sordello</a></li></ul>
         </section>
       </div>
-
+    
       </div>
     </main>
     <script>
       (function () {
         function getLanguage() {
-          const params = new URLSearchParams(window.location.search);
-          const requested = params.get("ui_lang");
-          if (requested === "bilingual") return "bilingual";
-          if (requested === "en") return "en";
           try {
-            const stored = window.localStorage.getItem("ddp-ui-language");
-            return stored === "bilingual" ? "bilingual" : "en";
+            window.localStorage.setItem("ddp-ui-language", "en");
           } catch (error) {
             return "en";
           }
+          return "en";
         }
         function applyLanguage(language) {
-          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          language = "en";
+          document.documentElement.lang = "en";
           document.querySelectorAll('[data-lang-target="personaggio-index"]').forEach((button) => {
             button.classList.toggle("is-active", button.dataset.langValue === language);
           });
@@ -130,7 +127,7 @@
             block.hidden = block.dataset.staticLang !== language;
           });
           const url = new URL(window.location.href);
-          url.searchParams.set("ui_lang", language);
+          url.searchParams.delete("ui_lang");
           window.history.replaceState({}, "", url);
           try {
             window.localStorage.setItem("ddp-ui-language", language);
@@ -138,7 +135,7 @@
           }
           const back = document.getElementById("personaggio-index-back-link");
           const backUrl = new URL(back.getAttribute("href"), window.location.href);
-          backUrl.searchParams.set("ui_lang", language);
+          backUrl.searchParams.delete("ui_lang");
           back.href = backUrl.pathname + backUrl.search;
         }
         const initial = getLanguage();

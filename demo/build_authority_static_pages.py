@@ -2351,7 +2351,7 @@ def rel_data_path(path_str: str | None) -> Path | None:
     return path if path.exists() else None
 
 
-SITE_URL = "https://ddpcommentary.com"
+SITE_URL = "https://anticafiamma.it"
 ASSET_VERSION = "20260415d"
 
 
@@ -2740,7 +2740,7 @@ def build_branch_page(
         language_key=f"branch-{author_slug}-{work_slug}-{slugify(branch_label)}",
         asset_prefix="",
         canonical_path=f"/autore/{author_slug}/{work_slug}/{branch_slug}.html",
-        description=f"{branch_label} — a branch of {work_label} by {author_name} in the Segni de l’antica fiamma Authority Layer.",
+        description=f"{branch_label} — a branch of {work_label} by {author_name} in the Antica Fiamma Authority Layer.",
     )
 
 
@@ -2882,7 +2882,7 @@ def build_work_page(
         language_key=f"work-{author_slug}-{work_slug}",
         asset_prefix="../..",
         canonical_path=f"/autore/{author_slug}/{work_slug}.html",
-        description=f"{work_label} by {author_name} — Segni de l’antica fiamma Authority Layer work page.",
+        description=f"{work_label} by {author_name} — Antica Fiamma Authority Layer work page.",
     )
 
 
@@ -3040,7 +3040,7 @@ def build_author_card(author: dict, work_links: list[dict]) -> tuple[str, str]:
             <h3>Return Paths</h3>
             <p class="help-paragraph">
               Return to the <a href="../authority.html">Authority page</a>, the <a href="./index.html">autore index</a>,
-              or <a href="../index.html">Segni de l’antica fiamma</a>.
+              or <a href="../index.html">Antica Fiamma</a>.
             </p>
           </section>
         </div>
@@ -3094,7 +3094,7 @@ def build_author_card(author: dict, work_links: list[dict]) -> tuple[str, str]:
           <section class="help-section">
             <h3>返回路径</h3>
             <p class="help-paragraph">
-              可以回到 <a href="../authority.html">Authority 页面</a>、<a href="./index.html">autore 索引页</a>，或者 <a href="../index.html">Segni de l’antica fiamma 首页</a>。
+              可以回到 <a href="../authority.html">Authority 页面</a>、<a href="./index.html">autore 索引页</a>，或者 <a href="../index.html">Antica Fiamma 首页</a>。
             </p>
           </section>
         </div>
@@ -3108,7 +3108,7 @@ def build_author_card(author: dict, work_links: list[dict]) -> tuple[str, str]:
         language_key=f"autore-{slug}",
         asset_prefix="..",
         canonical_path=f"/autore/{slug}.html",
-        description=f"{name} — tracked author in the Segni de l’antica fiamma Authority Layer, with mounted works, aliases, and related personaggi.",
+        description=f"{name} — tracked author in the Antica Fiamma Authority Layer, with mounted works, aliases, and related personaggi.",
     )
     return slug, html_doc
 
@@ -3167,7 +3167,7 @@ def build_autore_index(authors: list[dict], source_count: int, highlight_author_
         "autore-index",
         "..",
         canonical_path="/autore/index.html",
-        description="Index of tracked authors (autori) in the Segni de l’antica fiamma Authority Layer, covering Scripture, classical, patristic, medieval, and scholastic sources anchored in Dante's Commedia.",
+        description="Index of tracked authors (autori) in the Antica Fiamma Authority Layer, covering Scripture, classical, patristic, medieval, and scholastic sources anchored in Dante's Commedia.",
     )
 
 
@@ -3338,7 +3338,7 @@ def build_personaggio_index() -> str:
         "personaggio-index",
         "..",
         canonical_path="/personaggio/index.html",
-        description="Index of named characters (personaggi) in Dante's Commedia tracked by the Segni de l’antica fiamma Authority Layer, with alias atlases and cross-links to author pages.",
+        description="Index of named characters (personaggi) in Dante's Commedia tracked by the Antica Fiamma Authority Layer, with alias atlases and cross-links to author pages.",
     )
 
 
@@ -3475,7 +3475,7 @@ def build_personaggio_page(item: dict) -> str:
         f"personaggio-{slug}",
         "..",
         canonical_path=f"/personaggio/{slug}.html",
-        description=f"{title} — a personaggio tracked in the Segni de l’antica fiamma Authority Layer, with scene notes, alias atlas, and cross-links to the related autore entry.",
+        description=f"{title} — a personaggio tracked in the Antica Fiamma Authority Layer, with scene notes, alias atlas, and cross-links to the related autore entry.",
     )
 
 

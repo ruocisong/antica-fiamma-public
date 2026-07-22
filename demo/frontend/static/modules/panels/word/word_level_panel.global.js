@@ -6,6 +6,10 @@
       escapeHtml,
       renderHelpButton,
       ensureDanteWordLociIndexLoaded,
+      isDanteWordLociIndexShardSettled,
+      ensureTreccaniDantescaWordLinksLoaded,
+      hasTreccaniDantescaWordLinkShardState,
+      getTreccaniDantescaLink,
       ensureWordFamilyProfilesLoaded,
       getSelectedWordProfileBundle,
       canAttemptLocusProfileLoad,
@@ -58,11 +62,45 @@
       const familyIsActive = Boolean(bundle?.familyIsActive);
       const profile = bundle?.danteProfile || null;
       const researchProfile = bundle?.researchProfile || null;
+      const treccaniLink = getTreccaniDantescaLink(state.selectedLocus.normalized_form);
+      const treccaniEntries = treccaniLink
+        ? [
+            {
+              entry_title: treccaniLink.entry_title,
+              canonical_url: treccaniLink.canonical_url,
+              entry_role: "main_official_entry",
+            },
+            ...(treccaniLink.related_official_entries || []),
+          ]
+        : [];
+      const treccaniLinksMarkup = treccaniEntries
+        .map((entry, index) => {
+          const isSecondary = index > 0;
+          const visibleLabel = isSecondary
+            ? chooseText(
+                `Enciclopedia Dantesca: ${entry.entry_title} (altra voce)`,
+                `Enciclopedia Dantesca：${entry.entry_title}（另一词条）`,
+              )
+            : `Enciclopedia Dantesca: ${entry.entry_title}`;
+          const title = isSecondary
+            ? chooseText(
+                `Open the other official Enciclopedia Dantesca entry “${entry.entry_title}” on Treccani`,
+                `在 Treccani 打开另一条官方《Enciclopedia Dantesca》词条“${entry.entry_title}”`,
+              )
+            : chooseText(
+                `Open the main official Enciclopedia Dantesca entry “${entry.entry_title}” on Treccani`,
+                `在 Treccani 打开主要官方《Enciclopedia Dantesca》词条“${entry.entry_title}”`,
+              );
+          return `<a class="word-locus-external-link${isSecondary ? " is-secondary" : ""}" href="${escapeHtml(entry.canonical_url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}" aria-label="${escapeHtml(`${visibleLabel}: ${entry.entry_title} (${chooseText("opens in a new tab", "新标签页打开")})`)}">${escapeHtml(visibleLabel)}</a>`;
+        })
+        .join("");
 
-      if (!state.danteWordLociIndex) {
+      if (!isDanteWordLociIndexShardSettled(state.selectedLocus.normalized_form)) {
         const locusId = state.selectedLocus.id;
+        const normalizedForm = state.selectedLocus.normalized_form;
         elements.vocabularyPanel.innerHTML = `<div class="empty-state">${escapeHtml(chooseText(`Loading the Dante word-locus index for ${state.selectedLocus.surface_form}.`, `正在载入 ${state.selectedLocus.surface_form} 对应的 Dante word-locus index。`))}</div>`;
-        ensureDanteWordLociIndexLoaded()
+        ensureDanteWordLociIndexLoaded(normalizedForm)
+          .then(() => ensureWordFamilyProfilesLoaded(normalizedForm))
           .then(() => {
             if (state.selectedLocus?.id === locusId && state.selectedLine === payload.line_number) {
               const currentPayload = state.lineCache.get(payload.line_number) || payload;
@@ -95,6 +133,22 @@
         return;
       }
 
+      // Keep the small, locus-specific profile on the critical path. The full
+      // Treccani sidecar is optional enrichment and must not compete with it.
+      if (!hasTreccaniDantescaWordLinkShardState(state.selectedLocus.normalized_form)) {
+        const locusId = state.selectedLocus.id;
+        const normalizedForm = state.selectedLocus.normalized_form;
+        window.setTimeout(() => {
+          if (hasTreccaniDantescaWordLinkShardState(normalizedForm)) return;
+          ensureTreccaniDantescaWordLinksLoaded(normalizedForm).then((linksPayload) => {
+            if (linksPayload && state.selectedLocus?.id === locusId && state.selectedLine === payload.line_number) {
+              const currentPayload = state.lineCache.get(payload.line_number) || payload;
+              renderLineRecords(currentPayload);
+            }
+          });
+        }, 0);
+      }
+
       const localizedTerms = researchProfile ? getLocalizedInterpretiveTerms(payload, researchProfile) : [];
       const contrastiveTerms = researchProfile ? buildContrastiveInterpretiveTerms(payload, researchProfile, localizedTerms) : [];
       const relatedFields = researchProfile ? getRelatedFieldsForLocus(payload, contrastiveTerms) : [];
@@ -114,6 +168,16 @@
               || Number((right.sample_windows || []).length || 0) - Number((left.sample_windows || []).length || 0)
               || String(left.word || "").localeCompare(String(right.word || ""))
             )
+        : [];
+      const concurrenceLineGroups = profile
+        ? (profile.weighted_micro_context_concurrence?.line_evidence_groups || [])
+            .map((group) => ({
+              ...group,
+              terms: (group.terms || []).filter((term) =>
+                isMeaningfulConcurrenceTerm(term.word, state.selectedLocus?.normalized_form)
+              ),
+            }))
+            .filter((group) => group.terms.length)
         : [];
       const phraseExpansions = profile
         ? [...(profile.exact_local_phrase_expansions || [])]
@@ -142,16 +206,14 @@
             <article class="micro-context-card ${state.activeInterpretiveTerm === item.term ? "is-active" : ""}">
               <div class="micro-context-head">
                 <div class="title-with-inline-action">
-                  <strong>${escapeHtml(item.term)}</strong>
+                  <strong>${escapeHtml(item.displayTerm || item.term)}</strong>
                   <button type="button" class="inline-filter-link" data-interpretive-term="${escapeHtml(item.term)}">${escapeHtml(state.activeInterpretiveTerm === item.term ? chooseText("Clear filter", "清除过滤") : chooseText("Filter related cards", "过滤相关 cards"))}</button>
                 </div>
                 <span class="pill">contrastive ${item.contrastiveScore.toFixed(1)}</span>
               </div>
               <p class="semantic-intro">${escapeHtml(getContrastiveBand(item.corpusShare))} · ${item.corpusLineCount} / ${state.corpusInterpretiveStats?.totalLines || 0} line profiles (${corpusPct}%)</p>
               <div class="locus-meta-row">
-                <span class="pill">${item.localRecordCount} local records</span>
-                <span class="pill">${item.occurrenceLineCount} ${item.occurrenceLineCount === 1 ? "locus" : "loci"} for this word</span>
-                <span class="pill">rarity ${item.rarityScore.toFixed(1)}</span>
+                ${renderContrastiveEvidencePills(item)}
               </div>
             </article>
           `;
@@ -165,9 +227,29 @@
           </button>
         `;
       }).join("");
-      const concurrenceRows = concurrence.slice(0, 10)
-        .map(
-          (item) => `
+      const concurrenceRows = (concurrenceLineGroups.length
+        ? concurrenceLineGroups.slice(0, 10)
+            .map((group) => {
+              const terms = group.terms.map((term) => term.word).filter(Boolean);
+              const window = {
+                ...group,
+                weight: Number(group.group_score || 0),
+              };
+              return `
+                <article class="micro-context-card">
+                  <div class="micro-context-head">
+                    <strong>${escapeHtml(group.label || terms.join(" / "))}</strong>
+                    <span class="pill">score ${Number(group.group_score || 0).toFixed(1)}</span>
+                  </div>
+                  <div class="occurrence-list">
+                    ${renderConcurrenceWindowRow(window, terms) || `<div class="empty-state">${escapeHtml(chooseText("No readable sample windows are currently retained for this concurrence line group.", "当前这个 concurrence line group 还没有保留下来可读的 sample window。"))}</div>`}
+                  </div>
+                </article>
+              `;
+            })
+        : concurrence.slice(0, 10)
+            .map(
+              (item) => `
             <article class="micro-context-card">
               <div class="micro-context-head">
                 <strong>${escapeHtml(item.word)}</strong>
@@ -178,7 +260,7 @@
               </div>
             </article>
           `
-        )
+            ))
         .join("");
       const phraseRows = phraseExpansions.slice(0, 6).map((item) => renderPhraseExpansionCard(item)).join("");
       const contrastiveSectionMarkup = `
@@ -188,7 +270,7 @@
               <h4>Contrastive Interpretive Vocabulary</h4>
               ${renderHelpButton("contrastive-vocabulary", "Contrastive Interpretive Vocabulary 说明")}
             </div>
-            <div class="locus-meta-row">
+            <div class="locus-meta-row contrastive-layer-note-row">
               <span class="pill coverage-pill">${escapeHtml(chooseText("Word / Term Layer", "词位 / interpretive term 层"))}</span>
               <span class="pill">${escapeHtml(chooseText("unit: interpretive terms around the selected Dante locus", "单位：围绕当前 Dante locus 聚起来的 interpretive terms"))}</span>
               <span class="pill">${escapeHtml(chooseText("goal: contrastive cues, not raw word frequency", "目标：看更有区分度的解释线索，而不是原始词频"))}</span>
@@ -215,9 +297,14 @@
 
       elements.vocabularyPanel.innerHTML = `
         <div class="semantic-kicker">Dante Word Locus Layer</div>
-        <div class="title-with-help section-title-with-help">
-          <h3>Locus Panel for “<mark class="locus-target-highlight">${escapeHtml(state.selectedLocus.surface_form)}</mark>”</h3>
-          ${renderHelpButton("dante-word-locus", "Dante Word Locus Layer 说明")}
+        <div class="title-with-help section-title-with-help word-locus-title-row">
+          <div class="word-locus-heading-with-help">
+            <h3>Locus Panel for “<mark class="locus-target-highlight">${escapeHtml(state.selectedLocus.surface_form)}</mark>”</h3>
+            ${renderHelpButton("dante-word-locus", "Dante Word Locus Layer 说明")}
+          </div>
+          <div class="word-locus-title-actions">
+            ${treccaniLinksMarkup}
+          </div>
         </div>
         <div class="locus-meta-row">
           <span class="pill coverage-pill">${escapeHtml(chooseText(`normalized: ${profile?.normalized_form || state.selectedLocus.normalized_form}`, `normalized：${profile?.normalized_form || state.selectedLocus.normalized_form}`))}</span>

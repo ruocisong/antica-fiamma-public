@@ -1,16 +1,17 @@
 measure,value,note
-canto_shells_in_manifest,100,Live public runtime count frozen for Code4Lib drafting.
-canto_overviews_available,100,Live public runtime count frozen for Code4Lib drafting.
-line_profiles,14233,Live public runtime count frozen for Code4Lib drafting.
-overview_line_count,14233,Live public runtime count frozen for Code4Lib drafting.
-word_profiles,13230,Live public runtime count frozen for Code4Lib drafting.
-figure_profiles,4,Live public runtime count frozen for Code4Lib drafting.
-authority_authors,79,Live public runtime count frozen for Code4Lib drafting.
-stable_author_terms,359,Live public runtime count frozen for Code4Lib drafting.
-stable_works,130,Live public runtime count frozen for Code4Lib drafting.
-stable_work_terms,594,Live public runtime count frozen for Code4Lib drafting.
-personaggi,17,Live public runtime count frozen for Code4Lib drafting.
-indexed_search_lines,14233,Live public runtime count frozen for Code4Lib drafting.
+canto_shells_in_manifest,100,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+canto_overviews_available,100,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+line_profiles,14233,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+overview_line_count,14233,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+word_profiles,5125,Aggregate Dante word-locus profile count documented for the Antica Fiamma 1.0.0 public build.
+figure_profiles,4,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+authority_authors,79,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+stable_author_terms,359,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+stable_works,130,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+stable_work_terms,594,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+personaggi,17,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
+indexed_search_lines,14233,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
 search_commentary_source_pool,14306,Deduplicated source pool visible to search layer; payload rows not redistributed here.
-unique_indexed_tokens,119579,Live public runtime count frozen for Code4Lib drafting.
+unique_indexed_tokens,119579,Aggregate count documented for the Antica Fiamma 1.0.0 public build.
 runtime_record_store_entries_summed_by_canto,548698,Runtime scale count; not a deduplicated commentary-source-row count.
+preserved_commentary_source_rows,296069,Aggregate preserved source-row count; not a count of distinct commentaries or independent scholarly opinions.

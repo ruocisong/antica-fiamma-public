@@ -40,6 +40,15 @@
       return state.uiLanguage === "en" ? english : chinese;
     }
 
+    function schedulePanelEnhancement(callback, { timeoutMs = 5500, fallbackDelayMs = 3500 } = {}) {
+      const windowRef = documentRef.defaultView || global;
+      if (typeof windowRef.requestIdleCallback === "function") {
+        windowRef.requestIdleCallback(callback, { timeout: timeoutMs });
+        return;
+      }
+      windowRef.setTimeout(callback, fallbackDelayMs);
+    }
+
     function truncateText(text, maxLength = 140) {
       const normalized = String(text || "").replace(/\s+/g, " ").trim();
       if (!normalized || normalized.length <= maxLength) {
@@ -227,16 +236,157 @@
     function buildAuthorityHighlightTerms(authorityHits = []) {
       return [...new Set(
         (authorityHits || []).flatMap((hit) => [
-          hit?.canonicalName || "",
-          ...(hit?.works || []).slice(0, 2),
           ...(hit?.mentions || [])
             .map((term) => String(term || "").trim())
             .filter((term) => term && term.length <= 48 && term.split(/\s+/).length <= 5)
-            .slice(0, 2),
+            .slice(0, 3),
+          hit?.canonicalName || "",
+          ...(hit?.works || []).slice(0, 2),
         ])
           .map((term) => String(term || "").trim())
           .filter(Boolean)
-      )].slice(0, 6);
+      )].slice(0, 10);
+    }
+
+    function getRecordLocalAuthoritySidecar(item) {
+      const sampleId = item?.sampleId || state.currentSampleEntry?.id || "";
+      const recordId = item?.record?.id || item?.record?.record_id || "";
+      if (!sampleId || !recordId) {
+        return null;
+      }
+      const candidate = state.sampleRecordWorkMentionCache?.get(sampleId)?.records?.[recordId]
+        || item.record?.authority_sidecar
+        || null;
+      if (
+        candidate
+        && (
+          Array.isArray(candidate.raw_work_mentions)
+          || Array.isArray(candidate.raw_author_mentions)
+          || Array.isArray(candidate.raw_personaggio_mentions)
+          || Array.isArray(candidate.authority_signals)
+        )
+      ) {
+        return candidate;
+      }
+      return null;
+    }
+
+    function isDanteCommediaAuthorityWork(row) {
+      const authorId = String(row?.author_id || "").trim();
+      const work = String(row?.canonical_work || row?.display_label || "").trim().toLowerCase();
+      return authorId === "dante" && ["inferno", "purgatorio", "paradiso"].includes(work);
+    }
+
+    function prettifyAuthorityDisplayId(value) {
+      return String(value || "")
+        .replace(/[_-]+/g, " ")
+        .replace(/\b\w/g, (letter) => letter.toUpperCase())
+        .trim();
+    }
+
+    function addUniqueValue(list, value) {
+      const label = String(value || "").trim();
+      if (label && !list.includes(label)) {
+        list.push(label);
+      }
+    }
+
+    function signalHasRole(signal, role) {
+      return (signal?.roles || []).map((item) => String(item || "").trim()).includes(role);
+    }
+
+    function buildPointerLabelFromTarget(target) {
+      const lineStart = Number(target?.line_start || target?.lineNumber || 0);
+      const lineEnd = Number(target?.line_end || target?.lineEnd || lineStart);
+      return formatShortCommediaLocation(
+        target?.cantica || "",
+        Number(target?.canto || 0),
+        lineStart,
+        ...(Number.isFinite(lineEnd) && lineEnd !== lineStart ? [lineEnd] : [])
+      );
+    }
+
+    function getRecordLocalPointerTargetsForItem(item) {
+      const sidecar = getRecordLocalAuthoritySidecar(item);
+      if (!sidecar || !Array.isArray(sidecar.authority_signals)) {
+        return null;
+      }
+      const currentStart = Number(item.record?.line_start || item.activeLineNumber || 0);
+      const currentEnd = Number(item.record?.line_end || item.activeLineNumber || currentStart);
+      const seen = new Set();
+      const pointers = [];
+      (sidecar.authority_signals || []).forEach((signal) => {
+        if (!signalHasRole(signal, "pointer")) {
+          return;
+        }
+        (signal.pointer_targets || []).forEach((target) => {
+          const sampleId = String(target?.sample_id || "").trim();
+          const lineNumber = Number(target?.line_start || 0);
+          const lineEnd = Number(target?.line_end || lineNumber);
+          if (!sampleId || !Number.isFinite(lineNumber)) {
+            return;
+          }
+          if (sampleId === item.sampleId && rangesOverlap(currentStart, currentEnd, lineNumber, lineEnd || lineNumber)) {
+            return;
+          }
+          const key = `${sampleId}:${lineNumber}:${lineEnd || lineNumber}`;
+          if (seen.has(key)) {
+            return;
+          }
+          seen.add(key);
+          pointers.push({
+            matchedText: target.surface || "",
+            sampleId,
+            lineNumber,
+            lineEnd: lineEnd || lineNumber,
+            label: buildPointerLabelFromTarget(target),
+          });
+        });
+      });
+      return pointers.slice(0, 4);
+    }
+
+    function buildPointerHighlightGroups(pointers = []) {
+      const terms = [...new Set((pointers || []).map((pointer) => String(pointer?.matchedText || "").trim()).filter(Boolean))];
+      const resolveMap = {};
+      (pointers || []).forEach((pointer) => {
+        const normalized = normalizeAuthorityDisplayTerm(pointer?.matchedText || "");
+        if (!normalized || !pointer?.sampleId || !Number.isFinite(Number(pointer?.lineNumber))) {
+          return;
+        }
+        resolveMap[normalized] = {
+          "dante-sample-id": pointer.sampleId,
+          "dante-line-number": pointer.lineNumber,
+        };
+      });
+      return terms.length
+        ? [{ terms, className: "authority-hit-dante-line", resolveMap }]
+        : [];
+    }
+
+    function buildAuthorityHighlightGroupsFromHits(authorityHits = []) {
+      const authorTerms = [];
+      const workTerms = [];
+      const personaggioTerms = [];
+      (authorityHits || []).forEach((hit) => {
+        if (hit.authorityKind === "personaggio") {
+          addUniqueValue(personaggioTerms, hit.canonicalName);
+          (hit.personaggioTerms || hit.mentions || []).forEach((term) => addUniqueValue(personaggioTerms, term));
+          return;
+        }
+        (hit.authorTerms || []).forEach((term) => addUniqueValue(authorTerms, term));
+        addUniqueValue(authorTerms, hit.canonicalName);
+        (hit.workTerms || []).forEach((term) => addUniqueValue(workTerms, term));
+        (hit.works || []).forEach((term) => addUniqueValue(workTerms, term));
+      });
+      const personaggioClass = personaggioTerms.some((term) => VIRGILIO_DISPLAY_TERMS.has(normalizeAuthorityDisplayTerm(term)))
+        ? "authority-hit-personaggio authority-hit-personaggio-virgilio"
+        : "authority-hit-personaggio";
+      return [
+        ...(authorTerms.length ? [{ terms: authorTerms, className: "authority-hit-author" }] : []),
+        ...(workTerms.length ? [{ terms: workTerms, className: "authority-hit-work" }] : []),
+        ...(personaggioTerms.length ? [{ terms: personaggioTerms, className: personaggioClass }] : []),
+      ];
     }
 
     function renderTermChip(label, note = "") {
@@ -271,6 +421,7 @@
 
     let authorityIndex = null;
     let authorityIndexPromise = null;
+    let authorityIndexRenderScheduledForLine = null;
 
     function normalizeCompareCommentaryName(name) {
       const normalized = normalizeAuthorityCommentaryName
@@ -321,6 +472,49 @@
           ${note ? `<small>${escapeHtml(note)}</small>` : ""}
         </button>
       `;
+    }
+
+    function renderCompareStaticChip(label, note = "") {
+      return `
+        <span class="compare-link-chip compare-link-chip-static">
+          <strong>${escapeHtml(label)}</strong>
+          ${note ? `<small>${escapeHtml(note)}</small>` : ""}
+        </span>
+      `;
+    }
+
+    function formatCompareAuthorityNote(hit) {
+      const works = [...new Set((hit?.works || []).map((work) => String(work || "").trim()).filter(Boolean))];
+      return works.slice(0, 2).join(" · ") || chooseText(`${hit?.count || 0} mentions`, `${hit?.count || 0} 处引用`);
+    }
+
+    function normalizePointerRangeEnd(start, endText) {
+      const lineStart = Number(start);
+      if (!Number.isFinite(lineStart)) {
+        return Number(endText);
+      }
+      const raw = String(endText || "").trim();
+      if (!raw) {
+        return lineStart;
+      }
+      const parsed = Number(raw);
+      if (!Number.isFinite(parsed)) {
+        return lineStart;
+      }
+      if (parsed >= lineStart) {
+        return parsed;
+      }
+      if (raw.length >= String(lineStart).length) {
+        return null;
+      }
+      const startText = String(lineStart);
+      const expanded = Number(`${startText.slice(0, Math.max(0, startText.length - raw.length))}${raw}`);
+      return Number.isFinite(expanded) && expanded >= lineStart ? expanded : null;
+    }
+
+    function getComparePersonaggioHref(pageSlug) {
+      const slug = String(pageSlug || "").trim().replace(/^\/+|\/+$/g, "");
+      return slug ? `/personaggio/${encodeURIComponent(slug)}.html` : "";
     }
 
     function formatContextLabel(item) {
@@ -493,6 +687,10 @@
     }
 
     function extractPointerTargets(item) {
+      const localPointers = getRecordLocalPointerTargetsForItem(item);
+      if (localPointers) {
+        return localPointers;
+      }
       const compareText = `${item.record?.record_summary || ""} ${item.record?.record_text_preview || ""}`;
       const results = [];
       const seen = new Set();
@@ -509,7 +707,10 @@
             : "par";
         const cantoRaw = String(match[2] || "");
         const lineRaw = Number(match[3]);
-        const endRaw = Number(match[4] || match[3]);
+        const endRaw = normalizePointerRangeEnd(lineRaw, match[4]);
+        if (!Number.isFinite(lineRaw) || endRaw === null || endRaw < lineRaw) {
+          continue;
+        }
         const request = parseNavigationQuery ? parseNavigationQuery(`${alias} ${cantoRaw} ${lineRaw}`) : null;
         if (request?.kind !== "line" || !request.sampleId || !Number.isFinite(request.lineNumber)) {
           continue;
@@ -542,8 +743,8 @@
           continue;
         }
         const lineNumber = Number(match[1]);
-        const lineEnd = Number(match[2] || match[1]);
-        if (!Number.isFinite(lineNumber)) {
+        const lineEnd = normalizePointerRangeEnd(lineNumber, match[2]);
+        if (!Number.isFinite(lineNumber) || lineEnd === null || lineEnd < lineNumber) {
           continue;
         }
         if (item.sampleId === state.currentSampleEntry?.id && rangesOverlap(currentStart, currentEnd, lineNumber, lineEnd)) {
@@ -571,6 +772,16 @@
         button.addEventListener("click", async (event) => {
           event.stopPropagation();
           await openAuthorityAuthorFromCompare?.(button.dataset.compareAuthority || "");
+        });
+      });
+
+      root.querySelectorAll("[data-compare-personaggio]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const href = getComparePersonaggioHref(button.dataset.comparePersonaggio || "");
+          if (href) {
+            global.open(href, "_blank", "noopener,noreferrer");
+          }
         });
       });
 
@@ -616,6 +827,10 @@
         });
     }
 
+    function shouldDeferCompareAuthorityIndex() {
+      return Boolean(state.selectedLocus) || Date.now() < Number(state.compareAuthorityIndexDeferredUntil || 0);
+    }
+
     async function ensureCompareAuthorityIndexLoaded() {
       if (authorityIndex) {
         return authorityIndex;
@@ -627,22 +842,33 @@
         authorityIndex = new Map();
         return authorityIndex;
       }
+      if (shouldDeferCompareAuthorityIndex()) {
+        return new Map();
+      }
 
       authorityIndexPromise = Promise.resolve(ensureAuthorityLayerLoaded())
-        .then((layer) => Promise.all(
-          (layer?.authors || []).map(async (author) => {
-            if (!author?.detail_path) {
-              return author;
-            }
-            try {
-              const payload = await fetchJson(author.detail_path);
-              return payload?.author || author;
-            } catch (error) {
-              return author;
-            }
-          })
-        ))
+        .then((layer) => {
+          if (shouldDeferCompareAuthorityIndex()) {
+            return null;
+          }
+          return Promise.all(
+            (layer?.authors || []).map(async (author) => {
+              if (!author?.detail_path) {
+                return author;
+              }
+              try {
+                const payload = await fetchJson(author.detail_path);
+                return payload?.author || author;
+              } catch (error) {
+                return author;
+              }
+            })
+          );
+        })
         .then((authors) => {
+          if (!authors) {
+            return new Map();
+          }
           const index = new Map();
           authors.forEach((author) => {
             (author?.occurrences || []).forEach((occurrence) => {
@@ -675,7 +901,272 @@
       return authorityIndexPromise;
     }
 
+    function scheduleCompareAuthorityIndexRender(lineNumber) {
+      if (authorityIndex || authorityIndexPromise || authorityIndexRenderScheduledForLine === lineNumber) {
+        return;
+      }
+      authorityIndexRenderScheduledForLine = lineNumber;
+      schedulePanelEnhancement(() => {
+        authorityIndexRenderScheduledForLine = null;
+        if (authorityIndex || authorityIndexPromise || state.selectedLine !== lineNumber || shouldDeferCompareAuthorityIndex()) {
+          return;
+        }
+        ensureCompareAuthorityIndexLoaded().then(() => {
+          if (state.selectedLine === lineNumber) {
+            renderLineRecords(state.lineCache.get(lineNumber));
+          }
+        });
+      }, { timeoutMs: 6500, fallbackDelayMs: 4200 });
+    }
+
+    function getRecordLocalAuthorityHitsForItem(item) {
+      const sidecar = getRecordLocalAuthoritySidecar(item);
+      if (!sidecar) {
+        return null;
+      }
+      if (Array.isArray(sidecar.authority_signals)) {
+        const hitMap = new Map();
+        const ensureHit = (key, seed = {}) => {
+          if (!key) {
+            return null;
+          }
+          const existing = hitMap.get(key) || {
+            authorId: seed.authorId || "",
+            pageSlug: seed.pageSlug || "",
+            canonicalName: seed.canonicalName || "Authority",
+            authorityKind: seed.authorityKind || "autore",
+            works: [],
+            mentions: [],
+            authorTerms: [],
+            workTerms: [],
+            personaggioTerms: [],
+            count: 0,
+          };
+          if (seed.authorId && !existing.authorId) {
+            existing.authorId = seed.authorId;
+          }
+          if (seed.pageSlug && !existing.pageSlug) {
+            existing.pageSlug = seed.pageSlug;
+          }
+          if (seed.canonicalName && existing.canonicalName === "Authority") {
+            existing.canonicalName = seed.canonicalName;
+          }
+          hitMap.set(key, existing);
+          return existing;
+        };
+
+        (sidecar.authority_signals || []).forEach((signal) => {
+          const kind = String(signal?.kind || signal?.signal_kind || "").trim();
+          const entityKind = String(signal?.entity_kind || signal?.signal_kind || "").trim();
+          if (kind === "work" || signal?.signal_kind === "work") {
+            if (signalHasRole(signal, "pointer")) {
+              return;
+            }
+            const authorId = String(signal.author_id || "").trim();
+            if (!authorId) {
+              return;
+            }
+            const hit = ensureHit(`autore:${authorId}`, {
+              authorId,
+              canonicalName: signal.display_name || signal.canonical_name || prettifyAuthorityDisplayId(authorId),
+              authorityKind: "autore",
+            });
+            if (!hit) {
+              return;
+            }
+            addUniqueValue(hit.works, signal.display_label || signal.canonical_work);
+            (signal.raw_surfaces || []).forEach((surface) => {
+              addUniqueValue(hit.mentions, surface);
+              addUniqueValue(hit.workTerms, surface);
+            });
+            addUniqueValue(hit.workTerms, signal.display_label || signal.canonical_work);
+            hit.count += Math.max(1, (signal.raw_surfaces || []).length);
+            return;
+          }
+          if (kind === "entity" && entityKind === "personaggio") {
+            const pageSlug = String(signal.page_slug || "").trim();
+            if (!pageSlug) {
+              return;
+            }
+            const hit = ensureHit(`personaggio:${pageSlug}`, {
+              pageSlug,
+              canonicalName: signal.display_name || prettifyAuthorityDisplayId(pageSlug),
+              authorityKind: "personaggio",
+            });
+            if (!hit) {
+              return;
+            }
+            (signal.raw_surfaces || []).forEach((surface) => {
+              addUniqueValue(hit.mentions, surface);
+              addUniqueValue(hit.personaggioTerms, surface);
+            });
+            addUniqueValue(hit.personaggioTerms, signal.display_name);
+            hit.count += Math.max(1, (signal.raw_surfaces || []).length);
+            return;
+          }
+          if (kind === "entity" || signal?.signal_kind === "author") {
+            const authorId = String(signal.author_id || "").trim();
+            if (!authorId) {
+              return;
+            }
+            const hit = ensureHit(`autore:${authorId}`, {
+              authorId,
+              canonicalName: signal.display_name || signal.canonical_name || prettifyAuthorityDisplayId(authorId),
+              authorityKind: "autore",
+            });
+            if (!hit) {
+              return;
+            }
+            (signal.raw_surfaces || []).forEach((surface) => {
+              addUniqueValue(hit.mentions, surface);
+              addUniqueValue(hit.authorTerms, surface);
+            });
+            hit.count += Math.max(1, (signal.raw_surfaces || []).length);
+          }
+        });
+
+        return [...hitMap.values()]
+          .sort((left, right) =>
+            right.count - left.count
+            || (left.authorityKind === "personaggio" ? 1 : 0) - (right.authorityKind === "personaggio" ? 1 : 0)
+            || left.canonicalName.localeCompare(right.canonicalName)
+          )
+          .slice(0, 4);
+      }
+      const authorMetaById = new Map(
+        (sidecar.authority_authors || []).map((author) => [
+          String(author?.author_id || "").trim(),
+          author,
+        ])
+      );
+      const workMetaByKey = new Map(
+        (sidecar.authority_works || []).map((work) => [
+          `${String(work?.author_id || "").trim()}::${String(work?.canonical_work || work?.display_label || "").trim()}`,
+          work,
+        ])
+      );
+      const personaggioMetaBySlug = new Map(
+        (sidecar.authority_personaggi || []).map((personaggio) => [
+          String(personaggio?.page_slug || personaggio?.public_slug_it || "").trim(),
+          personaggio,
+        ])
+      );
+      const hitMap = new Map();
+
+      const ensureHit = (key, seed = {}) => {
+        if (!key) {
+          return null;
+        }
+          const existing = hitMap.get(key) || {
+            authorId: seed.authorId || "",
+            pageSlug: seed.pageSlug || "",
+            canonicalName: seed.canonicalName || "Authority",
+            authorityKind: seed.authorityKind || "author",
+            works: [],
+          mentions: [],
+          count: 0,
+        };
+        if (seed.authorId && !existing.authorId) {
+          existing.authorId = seed.authorId;
+        }
+        if (seed.pageSlug && !existing.pageSlug) {
+          existing.pageSlug = seed.pageSlug;
+        }
+        if (seed.canonicalName && existing.canonicalName === "Authority") {
+          existing.canonicalName = seed.canonicalName;
+        }
+        hitMap.set(key, existing);
+        return existing;
+      };
+
+      (sidecar.raw_work_mentions || []).forEach((row) => {
+        if (!row || isDanteCommediaAuthorityWork(row)) {
+          return;
+        }
+        const authorId = String(row.author_id || "").trim();
+        const canonicalWork = String(row.canonical_work || "").trim();
+        if (!authorId) {
+          return;
+        }
+        const authorMeta = authorMetaById.get(authorId) || {};
+        const workMeta = workMetaByKey.get(`${authorId}::${canonicalWork}`) || {};
+        const hit = ensureHit(`author:${authorId}`, {
+          authorId,
+          canonicalName: authorMeta.display_name || authorMeta.canonical_name || prettifyAuthorityDisplayId(authorId),
+          authorityKind: "author",
+        });
+        if (!hit) {
+          return;
+        }
+        const workLabel = workMeta.display_label || canonicalWork;
+        if (workLabel && !hit.works.includes(workLabel)) {
+          hit.works.push(workLabel);
+        }
+        (row.raw_surfaces || []).forEach((surface) => {
+          const label = String(surface || "").trim();
+          if (label && !hit.mentions.includes(label)) {
+            hit.mentions.push(label);
+          }
+        });
+        hit.count += Math.max(1, (row.raw_surfaces || []).length);
+      });
+
+      (sidecar.raw_author_mentions || []).forEach((row) => {
+        const authorId = String(row?.author_id || "").trim();
+        if (!authorId) {
+          return;
+        }
+        const authorMeta = authorMetaById.get(authorId) || {};
+        const hit = ensureHit(`author:${authorId}`, {
+          authorId,
+          canonicalName: authorMeta.display_name || authorMeta.canonical_name || prettifyAuthorityDisplayId(authorId),
+          authorityKind: "author",
+        });
+        if (!hit) {
+          return;
+        }
+        (row.raw_surfaces || []).forEach((surface) => {
+          const label = String(surface || "").trim();
+          if (label && !hit.mentions.includes(label)) {
+            hit.mentions.push(label);
+          }
+        });
+        hit.count += Math.max(1, (row.raw_surfaces || []).length);
+      });
+
+      (sidecar.raw_personaggio_mentions || []).forEach((row) => {
+        const pageSlug = String(row?.page_slug || "").trim();
+        if (!pageSlug) {
+          return;
+        }
+        const personaggioMeta = personaggioMetaBySlug.get(pageSlug) || {};
+        const hit = ensureHit(`personaggio:${pageSlug}`, {
+          pageSlug,
+          canonicalName: personaggioMeta.display_name || row.display_name || prettifyAuthorityDisplayId(pageSlug),
+          authorityKind: "personaggio",
+        });
+        if (!hit) {
+          return;
+        }
+        (row.raw_surfaces || []).forEach((surface) => {
+          const label = String(surface || "").trim();
+          if (label && !hit.mentions.includes(label)) {
+            hit.mentions.push(label);
+          }
+        });
+        hit.count += Math.max(1, (row.raw_surfaces || []).length);
+      });
+
+      return [...hitMap.values()]
+        .sort((left, right) => right.count - left.count || left.canonicalName.localeCompare(right.canonicalName))
+        .slice(0, 4);
+    }
+
     function getAuthorityHitsForItem(item) {
+      const localHits = getRecordLocalAuthorityHitsForItem(item);
+      if (localHits) {
+        return localHits;
+      }
       if (!authorityIndex) {
         ensureAuthorityIndexPrimed();
         return [];
@@ -1038,14 +1529,6 @@
       });
       const visibleRecords = dedupeRecordsForDisplay(filteredRecords);
 
-      if (!authorityIndex && !authorityIndexPromise && visibleRecords.length) {
-        ensureCompareAuthorityIndexLoaded().then(() => {
-          if (state.selectedLine === payload.line_number) {
-            renderLineRecords(state.lineCache.get(payload.line_number));
-          }
-        });
-      }
-
       if (state.activeSearchRecordId && !visibleRecords.some((record) => record.id === state.activeSearchRecordId)) {
         state.activeSearchRecordId = null;
       }
@@ -1110,17 +1593,29 @@
         ? ""
         : `<p class="compare-origin">${escapeHtml(locationNote)}</p>`;
       const authorityMarkup = cardModel?.authorityHits?.length
-          ? `<div class="compare-chip-row compare-action-row">${cardModel.authorityHits.map((hit) => renderCompareActionChip(
-              hit.canonicalName,
-              `data-compare-authority="${escapeAttribute(hit.authorId)}"`,
-              hit.works[0] || chooseText(`${hit.count} mentions`, `${hit.count} 处引用`)
-            )).join("")}</div>`
+          ? `<div class="compare-chip-row compare-action-row">${cardModel.authorityHits.map((hit) => {
+              const note = formatCompareAuthorityNote(hit);
+              if (hit.authorId) {
+                return renderCompareActionChip(
+                  hit.canonicalName,
+                  `data-compare-authority="${escapeAttribute(hit.authorId)}"`,
+                  note
+                );
+              }
+              if (hit.authorityKind === "personaggio" && hit.pageSlug && getComparePersonaggioHref(hit.pageSlug)) {
+                return renderCompareActionChip(
+                  hit.canonicalName,
+                  `data-compare-personaggio="${escapeAttribute(hit.pageSlug)}"`,
+                  note
+                );
+              }
+              return renderCompareStaticChip(hit.canonicalName, note);
+            }).join("")}</div>`
           : "";
       const pointerMarkup = cardModel?.pointers?.length
         ? `<div class="compare-chip-row compare-action-row">${cardModel.pointers.map((pointer) => renderCompareActionChip(
             pointer.label,
-            `data-compare-pointer-sample="${escapeAttribute(pointer.sampleId)}" data-compare-pointer-line="${escapeAttribute(pointer.lineNumber)}"`,
-            pointer.matchedText
+            `data-compare-pointer-sample="${escapeAttribute(pointer.sampleId)}" data-compare-pointer-line="${escapeAttribute(pointer.lineNumber)}"`
           )).join("")}</div>`
         : "";
       const card = documentRef.createElement("article");
@@ -1146,17 +1641,15 @@
           </div>
         </div>
         ${originMarkup}
-        ${renderSignalSection(chooseText("Authority Usage", "Authority 使用"), authorityMarkup)}
         ${renderSignalSection(chooseText("Pointers", "Pointer 指针"), pointerMarkup)}
+        ${renderSignalSection(chooseText("Authority", "Authority"), authorityMarkup)}
         <div class="compare-preview">${renderReadingBody(
           record.record_text_preview || record.record_summary,
           { chunkLongParagraphs: true, maxParagraphs: 3 },
-          cardModel?.highlightTerms || [],
+          [],
           [
-            ...buildAuthorityDisplayHighlightGroups(cardModel?.authorityHighlightTerms || []),
-            ...(buildAuthorityLexiconHighlightGroupsForText
-              ? buildAuthorityLexiconHighlightGroupsForText(record.record_text_preview || record.record_summary || "", record)
-              : []),
+            ...buildPointerHighlightGroups(cardModel?.pointers || []),
+            ...buildAuthorityHighlightGroupsFromHits(cardModel?.authorityHits || []),
           ]
         )}</div>
       `;
@@ -1187,55 +1680,10 @@
             `${compareModel.count} records are pinned. Compare them through source-aware jumps, authority use, and outward references when they surface.`,
             `当前已 pin ${compareModel.count} 张卡。默认前台只保留原行跳转、authority 使用和 outward reference 这些更成熟的比较动作。`
           );
-      const authorityRows = compareModel.cards
-        .filter((card) => card.authorityHits.length)
-        .map((card) => `
-          <article class="compare-alignment-row">
-            <strong>${escapeHtml(card.item.record.commentary_name)}</strong>
-            <div class="compare-chip-row compare-action-row">
-              ${card.authorityHits.map((hit) => renderCompareActionChip(
-                hit.canonicalName,
-                `data-compare-authority="${escapeAttribute(hit.authorId)}"`,
-                hit.works[0] || chooseText(`${hit.count} mentions`, `${hit.count} 处引用`)
-              )).join("")}
-            </div>
-          </article>
-        `)
-        .join("");
-      const authorityMarkup = compareModel.sharedAuthorities.length
-        ? `
-          <div class="compare-chip-row compare-action-row">
-            ${compareModel.sharedAuthorities.map((item) => renderCompareActionChip(
-              item.canonicalName,
-              `data-compare-authority="${escapeAttribute(item.authorId)}"`,
-              chooseText(`${item.support} cards`, `${item.support} 张卡`)
-            )).join("")}
-          </div>
-          ${authorityRows}
-        `
-        : authorityRows;
-      const pointerRows = compareModel.cards
-        .filter((card) => card.pointers.length)
-        .map((card) => `
-          <article class="compare-alignment-row">
-            <strong>${escapeHtml(card.item.record.commentary_name)}</strong>
-            <div class="compare-chip-row compare-action-row">
-              ${card.pointers.map((pointer) => renderCompareActionChip(
-                pointer.label,
-                `data-compare-pointer-sample="${escapeAttribute(pointer.sampleId)}" data-compare-pointer-line="${escapeAttribute(pointer.lineNumber)}"`,
-                pointer.matchedText
-              )).join("")}
-            </div>
-          </article>
-        `)
-        .join("");
-      const pointerMarkup = pointerRows;
       elements.compareSummary.innerHTML = `
         <div class="compare-summary-shell">
           <strong class="compare-summary-title">${escapeHtml(compareModel.sharedHeading ? `${chooseText("Compare", "Compare")}: ${compareModel.sharedHeading}` : chooseText("Compare", "Compare"))}</strong>
           <p class="compare-lead">${escapeHtml(lead)}</p>
-          ${renderSignalSection(chooseText("Authority Usage", "Authority 使用"), authorityMarkup, "compare-summary-section")}
-          ${renderSignalSection(chooseText("Pointers", "Pointer 指针"), pointerMarkup, "compare-summary-section")}
         </div>
       `;
       bindCompareInteractiveElements(elements.compareSummary);

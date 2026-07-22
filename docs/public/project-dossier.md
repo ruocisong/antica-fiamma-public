@@ -13,11 +13,10 @@ The project uses the Dartmouth Dante Project as its commentary source. It presen
 Live entrances:
 
 - [anticafiamma.it](https://anticafiamma.it)
-- [ddpcommentary.com](https://ddpcommentary.com)
 
 Public repository:
 
-- Antica Fiamma public repository
+- [ruocisong/antica-fiamma-public](https://github.com/ruocisong/antica-fiamma-public)
 
 ## Scholarly Premise
 
@@ -58,7 +57,7 @@ The project is currently author-maintained and presented as an inspectable DH pr
 
 The commentary source relationship is central. Antica Fiamma uses the Dartmouth Dante Project as the commentary source and credits that relationship explicitly.
 
-The project author has contacted the Dartmouth Dante Project team about formal reuse permission. While the response process is ongoing, the public repository keeps the heavy commentary payloads outside GitHub and documents the source relationship clearly.
+The project author holds written authorisation for the current academic, non-profit website use of DDP-derived material. That limited website-use authorisation is not treated as a licence to redistribute the complete commentary corpus through GitHub, Zenodo, or another repository; the public repository therefore excludes the heavy commentary payload.
 
 The public shell, research rooms, static authority pages, build scripts, and documentation remain structurally separable from any single full-text payload. If formal reuse conditions call for a reduced public version, modern commentary material can be removed while retaining the core line-first interface and public-domain commentary layers where available.
 

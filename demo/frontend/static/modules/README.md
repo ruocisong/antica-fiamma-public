@@ -1,34 +1,60 @@
-# Frontend Modules
+# Frontend Modules Scaffold
 
-This directory contains the split frontend module layer for the public Antica Fiamma shell.
+这个目录是 DDP 主前端壳的拆分准备区。
 
-The current browser shell still keeps `demo/frontend/static/app.js` as the main entrypoint. The files here make the runtime structure easier to maintain by separating stable responsibilities into smaller public modules and contract notes.
+当前说明：
 
-## Main Areas
+- 这里先放 **稳定 contract / registry / runtime scaffold**
+- 其中 `core/module_registry.js` 与 `core/runtime_contract.js` 当前是 **reference-only contract scaffold**
+- 它们**不**属于当前页面运行时加载链
+- 还没有把主站直接切换成 `type="module"` 运行
+- 当前生产入口仍然是：
+  - [demo/frontend/static/app.js](/Users/Ruoci/Desktop/fiamma🔥/DDP/demo/frontend/static/app.js)
 
-- `core/`: shared runtime contracts, DOM helpers, state, routing, loaders, and module registry notes.
-- `panels/`: interface panels and interaction-level logic.
+## 为什么先这样做
 
-## Current Runtime Shape
+因为当前主任务不是一口气推倒 `app.js`，而是先把以下东西冻结：
 
-The public shell uses a hybrid structure:
+- 模块边界
+- 共享 state / cache contract
+- 主线程与 authority/search/UI 线程的接缝
 
-- `static/app.js` remains the central browser entrypoint.
-- Stable panel logic can live under `static/modules/panels/`.
-- Word-level logic now lives under `static/modules/panels/word/`.
-- Line-level logic now lives under `static/modules/panels/line/`.
-- Core files document shared contracts and provide reusable runtime helpers where already stabilized.
+等这些边界钉住后，再逐步搬运具体 panel 逻辑。
 
-## Important Panel Paths
+## 当前已落地的准备文件
 
-- `panels/word/word_level_panel.global.js`: Dante Word Locus Layer and word-centered panels.
-- `panels/line/line_level_panel.global.js`: line-level Cross-Canto Echoes and related line panels.
-- `panels/records_panel.global.js`: commentary-card and record-reading surface.
-- `panels/authority_panel.global.js`: authority-layer interactions.
-- `panels/coverage_panel.global.js`: canto and line coverage surface.
+### `core/module_registry.js`
 
-Do not target removed or obsolete paths when updating the live frontend. In particular, new word-level work should target `panels/word/word_level_panel.global.js`, not an older top-level loci-panel path.
+记录：
 
-## Public Boundary
+- 模块 id
+- owner
+- 迁移 phase
+- 依赖关系
+- 每块的职责
 
-These modules belong to the public shell because they describe how the visible interface runs. Heavy runtime data consumed by these modules remains outside this public repository.
+注意：
+
+- 当前只是线程协作与主壳拆分的参考注册表
+- 不是浏览器运行时真正 import/执行的模块
+
+### `core/runtime_contract.js`
+
+记录：
+
+- manifest 稳定字段
+- line payload 稳定字段
+- record store 稳定字段
+- sample 级 cache key
+- jump contract
+
+注意：
+
+- 当前只是稳定字段与路径约定的参考文件
+- 不是浏览器运行时真正 import/执行的模块
+
+## 当前工作原则
+
+- authority/search/UI 线程不要在这里自行发明另一套 bootstrap 结构
+- 主线程先维护这些 contract scaffold
+- 后续真正拆 `app.js` 时，先从低副作用 shared layer 开始

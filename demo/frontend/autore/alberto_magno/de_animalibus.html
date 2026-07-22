@@ -4,15 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>De animalibus / Alberto Magno</title>
-    <meta name="description" content="De animalibus by Alberto Magno — Segni de l’antica fiamma Authority Layer work page." />
+    <meta name="description" content="De animalibus by Alberto Magno — Antica Fiamma Authority Layer work page." />
     <meta property="og:title" content="De animalibus / Alberto Magno" />
-    <meta property="og:description" content="De animalibus by Alberto Magno — Segni de l’antica fiamma Authority Layer work page." />
+    <meta property="og:description" content="De animalibus by Alberto Magno — Antica Fiamma Authority Layer work page." />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ddpcommentary.com/autore/alberto_magno/de_animalibus.html" />
+    <meta property="og:url" content="https://anticafiamma.it/autore/alberto_magno/de_animalibus.html" />
     <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://ddpcommentary.com/autore/alberto_magno/de_animalibus.html" />
+    <link rel="canonical" href="https://anticafiamma.it/autore/alberto_magno/de_animalibus.html" />
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../../static/styles.css?v=20260415d" />
+    <link rel="stylesheet" href="../../static/styles.css?v=20260701a" />
   </head>
   <body class="help-popup-page">
     <main class="help-popup-shell">
@@ -28,7 +28,7 @@
         <a class="ghost-link-button" id="work-alberto_magno-de_animalibus-back-link" href="../alberto_magno.html">Back</a>
       </div>
       <div class="static-page-content" data-static-lang="en">
-
+        
       <p class="help-modal-lead">
         This page isolates <strong>De animalibus</strong> inside the authority room of <strong>Alberto Magno</strong>.
         It is part of the new static autore atlas.
@@ -43,8 +43,8 @@
             <strong>0</strong>.
           </p>
           <p class="help-paragraph">This work belongs to a mature works-tree object, so locator branches can be surfaced as their own pages.</p>
-
-
+          
+          
         </section>
         <section class="help-section">
           <h3>Available Locator Links</h3>
@@ -59,10 +59,10 @@
           </p>
         </section>
       </div>
-
+    
       </div>
       <div class="static-page-content" data-static-lang="bilingual" hidden>
-
+        
       <p class="help-modal-lead">
         这页把 <strong>Alberto Magno</strong> 名下的 <strong>De animalibus</strong> 单独拿出来，作为静态 autore atlas 里的 opera 房间。
       </p>
@@ -76,8 +76,8 @@
             <strong>0</strong>。
           </p>
           <p class="help-paragraph">This work belongs to a mature works-tree object, so locator branches can be surfaced as their own pages.</p>
-
-
+          
+          
         </section>
         <section class="help-section">
           <h3>可用的 locator 链接</h3>
@@ -92,25 +92,22 @@
           </p>
         </section>
       </div>
-
+    
       </div>
     </main>
     <script>
       (function () {
         function getLanguage() {
-          const params = new URLSearchParams(window.location.search);
-          const requested = params.get("ui_lang");
-          if (requested === "bilingual") return "bilingual";
-          if (requested === "en") return "en";
           try {
-            const stored = window.localStorage.getItem("ddp-ui-language");
-            return stored === "bilingual" ? "bilingual" : "en";
+            window.localStorage.setItem("ddp-ui-language", "en");
           } catch (error) {
             return "en";
           }
+          return "en";
         }
         function applyLanguage(language) {
-          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          language = "en";
+          document.documentElement.lang = "en";
           document.querySelectorAll('[data-lang-target="work-alberto_magno-de_animalibus"]').forEach((button) => {
             button.classList.toggle("is-active", button.dataset.langValue === language);
           });
@@ -118,7 +115,7 @@
             block.hidden = block.dataset.staticLang !== language;
           });
           const url = new URL(window.location.href);
-          url.searchParams.set("ui_lang", language);
+          url.searchParams.delete("ui_lang");
           window.history.replaceState({}, "", url);
           try {
             window.localStorage.setItem("ddp-ui-language", language);
@@ -126,7 +123,7 @@
           }
           const back = document.getElementById("work-alberto_magno-de_animalibus-back-link");
           const backUrl = new URL(back.getAttribute("href"), window.location.href);
-          backUrl.searchParams.set("ui_lang", language);
+          backUrl.searchParams.delete("ui_lang");
           back.href = backUrl.pathname + backUrl.search;
         }
         const initial = getLanguage();

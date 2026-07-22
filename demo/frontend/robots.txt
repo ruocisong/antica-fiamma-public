@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ddpcommentary.com/sitemap.xml
+Sitemap: https://anticafiamma.it/sitemap.xml

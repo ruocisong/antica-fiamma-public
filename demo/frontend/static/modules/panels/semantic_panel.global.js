@@ -22,7 +22,7 @@
             <button class="ghost-button" type="button" id="clear-semantic-filter">显示全部</button>
           </div>
         `
-        : `<p class="semantic-intro">这些 interpretive semantic fields 现在优先基于当前 loci 覆盖 records 的局部语义表示来分组；词项、canonical map 和 span 权重仍然保留为辅助解释层。点击任一 field 可直接过滤下方 cards。</p>`;
+        : `<p class="semantic-intro">这些 interpretive semantic fields 现在优先基于当前 locus 覆盖 records 的局部语义表示来分组；词项、canonical map 和 span 权重仍然保留为辅助解释层。点击任一 field 可直接过滤下方 cards。</p>`;
 
       const fieldCards = semanticState.fields
         .map((field) => {

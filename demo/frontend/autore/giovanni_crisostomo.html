@@ -4,15 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Giovanni Crisostomo / Autore</title>
-    <meta name="description" content="Giovanni Crisostomo — tracked author in the Segni de l’antica fiamma Authority Layer, with mounted works, aliases, and related personaggi." />
+    <meta name="description" content="Giovanni Crisostomo — tracked author in the Antica Fiamma Authority Layer, with mounted works, aliases, and related personaggi." />
     <meta property="og:title" content="Giovanni Crisostomo / Autore" />
-    <meta property="og:description" content="Giovanni Crisostomo — tracked author in the Segni de l’antica fiamma Authority Layer, with mounted works, aliases, and related personaggi." />
+    <meta property="og:description" content="Giovanni Crisostomo — tracked author in the Antica Fiamma Authority Layer, with mounted works, aliases, and related personaggi." />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ddpcommentary.com/autore/giovanni_crisostomo.html" />
+    <meta property="og:url" content="https://anticafiamma.it/autore/giovanni_crisostomo.html" />
     <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://ddpcommentary.com/autore/giovanni_crisostomo.html" />
+    <link rel="canonical" href="https://anticafiamma.it/autore/giovanni_crisostomo.html" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../static/styles.css?v=20260415d" />
+    <link rel="stylesheet" href="../static/styles.css?v=20260701a" />
   </head>
   <body class="help-popup-page">
     <main class="help-popup-shell">
@@ -28,10 +28,10 @@
         <a class="ghost-link-button" id="autore-giovanni_crisostomo-back-link" href="./index.html">Back</a>
       </div>
       <div class="static-page-content" data-static-lang="en">
-
+        
         <p class="help-modal-lead">
           This page gives <strong>Giovanni Crisostomo</strong> a stable authority room of its own. It is meant as a reading room
-          for the current authority object, not as a full replacement for the Authority Lens.
+          for the current authority object, linked back to the line-first Authority route rather than replacing it.
         </p>
         <nav class="static-page-nav" aria-label="Author page contents">
           <a href="#summary">Summary</a>
@@ -54,13 +54,13 @@
               direct text-layer hits across 1 canto shells.
             </p>
           </section>
-
+          
           <section class="help-section" id="pressure">
             <h3>Reading Pressure</h3>
             <p class="help-paragraph">Giovanni Crisostomo still lacks a mounted work layer, but the homiletic-patristic room already has a stable speaking core.</p>
             <div class="compare-chip-row"><span class="compare-chip">Homilies on Matthew</span><span class="compare-chip">De sacerdotio</span><span class="compare-chip">Homilies on John</span></div>
           </section>
-
+        
           <section class="help-section" id="works">
             <h3>Opera</h3>
             <p class="help-paragraph">This author now opens through a thin mounted works tree: real work nodes and sampled commentary occurrences are live, without overstating a deeper branch backbone.</p>
@@ -87,16 +87,16 @@
             <h3>Return Paths</h3>
             <p class="help-paragraph">
               Return to the <a href="../authority.html">Authority page</a>, the <a href="./index.html">autore index</a>,
-              or <a href="../index.html">Segni de l’antica fiamma</a>.
+              or <a href="../index.html">Antica Fiamma</a>.
             </p>
           </section>
         </div>
-
+    
       </div>
       <div class="static-page-content" data-static-lang="bilingual" hidden>
-
+        
         <p class="help-modal-lead">
-          这页把 <strong>Giovanni Crisostomo</strong> 作为一张稳定的 authority room 单独摆出来。它不是要取代 Authority Lens，而是给这个对象一个自己能站住的房间。
+          这页把 <strong>Giovanni Crisostomo</strong> 作为一张稳定的 authority room 单独摆出来；它会接回 line-first 的 Authority 路径，而不是替代那条路径。
         </p>
         <nav class="static-page-nav" aria-label="Author page contents">
           <a href="#summary-bi">当前房间</a>
@@ -118,13 +118,13 @@
               分布在 1 个 canto shell 里。
             </p>
           </section>
-
+          
           <section class="help-section" id="pressure-bi">
             <h3>阅读压力</h3>
             <p class="help-paragraph">Giovanni Crisostomo 还没有正式挂出的 work layer，但 homiletic-patristic room 已经有一个稳定的 speaking core。</p>
             <div class="compare-chip-row"><span class="compare-chip">Homilies on Matthew</span><span class="compare-chip">De sacerdotio</span><span class="compare-chip">Homilies on John</span></div>
           </section>
-
+        
           <section class="help-section" id="works-bi">
             <h3>作品</h3>
             <ul class="help-list"><li><a href="./giovanni_crisostomo/de_sacerdotio.html">De sacerdotio</a> · 2 mentions · 0 branch pages</li></ul>
@@ -149,29 +149,26 @@
           <section class="help-section">
             <h3>返回路径</h3>
             <p class="help-paragraph">
-              可以回到 <a href="../authority.html">Authority 页面</a>、<a href="./index.html">autore 索引页</a>，或者 <a href="../index.html">Segni de l’antica fiamma 首页</a>。
+              可以回到 <a href="../authority.html">Authority 页面</a>、<a href="./index.html">autore 索引页</a>，或者 <a href="../index.html">Antica Fiamma 首页</a>。
             </p>
           </section>
         </div>
-
+    
       </div>
     </main>
     <script>
       (function () {
         function getLanguage() {
-          const params = new URLSearchParams(window.location.search);
-          const requested = params.get("ui_lang");
-          if (requested === "bilingual") return "bilingual";
-          if (requested === "en") return "en";
           try {
-            const stored = window.localStorage.getItem("ddp-ui-language");
-            return stored === "bilingual" ? "bilingual" : "en";
+            window.localStorage.setItem("ddp-ui-language", "en");
           } catch (error) {
             return "en";
           }
+          return "en";
         }
         function applyLanguage(language) {
-          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          language = "en";
+          document.documentElement.lang = "en";
           document.querySelectorAll('[data-lang-target="autore-giovanni_crisostomo"]').forEach((button) => {
             button.classList.toggle("is-active", button.dataset.langValue === language);
           });
@@ -179,7 +176,7 @@
             block.hidden = block.dataset.staticLang !== language;
           });
           const url = new URL(window.location.href);
-          url.searchParams.set("ui_lang", language);
+          url.searchParams.delete("ui_lang");
           window.history.replaceState({}, "", url);
           try {
             window.localStorage.setItem("ddp-ui-language", language);
@@ -187,7 +184,7 @@
           }
           const back = document.getElementById("autore-giovanni_crisostomo-back-link");
           const backUrl = new URL(back.getAttribute("href"), window.location.href);
-          backUrl.searchParams.set("ui_lang", language);
+          backUrl.searchParams.delete("ui_lang");
           back.href = backUrl.pathname + backUrl.search;
         }
         const initial = getLanguage();

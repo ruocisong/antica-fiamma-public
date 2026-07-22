@@ -5,7 +5,7 @@ This directory contains the public static shell for **Antica Fiamma**.
 Live entrances:
 
 - [anticafiamma.it](https://anticafiamma.it)
-- [ddpcommentary.com](https://ddpcommentary.com)
+- [anticafiamma.it](https://anticafiamma.it)
 
 ## Root Pages
 

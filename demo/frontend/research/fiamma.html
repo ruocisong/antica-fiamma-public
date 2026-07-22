@@ -6,17 +6,17 @@
     <title>Fiamma: Dante and the Fire Motif in the Commedia</title>
     <meta
       name="description"
-      content="A long-lived Segni de l’antica fiamma research room tracing the fire motif in Dante’s Commedia through documented lexicon construction, levels of pertinence, thematic distribution, and return to close reading." />
+      content="A philologically grounded Antica Fiamma research room tracing Dante’s fire motif through documented lexicon construction, levels of pertinence, thematic distribution, and return to close reading." />
     <meta property="og:title" content="Fiamma: Dante and the Fire Motif in the Commedia" />
     <meta
       property="og:description"
-      content="A philologically anchored Segni de l’antica fiamma research room, centred on lexicon construction, levels of pertinence, semantic-field modelling, and return to close reading." />
+      content="A philologically grounded research room for Dante’s fire motif, centred on lexicon construction, levels of pertinence, fire-intensity scoring, and return to close reading." />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ddpcommentary.com/research/fiamma.html" />
+    <meta property="og:url" content="https://anticafiamma.it/research/fiamma" />
     <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://ddpcommentary.com/research/fiamma.html" />
+    <link rel="canonical" href="https://anticafiamma.it/research/fiamma" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/static/styles.css?v=20260512c" />
+    <link rel="stylesheet" href="/static/styles.css?v=20260713b" />
     <style>
       :root {
         --fiamma-brown: #8c3b2a;
@@ -24,6 +24,7 @@
         --fiamma-red-soft: rgba(162, 35, 29, 0.1);
         --fiamma-line: rgba(93, 75, 49, 0.14);
         --fiamma-bg-soft: rgba(255, 255, 255, 0.72);
+        --fiamma-text: var(--muted);
       }
 
       body.fiamma-research-page {
@@ -60,8 +61,7 @@
 
       .fiamma-room-copy {
         font-size: 1.08rem;
-        line-height: 1.72;
-        font-family: var(--ui-font);
+        line-height: 1.6;
         display: block;
         text-wrap: auto;
         word-spacing: normal;
@@ -74,7 +74,6 @@
         margin: 12px 0 0;
         color: var(--muted);
         line-height: 1.68;
-        font-family: var(--ui-font);
         display: block;
         text-wrap: auto;
       }
@@ -85,12 +84,79 @@
         letter-spacing: normal;
       }
 
+      .fiamma-room-copy,
+      .fiamma-room-note,
+      .fiamma-hero-mini-note,
+      .fiamma-panel .panel-note,
+      .fiamma-prose-block p,
+      .fiamma-lexicon-card p,
+      .fiamma-method-item,
+      .fiamma-reading-note p,
+      .fiamma-filter-meta,
+      .fiamma-loading-note,
+      .fiamma-filter-empty,
+      .fiamma-table-note,
+      .fiamma-environment-note p,
+      .fiamma-micro-text {
+        color: var(--fiamma-text);
+        font-family: var(--explanatory-font);
+        font-weight: 450;
+      }
+
       .fiamma-nav {
         margin-top: 18px;
       }
 
       .fiamma-nav a {
         white-space: nowrap;
+      }
+
+      .fiamma-guide-trigger {
+        margin-left: 8px;
+        vertical-align: 0.16em;
+      }
+
+      .fiamma-guide-nowrap {
+        white-space: nowrap;
+      }
+
+      .fiamma-guide-audience {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 0 0 18px;
+      }
+
+      .fiamma-guide-audience-label {
+        color: var(--muted);
+        font-size: 0.76rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .fiamma-guide-chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .fiamma-guide-chip {
+        border: 1px solid rgba(93, 75, 49, 0.16);
+        border-radius: 999px;
+        padding: 7px 13px;
+        background: rgba(255, 255, 255, 0.68);
+        color: var(--muted);
+        font: inherit;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+
+      .fiamma-guide-chip.is-active {
+        border-color: rgba(140, 59, 42, 0.34);
+        background: rgba(140, 59, 42, 0.1);
+        color: var(--accent);
       }
 
       .fiamma-hero-stats {
@@ -146,7 +212,6 @@
 
       .fiamma-micro-text {
         margin: 0;
-        color: var(--ink);
         line-height: 1.58;
       }
 
@@ -368,38 +433,66 @@
         gap: 10px;
       }
 
-      .fiamma-line-item {
-        padding: 14px 16px;
+      .fiamma-line-table {
+        overflow-x: auto;
         border: 1px solid var(--fiamma-line);
         border-radius: 16px;
-        background: rgba(255, 255, 255, 0.56);
+        background: rgba(255, 255, 255, 0.72);
       }
 
-      .fiamma-line-meta {
-        display: inline-flex;
+      .fiamma-line-table-inner {
+        min-width: 940px;
+      }
+
+      .fiamma-line-row {
+        display: grid;
+        grid-template-columns: 90px 82px 96px 104px 96px 96px minmax(300px, 1fr);
         align-items: baseline;
         gap: 10px;
-        flex-wrap: nowrap;
-        max-width: 100%;
-        white-space: nowrap;
-        margin-right: 10px;
-        color: var(--ink);
-        font-size: 0.86rem;
-        font-weight: 500;
+        padding: 13px 16px;
+        border-bottom: 1px solid rgba(93, 75, 49, 0.12);
       }
 
-      .fiamma-line-score {
-        color: var(--fiamma-brown);
-        font-weight: 500;
+      .fiamma-line-row:last-child {
+        border-bottom: 0;
+      }
+
+      .fiamma-line-row.is-head {
+        color: var(--ink);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        background: rgba(255, 252, 247, 0.86);
+      }
+
+      .fiamma-line-cell {
+        color: var(--fiamma-text);
+        font-size: 0.86rem;
+        font-weight: 450;
         white-space: nowrap;
+      }
+
+      .fiamma-line-cell.fiamma-line-location,
+      .fiamma-line-cell.fiamma-line-score {
+        color: var(--ink);
+      }
+
+      .fiamma-line-cell.fiamma-line-score {
+        color: var(--fiamma-brown);
+        font-weight: 700;
+      }
+
+      .fiamma-line-cell.fiamma-line-text-cell {
+        white-space: normal;
+        color: var(--ink);
+        font-size: 1rem;
       }
 
       .fiamma-line-text {
         margin: 0;
         color: var(--ink);
-        line-height: 1.62;
-        font-family: var(--ui-font);
-        font-weight: 700;
+        line-height: 1.6;
       }
 
       .fiamma-line-text-inline {
@@ -407,6 +500,7 @@
       }
 
       .fiamma-line-anchor {
+        font-family: inherit;
         font-weight: inherit;
       }
 
@@ -536,14 +630,13 @@
         margin-top: 14px;
         padding: 13px 14px;
         border-left: 3px solid rgba(140, 59, 42, 0.28);
-        background: rgba(255, 252, 247, 0.76);
+        background: rgba(255, 252, 247, 0.88);
         border-radius: 0 14px 14px 0;
       }
 
       .fiamma-reading-note p {
         margin: 0;
-        color: var(--muted);
-        line-height: 1.58;
+        line-height: 1.55;
       }
 
       .fiamma-filter-head {
@@ -553,20 +646,19 @@
 
       .fiamma-filter-head h3 {
         margin: 0;
-        font-family: var(--serif-font);
+        font-family: var(--ui-font);
         font-size: 1.24rem;
+        font-weight: 700;
       }
 
       .fiamma-filter-meta {
         margin: 0;
-        color: var(--muted);
-        line-height: 1.56;
+        line-height: 1.55;
       }
 
       .fiamma-loading-note,
       .fiamma-filter-empty {
         margin: 0;
-        color: var(--muted);
         line-height: 1.6;
       }
 
@@ -574,13 +666,13 @@
         overflow-x: auto;
         border: 1px solid rgba(93, 75, 49, 0.1);
         border-radius: 22px;
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.78);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
       }
 
       .fiamma-score-table {
         width: 100%;
-        min-width: 760px;
+        min-width: 1120px;
         border-collapse: collapse;
         font-family: var(--ui-font);
       }
@@ -613,8 +705,9 @@
       }
 
       .fiamma-score-table td {
-        color: var(--muted);
+        color: var(--fiamma-text);
         font-size: 0.98rem;
+        font-weight: 450;
         line-height: 1.55;
       }
 
@@ -624,10 +717,17 @@
       }
 
       .fiamma-score-table td.fiamma-cell-metric {
-        color: var(--ink);
+        color: var(--fiamma-brown);
         font-family: var(--ui-font);
         font-size: 0.88rem;
-        font-weight: 500;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .fiamma-score-table td.fiamma-cell-component {
+        color: var(--fiamma-text);
+        font-family: var(--ui-font);
+        font-size: 0.82rem;
         white-space: nowrap;
       }
 
@@ -635,13 +735,10 @@
         min-width: 420px;
         max-width: 720px;
         color: var(--ink);
-        font-family: var(--ui-font);
-        font-weight: 700;
       }
 
       .fiamma-table-note {
         margin: 12px 0 0;
-        color: var(--muted);
         line-height: 1.55;
       }
 
@@ -661,13 +758,14 @@
         padding: 16px 18px;
         border: 1px solid var(--fiamma-line);
         border-radius: 18px;
-        background: rgba(255, 255, 255, 0.62);
+        background: rgba(255, 255, 255, 0.72);
       }
 
       .fiamma-method-card h3 {
         margin: 0;
-        font-family: var(--serif-font);
+        font-family: var(--ui-font);
         font-size: 1.1rem;
+        font-weight: 700;
       }
 
       .fiamma-method-list {
@@ -677,7 +775,6 @@
 
       .fiamma-method-item {
         margin: 0;
-        color: var(--muted);
         line-height: 1.55;
       }
 
@@ -698,8 +795,8 @@
       .fiamma-prose-block p,
       .fiamma-environment-note p {
         margin: 0;
-        color: var(--muted);
-        line-height: 1.66;
+        font-size: 1.05rem;
+        line-height: 1.6;
       }
 
       .fiamma-lexicon-card {
@@ -708,19 +805,19 @@
         padding: 16px 18px;
         border: 1px solid var(--fiamma-line);
         border-radius: 18px;
-        background: rgba(255, 255, 255, 0.62);
+        background: rgba(255, 255, 255, 0.72);
       }
 
       .fiamma-lexicon-card h3,
       .fiamma-environment-note h3 {
         margin: 0;
-        font-family: var(--serif-font);
+        font-family: var(--ui-font);
         font-size: 1.1rem;
+        font-weight: 700;
       }
 
       .fiamma-lexicon-card p {
         margin: 0;
-        color: var(--muted);
         line-height: 1.6;
       }
 
@@ -835,24 +932,39 @@
       }
 
       .fiamma-room-hero .guide-button-inline {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        width: fit-content;
+        align-self: center;
         padding: 0;
         color: #36584f;
         font-size: 0.82rem;
         font-weight: 700;
+        line-height: 1.1;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        text-decoration-color: rgba(54, 88, 79, 0.28);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(54, 88, 79, 0.28);
+        text-shadow: none;
+      }
+
+      .fiamma-room-hero .guide-button-inline:hover,
+      .fiamma-room-hero .guide-button-inline:focus-visible {
+        border-bottom-color: rgba(54, 88, 79, 0.52);
       }
 
       .fiamma-room-hero h1 {
         order: 1;
-        max-width: 14ch;
+        max-width: 100%;
         color: var(--ink);
         font-family: var(--serif-font);
-        font-size: clamp(2rem, 3.45vw, 3.8rem);
+        font-size: clamp(2.25rem, 3vw, 3.55rem);
         font-weight: 700;
-        line-height: 0.98;
+        line-height: 1;
         letter-spacing: 0;
+        text-wrap: auto;
+        white-space: normal;
         text-shadow: none;
       }
 
@@ -864,17 +976,16 @@
         order: 2;
         max-width: 49rem;
         margin-top: 4px;
-        color: #3d3932;
-        font-size: clamp(1rem, 1.25vw, 1.18rem);
-        line-height: 1.66;
+        font-size: 1.05rem;
+        line-height: 1.6;
       }
 
       .fiamma-room-note {
         order: 3;
         max-width: 46rem;
         margin-top: 0;
-        color: #38332d;
-        font-size: 0.98rem;
+        font-size: 1.05rem;
+        line-height: 1.6;
       }
 
       .fiamma-nav {
@@ -970,9 +1081,9 @@
         padding: 13px 14px;
         border-left: 3px solid rgba(54, 88, 79, 0.28);
         border-radius: 0 10px 10px 0;
-        background: rgba(255, 255, 255, 0.48);
-        color: #342f2a;
-        font-size: 0.92rem;
+        background: rgba(255, 255, 255, 0.62);
+        font-size: 1.05rem;
+        line-height: 1.6;
       }
 
       .fiamma-micro-panel {
@@ -996,14 +1107,14 @@
       .fiamma-micro-card,
       .fiamma-lexicon-card,
       .fiamma-method-card {
-        background: rgba(255, 255, 255, 0.54);
+        background: rgba(255, 255, 255, 0.72);
         box-shadow: none;
       }
 
       .fiamma-panel {
         border-radius: 14px;
         background:
-          linear-gradient(180deg, rgba(255, 252, 247, 0.92), rgba(248, 241, 229, 0.84));
+          linear-gradient(180deg, rgba(251, 248, 241, 0.92), rgba(251, 248, 241, 0.88));
         box-shadow: 0 16px 34px rgba(63, 45, 25, 0.08);
       }
 
@@ -1017,7 +1128,8 @@
       .fiamma-panel .panel-note {
         max-width: 42rem;
         margin-top: 0;
-        color: #38332d;
+        font-size: 0.92rem;
+        line-height: 1.45;
       }
 
       .fiamma-breakout-panel {
@@ -1077,8 +1189,8 @@
         }
 
         .fiamma-room-hero h1 {
-          max-width: 14ch;
-          font-size: clamp(2.2rem, 7.8vw, 3.45rem);
+          max-width: 100%;
+          font-size: clamp(2.2rem, 7.2vw, 3.25rem);
         }
 
         .fiamma-hero-art {
@@ -1137,17 +1249,17 @@
         <div>
           <div class="eyebrow-row">
             <p class="eyebrow">Philological Case Study</p>
-            <a class="guide-button guide-button-inline" href="/index.html">→ Segni de l’antica fiamma</a>
+            <a class="guide-button guide-button-inline" href="/index.html">→ Antica Fiamma</a>
           </div>
           <h1>Fiamma: Dante and the Fire Motif in the <em>Commedia</em></h1>
           <p class="hero-copy fiamma-room-copy">
-            This research room studies the fire motif in Dante’s <em class="fiamma-inline-ital">Commedia</em> through a controlled lexical model anchored in the poem itself. It follows the distribution and transformation of the wider fire field across the three <em class="fiamma-inline-ital">cantiche</em>, with <em class="fiamma-inline-ital">fiamma</em> as one of its guiding terms.
+            A research room for Dante’s fire motif, where a documented fire lexicon becomes an inspectable score, a set of visualisations, and a path back to close reading.
           </p>
           <p class="fiamma-room-note">
-            Within Segni de l’antica fiamma, the page functions as a long-lived scholarly research room in which lexical choices, local contexts, and line-level evidence remain continuously available to reading.
+            The page begins from Dante’s own text and from attested lexical evidence. It keeps lexical choices, local contexts, and line-level evidence continuously available for inspection.
           </p>
           <p class="fiamma-hero-mini-note">
-            The modules below support lexical inspection at several scales. Heatmap, evidence table, selected lines, and semantic field all help move from poem-wide patterning back to readable local evidence within the same commentary environment.
+            Heatmap, curve, evidence table, selected lines, lexical figure, and semantic field all return visual patterning to citation, commentary workbench, and close reading.
           </p>
           <nav class="static-page-nav fiamma-nav" aria-label="Fiamma sections">
             <a href="#fiamma-framing">Framing</a>
@@ -1175,16 +1287,16 @@
             <p class="panel-kicker">Framing</p>
             <h2>Why Fiamma</h2>
           </div>
-          <p class="panel-note">The fire motif appears here as both a thematic object and a lexical problem: a field of words whose distribution can be traced across the poem and whose local force emerges in context.</p>
+          <p class="panel-note">The fire motif appears here as both a thematic object and a lexical problem: a field of words whose distribution can be traced across the poem and whose force emerges locally.</p>
         </div>
         <div class="fiamma-prose-grid">
           <div class="fiamma-prose-block">
-            <p>In Dante’s <em>Commedia</em>, fire exceeds any single stable meaning. It names literal flame, punitive and purgative fire, desire, radiance, revelation, warmth, animation, and forms of theological perception. The motif therefore sustains a mode of reading that can move between lexical recurrence, thematic distribution, and local interpretive pressure.</p>
-            <p>This page approaches <em>fiamma</em> and the wider field of fire as a controlled philological case study supported by computational modelling. It offers a durable frame for making distributional patterning visible at poem scale and returning that patterning to the lines, passages, and semantic transitions that produce it.</p>
+            <p>In Dante’s <em>Commedia</em>, fire exceeds any single stable meaning. It names literal flame, punitive and purgative fire, desire, radiance, revelation, warmth, animation, and forms of theological perception. The motif therefore calls for a mode of reading that can move between lexical recurrence, thematic distribution, and local interpretive pressure.</p>
+            <p>This page approaches <em>fiamma</em> and the wider field of fire as a controlled philological case study supported by a compact computational model. It makes distributional patterning visible at poem scale, then returns that patterning to the lines, passages, and semantic transitions that produce it.</p>
           </div>
           <div class="fiamma-lexicon-card">
             <h3>Interpretive Aim</h3>
-          <p>The governing principle of this module is interpretive transparency. Poem-wide views matter here because their lexical premises, contextual limits, and line-level consequences remain inspectable inside the commentary environment.</p>
+          <p>The governing principle is interpretive transparency. Poem-wide views matter here because their lexical premises, contextual limits, and line-level consequences remain inspectable inside the commentary environment.</p>
           </div>
         </div>
       </section>
@@ -1195,21 +1307,21 @@
             <p class="panel-kicker">Lexicon</p>
             <h2>Lexicon Construction and Levels of Pertinence</h2>
           </div>
-          <p class="panel-note">The fire lexicon used here is built from attested lexical material in the <em>Commedia</em> and maintained as a constrained scholarly configuration inside the commentary environment.</p>
+          <p class="panel-note">The fire lexicon used here is built from attested lexical material in the <em>Commedia</em> and maintained as a constrained scholarly configuration.</p>
         </div>
         <div class="fiamma-prose-grid">
           <div class="fiamma-prose-block">
-            <p>The present lexicon is organised from words and forms that can be documented within Dante’s own text. Its boundaries are negotiated through corpus evidence, philological judgment, and interpretive purpose. Each inclusion can therefore be explained, inspected, and, when necessary, revised. The page treats lexical modelling as a documented scholarly choice whose terms, local context windows, and pertinence levels remain available for comparison.</p>
-            <p>This work is informed by philological discussion of the semantic field of <em>fuoco</em>, especially <a class="fiamma-table-anchor fiamma-reference-link" href="https://doi.org/10.1179/ita.1991.11.1.29" target="_blank" rel="noreferrer">Pertile (1991)</a>, with its reconstruction of the fire and heat lexicon, its attention to lexical distribution across the three cantiche, and its account of the semantic and theological transformation carried by these terms. That discussion anchors the present lexicon without converting the field into a fixed, closed list.</p>
+            <p>The present lexicon is assembled from words and forms that can be documented within Dante’s own text. Its boundaries are negotiated through corpus evidence, philological judgment, and interpretive purpose. Each inclusion can therefore be explained, inspected, and, when necessary, revised. The page treats lexical modelling as a documented scholarly choice whose terms, local context windows, and pertinence levels remain available for comparison.</p>
+            <p>This work is informed by philological discussion of the semantic field of <em>fuoco</em>, especially <a class="fiamma-table-anchor fiamma-reference-link" href="https://doi.org/10.1179/ita.1991.11.1.29" target="_blank" rel="noreferrer">Pertile (1991)</a>, with its reconstruction of the fire/heat lexicon, its attention to distribution across the three <em>cantiche</em>, and its account of the semantic and theological transformation carried by these terms. That discussion anchors the present lexicon without converting the field into a fixed, closed list.</p>
           </div>
           <div class="fiamma-lexicon-card">
             <h3>Three Levels of Pertinence</h3>
             <div class="fiamma-lexicon-badge-row">
               <span class="fiamma-lexicon-badge">Level 1 · direct fire terms</span>
               <span class="fiamma-lexicon-badge">Level 2 · thermal and combustive field</span>
-              <span class="fiamma-lexicon-badge">Level 3 · context-dependent neighbours</span>
+              <span class="fiamma-lexicon-badge">Level 3 · borderline forms</span>
             </div>
-            <p>A first level gathers directly attested fire terms and closely related flame forms. A second level includes terms from the broader thermal or combustive field that often participate in Dante’s fire imagery. A third level records neighbouring words whose relevance depends more explicitly on local context, commentary inspection, and interpretive justification.</p>
+            <p>The three levels document lexical pertinence rather than a fixed ontology. Level 1 gathers direct fire terms, such as <em>foco/fuoco</em>, <em>fiamma</em>, <em>incendio</em>, and <em>favilla</em>. Level 2 includes mediated forms from the broader field of heat, ardour, combustion, and light, whose relevance depends more strongly on context. Level 3 records borderline or context-dependent forms, mainly to make the edge of the field visible and to distinguish interpretable proximity from lexical noise.</p>
           </div>
         </div>
       </section>
@@ -1220,20 +1332,20 @@
             <p class="panel-kicker">Methodology</p>
             <h2>Line Scoring and Local Context</h2>
           </div>
-          <p class="panel-note">FIS remains compact and inspectable inside the same commentary environment.</p>
+          <p class="panel-note">FIS is a compact line-level score whose components remain inspectable inside the same commentary environment.</p>
         </div>
         <div class="fiamma-prose-grid">
           <div class="fiamma-prose-block">
-            <p>FIS, the Fire-Intensity Score, names the current line-level fire score for the active lexical configuration. It offers a compact indication of how strongly a line participates in the present fire field.</p>
-            <p>The score remains legible because its local basis is kept visible. Lexical presence, semantic similarity, contextual similarity, and the local penalty can still be read alongside the current line score as part of the same documented configuration.</p>
+            <p>FIS, the Fire-Intensity Score, names the current line-level fire score for the active lexical configuration. It combines lexical evidence, semantic proximity, local context, and penalty signals in order to make the participation of each line in the fire field inspectable.</p>
+            <p>The score remains legible because its basis is kept visible. L, S, C, and D answer why a specific line receives its score; the three levels of pertinence answer where the lexicon comes from and how the fire field is bounded.</p>
           </div>
           <div class="fiamma-lexicon-card fiamma-method-card">
             <h3>Four Components of the Fire-Intensity Score</h3>
             <div class="fiamma-method-list">
-              <p class="fiamma-method-item"><strong>L</strong> lexical presence in the line.</p>
-              <p class="fiamma-method-item"><strong>S</strong> semantic similarity to the fire prototype.</p>
-              <p class="fiamma-method-item"><strong>C</strong> contextual similarity across the three-line window.</p>
-              <p class="fiamma-method-item"><strong>D</strong> local penalty where abstract fire appears without literal fire nearby.</p>
+              <p class="fiamma-method-item"><strong>L</strong> is the lexical component. It records which fire-field forms occur in the line and how directly they belong to the configured lexicon.</p>
+              <p class="fiamma-method-item"><strong>S</strong> is the semantic component. It estimates how close each line embedding is to a compact lexical prototype of the fire field, built from direct fire terms attested in the <em>Commedia</em>, such as <em>foco</em>, <em>fuoco</em>, <em>fiamma</em>, <em>incendio</em>, and <em>favilla</em>.</p>
+              <p class="fiamma-method-item"><strong>C</strong> is the contextual component. It measures support from the local three-line window, with light canto-level support when the line belongs to a locally dense fire-field zone.</p>
+              <p class="fiamma-method-item"><strong>D</strong> is the penalty component. It is activated when an abstract or mediated fire term appears without support from direct fire-field forms in the local window.</p>
             </div>
           </div>
         </div>
@@ -1245,12 +1357,12 @@
             <p class="panel-kicker">Distribution</p>
             <h2>Heatmap of Canto Distribution</h2>
           </div>
-          <p class="panel-note">The heatmap offers a canto-scale view of the fire field across the whole <em>Commedia</em>. It supports inspection of concentrations, transitions, and cantica-level asymmetries before reading the lines that produce them.</p>
+          <p class="panel-note">The heatmap gives a canto-scale view of fire intensity across the <em>Commedia</em>. Colour makes concentrations, transitions, and asymmetries visible; the line layer and evidence table return those patterns to textual evidence.</p>
         </div>
         <div class="fiamma-legend" aria-hidden="true">
           <span>Lighter</span>
           <div class="fiamma-legend-bar"></div>
-          <span>Higher flame total</span>
+          <span>Higher FIS</span>
         </div>
         <div id="fiamma-heatmap-root" class="fiamma-heatmap-shell">
           <p class="fiamma-loading-note">Loading heatmap…</p>
@@ -1263,10 +1375,10 @@
             <p class="panel-kicker">Canto Rhythm</p>
             <h2>Intensity Across the Poem</h2>
           </div>
-          <p class="panel-note">The curve translates canto totals into a continuous profile across the poem. It helps situate peaks, lulls, and transitions in relation to Dante’s larger movement from <em>Inferno</em> through <em>Purgatorio</em> to <em>Paradiso</em>.</p>
+          <p class="panel-note">The curve translates canto totals into a continuous profile across the poem. It helps situate peaks, lulls, and transitions within Dante’s larger movement from <em>Inferno</em> through <em>Purgatorio</em> to <em>Paradiso</em>.</p>
         </div>
         <div id="fiamma-curve-root" class="fiamma-curve-root">
-          <p class="fiamma-loading-note">Loading flame curve…</p>
+          <p class="fiamma-loading-note">Loading FIS curve…</p>
         </div>
       </section>
 
@@ -1290,12 +1402,12 @@
             <p class="panel-kicker">Inspectable Evidence</p>
             <h2>Scored Lines and Lexical Evidence</h2>
           </div>
-          <p class="panel-note">The table presents the current line set in a form suitable for inspection. Location, FIS, and line text remain visible together so that ranking can be read as a transparent editorial and modelling decision.</p>
+          <p class="panel-note">The table returns visualisation to citation. Location, FIS, Lexicon, Semantic, Context, Penalty, and line text remain visible together, so each ranking can be read as an inspectable modelling and editorial decision.</p>
         </div>
         <div id="fiamma-score-table-root" class="fiamma-table-wrap">
           <p class="fiamma-loading-note">Loading scored lines…</p>
         </div>
-        <p class="fiamma-table-note">Within this module the table keeps poem-wide claims grounded in individual lines and shows how the current lexical configuration can be checked against the text. FIS names the current line-level fire score, while the component columns document the lexical, semantic, contextual, and penalising terms through which the score is assembled in the present configuration.</p>
+        <p class="fiamma-table-note">Within this module the table keeps poem-wide claims grounded in individual lines. FIS names the current line-level fire score, while L, S, C, and D document the lexical, semantic, contextual, and penalty signals through which the score is assembled.</p>
       </section>
 
       <div class="fiamma-secondary-grid">
@@ -1321,13 +1433,13 @@
               <p class="panel-kicker">Semantic Field Negotiation</p>
               <h2>Semantic Field</h2>
             </div>
-            <p class="panel-note">The semantic field figure traces proximity and clustering within the fire lexicon and its immediate neighbours. Distance offers one view onto lexical pressure within the present research configuration.</p>
+            <p class="panel-note">The semantic field view is an exploratory projection of lexical proximity within the current configuration. It helps identify neighbourhoods of fire, heat, light, and ardour, then sends the reader back to the lines behind those relations.</p>
           </div>
           <div id="fiamma-map-root" class="fiamma-figure-shell">
             <p class="fiamma-loading-note">Loading semantic field…</p>
           </div>
           <div class="fiamma-reading-note">
-            <p>This figure records one view of lexical proximity within the current research configuration. It does not separate Dante’s fire vocabulary into fixed semantic classes. The line layer and commentary links remain the place where each local grouping must be tested.</p>
+            <p>This figure records one view of lexical proximity within the current research configuration. It does not divide Dante’s fire vocabulary into fixed semantic classes. The line layer and commentary links remain the place where each local grouping must be tested.</p>
           </div>
           <div id="fiamma-map-detail" class="fiamma-filter-detail">
             <p class="fiamma-filter-empty">Choose a hotspot in the semantic field to inspect its line cluster.</p>
@@ -1339,14 +1451,14 @@
         <div class="panel-head">
           <div class="panel-title-block">
             <p class="panel-kicker">Commentary Environment</p>
-            <h2>Research Room within Segni de l’antica fiamma</h2>
+            <h2>Research Room within Antica Fiamma</h2>
           </div>
-          <p class="panel-note">This page belongs to an existing scholarly commentary environment in which lexical evidence, contextual settings, and line-level reading remain available together over time.</p>
+          <p class="panel-note">This page belongs to an existing scholarly commentary environment in which lexical evidence, contextual settings, and line-level reading remain available together.</p>
         </div>
         <div class="fiamma-environment-note">
           <h3>Inspectable, configurable, documentable</h3>
-          <p>Within Segni de l’antica fiamma, the fire module can be inspected, documented, and compared across lexical or methodological configurations. Lexical versions, pertinence levels, weighting schemes, and local context settings can remain part of the scholarly record across later revisions.</p>
-          <p>The current page records one documented research configuration inside a larger commentary environment. Its stable interpretive core remains the same across later updates: the <em>Commedia</em> as primary object, the fire field as a controlled lexical case study, and close reading as the final horizon of explanation.</p>
+          <p>Within Antica Fiamma, the fire module can be inspected, documented, and compared across lexical or methodological configurations. Lexical versions, pertinence levels, weighting schemes, and local context settings can remain part of the scholarly record across later revisions.</p>
+          <p>The current page records one documented research configuration inside a larger commentary environment. Its stable interpretive core remains unchanged across later updates: the <em>Commedia</em> as primary object, the fire field as a controlled lexical case study, and close reading as the final horizon of explanation.</p>
         </div>
       </section>
 
@@ -1354,17 +1466,615 @@
         <div class="fiamma-micro-grid">
           <article class="fiamma-micro-card">
             <p class="fiamma-micro-label">Publication</p>
-            <p class="fiamma-micro-text">This page accompanies an ongoing line of scholarly publication, while remaining oriented toward the longer life of the research room itself.</p>
+            <p class="fiamma-micro-text">This page accompanies an ongoing line of scholarly publication while remaining oriented toward the longer life of the research room itself.</p>
           </article>
           <article class="fiamma-micro-card">
             <p class="fiamma-micro-label">Current Version</p>
-            <p class="fiamma-micro-text">The present view records one documented lexical configuration. Figures, coordinate layers, and images may be updated later without changing the page’s interpretive frame.</p>
+            <p class="fiamma-micro-text">The present view records one documented lexical configuration. Figures, coordinate layers, and images may be updated later while preserving the page’s interpretive frame.</p>
           </article>
         </div>
       </section>
     </main>
 
+    <div class="help-overlay is-hidden" id="fiamma-guide-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="fiamma-guide-title">
+      <div class="help-overlay-backdrop" id="fiamma-guide-backdrop"></div>
+      <article class="help-overlay-card" role="document">
+        <div class="help-overlay-shell">
+          <div class="help-overlay-content">
+            <p class="panel-kicker">UI Guide</p>
+            <div class="help-popup-head">
+              <h1 id="fiamma-guide-title">Fiamma Guide</h1>
+              <button type="button" class="ghost-link-button help-overlay-close-button" id="fiamma-guide-close">Close</button>
+            </div>
+            <div class="fiamma-guide-audience">
+              <span class="fiamma-guide-audience-label">Reading angle</span>
+              <div class="fiamma-guide-chip-row" aria-label="Guide reading angle">
+                <button type="button" class="fiamma-guide-chip is-active" data-fiamma-guide-audience="philologist">Philologist</button>
+                <button type="button" class="fiamma-guide-chip" data-fiamma-guide-audience="dh">Digital Humanist</button>
+              </div>
+            </div>
+            <p class="help-modal-lead" id="fiamma-guide-lead"></p>
+            <div class="help-modal-body" id="fiamma-guide-body"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
     <script>
+      (() => {
+        const GUIDE_TARGETS = [
+          "fiamma-framing",
+          "fiamma-lexicon",
+          "fiamma-methodology",
+          "fiamma-heatmap",
+          "fiamma-curves",
+          "fiamma-lines",
+          "fiamma-table",
+          "fiamma-cloud",
+          "fiamma-map",
+          "fiamma-environment",
+        ];
+
+        const FIAMMA_GUIDES = {
+          "fiamma-framing": {
+            title: "Why Fiamma",
+            philologist: {
+              lead: "Read this opening as the contract of the room. The page begins from Dante's fire motif as a [[lexical, theological, and distributional]] problem that must stay tied to the poem.",
+              sections: [
+                {
+                  label: "What this room asks",
+                  body: [
+                    "The object is the fire field in the Commedia: literal flame, punitive heat, purgative fire, light, ardour, and forms of theological perception. Those values overlap, but they do not behave as one simple keyword family.",
+                    "The room asks how this field moves across the poem, where it concentrates, where it thins, and which local passages deserve renewed close reading."
+                  ],
+                },
+                {
+                  label: "What stays primary",
+                  body: [
+                    "The primary object remains Dante's wording. A poem-wide pattern matters here only when it can be traced back to lexical choices, local context, and a readable passage.",
+                    "The visual layers are entrances back into reading. They do not summarize the poem from above; they help decide where the reader should slow down."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "This opening defines the research surface before any chart appears: one motif, one documented lexical configuration, and several views of the same line-level evidence.",
+              sections: [
+                {
+                  label: "Research surface",
+                  body: [
+                    "The page treats fire as a controlled case study rather than a generic demo of visualization. Heatmap, curve, line cards, evidence table, lexical figure, and semantic field all depend on the same current scoring export.",
+                    "This continuity matters: the views can disagree in emphasis, but they should remain comparable because they are all downstream of the same documented configuration."
+                  ],
+                },
+                {
+                  label: "Audit boundary",
+                  body: [
+                    "The model may point toward concentrations, lulls, and anomalies. It should never be treated as a final classifier of Dante's meaning.",
+                    "A visual signal becomes useful only when the reader can return from the chart to the scored line, its components, and the words that produced the signal."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-lexicon": {
+            title: "Lexicon Construction and Levels of Pertinence",
+            philologist: {
+              lead: "This is the hinge of the page. The fire field is a documented construction built from Dante's own text and constrained by philological judgment.",
+              sections: [
+                {
+                  label: "Where the field begins",
+                  body: [
+                    "Begin here before reading any score. The lexicon comes from forms attested in the Commedia and from the interpretive problem of deciding how close each form stands to the fire field.",
+                    "Pertile's work on fire and heat anchors the field historically and philologically. The present lexicon is informed by that scholarship, while remaining a documented research configuration rather than a copied list."
+                  ],
+                },
+                {
+                  label: "Why pertinence levels matter",
+                  body: [
+                    "The levels of pertinence keep different kinds of evidence apart. A line with foco or fiamma, a line with ardore, and a line with a context-dependent neighbour do not support the same kind of claim.",
+                    "This distinction is philological before it is computational: the three levels document lexical pertinence, while L, S, C, and D explain why a specific line receives its score."
+                  ],
+                },
+                {
+                  label: "Borderline forms",
+                  body: [
+                    "Read later visualizations with this hierarchy in mind. If a passage rises in the score, ask which lexical level is carrying the signal and whether the surrounding lines justify that pressure.",
+                    "Borderline forms are not automatic expansion. Their role is diagnostic: they make the edge of the field visible and help distinguish interpretable proximity from lexical noise."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The lexicon is the feature space of the model. It defines which forms can contribute to the fire score and with what degree of interpretive pressure.",
+              sections: [
+                {
+                  label: "Feature space",
+                  body: [
+                    "The page begins from corpus-attested Dante forms, then organizes them into a current lexical configuration. The model does not rely on a generic semantic network to decide the field in advance.",
+                    "Levels of pertinence make the feature space readable: direct fire terms carry stronger evidence, broader thermal, ardour, combustion, and light terms carry mediated evidence, and borderline forms require local checking."
+                  ],
+                },
+                {
+                  label: "Configuration sensitivity",
+                  body: [
+                    "Changing the lexicon would change L, and therefore the final FIS. Changing pertinence weights would also change which lines rise or fall.",
+                    "The value of the interface is that this dependence stays visible. The lexicon is not background setup; it is the first auditable parameter of the research room."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-methodology": {
+            title: "Line Scoring and Local Context",
+            philologist: {
+              lead: "The Fire-Intensity Score, or FIS, should be read as a disciplined prompt for close reading. It measures participation in the current fire field, not literary importance.",
+              sections: [
+                {
+                  label: "What the score can say",
+                  body: [
+                    "FIS tells the reader that a line is participating more or less strongly in the current fire configuration. It does not say that the line is more important, more symbolic, or more theologically central in itself.",
+                    "Its best use is diagnostic: a high score asks for verification, and a low or middling score may be interesting when the surrounding imagery feels violent without forming a compact fire cluster."
+                  ],
+                },
+                {
+                  label: "Line, three-line context, and canto support",
+                  body: [
+                    "The score begins from the line, then widens to a local three-line window: previous line, current line, and following line. A light canto-level support also records whether the line belongs to a locally dense fire environment.",
+                    "This keeps the unit close to the verse while distinguishing an isolated fire word from a locally sustained fire scene. A line does not have to carry the entire motif alone."
+                  ],
+                },
+                {
+                  label: "How to read fire pressure",
+                  body: [
+                    "When a line rises, ask what kind of fire is active there: physical flame, heat, ardour, light, punitive force, purgative passage, or a more mediated semantic pressure.",
+                    "The score begins the question. The passage answers it."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "FIS is the page's core scoring object. The current export records each scored line through [[L, S, C, D, and F_score]], so the score can be inspected through its component evidence.",
+              sections: [
+                {
+                  label: "What L, S, C, and D encode",
+                  body: [
+                    "L is the lexical component. It records which fire-field forms occur in the line and how directly they belong to the configured lexicon.",
+                    "S is the semantic component. It estimates how close each line embedding is to a compact lexical prototype of the fire field, built from direct fire terms attested in the Commedia, such as foco, fuoco, fiamma, incendio, and favilla.",
+                    "C is the contextual component. It measures support from the local three-line window: previous line, current line, and following line, with light canto-level support when the line belongs to a locally dense fire-field zone.",
+                    "D is the penalty component. It is activated when an abstract or mediated fire term appears without support from direct fire-field forms in the local window."
+                  ],
+                },
+                {
+                  label: "From components to F_score",
+                  body: [
+                    "F_score is the final fire-intensity value used by the page for ranking, heatmap aggregation, curve drawing, and line selection. It should be read as the current weighted output of the LSCD configuration, not as a simple human label.",
+                    "The useful question is not only which line ranks highest, but why it ranks there: direct lexical evidence, embedding proximity, contextual reinforcement, or the absence of a penalty."
+                  ],
+                },
+                {
+                  label: "Audit boundary",
+                  body: [
+                    "FIS supports ranking, comparison, anomaly detection, and visual aggregation within the current lexical configuration.",
+                    "Every strong interpretation still needs to return to the line text and to the component profile that made the score visible."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-heatmap": {
+            title: "Heatmap of Canto Distribution",
+            philologist: {
+              lead: "The heatmap is the poem-scale entrance into the fire field. Its job is to show where close reading may be worth slowing down.",
+              sections: [
+                {
+                  label: "From color to passage",
+                  body: [
+                    "Each cell summarizes line scores across a canto block. The color is therefore a compressed trace of many local decisions, not a quotation by itself.",
+                    "Use it to locate concentrations, transitions, and unexpectedly quiet stretches. Then move back to the lines that produce the color."
+                  ],
+                },
+                {
+                  label: "Expected arc and local unevenness",
+                  body: [
+                    "The broad movement from Inferno through Purgatorio to Paradiso is expected. The interesting work often begins where the map shows unevenness inside that larger arc.",
+                    "A hot block calls for checking density and kind of fire. A cooler block may show that violent or dramatic material is not necessarily organized by the fire field."
+                  ],
+                },
+                {
+                  label: "Use with caution",
+                  body: [
+                    "A heatmap is persuasive because it is legible at once. That is also its danger. It should send the reader toward a passage, not let the color stand in for the passage."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The heatmap aggregates line-level FIS values into a compact distributional surface.",
+              sections: [
+                {
+                  label: "Aggregation rule",
+                  body: [
+                    "The figure reduces many line scores into block-level averages. It gains poem-wide visibility by sacrificing line detail.",
+                    "Color should be read as relative intensity within the current configuration, not as an absolute measurement of fire in Dante."
+                  ],
+                },
+                {
+                  label: "What color hides",
+                  body: [
+                    "A dark block may be driven by many moderately high lines or by a few very strong ones. A pale block may still contain an important isolated fire passage.",
+                    "The line layer and evidence table are the controls for any claim made from the heatmap."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-curves": {
+            title: "Intensity Across the Poem",
+            philologist: {
+              lead: "The curve turns the fire field into canto rhythm. It helps you see whether a rise is a sudden knot, a plateau, or a transition.",
+              sections: [
+                {
+                  label: "Canto rhythm",
+                  body: [
+                    "Each point depends on canto-level scoring. The curve is useful when the heatmap gives a region and you need to know how the pressure moves through it.",
+                    "Follow peaks and lulls back to the selected canto detail. The curve is a reading route, not a detached graph."
+                  ],
+                },
+                {
+                  label: "Peak, plateau, transition",
+                  body: [
+                    "The curve is especially good at showing the difference between one iconic fire passage and a broader local atmosphere.",
+                    "That distinction matters for reading: density, recurrence, and local continuation are different from a single memorable occurrence."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The curve is the same score rendered as a sequence rather than a matrix.",
+              sections: [
+                {
+                  label: "Sequence view",
+                  body: [
+                    "The curve preserves canto order and makes transitions easier to see. Peaks, valleys, and shoulders should be read as candidates for inspection.",
+                    "Unlike the heatmap, it makes serial movement more visible: where the fire field rises, relaxes, or remains sustained across neighbouring canti."
+                  ],
+                },
+                {
+                  label: "What the curve cannot decide",
+                  body: [
+                    "The curve supports questions about rhythm and distribution. It does not decide why a canto is strong.",
+                    "Because the curve is visually smoothed, the evidence table remains the audit layer for component-level explanation."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-lines": {
+            title: "Selected Canto Lines",
+            philologist: {
+              lead: "This is where the visualization returns to Dante's wording. The selected canto detail keeps local line evidence on the table.",
+              sections: [
+                {
+                  label: "Back to the verse",
+                  body: [
+                    "Read the lines first. Scores are useful only because they sit beside the verse that produced them.",
+                    "The passage view lets you ask whether the fire signal is sustained across neighbouring lines, carried by one isolated term, or produced by a compact local constellation."
+                  ],
+                },
+                {
+                  label: "Anomaly as a reading question",
+                  body: [
+                    "This layer is where anomaly becomes reading. A local rise, a quiet stretch, or a borderline line can be checked against syntax, imagery, and canto context.",
+                    "If a visual pattern cannot be explained here, it should remain a question rather than become a claim."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The line layer is the main audit surface for every visualization above it.",
+              sections: [
+                {
+                  label: "Audit layer",
+                  body: [
+                    "The page keeps score, location, and text together so that the model never floats away from the unit it ranks.",
+                    "This layer is especially important for spotting whether an apparent pattern comes from density, context, one unusually strong line, or several weaker signals accumulating."
+                  ],
+                },
+                {
+                  label: "Pattern diagnosis",
+                  body: [
+                    "Move from the aggregate view to the line cards, then compare component values with the wording. That is the shortest path from score to evidence."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-table": {
+            title: "Scored Lines and Lexical Evidence",
+            philologist: {
+              lead: "The evidence table is the page's most explicit safeguard against reading the figures too quickly.",
+              sections: [
+                {
+                  label: "From score to citation",
+                  body: [
+                    "Location, line text, FIS, and component values appear together. This makes ranking inspectable as a scholarly and modelling decision.",
+                    "The table lets you check whether a line is high because fire is named, because the line is close to the lexical prototype, because neighbouring lines reinforce the signal, or because several weaker signals accumulate."
+                  ],
+                },
+                {
+                  label: "Borderline cases",
+                  body: [
+                    "Use the table to move from a claim about distribution to a specific passage. It is the bridge between visualization and citation.",
+                    "It also helps keep borderline cases honest, since the component columns show which part of the score is doing the work."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The evidence table returns visualisation to citation by exposing the score's component structure line by line.",
+              sections: [
+                {
+                  label: "Component trace",
+                  body: [
+                    "A ranking without components would be hard to trust. Here the component columns make it possible to distinguish lexical contribution, semantic proximity, contextual reinforcement, and penalty effects.",
+                    "If the table is expanded against the full export, L, S, C, and D can be read as a compact audit trail for every visible line."
+                  ],
+                },
+                {
+                  label: "Debugging the configuration",
+                  body: [
+                    "This is the best place to debug the current configuration before interpreting larger visual patterns.",
+                    "The table makes the reasons for a score easier to challenge because the component columns stay visible beside the line."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-cloud": {
+            title: "Lexical Figure",
+            philologist: {
+              lead: "The lexical figure is a small supplementary view. It helps identify recurrent words, then sends the reader back to scored lines.",
+              sections: [
+                {
+                  label: "Recurrent forms",
+                  body: [
+                    "A large word is not an argument by itself. Its value lies in the lines that carry it and in the local contexts where it participates in the fire field.",
+                    "Choose a hotspot to inspect the lines behind the word. The figure becomes useful when it restores that path from term to passage."
+                  ],
+                },
+                {
+                  label: "Frequency needs pertinence",
+                  body: [
+                    "This figure is useful for seeing which forms dominate the current configuration, especially when direct fire language and broader thermal or affective language need to be kept apart.",
+                    "Frequency alone does not decide pertinence. A recurrent form still needs lexical level, local context, and line evidence before it can support interpretation."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The lexical figure is a frequency-oriented entry point into the current scored set.",
+              sections: [
+                {
+                  label: "Frequency reduction",
+                  body: [
+                    "The figure compresses recurrent terms into a readable image. It is intentionally lighter than the table because it foregrounds lexical concentration rather than component structure.",
+                    "Hotspots restore the missing link by opening the lines behind a term."
+                  ],
+                },
+                {
+                  label: "Recovering the lines behind a word",
+                  body: [
+                    "Use the figure to ask which tokens drive the configuration, then test that answer in the table and line layer.",
+                    "A frequent form can be a direct fire term, a broader abstract form, or a context-dependent neighbour. The visualization should not collapse those categories."
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-map": {
+            title: "Semantic Field",
+            philologist: {
+              lead: "The semantic field view shows lexical proximity inside the current research configuration. It is a map for checking relations, not a final ontology of Dante's fire vocabulary.",
+              sections: [
+                {
+                  label: "Negotiated proximity",
+                  body: [
+                    "This view is for the negotiated edge of the fire field. Ardour, heat, light, flame, and neighbouring forms may stand near one another without meaning the same thing.",
+                    "Proximity is useful because it marks a relation worth checking. It does not settle that relation."
+                  ],
+                },
+                {
+                  label: "When near does not mean same",
+                  body: [
+                    "A cluster becomes meaningful only when the lines behind it show why those terms belong near one another in this configuration.",
+                    "The best philological use is to move from visual nearness to a passage-level question: what kind of fire, heat, light, or desire is active here?"
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The semantic field view is an exploratory projection of lexical proximity within the current configuration.",
+              sections: [
+                {
+                  label: "What UMAP is doing",
+                  body: [
+                    "The underlying terms or term contexts live in a high-dimensional semantic space. UMAP compresses that space into two visible axes so that neighbourhoods of fire, heat, light, and ardour can be inspected on the page.",
+                    "The projection is strongest at suggesting neighbourhoods that should be checked against lines. It is weaker as a measurement of exact global distance."
+                  ],
+                },
+                {
+                  label: "Projection cost",
+                  body: [
+                    "Distances depend on preprocessing, embeddings, projection settings, and the current lexical configuration. A different configuration could move terms or change visible clusters.",
+                    "This means the map is a research view, not an ontology. It helps formulate questions about proximity; it does not certify stable semantic classes."
+                  ],
+                },
+                {
+                  label: "Recovering evidence",
+                  body: [
+                    "Click a hotspot to inspect the line cluster behind that term. The strongest use is simple: why do these terms sit near one another here, and which lines make that proximity plausible?"
+                  ],
+                },
+              ],
+            },
+          },
+          "fiamma-environment": {
+            title: "Research Room within Antica Fiamma",
+            philologist: {
+              lead: "This closing section explains why the fire module belongs inside a commentary environment rather than remaining a detached figure.",
+              sections: [
+                {
+                  label: "Why this belongs in a commentary room",
+                  body: [
+                    "The room keeps lexical choices, context windows, parameters, figures, and line evidence together. That proximity is part of the scholarly argument.",
+                    "The fire field is negotiated. A documented room can show that negotiation instead of hiding it behind a finished figure."
+                  ],
+                },
+                {
+                  label: "The scholarly record",
+                  body: [
+                    "A later version can revise the configuration while preserving what changed and why. That matters because one lexical list cannot exhaust the motif.",
+                    "The stable horizon remains close reading of the Commedia."
+                  ],
+                },
+              ],
+            },
+            dh: {
+              lead: "The environment section identifies the page as a versioned and inspectable research configuration.",
+              sections: [
+                {
+                  label: "Versioned configuration",
+                  body: [
+                    "Lexical versions, pertinence levels, weighting schemes, context settings, and figure exports can be displayed as part of the scholarly record.",
+                    "That makes the page useful beyond one static visualization: the configuration can be compared, cited, revised, and audited over time."
+                  ],
+                },
+                {
+                  label: "Platform boundary",
+                  body: [
+                    "The site should make parameter movement visible without turning the page into a generic platform pitch.",
+                    "The fire case remains the scholarly center. The environment matters because it keeps the model inspectable, not because it replaces the case study."
+                  ],
+                },
+              ],
+            },
+          },
+        };
+
+        const overlay = document.getElementById("fiamma-guide-overlay");
+        const title = document.getElementById("fiamma-guide-title");
+        const lead = document.getElementById("fiamma-guide-lead");
+        const body = document.getElementById("fiamma-guide-body");
+        const closeButton = document.getElementById("fiamma-guide-close");
+        const backdrop = document.getElementById("fiamma-guide-backdrop");
+        const audienceButtons = Array.from(document.querySelectorAll("[data-fiamma-guide-audience]"));
+        let activeGuideKey = "fiamma-framing";
+        let activeAudience = "philologist";
+
+        function escapeHtml(value) {
+          return String(value || "").replace(/[&<>"']/g, (character) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          })[character]);
+        }
+
+        function renderInline(value) {
+          return escapeHtml(value).replace(/\[\[(.+?)\]\]/g, '<span class="guide-focus">$1</span>');
+        }
+
+        function renderGuide() {
+          const entry = FIAMMA_GUIDES[activeGuideKey] || FIAMMA_GUIDES["fiamma-framing"];
+          const content = entry[activeAudience] || entry.philologist;
+          title.textContent = entry.title;
+          lead.innerHTML = renderInline(content.lead);
+          body.innerHTML = content.sections.map((section) => `
+            <section class="help-section">
+              <h3>${escapeHtml(section.label)}</h3>
+              ${section.body.map((paragraph) => `<p class="help-paragraph">${renderInline(paragraph)}</p>`).join("")}
+            </section>
+          `).join("");
+          audienceButtons.forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.fiammaGuideAudience === activeAudience);
+          });
+        }
+
+        function openGuide(key) {
+          activeGuideKey = key;
+          activeAudience = "philologist";
+          renderGuide();
+          overlay.classList.remove("is-hidden");
+          overlay.setAttribute("aria-hidden", "false");
+          document.body.classList.add("help-overlay-open");
+          closeButton.focus({ preventScroll: true });
+        }
+
+        function closeGuide() {
+          overlay.classList.add("is-hidden");
+          overlay.setAttribute("aria-hidden", "true");
+          document.body.classList.remove("help-overlay-open");
+        }
+
+        function installGuideButtons() {
+          GUIDE_TARGETS.forEach((id) => {
+            const section = document.getElementById(id);
+            const titleBlock = section?.querySelector(".panel-title-block");
+            if (!titleBlock || titleBlock.querySelector("[data-fiamma-guide-key]")) return;
+            const heading = titleBlock.querySelector("h2");
+            if (!heading) return;
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "help-trigger fiamma-guide-trigger";
+            button.dataset.fiammaGuideKey = id;
+            button.textContent = "i";
+            button.setAttribute("aria-label", `Open UI guide for ${heading.textContent || "this section"}`);
+            const titleText = heading.textContent.trim();
+            const match = titleText.match(/^(.*\s)(\S+)$/);
+            if (match) {
+              heading.textContent = match[1];
+              const keepTogether = document.createElement("span");
+              keepTogether.className = "fiamma-guide-nowrap";
+              keepTogether.appendChild(document.createTextNode(match[2]));
+              keepTogether.appendChild(button);
+              heading.appendChild(keepTogether);
+            } else {
+              heading.appendChild(button);
+            }
+          });
+        }
+
+        window.installFiammaGuideButtons = installGuideButtons;
+
+        installGuideButtons();
+
+        document.addEventListener("click", (event) => {
+          const trigger = event.target.closest("[data-fiamma-guide-key]");
+          if (trigger) {
+            openGuide(trigger.dataset.fiammaGuideKey);
+            return;
+          }
+          if (event.target.closest("#fiamma-guide-close") || event.target.closest("#fiamma-guide-backdrop")) {
+            closeGuide();
+          }
+        });
+
+        audienceButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            activeAudience = button.dataset.fiammaGuideAudience || "philologist";
+            renderGuide();
+          });
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && !overlay.classList.contains("is-hidden")) {
+            closeGuide();
+          }
+        });
+      })();
+
       (() => {
         const CANTICHE = [
           { name: "Inferno", slug: "inferno", count: 34, short: "Inf.", color: "#c5413d" },
@@ -1688,13 +2398,13 @@
                   data-key="${point.cantica}:${point.canto}"
                   tabindex="0"
                   role="button"
-                  aria-label="${point.cantica} ${point.canto}, flame total ${point.total.toFixed(2)}"></circle>
+                  aria-label="${point.cantica} ${point.canto}, FIS total ${point.total.toFixed(2)}"></circle>
               `).join("")}
               <text x="${xScale(peak.globalIndex) + 12}" y="${yScale(peak.total) - 12}" class="fiamma-chart-annotation">${group.short} ${peak.canto}</text>
             `;
           }).join("");
           root.innerHTML = `
-            <svg viewBox="0 0 ${width} ${height}" class="fiamma-curve-svg" aria-label="Flame energy across 100 canti">
+            <svg viewBox="0 0 ${width} ${height}" class="fiamma-curve-svg" aria-label="FIS across 100 canti">
               ${gridLines}
               ${boundaries}
               ${series}
@@ -1733,7 +2443,7 @@
           const root = document.getElementById("fiamma-heatmap-root");
           const grid = document.createElement("div");
           grid.className = "fiamma-heatmap-grid";
-          grid.innerHTML = `<div class="fiamma-heatmap-label-head"></div>${Array.from({ length: 34 }, (_, index) => `<div class="fiamma-heatmap-col-head">${index + 1}</div>`).join("")}`;
+          grid.innerHTML = `<div class="fiamma-heatmap-label-head"></div>${Array.from({ length: 34 }, () => `<div class="fiamma-heatmap-col-head" aria-hidden="true"></div>`).join("")}`;
           CANTICHE.forEach((cantica) => {
             grid.insertAdjacentHTML("beforeend", `<div class="fiamma-heatmap-row-label">${cantica.name}</div>`);
             for (let canto = 1; canto <= 34; canto += 1) {
@@ -1750,8 +2460,8 @@
                   class="fiamma-heatmap-cell${state.selectedKey === key ? " is-active" : ""}"
                   data-key="${key}"
                   style="background:${colors.background}; color:${colors.color};"
-                  aria-label="${cantica.name} ${canto}, flame total ${cantoData.total.toFixed(2)}"
-                  title="${cantica.name} ${canto} — flame total ${cantoData.total.toFixed(2)}">
+                  aria-label="${cantica.name} ${canto}, FIS total ${cantoData.total.toFixed(2)}"
+                  title="${cantica.name} ${canto} — FIS total ${cantoData.total.toFixed(2)}">
                   ${canto}
                 </button>
               `);
@@ -1769,27 +2479,43 @@
         }
 
         function renderLineCards(lines) {
-          return lines.map((line) => `
-            <article class="fiamma-line-item">
-              <p class="fiamma-line-text fiamma-line-text-inline">
-                <span class="fiamma-line-meta">
-                  <a class="fiamma-location-anchor" href="${makeWorkbenchHref(line.slug, line.canto, line.line)}" target="_blank" rel="noreferrer">${locationHtml(line.cantica, line.canto, line.line)}</a>
-                  <span class="fiamma-line-score">FIS=${line.score.toFixed(3)}</span>
-                </span>
-                <a class="fiamma-line-anchor" href="${makeWorkbenchHref(line.slug, line.canto, line.line)}" target="_blank" rel="noreferrer">${escapeHtml(line.text)}</a>
-              </p>
-            </article>
-          `).join("");
+          return `
+            <div class="fiamma-line-table" role="table" aria-label="Scored fire lines">
+              <div class="fiamma-line-table-inner">
+                <div class="fiamma-line-row is-head" role="row">
+                  <span role="columnheader">Location</span>
+                  <span role="columnheader">FIS</span>
+                  <span role="columnheader">Lexicon</span>
+                  <span role="columnheader">Semantic</span>
+                  <span role="columnheader">Context</span>
+                  <span role="columnheader">Penalty</span>
+                  <span role="columnheader">Text</span>
+                </div>
+                ${lines.map((line) => `
+                  <div class="fiamma-line-row" role="row">
+                    <span class="fiamma-line-cell fiamma-line-location" role="cell"><a class="fiamma-location-anchor" href="${makeWorkbenchHref(line.slug, line.canto, line.line)}" target="_blank" rel="noreferrer">${locationHtml(line.cantica, line.canto, line.line)}</a></span>
+                    <span class="fiamma-line-cell fiamma-line-score" role="cell">${line.score.toFixed(3)}</span>
+                    <span class="fiamma-line-cell" role="cell">${line.L.toFixed(2)}</span>
+                    <span class="fiamma-line-cell" role="cell">${line.S.toFixed(3)}</span>
+                    <span class="fiamma-line-cell" role="cell">${line.C.toFixed(3)}</span>
+                    <span class="fiamma-line-cell" role="cell">${line.D.toFixed(2)}</span>
+                    <span class="fiamma-line-cell fiamma-line-text-cell" role="cell"><a class="fiamma-line-anchor" href="${makeWorkbenchHref(line.slug, line.canto, line.line)}" target="_blank" rel="noreferrer">${escapeHtml(line.text)}</a></span>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          `;
         }
 
         function renderSelection() {
           const canto = model.cantoMap.get(state.selectedKey);
           document.getElementById("fiamma-detail-title").textContent = `${canto.cantica} ${canto.canto}`;
-          document.getElementById("fiamma-detail-meta").textContent = `${canto.lines.length} scored line${canto.lines.length === 1 ? "" : "s"} in the current lexical configuration. FIS gives the present line-level fire score. Each location and line remains directly available for commentary inspection.`;
+          window.installFiammaGuideButtons?.();
+          document.getElementById("fiamma-detail-meta").textContent = `${canto.lines.length} scored line${canto.lines.length === 1 ? "" : "s"} in the current lexical configuration. FIS gives the present line-level fire score, with component values available for textual inspection.`;
           document.getElementById("fiamma-detail-summary").innerHTML = `
             <div class="fiamma-metric-grid">
               <article class="fiamma-metric">
-                <p class="fiamma-metric-label">Flame Total</p>
+                <p class="fiamma-metric-label">FIS Total</p>
                 <p class="fiamma-metric-value">${canto.total.toFixed(2)}</p>
               </article>
               <article class="fiamma-metric">
@@ -1818,6 +2544,10 @@
                 <tr>
                   <th>Location</th>
                   <th>FIS</th>
+                  <th>Lexicon</th>
+                  <th>Semantic</th>
+                  <th>Context</th>
+                  <th>Penalty</th>
                   <th>Text</th>
                 </tr>
               </thead>
@@ -1826,6 +2556,10 @@
                   <tr class="${state.selectedKey === row.key ? "is-active" : ""}" data-key="${row.key}">
                     <td class="fiamma-cell-location"><a class="fiamma-table-anchor" href="${makeWorkbenchHref(row.slug, row.canto, row.line)}" target="_blank" rel="noreferrer">${locationHtml(row.cantica, row.canto, row.line)}</a></td>
                     <td class="fiamma-cell-metric">${row.score.toFixed(3)}</td>
+                    <td class="fiamma-cell-component">${row.L.toFixed(2)}</td>
+                    <td class="fiamma-cell-component">${row.S.toFixed(3)}</td>
+                    <td class="fiamma-cell-component">${row.C.toFixed(3)}</td>
+                    <td class="fiamma-cell-component">${row.D.toFixed(2)}</td>
                     <td class="fiamma-cell-text"><a class="fiamma-table-anchor" href="${makeWorkbenchHref(row.slug, row.canto, row.line)}" target="_blank" rel="noreferrer">${escapeHtml(row.text)}</a></td>
                   </tr>
                 `).join("")}
