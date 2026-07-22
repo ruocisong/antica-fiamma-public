@@ -27,4 +27,4 @@ It is written for readers who want more context than the repository root README 
 - [Authority Room](https://anticafiamma.it/authority.html)
 - [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html)
 
-The mirror domain [ddpcommentary.com](https://ddpcommentary.com) carries the same public routes during the current transition.
+The canonical live research environment is [anticafiamma.it](https://anticafiamma.it).

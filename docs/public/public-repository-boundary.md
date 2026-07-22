@@ -50,6 +50,7 @@ It keeps the public project entrance separate from the internal studio floor.
 - semantic-thread experiments and overnight outputs
 - summary-layer experiments
 - cross-canto publication workspaces
+- article and conference submission drafts or reviewer-only artifact packets
 - `ops/prompts/`, thread handoffs, and internal operating notes
 - uploader utilities and local release wrappers
 - local screenshots, scratch files, and `.DS_Store`
@@ -57,7 +58,8 @@ It keeps the public project entrance separate from the internal studio floor.
 ## Public README Should Answer
 
 - What Antica Fiamma is
-- Where the live site is: [anticafiamma.it](https://anticafiamma.it) and [ddpcommentary.com](https://ddpcommentary.com)
+- Where the live site is: [anticafiamma.it](https://anticafiamma.it)
+- Where the public code repository is: [ruocisong/antica-fiamma-public](https://github.com/ruocisong/antica-fiamma-public)
 - What public pages a visitor can read first
 - How Antica Fiamma relates to the Dartmouth Dante Project
 - Which interface layers are present
@@ -67,6 +69,7 @@ It keeps the public project entrance separate from the internal studio floor.
 - How the Cloudflare Pages deployment is prepared
 - Which module README files explain the main repository areas
 - How to cite and license the repository artifact
+- How the living GitHub repository differs from the fixed Zenodo 1.0.0 archive
 - Where to find the rights-safe sample runtime structure
 
 ## Public Repo Shape

@@ -8,7 +8,7 @@ Read in this order:
 
 - [scheda-progetto.md](./scheda-progetto.md): one-page Italian project sheet.
 - [project-dossier.md](./project-dossier.md): compact project dossier.
-- [rights-and-permissions.md](./rights-and-permissions.md): source, permission status, and reduced-version posture.
+- [rights-and-permissions.md](./rights-and-permissions.md): verified website-use permission scope and repository redistribution boundary.
 - [technical-overview.md](./technical-overview.md): technological and implementative choices.
 - [sustainability-and-maintenance.md](./sustainability-and-maintenance.md): current maintenance model and hosting boundary.
 - [demo-paths.md](./demo-paths.md): quick paths through the live interface.

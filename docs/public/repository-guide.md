@@ -6,10 +6,9 @@ This guide explains how to read the public **Antica Fiamma** repository.
 
 Antica Fiamma is the project name.
 
-Live entrances:
+Live entrance:
 
 - [anticafiamma.it](https://anticafiamma.it)
-- [ddpcommentary.com](https://ddpcommentary.com)
 
 The repository is presented under the public-facing project identity **Antica Fiamma**.
 
@@ -32,7 +31,7 @@ For a fast external reading, use this order:
 - [Authority Room](https://anticafiamma.it/authority.html): author, work, personaggio, and source-facing navigation connected to the reading interface.
 - [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html): public research room for Dante's fire vocabulary and motif.
 
-The same public pages are also reachable from `https://ddpcommentary.com` during the domain transition.
+The live pages use `https://anticafiamma.it` as their canonical domain.
 
 Repository notes after that:
 

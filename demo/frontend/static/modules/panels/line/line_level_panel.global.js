@@ -16,6 +16,36 @@
       return state.uiLanguage === "en" ? english : chinese;
     }
 
+    function parseCandidateLineNumber(candidate) {
+      const directLineNumber = Number(
+        candidate?.line_number
+        ?? candidate?.lineNumber
+        ?? candidate?.candidate_line_number
+        ?? candidate?.target_line_number
+      );
+      if (Number.isInteger(directLineNumber) && directLineNumber > 0) {
+        return directLineNumber;
+      }
+      const idMatch = String(candidate?.id || "").match(/:(\d+)$/);
+      const idLineNumber = idMatch ? Number(idMatch[1]) : NaN;
+      return Number.isInteger(idLineNumber) && idLineNumber > 0 ? idLineNumber : null;
+    }
+
+    function getCandidateSampleId(candidate) {
+      return String(candidate?.sample || candidate?.sample_id || "").trim();
+    }
+
+    function formatEchoScoreLabel(candidate, index) {
+      const score = Number(candidate?.score || 0);
+      if (!Number.isFinite(score) || score <= 0) {
+        return "";
+      }
+      if (score >= 900) {
+        return `rank #${index + 1}`;
+      }
+      return `echo score ${score.toFixed(1)}`;
+    }
+
     function renderRecurrencePanel(payload) {
       const sourceTerms = buildLineEchoSourceTerms(payload).slice(0, 5);
       const sourceFields = buildLineEchoSourceFields(payload).slice(0, 4);
@@ -26,7 +56,12 @@
         const distinctEchoTypes = new Set(candidates.map((candidate) => candidate.echoTypeLabel).filter(Boolean));
         const showEchoTypeTag = distinctEchoTypes.size > 1;
         return candidates
-          .map((candidate) => {
+          .map((candidate, index) => {
+            const sampleId = getCandidateSampleId(candidate);
+            const lineNumber = parseCandidateLineNumber(candidate);
+            const canJump = Boolean(sampleId && lineNumber);
+            const lineTextMarkup = escapeHtml(candidate.line_text || candidate.lineText || "");
+            const scoreLabel = formatEchoScoreLabel(candidate, index);
             const seenOverlapLabels = new Set();
             const overlapPills = [...(candidate.sharedFields || []), ...(candidate.sharedTerms || [])]
               .filter((label) => {
@@ -39,7 +74,6 @@
               })
               .map((label) => `<span class="pill">${escapeHtml(label)}</span>`)
               .join("");
-            const lineTextMarkup = escapeHtml(candidate.line_text || "");
             const directionClass = candidate.direction === "backward"
               ? "echo-direction-pill backward-pill"
               : (candidate.direction === "forward"
@@ -58,10 +92,10 @@
             return `
               <article class="micro-context-card">
                 <div class="micro-context-head">
-                  <strong>${escapeHtml(formatShortCommediaLocation(candidate.cantica, candidate.canto, candidate.line_number))}</strong>
-                  <span class="pill">echo score ${candidate.score.toFixed(1)}</span>
+                  <strong>${escapeHtml(formatShortCommediaLocation(candidate.cantica, candidate.canto, lineNumber))}</strong>
+                  ${scoreLabel ? `<span class="pill echo-score-pill">${escapeHtml(scoreLabel)}</span>` : ""}
                 </div>
-                <button type="button" class="reading-result-link occurrence-inline-link" data-occurrence-sample="${candidate.sample}" data-occurrence-line="${candidate.line_number}">${lineTextMarkup}</button>
+                <button type="button" class="reading-result-link occurrence-inline-link ${canJump ? "" : "is-disabled"}" ${canJump ? `data-occurrence-sample="${escapeHtml(sampleId)}" data-occurrence-line="${lineNumber}"` : "disabled"}>${lineTextMarkup}</button>
                 <div class="locus-meta-row">
                   ${showEchoTypeTag ? `<span class="pill coverage-pill">${escapeHtml(candidate.echoTypeLabel || "line echo")}</span>` : ""}
                   ${directionPill}
@@ -140,9 +174,13 @@
 
       elements.recurrencePanel.querySelectorAll("[data-occurrence-sample]").forEach((button) => {
         button.addEventListener("click", async () => {
+          const lineNumber = Number(button.dataset.occurrenceLine);
+          if (!Number.isInteger(lineNumber) || lineNumber < 1) {
+            return;
+          }
           await jumpToSampleLine(
             button.dataset.occurrenceSample,
-            Number(button.dataset.occurrenceLine),
+            lineNumber,
             button.dataset.occurrenceLocus
           );
         });

@@ -3,20 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>About the Authority Layer / Segni de l’antica fiamma</title>
+    <title>About the Authority Layer / Antica Fiamma</title>
     <meta
       name="description"
-      content="About the Authority Layer for Segni de l’antica fiamma: tracked authors, personaggi, work layers, source texts, and the authority-reading contract." />
-    <meta property="og:title" content="About the Authority Layer / Segni de l’antica fiamma" />
+      content="About the Authority Layer for Antica Fiamma: line-first authority reading, canto maps, author rooms, personaggi, work chips, and preserved commentary records." />
+    <meta property="og:title" content="About the Authority Layer / Antica Fiamma" />
     <meta
       property="og:description"
-      content="Read what the Authority Layer is, how to enter it, what it covers, and how tracked authors, personaggi, and work layers fit together." />
+      content="Read how the Authority Layer moves from a selected line to canto-wide authority maps and full author or personaggio rooms." />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ddpcommentary.com/authority.html" />
+    <meta property="og:url" content="https://anticafiamma.it/authority.html" />
     <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://ddpcommentary.com/authority.html" />
+    <link rel="canonical" href="https://anticafiamma.it/authority.html" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/static/styles.css?v=20260415d" />
+    <link rel="stylesheet" href="/static/styles.css?v=20260713b" />
   </head>
   <body class="help-popup-page">
     <main class="help-popup-shell">
@@ -29,14 +29,14 @@
       </div>
       <div class="help-popup-head">
         <h1 id="authority-title">About the Authority Layer</h1>
-        <a class="ghost-link-button" id="authority-back-link" href="/">Back to Segni de l’antica fiamma</a>
+        <a class="ghost-link-button" id="authority-back-link" href="/">Back to Antica Fiamma</a>
       </div>
 
       <div class="static-page-content" data-static-lang="en">
         <p class="help-modal-lead">
           This about page treats Authority as a reading environment in its own right, not just as an auxiliary panel. It
-          explains what kinds of objects are inside the layer, how tracked authors, personaggi, and work
-          layers fit together, and what sort of authority-reading Segni de l’antica fiamma supports.
+          explains how the layer moves from a selected line to canto-wide authority maps, tracked authors,
+          personaggi, work chips, and preserved commentary records.
         </p>
         <div class="compare-chip-row" style="margin-bottom: 16px;">
           <a class="guide-button guide-button-inline" href="/autore/index.html">→ Autori</a>
@@ -56,19 +56,21 @@
             <section class="help-section">
               <h2>What This Layer Is</h2>
               <p class="help-paragraph">
-                The Authority Layer does not simply collect cited names. It reorganises commentary use into local
-                authority profiles, work-level entry lanes, personaggio rooms, and commentary-source bridges.
-                Its job is to make authority usage readable as a navigable tradition rather than as a residue hidden
-                inside record cards.
+                The Authority Layer does not simply collect cited names. It reorganises commentary use into a
+                line-first route: Line for local accountability, Canto Map for canto-wide distribution, and Full
+                Authority Page for author or personaggio rooms. Its job is to make authority usage readable as a
+                navigable tradition rather than as a residue hidden inside record cards.
               </p>
               <p class="help-paragraph">
-                In practical terms, that means the layer now supports multiple levels of objecthood: fully shaped
-                objects such as Aristotle or Virgil, a full tracked author universe, and personaggi that can now be
-                entered through poem hits, commentary aliases, and local figure bands.
+                In practical terms, that means the layer now supports multiple levels of objecthood: record-local
+                work mentions on the selected line, per-canto authority indexes, fully shaped objects such as
+                Aristotle or Virgil, a tracked author universe, and personaggi that can be entered through poem
+                hits, commentary aliases, and local figure bands.
               </p>
               <p class="help-paragraph">
                 The key design decision is that authority remains anchored to the reading scene. You do not have to
-                leave line, card, or commentary language behind in order to enter authors, works, or source passages.
+                leave line, card, or commentary language behind in order to enter authors, works, personaggi, or
+                preserved commentary records.
               </p>
             </section>
           </section>
@@ -77,9 +79,9 @@
             <section class="help-section">
               <h2>Current Build Snapshot</h2>
               <p class="help-paragraph">
-                Segni de l’antica fiamma exposes <strong id="authority-author-count-en">…</strong>
-                tracked authority authors, <strong id="authority-source-count-en">…</strong> bridged commentary
-                source texts, and <strong id="authority-highlight-author-count-en">…</strong> stable highlightable
+                Antica Fiamma exposes <strong id="authority-author-count-en">…</strong>
+                tracked authority authors, <strong id="authority-source-count-en">…</strong> preserved commentary-source
+                rows, and <strong id="authority-highlight-author-count-en">…</strong> stable highlightable
                 author lexicon entries.
               </p>
               <p class="help-paragraph">
@@ -96,18 +98,19 @@
                 </p>
               </section>
               <section class="help-section help-subsection">
-                <h3>Source Bridges</h3>
+                <h3>Record-Local Work Mentions</h3>
                 <p class="help-paragraph">
-                  Commentary-source bridges matter because Authority should not stop at names alone. When the bridge is
-                  present, the layer can open local source text rather than stopping at a bare occurrence.
+                  Work mentions matter because Authority should not stop at names alone. When a work chip appears on
+                  a line, it can open the filtered record list that produced the count, while Open in reader keeps the
+                  single preserved commentary record available.
                 </p>
               </section>
               <section class="help-section help-subsection">
                 <h3>Highlight Lexicon</h3>
                 <p class="help-paragraph">
                   Authority is now also present inside commentary reading itself. Author, work, and personaggio
-                  highlights let the text page begin to glow with the same universe that the Authority Lens already
-                  knows.
+                  highlights let the text page begin to glow with the same line-first universe that the Authority
+                  route already knows.
                 </p>
               </section>
             </div>
@@ -117,14 +120,15 @@
             <section class="help-section">
               <h2>Authority Atlas</h2>
               <p class="help-paragraph">
-                The Authority universe is no longer one undifferentiated list. In Segni de l’antica fiamma, the
-                author-side works tree is the default live structure; what varies is not whether a room has works,
-                but how much <span class="guide-focus">entry contract pressure</span> or commentary-sensitivity still needs to remain visible.
+                The Authority universe is no longer one undifferentiated list. In Antica Fiamma, the
+                author-side work data is mounted unevenly but honestly. Some rooms expose deeper works trees; others
+                keep a lighter work overview. What matters is that the displayed route states its
+                <span class="guide-focus">entry contract pressure</span> instead of pretending every authority object has the same depth.
               </p>
             </section>
             <div class="help-group-children">
               <section class="help-section help-subsection">
-                <h3>Mature Works Trees</h3>
+                <h3>Mounted Work Layers</h3>
                 <p class="help-paragraph">
                   <strong id="authority-works-tree-count-en">…</strong> authors expose a real works-tree
                   layer.
@@ -135,7 +139,7 @@
                 <h3>Commentary-Sensitive Entries</h3>
                 <p class="help-paragraph">
                   <strong id="authority-commentary-sensitive-count-en">…</strong> authors still require
-                  commentary-sensitive staging even though their works tree is available.
+                  commentary-sensitive staging even though their work layer is available.
                 </p>
                 <p class="help-paragraph" id="authority-commentary-sensitive-samples-en">…</p>
               </section>
@@ -167,7 +171,7 @@
                 into autore intake.
               </p>
               <p class="help-paragraph">
-                Segni de l’antica fiamma recognises <strong id="authority-personaggio-author-count-en">…</strong>
+                Antica Fiamma recognises <strong id="authority-personaggio-author-count-en">…</strong>
                 Autore-Personaggio entries and <strong id="authority-personaggio-standalone-count-en">…</strong>
                 standalone personaggi.
               </p>
@@ -188,24 +192,23 @@
             <section class="help-section">
               <h2>How To Enter It</h2>
               <p class="help-paragraph">
-                There are now three honest entry routes. One begins from the Authority panel itself. One begins from
-                the Compare workspace, where shared authority usage appears between pinned cards. One begins inside the
-                commentary text, where highlighted author and work surfaces now start to signal the same authority
-                universe directly in the reading flow.
+                There are now three honest scopes. Line begins from the selected verse and the commentary records
+                that touch it. Canto Map widens to the full canto and shows where authority signals gather. Full
+                Authority Page opens the larger author or personaggio room when you need the whole object.
               </p>
               <p class="help-paragraph">
                 That plurality is important because authority use does not arrive in only one scholarly form. Sometimes
-                you start from a cited name, sometimes from a figure in the poem, and sometimes from a recurrent work
-                or source habit emerging inside commentary prose.
+                you start from a cited name, sometimes from a figure in the poem, sometimes from a work chip such as
+                <em>Vita Nuova</em> or <em>Convivio</em>, and sometimes from one preserved commentary record opened in the reader.
               </p>
             </section>
             <div class="help-group-children">
               <section class="help-section help-subsection">
-                <h3>Authority Lens</h3>
+                <h3>Line Scope</h3>
                 <p class="help-paragraph">
-                  The Lens should be read as a staged entry, not as a flat filter. The contract banner, drilldown
-                  lane, and bucket notes now explain what kind of object you are entering and which layer of the
-                  completed authority universe you are opening.
+                  Line scope keeps the selected verse still. Work chips open filtered record lists inside the
+                  Authority module, and Open in reader opens a single commentary record without moving the main entry
+                  away from the line.
                 </p>
               </section>
               <section class="help-section help-subsection">
@@ -231,9 +234,9 @@
             <section class="help-section">
               <h2>Object Types</h2>
               <p class="help-paragraph">
-                The layer no longer needs to pretend that shallower structure is the main distinction. The
-                major live distinction is now between a broad works-tree universe and a smaller set of rooms
-                whose reading contract still needs extra caveat.
+                The layer no longer treats shallowness as the main distinction. The major live distinction is between
+                local line evidence, canto-wide distribution, and larger rooms whose reading contract still needs to
+                say how much text, commentary, work, or personaggio evidence is mounted.
               </p>
             </section>
             <div class="help-group-children">
@@ -247,7 +250,7 @@
               <section class="help-section help-subsection">
                 <h3>Scoped Rooms</h3>
                 <p class="help-paragraph">
-                  Some rooms still need scoped reading discipline even after the works tree is available. This is most
+                  Some rooms still need scoped reading discipline even after work data is available. This is most
                   visible where commentary pressure, role pressure, or double identity should remain explicit rather
                   than being flattened into an ordinary browse tree.
                 </p>
@@ -256,7 +259,7 @@
                 <h3>Still Uneven</h3>
                 <p class="help-paragraph">
                   The point is not to suppress internal unevenness but to state clearly where the remaining difference
-                  now lives. In Segni de l’antica fiamma it lives less in the presence or absence of works trees, and more in
+                  now lives. In Antica Fiamma it lives less in a simple works-tree yes/no, and more in
                   entry contract, scoped caveat, and reading pressure.
                 </p>
               </section>
@@ -272,7 +275,7 @@
               </p>
               <p class="help-paragraph">
                 The next frontier is therefore not blind expansion. It is to keep thickening reading contracts,
-                clickable entry routes, work-level drilldown, and commentary-integrated authority paths for the
+                clickable line and canto routes, work-level drilldown, and commentary-integrated authority paths for the
                 universe that already exists.
               </p>
               <p class="help-paragraph">
@@ -286,7 +289,7 @@
 
       <div class="static-page-content" data-static-lang="bilingual" hidden>
         <p class="help-modal-lead">
-          这页把 Authority 当成一张独立阅读页来看，而不只是 Segni de l’antica fiamma 旁边的一个附属 panel。它解释这一层装了什么对象、author、personaggi、work layer 怎么接到一起，以及 Segni de l’antica fiamma 支持到什么程度的 authority 阅读。
+          这页把 Authority 当成一张独立阅读页来看，而不只是 Antica Fiamma 旁边的一个附属 panel。它解释这一层怎样从被选中的 line 进入 canto map、author room、personaggio room、work chips 和保留下来的 commentary records。
         </p>
         <div class="compare-chip-row" style="margin-bottom: 16px;">
           <a class="guide-button guide-button-inline" href="/autore/index.html">→ Autori</a>
@@ -306,13 +309,13 @@
             <section class="help-section">
               <h2>这层到底是什么</h2>
               <p class="help-paragraph">
-                Authority Layer 不是简单地把被引用的人名堆在一起。它把 commentary 里的 authority 使用重新组织成 author profile、work-level entry、personaggio rooms 和 commentary-source bridge，让 authority tradition 可以被走、被读、被分层，而不只是 cards 里的残余。
+                Authority Layer 不是简单地把被引用的人名堆在一起。它把 commentary 里的 authority 使用重新组织成一条 line-first 路径：Line 负责局部核查，Canto Map 展开整支 canto 的分布，Full Authority Page 进入 author 或 personaggio 房间。这样 authority tradition 可以被走、被读、被分层，而不只是 cards 里的残余。
               </p>
               <p class="help-paragraph">
-                所以这里现在已经有多种对象形态：像 Aristotele、Virgilio 这种更成熟的对象；完整的 tracked author universe；以及可以通过 poem hits、commentary aliases 和本地 bands 被打开的 personaggi。
+                所以这里现在已经有多种对象形态：选中 line 上的 record-local work mentions、逐 canto 的 authority indexes、像 Aristotele、Virgilio 这种更成熟的对象、完整的 tracked author universe，以及可以通过 poem hits、commentary aliases 和本地 bands 被打开的 personaggi。
               </p>
               <p class="help-paragraph">
-                这层最关键的设计决定，是 authority 始终要锚在阅读现场上。你不需要为了进入 authors、works 或 source passages，就把 line、card 和 commentary 语言整个丢在身后。
+                这层最关键的设计决定，是 authority 始终要锚在阅读现场上。你不需要为了进入 authors、works、personaggi 或 preserved commentary records，就把 line、card 和 commentary 语言整个丢在身后。
               </p>
             </section>
           </section>
@@ -321,7 +324,7 @@
             <section class="help-section">
               <h2>当前快照</h2>
               <p class="help-paragraph">
-                Segni de l’antica fiamma 已经暴露出 <strong id="authority-author-count-bi">…</strong> 位 tracked authority authors、<strong id="authority-source-count-bi">…</strong> 条 bridged commentary source texts，以及 <strong id="authority-highlight-author-count-bi">…</strong> 组稳定 author highlight entries。
+                Antica Fiamma 已经暴露出 <strong id="authority-author-count-bi">…</strong> 位 tracked authority authors、<strong id="authority-source-count-bi">…</strong> 条 preserved commentary-source rows，以及 <strong id="authority-highlight-author-count-bi">…</strong> 组稳定 author highlight entries。
               </p>
               <p class="help-paragraph">
                 这些数字写在这里，不是为了展示，而是为了说明 Authority 已经不是薄薄一层试验；它现在已经长到值得拥有一页自己的程度。
@@ -335,15 +338,15 @@
                 </p>
               </section>
               <section class="help-section help-subsection">
-                <h3>Source Bridges</h3>
+                <h3>Record-local work mentions</h3>
                 <p class="help-paragraph">
-                  Authority 不该只停在名字上。source bridge 的意义在于：当 bridge 存在时，它能真的打开本地 source text，而不是只停在一个 bare occurrence 上。
+                  Authority 不该只停在名字上。work chip 的意义在于：点击 Vita Nuova、Convivio 这样的作品标签时，会打开产生该计数的 filtered record list；而 Open in reader 仍然负责打开单条 preserved commentary record。
                 </p>
               </section>
               <section class="help-section help-subsection">
                 <h3>Highlight Lexicon</h3>
                 <p class="help-paragraph">
-                  Authority 现在也开始回到正文里发光了。author / work / personaggio 高亮，让 Authority universe 不再只活在旁边的 Lens 里，也开始活在 commentary 自己的语言里。
+                  Authority 现在也开始回到正文里发光了。author / work / personaggio 高亮，让这条 line-first authority route 不再只活在旁边的面板里，也开始活在 commentary 自己的语言里。
                 </p>
               </section>
             </div>
@@ -353,12 +356,12 @@
             <section class="help-section">
               <h2>Authority 地图</h2>
               <p class="help-paragraph">
-                Authority universe 现在已经不是一张平面名单了。在 Segni de l’antica fiamma 里，author-side works tree 已经成为默认 live 结构；真正还在变化的，不再主要是“有没有 works”，而是哪些 room 仍需把 <span class="guide-focus">entry contract pressure</span> 和 commentary-sensitive caveat 保持可见。
+                Authority universe 现在已经不是一张平面名单了。在 Antica Fiamma 里，author-side work data 已经真实挂载，但深浅并不完全相同；重要的是每条 route 都说明自己的 <span class="guide-focus">entry contract pressure</span>，而不是假装每个 authority object 都有同样厚度。
               </p>
             </section>
             <div class="help-group-children">
               <section class="help-section help-subsection">
-                <h3>成熟 works-tree</h3>
+                <h3>已挂载 work layers</h3>
                 <p class="help-paragraph">
                   当前有 <strong id="authority-works-tree-count-bi">…</strong> 位 author 已经长出真实 works-tree。
                 </p>
@@ -367,7 +370,7 @@
               <section class="help-section help-subsection">
                 <h3>Commentary-sensitive 入口</h3>
                 <p class="help-paragraph">
-                  当前有 <strong id="authority-commentary-sensitive-count-bi">…</strong> 位 author 虽然已经挂出 works tree，但进入时仍需保留 commentary-sensitive 的 staged contract。
+                  当前有 <strong id="authority-commentary-sensitive-count-bi">…</strong> 位 author 虽然已经挂出 work layer，但进入时仍需保留 commentary-sensitive 的 staged contract。
                 </p>
                 <p class="help-paragraph" id="authority-commentary-sensitive-samples-bi">…</p>
               </section>
@@ -395,7 +398,7 @@
                 Authority 现在已经不只到 author 为止。有些 tracked author 在诗里也会长成真正的角色，还有一些 lane 本来就该直接进入角色层，而不是被硬拖回 autore intake。
               </p>
               <p class="help-paragraph">
-                Segni de l’antica fiamma 已经承认 <strong id="authority-personaggio-author-count-bi">…</strong> 位 Autore-Personaggio，
+                Antica Fiamma 已经承认 <strong id="authority-personaggio-author-count-bi">…</strong> 位 Autore-Personaggio，
                 以及 <strong id="authority-personaggio-standalone-count-bi">…</strong> 位 standalone personaggi。
               </p>
             </section>
@@ -415,17 +418,17 @@
             <section class="help-section">
               <h2>怎么进入</h2>
               <p class="help-paragraph">
-                现在有三条诚实入口：一条是从 Authority panel 自己进去，一条是从 Compare 里共享 authority 使用进去，一条是从 commentary 正文里的高亮 surface 进去。
+                现在有三个诚实尺度：Line 从选中的诗行和覆盖它的 commentary records 开始；Canto Map 展开整支 canto 的 authority 分布；Full Authority Page 在你需要完整对象时进入更大的 author 或 personaggio room。
               </p>
               <p class="help-paragraph">
-                这种复数入口很重要，因为 authority 使用本来就不会只以一种学术形态到来。有时你是从被引用的人名开始，有时是从诗里的人物开始，有时则是从 commentary prose 里反复浮现的 work 或 source 习惯开始。
+                这种复数入口很重要，因为 authority 使用本来就不会只以一种学术形态到来。有时你是从被引用的人名开始，有时是从诗里的人物开始，有时是从 Vita Nuova 或 Convivio 这样的 work chip 开始，有时则是从 reader 里打开的一条 preserved commentary record 开始。
               </p>
             </section>
             <div class="help-group-children">
               <section class="help-section help-subsection">
-                <h3>Authority Lens</h3>
+                <h3>Line scope</h3>
                 <p class="help-paragraph">
-                  Lens 现在不该被读成一个平铺 filter，而该被读成 staged entry。contract banner、drilldown lane 和 bucket note 都在说明：你现在进入的是哪种对象，以及你打开的是 authority universe 的哪一层。
+                  Line scope 会让 main entry 停在当前诗行。work chips 在 Authority 模块内部打开 filtered record list；Open in reader 打开单条 commentary 全文，不把整页从这一行挪走。
                 </p>
               </section>
               <section class="help-section help-subsection">
@@ -447,7 +450,7 @@
             <section class="help-section">
               <h2>对象类型</h2>
               <p class="help-paragraph">
-                当前这层已经不需要再把“有没有 works tree”当成主要差别。现在更真实的差别，是哪些 room 可以直接按 works tree 读，哪些 room 仍需额外 caveat、scoped entry 和 staged explanation。
+                当前这层已经不需要再把“有没有 works tree”当成主要差别。现在更真实的差别，是 local line evidence、canto-wide distribution，以及更大的 author/personaggio room 各自能支撑到什么强度。
               </p>
             </section>
             <div class="help-group-children">
@@ -460,13 +463,13 @@
               <section class="help-section help-subsection">
                 <h3>Scoped Rooms</h3>
                 <p class="help-paragraph">
-                  有些 room 即使已经挂出了 works tree，仍然需要保留 scoped reading discipline。最明显的是那些带有 commentary pressure、作者/人物双重身份，或更敏感范围契约的对象。
+                  有些 room 即使已经挂出了 work data，仍然需要保留 scoped reading discipline。最明显的是那些带有 commentary pressure、作者/人物双重身份，或更敏感范围契约的对象。
                 </p>
               </section>
               <section class="help-section help-subsection">
                 <h3>仍然不均匀</h3>
                 <p class="help-paragraph">
-                  这里要保留的不是“延后”本身，而是差异真实落在哪里。在 Segni de l’antica fiamma 里，它越来越少地体现在“有没有 works tree”，而更多地体现在 entry contract、scoped caveat 和阅读压力上。这种诚实是这层设计的一部分。
+                  这里要保留的不是“延后”本身，而是差异真实落在哪里。在 Antica Fiamma 里，它越来越少地体现在 works-tree yes/no，而更多地体现在 entry contract、scoped caveat 和阅读压力上。这种诚实是这层设计的一部分。
                 </p>
               </section>
             </div>
@@ -479,7 +482,7 @@
                 这页不声称每一个被提到的名字都已经被解决。它声称的是另一件更有用的事：Authority 这一层现在已经长到足以拥有自己的页面、自己的入口逻辑、自己的阅读契约。
               </p>
               <p class="help-paragraph">
-                所以下一步最值的，不再是盲扩，而是继续把已经存在的 universe 做厚：clickable 路径、更深的 work drilldown、commentary-integrated authority path、以及更稳定的前端 entry copy。
+                所以下一步最值的，不再是盲扩，而是继续把已经存在的 universe 做厚：clickable line / canto 路径、更深的 work drilldown、commentary-integrated authority path、以及更稳定的前端 entry copy。
               </p>
               <p class="help-paragraph">
                 换句话说，这层现在最重要的，不是把不均匀藏起来，而是继续把它说清楚。成熟对象、较薄对象、以及 special-case 对象，都应该作为它们真实的样子被读到。
@@ -493,20 +496,17 @@
     <script>
       (function () {
         function getLanguage() {
-          const params = new URLSearchParams(window.location.search);
-          const requested = params.get("ui_lang");
-          if (requested === "bilingual") return "bilingual";
-          if (requested === "en") return "en";
           try {
-            const stored = window.localStorage.getItem("ddp-ui-language");
-            return stored === "bilingual" ? "bilingual" : "en";
+            window.localStorage.setItem("ddp-ui-language", "en");
           } catch (error) {
             return "en";
           }
+          return "en";
         }
 
         function applyLanguage(language) {
-          document.documentElement.lang = language === "bilingual" ? "zh-CN" : "en";
+          language = "en";
+          document.documentElement.lang = "en";
           document.querySelectorAll("[data-authority-lang]").forEach((button) => {
             button.classList.toggle("is-active", button.dataset.authorityLang === language);
           });
@@ -514,7 +514,7 @@
             block.hidden = block.dataset.staticLang !== language;
           });
           const url = new URL(window.location.href);
-          url.searchParams.set("ui_lang", language);
+          url.searchParams.delete("ui_lang");
           window.history.replaceState({}, "", url);
           try {
             window.localStorage.setItem("ddp-ui-language", language);
@@ -523,7 +523,7 @@
           }
           const back = document.getElementById("authority-back-link");
           const backUrl = new URL("/", window.location.href);
-          backUrl.searchParams.set("ui_lang", language);
+          backUrl.searchParams.delete("ui_lang");
           back.href = backUrl.pathname + backUrl.search;
         }
 

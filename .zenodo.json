@@ -1,21 +1,38 @@
 {
-  "title": "Antica Fiamma Public Shell",
-  "description": "Public-facing shell, selected build utilities, deployment wiring, documentation, and rights-safe runtime samples for Antica Fiamma, a static line-first Dante reading interface built with the Dartmouth Dante Project as its commentary source.",
+  "title": "Antica Fiamma: Public Research Environment, Version 1.0.0",
+  "description": "<p><strong>Live research environment: <a href=\"https://anticafiamma.it\">https://anticafiamma.it</a></strong></p><p>Antica Fiamma is a continuously updated, line-first research environment for Dante's <em>Commedia</em>. This versioned, rights-safe release archives the public website shell, selected method-facing build code, runtime checks, public documentation, deployment packaging, citation and licence information, and synthetic or redacted runtime samples. It does not contain the complete Dartmouth Dante Project-derived commentary payload.</p><p><strong>Rights statement.</strong> Project-owned source code is released under the MIT License. Project documentation written by Ruoci Song is released under CC BY 4.0 unless otherwise noted. Synthetic or redacted samples are documentation of data structures and do not grant rights in source materials. Screenshots and derived interface materials retain their stated attributions and source-sensitive limitations. Antica Fiamma has written authorisation for the current academic, non-profit website use of DDP-derived material; this authorisation is limited to that website use and is not represented as a licence to redistribute the complete commentary corpus through GitHub, Zenodo, or another repository. The Dartmouth Dante Project remains the visible source archive for the commentary layer.</p><p>The live environment may continue to change after this release. Use DOI <a href=\"https://doi.org/10.5281/zenodo.21479971\">10.5281/zenodo.21479971</a> for the archived 1.0.0 software/documentation snapshot and cite the live site with an access date for current interface or runtime claims.</p>",
   "creators": [
     {
       "name": "Song, Ruoci",
-      "affiliation": "University of Bologna"
+      "affiliation": "University of Bologna",
+      "orcid": "0009-0004-1263-2192"
     }
   ],
   "keywords": [
-    "Dante",
+    "Dante Alighieri",
+    "Divine Comedy",
     "digital humanities",
-    "static publication",
-    "scholarly editions",
-    "commentary archives",
-    "Code4Lib"
+    "digital philology",
+    "commentary studies",
+    "scholarly interface",
+    "research software",
+    "static web publication"
   ],
   "license": "MIT",
   "upload_type": "software",
-  "access_right": "open"
+  "access_right": "open",
+  "version": "1.0.0",
+  "publication_date": "2026-07-22",
+  "related_identifiers": [
+    {
+      "identifier": "https://anticafiamma.it",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/ruocisong/antica-fiamma-public",
+      "relation": "isVersionOf",
+      "scheme": "url"
+    }
+  ]
 }

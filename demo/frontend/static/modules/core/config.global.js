@@ -44,7 +44,7 @@
     "significa", "sive", "sono", "sopra", "sua", "sue", "suo", "tale", "tamen", "tanto", "testo", "tutta", "usque",
     "tutte", "tutti", "tutto", "unde", "uno", "uomo", "via", "vita", "where",
     "adunque", "enim", "idest", "nobis", "perche", "qual", "quella", "quelle", "quelli",
-    "quivi", "scilicet",
+    "quivi", "scilicet", "tien", "tiene", "tieni", "tienti", "tengono",
   ]);
 
   const DANTE_STOPWORDS = new Set([
@@ -72,7 +72,7 @@
   const WORD_PROFILE_NOISE = new Set([
     "altore", "auctor", "autor", "capitulo", "canto", "cetera", "dicat", "dicendo", "dicie",
     "dicitur", "disse", "ebbe", "elli", "essa", "esso", "item", "lezione", "modo", "parole",
-    "quel", "quomodo", "seconda",
+    "quel", "quomodo", "seconda", "tien", "tiene", "tieni", "tienti", "tengono",
   ]);
 
   const CORPUS_DRIFT_TERMS = new Set([
@@ -87,7 +87,7 @@
     "ancor", "apparve", "aver", "cotal", "dall",
     "elli", "ella", "elle", "esso", "essa", "essi", "quelle", "quella", "quello", "quelli",
     "quel", "questa", "queste", "questo", "questi", "tale", "tali", "esser", "ester", "fece", "inter",
-    "mentr", "quidam", "quorum", "siam", "sovr", "their", "vide", "vidi", "vieni", "vuole", "vuol", "onde", "dunque",
+    "mentr", "quidam", "quorum", "siam", "sovr", "their", "tien", "tiene", "tieni", "tienti", "tengono", "vide", "vidi", "vieni", "vuole", "vuol", "onde", "dunque",
   ]);
   const PROPER_TERM_LABELS = new Map([
     ["virgilio", "Virgilio"],
@@ -207,8 +207,8 @@
       "compare.summary.empty": "还没有 pin 的 cards。",
       "compare.future": "预留接口",
       "authority.kicker": "人物层 / Authority Layer",
-      "authority.title": "人物层 / Authorities as cited in the commentary tradition",
-      "authority.note": "选择一行，查看覆盖这行的注释中出现了哪些 authority 与作品。",
+      "authority.title": "人物层 / Line, Canto, and Authority rooms",
+      "authority.note": "选择一行，先看覆盖这行的 authority 与作品；再切换到 Canto Map 或 Full Authority Page。",
     },
     en: {
       "hero.eyebrow": "Digital Humanities Workbench",
@@ -254,8 +254,8 @@
       "compare.summary.empty": "No pinned cards yet.",
       "compare.future": "Reserved Hooks",
       "authority.kicker": "Authority Layer",
-      "authority.title": "Authorities as cited in the commentary tradition",
-      "authority.note": "Select a line to see which authorities and works appear in the commentary reaching it.",
+      "authority.title": "Line, Canto, and Authority rooms",
+      "authority.note": "Select a line to see local authorities and works, then widen to Canto Map or Full Authority Page.",
     },
     zh: {
       "hero.eyebrow": "数字人文工作台",
@@ -301,8 +301,8 @@
       "compare.summary.empty": "还没有 pin 的 cards。",
       "compare.future": "预留接口",
       "authority.kicker": "人物层",
-      "authority.title": "评论传统中的 authority",
-      "authority.note": "选择一行，查看覆盖这行的注释中出现了哪些 authority 与作品。",
+      "authority.title": "Line、Canto 与 Authority 房间",
+      "authority.note": "选择一行，先看覆盖这行的 authority 与作品；再切换到 Canto Map 或 Full Authority Page。",
     },
   };
 

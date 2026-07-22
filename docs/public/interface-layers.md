@@ -2,7 +2,7 @@
 
 This note describes the public reading surfaces of **Antica Fiamma** in the order a visitor is likely to encounter them.
 
-For the visual tour, see [anticafiamma.it/reading-route.html](https://anticafiamma.it/reading-route.html). The same page is also available at [ddpcommentary.com/reading-route.html](https://ddpcommentary.com/reading-route.html).
+For the visual tour, see [anticafiamma.it/reading-route.html](https://anticafiamma.it/reading-route.html).
 
 The interface can also be read by scale and by parallel room:
 
@@ -92,4 +92,4 @@ For a first walkthrough:
 - use the [Authority Room](https://anticafiamma.it/authority.html) when moving from commentary cards toward authors, works, and source paths
 - visit the [Fiamma Research Room](https://anticafiamma.it/research/fiamma.html) to see how a focused research case can live inside the same public environment
 
-The mirror domain [ddpcommentary.com](https://ddpcommentary.com) carries the same public routes during the current transition.
+All public routes documented here use the canonical domain [anticafiamma.it](https://anticafiamma.it).

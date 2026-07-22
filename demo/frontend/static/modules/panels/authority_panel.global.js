@@ -505,8 +505,8 @@
       const chooseText = (en, zh) => (isEnglish ? en : zh);
       const tabs = `
         <div class="lens-tab-row">
-          <button type="button" class="lens-tab ${state.activeScholarTab === "figure" ? "is-active" : ""}" data-lens-tab="figure">Figure Navigation</button>
-          <button type="button" class="lens-tab ${state.activeScholarTab === "authority" ? "is-active" : ""}" data-lens-tab="authority">Authority Lens</button>
+          <button type="button" class="lens-tab ${state.activeScholarTab === "figure" ? "is-active" : ""}" data-lens-tab="figure">Personaggi</button>
+          <button type="button" class="lens-tab ${state.activeScholarTab === "authority" ? "is-active" : ""}" data-lens-tab="authority">Full Authority Page</button>
         </div>
       `;
 
@@ -515,7 +515,7 @@
         const needsCuratedAnchors = !state.authorityCuratedRoomAnchors;
         if (needsAuthorityLayer || needsCuratedAnchors) {
           if (state.authorityLayerPromise || state.authorityCuratedRoomAnchorsPromise) {
-            elements.figurePanel.innerHTML = `${tabs}<div class="empty-state">${escapeHtml(chooseText("Loading Authority Lens data on demand.", "正在按需加载 Authority Lens 数据，请稍等。"))}</div>`;
+            elements.figurePanel.innerHTML = `${tabs}<div class="empty-state">${escapeHtml(chooseText("Loading Full Authority Page data on demand.", "正在按需加载 Full Authority Page 数据，请稍等。"))}</div>`;
             bindScholarLensEvents();
             return;
           }
@@ -529,7 +529,7 @@
             .catch(() => {
               renderFigurePanel();
             });
-          elements.figurePanel.innerHTML = `${tabs}<div class="empty-state">${escapeHtml(chooseText("Loading Authority Lens data on demand.", "正在按需加载 Authority Lens 数据，请稍等。"))}</div>`;
+          elements.figurePanel.innerHTML = `${tabs}<div class="empty-state">${escapeHtml(chooseText("Loading Full Authority Page data on demand.", "正在按需加载 Full Authority Page 数据，请稍等。"))}</div>`;
           bindScholarLensEvents();
           return;
         }
@@ -666,12 +666,12 @@
       elements.figurePanel.innerHTML = `
         ${tabs}
         <div class="title-with-help section-title-with-help">
-          <h3>Figure Navigation</h3>
-          ${renderHelpButton("figure-navigation", "Figure Navigation 说明")}
+          <h3>Personaggi</h3>
+          ${renderHelpButton("figure-navigation", "Personaggi 说明")}
         </div>
         <p class="semantic-intro">${escapeHtml(chooseText(
-          "This panel now reads directly from the authority/personaggio layer rather than from the old research-only figure profile shelf. It keeps all current personaggi together, then opens each room through poem hits, commentary aliases, and figure-specific bands.",
-          "这一层现在直接读取 authority/personaggio，而不是旧的 research-only figure profile。当前 personaggi 会一起出现，然后再用正文命中、commentary aliases、以及 figure-specific bands 来打开每一间房。"
+          "This panel reads from the current authority/personaggio layer. It keeps the active personaggi together, then opens each room through poem hits, commentary aliases, figure-specific bands, and links to static personaggio or autore pages where available.",
+          "这一层读取当前 authority/personaggio layer。当前 personaggi 会一起出现，然后通过正文命中、commentary aliases、figure-specific bands，以及可用的静态 personaggio / autore 页面链接打开每一间房。"
         ))}</p>
         <div class="figure-chip-row">${chipButtons}</div>
         <div class="figure-summary">

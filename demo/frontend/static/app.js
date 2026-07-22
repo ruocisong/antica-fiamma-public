@@ -19,6 +19,8 @@ const {
   UI_COPY,
 } = window.DDPConfig;
 
+const MIN_AUTO_PREFIX_SEARCH_LENGTH = 5;
+
 const state = window.DDPState.createInitialState();
 
 const elements = window.DDPDom.getElements(document);
@@ -225,7 +227,8 @@ function getHelpStatsSnapshot() {
       || getCollectionSize(state.authorityPersonaggioScan?.standalone_personaggi),
     authorityAuthorCount: getCollectionSize(state.authorityLayer?.authors),
     authoritySourceCount: Number(state.authorityCommentarySources?.source_count || 0),
-    danteWordProfileCount: getCollectionSize(state.danteWordLociIndex?.profiles),
+    danteWordProfileCount: Number(state.danteWordLociIndex?.profile_count || 0)
+      || getCollectionSize(state.danteWordLociIndex?.profiles),
     researchNotes: state.researchLayer?.notes || {},
     authorityNotes: state.authorityLayer?.notes || {},
     currentSampleTitle: state.currentSampleEntry?.title || "current sample",
@@ -490,7 +493,7 @@ function buildHelpContent(key) {
           label: "",
           body: `
             <figure class="help-image-figure">
-              <img src="/static/assets/manicula-hrc-45.png" alt="" aria-hidden="true" />
+              <span aria-hidden="true">☞</span>
             </figure>
             ${makeBody("HRC 45, Divina Commedia by Dante Alighieri (1363).")}
           `,
@@ -728,7 +731,7 @@ function buildHelpContent(key) {
       ),
       sections: [
         { label: choose("What you see here", "这里看什么"), body: makeBody(
-          choose("It keeps the scale deliberately small, so you can notice which content words gather near the current locus without drifting too far away from the poem.", "它故意把尺度压小，让你看见哪些 content words 会在当前 loci 附近聚起来，而不至于一下子离诗太远。")
+          choose("It keeps the scale deliberately small, so you can notice which content words gather near the current locus without drifting too far away from the poem.", "它故意把尺度压小，让你看见哪些 content words 会在当前 locus 附近聚起来，而不至于一下子离诗太远。")
         )},
         { label: choose("Current filtering", "当前过滤规则"), body: makeBody(
           choose("Very weak items are hidden by default, ties prefer terms with more surviving windows, and the displayed windows try to keep at least one line that still contains the current focus word.", "默认会隐藏很弱的项；同分时，保留下来的窗口更多的 term 会排前；展示窗口也会尽量保留至少一行仍然明确包含当前 focus word。")
@@ -748,23 +751,23 @@ function buildHelpContent(key) {
       ],
     },
     "figure-navigation": {
-      title: "Figure Navigation",
+      title: "Personaggi",
       lead: choose(
-        `Figure Navigation now reads from the authority/personaggio layer rather than the old research-only shelf. The current local atlas exposes ${formatNumber(stats.personaggioCount)} personaggi with poem-side and commentary-side routes where available.`,
-        `Figure Navigation 现在读取 authority/personaggio layer，而不是旧的 research-only shelf。当前本地 atlas 暴露 ${formatNumber(stats.personaggioCount)} 个 personaggi；可用时会同时保留 poem-side 和 commentary-side 路径。`
+        `Personaggi reads from the current authority/personaggio layer. The local atlas exposes ${formatNumber(stats.personaggioCount)} personaggi with poem-side and commentary-side routes where available.`,
+        `Personaggi 读取当前 authority/personaggio layer。当前本地 atlas 暴露 ${formatNumber(stats.personaggioCount)} 个 personaggi；可用时会同时保留 poem-side 和 commentary-side 路径。`
       ),
       sections: [
         { label: choose("Why it belongs here", "为什么它适合在这里"), body: makeBody(
           choose("It keeps figure-based reading close to the poem and the cards, instead of forcing you into a detached encyclopaedic index. Personaggi now open through poem hits, commentary aliases, and figure-specific bands rather than through a thin profile shelf.", "它让人物阅读始终贴着诗句和 cards 走，而不是把你突然扔进一张脱离现场的人物索引表。现在 personaggi 会通过 poem hits、commentary aliases 和 figure-specific bands 打开，而不是靠一层很薄的旧 profile shelf。")
         )},
         { label: choose("Why figures need their own path", "为什么人物需要自己的路径"), body: makeBody(
-          choose("Figures are not just authorities with different labels. They belong to the dramatic economy of the poem as well as to the commentary tradition. Figure Navigation matters because it lets those two roles stay visible together.", "人物并不只是换了标签的 authority。它们既属于诗的戏剧现场，也属于评论传统。Figure Navigation 的意义就在于：它让这两种身份能够同时保持可见。"),
+          choose("Figures are not just authorities with different labels. They belong to the dramatic economy of the poem as well as to the commentary tradition. Personaggi matters because it lets those two roles stay visible together.", "人物并不只是换了标签的 authority。它们既属于诗的戏剧现场，也属于评论传统。Personaggi 的意义就在于：它让这两种身份能够同时保持可见。"),
           choose("That makes it especially useful for readers who need to move from a named figure in the verse to the commentary habits that accrete around that figure.", "所以它尤其适合那些需要从诗句里的某个人物，一路追到围绕这个人物长出来的 commentary 习惯的读者。")
         )},
       ],
     },
     "authority-lens": {
-      title: "Authority Lens",
+      title: choose("Full Authority Page", "Full Authority Page / Authority 总览"),
       lead: choose(
         "Full Authority Page is the wider authority room: author chips, a biblical shelf, Text Layer, Commentary Layer, Work Layer, and links out to static autore or personaggio pages when those rooms exist.",
         "Full Authority Page 是更大的 authority room：这里有 author chips、Biblical shelf、Text Layer、Commentary Layer、Work Layer；如果静态 autore 或 personaggio 页面已经存在，也会从这里连出去。"
@@ -780,7 +783,7 @@ function buildHelpContent(key) {
       title: "Contrastive Interpretive Vocabulary",
       lead: choose(
         "This panel is not a simple frequency list. It shows which interpretive words are doing more real work around the current locus.",
-        "这一层不是普通词频表，而是在看当前 loci 周围哪些 interpretive words 真正更有解释分量。"
+        "这一层不是普通词频表，而是在看当前 locus 周围哪些 interpretive words 真正更有解释分量。"
       ),
       sections: [
         { label: choose("What it gives you", "它给你什么"), body: makeBody(
@@ -1387,12 +1390,12 @@ function buildHelpContent(key) {
       lead: pickAudienceLead(
         helpMap["figure-navigation"]?.lead,
         choose(
-          "Philologically, Figure Navigation should stay accountable to the poem scene in which a figure appears, then to the commentary wording that gathers around that figure.",
-          "从 philological 角度，Figure Navigation 应该先对人物出现的诗歌现场负责，再对围绕这个人物聚起来的 commentary wording 负责。"
+          "Philologically, Personaggi should stay accountable to the poem scene in which a figure appears, then to the commentary wording that gathers around that figure.",
+          "从 philological 角度，Personaggi 应该先对人物出现的诗歌现场负责，再对围绕这个人物聚起来的 commentary wording 负责。"
         ),
         choose(
-          "Algorithmically, Figure Navigation admits a figure only when poem-side or commentary-side evidence can resolve it as a real tracked figure rather than a loose name mention.",
-          "从算法上说，Figure Navigation 只有在 poem-side 或 commentary-side 的证据能够把它解析成一个真实被追踪的 figure，而不是松散名字提及时，才会准入。"
+          "Algorithmically, Personaggi admits a figure only when poem-side or commentary-side evidence can resolve it as a real tracked figure rather than a loose name mention.",
+          "从算法上说，Personaggi 只有在 poem-side 或 commentary-side 的证据能够把它解析成一个真实被追踪的 figure，而不是松散名字提及时，才会准入。"
         )
       ),
       philologist: [
@@ -1867,9 +1870,12 @@ async function restorePreviousViewportState() {
         const match = getPayloadLoci(payload).find((locus) => normalizeLocusForm(locus.normalized_form) === normalizeLocusForm(snapshot.selectedLocus));
         state.selectedLocus = match || null;
         state.activeInterpretiveTerm = null;
+        if (state.selectedLocus) {
+          await warmSelectedLocusProfile(state.selectedLocus, snapshot.selectedLine, { rerenderOnLoad: false });
+        }
         renderLineRecords(payload);
         if (state.selectedLocus) {
-          ensureResearchLayerLoaded();
+          scheduleSelectedLocusResearchWarm();
         }
       }
     }
@@ -1906,17 +1912,19 @@ function getInitialSampleId() {
   return state.manifest.default_sample;
 }
 
-function getInitialUiLanguage() {
-  const params = new URLSearchParams(window.location.search);
-  const requested = params.get("ui_lang");
-  if (requested && UI_COPY[requested]) {
-    return requested === "zh" ? "bilingual" : requested;
+function clearUiLanguageParam() {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("ui_lang")) {
+    return;
   }
+  url.searchParams.delete("ui_lang");
+  window.history.replaceState({}, "", url);
+}
+
+function getInitialUiLanguage() {
+  clearUiLanguageParam();
   try {
-    const stored = window.localStorage.getItem("ddp-ui-language");
-    if (stored && UI_COPY[stored]) {
-      return stored === "zh" ? "bilingual" : stored;
-    }
+    window.localStorage.setItem("ddp-ui-language", "en");
   } catch (error) {
     return "en";
   }
@@ -1929,6 +1937,8 @@ function getUiText(key) {
 }
 
 function applyUiLanguage() {
+  state.uiLanguage = "en";
+  clearUiLanguageParam();
   document.querySelectorAll("[data-ui-key]").forEach((node) => {
     node.textContent = getUiText(node.dataset.uiKey);
   });
@@ -1947,7 +1957,7 @@ function applyUiLanguage() {
       return;
     }
     const url = new URL(link.href, window.location.href);
-    url.searchParams.set("ui_lang", state.uiLanguage);
+    url.searchParams.delete("ui_lang");
     link.href = url.pathname + url.search;
   });
   if (elements.sortMode) {
@@ -1984,21 +1994,14 @@ function applyUiLanguage() {
 }
 
 function setUiLanguage(language) {
-  if (!UI_COPY[language]) {
-    return;
-  }
-  state.uiLanguage = language;
+  state.uiLanguage = "en";
   try {
-    window.localStorage.setItem("ddp-ui-language", language);
+    window.localStorage.setItem("ddp-ui-language", "en");
   } catch (error) {
     // noop
   }
   const url = new URL(window.location.href);
-  if (language === "bilingual") {
-    url.searchParams.delete("ui_lang");
-  } else {
-    url.searchParams.set("ui_lang", language);
-  }
+  url.searchParams.delete("ui_lang");
   window.history.replaceState({}, "", url);
   applyUiLanguage();
   if (state.manifest) {
@@ -2016,8 +2019,6 @@ async function loadSample(sampleId) {
 
   state.currentSampleEntry = entry;
   resetSampleState();
-  ensureSampleLineEchoProfilesLoaded(sampleId);
-  ensureSampleAuthorityCantoIndexLoaded(sampleId);
   renderFigurePanel();
   syncSampleSelection();
   updateSampleUrl(sampleId, requestedLineNumber, { locusNormalized: requestedLocusNormalized });
@@ -2031,9 +2032,8 @@ async function loadSample(sampleId) {
     setWorkspaceInteractive(canSampleOpenLineWorkbench(entry));
 
     const defaultLine = state.overview.lines.find((line) => line.line_number === requestedLineNumber)
-      || state.overview.lines.find((line) => line.line_number === 1)
-      || state.overview.lines[0];
-    if (defaultLine) {
+      || null;
+    if (defaultLine && Number.isFinite(requestedLineNumber)) {
       renderLineLoadingState(defaultLine.line_number);
       const token = ++deferredInitialLineSelectionToken;
       const schedule = typeof window.requestAnimationFrame === "function"
@@ -2056,6 +2056,9 @@ async function loadSample(sampleId) {
           renderCoverageOnlyLine(defaultLine.line_number);
         });
       });
+    } else {
+      deferredInitialLineSelectionToken += 1;
+      renderLineIdleState();
     }
     return;
   }
@@ -2086,6 +2089,7 @@ function resetSampleState() {
   state.authorityInlineOpenRecordId = null;
   state.authorityInlineOpenRecordScope = null;
   state.authorityInlineOpenWorkKey = null;
+  state.authorityInlineExpandedRecordKeys.clear();
   state.activeSearchRecordId = null;
   state.activeSearchHighlightTerms = [];
   if (elements.coverageList) {
@@ -2353,7 +2357,7 @@ function getLoadedAuthorityWorksTree(author) {
   if (!meta) {
     return null;
   }
-  if (meta.path) {
+  if (meta.index_path || meta.path) {
     return state.authorityWorksTreeCache.get(author.author_id) || null;
   }
   return meta;
@@ -2368,7 +2372,7 @@ function getLoadedAuthorityCommentaryLineIndex(author) {
   if (!meta) {
     return null;
   }
-  if (meta.path) {
+  if (meta.index_path || meta.path) {
     return state.authorityCommentaryLineCache.get(author.author_id) || null;
   }
   return meta;
@@ -2376,14 +2380,15 @@ function getLoadedAuthorityCommentaryLineIndex(author) {
 
 async function ensureAuthorityCommentaryLineIndexLoaded(author) {
   const meta = getAuthorityCommentaryLineMeta(author);
-  if (!meta?.available || !meta?.path || !author?.author_id) {
+  const requestPath = meta?.index_path || meta?.path;
+  if (!meta?.available || !requestPath || !author?.author_id) {
     return meta || null;
   }
   if (state.authorityCommentaryLineCache.has(author.author_id)) {
     return state.authorityCommentaryLineCache.get(author.author_id);
   }
   if (!state.authorityCommentaryLinePromises.has(author.author_id)) {
-    const request = fetchJson(meta.path)
+    const request = fetchJson(requestPath)
       .then((payload) => {
         state.authorityCommentaryLineCache.set(author.author_id, payload);
         return payload;
@@ -2396,16 +2401,73 @@ async function ensureAuthorityCommentaryLineIndexLoaded(author) {
   return state.authorityCommentaryLinePromises.get(author.author_id);
 }
 
+function getAuthorityCommentaryLineSampleCacheKey(author, sampleName) {
+  const authorId = String(author?.author_id || "").trim();
+  const sampleId = String(sampleName || "").trim();
+  return authorId && sampleId ? `${authorId}::${sampleId}` : "";
+}
+
+function getLoadedAuthorityCommentaryLineSample(author, sampleName) {
+  const key = getAuthorityCommentaryLineSampleCacheKey(author, sampleName);
+  return key ? state.authorityCommentaryLineSampleCache.get(key) || null : null;
+}
+
+function mergeAuthorityCommentarySampleShell(author, sampleEntry) {
+  if (!sampleEntry) {
+    return null;
+  }
+  const sampleName = sampleEntry.sample_name || sampleEntry.sample_id || "";
+  const loaded = getLoadedAuthorityCommentaryLineSample(author, sampleName);
+  return loaded ? { ...sampleEntry, ...loaded, sample_name: sampleName || loaded.sample_name } : sampleEntry;
+}
+
+function isAuthorityCommentarySampleShellOnly(sampleEntry) {
+  return Boolean(sampleEntry?.path) && !Array.isArray(sampleEntry?.line_groups);
+}
+
+async function ensureAuthorityCommentaryLineSampleLoaded(author, sampleEntry) {
+  const sampleName = sampleEntry?.sample_name || sampleEntry?.sample_id || "";
+  const key = getAuthorityCommentaryLineSampleCacheKey(author, sampleName);
+  if (!key) {
+    return sampleEntry || null;
+  }
+  if (state.authorityCommentaryLineSampleCache.has(key)) {
+    return state.authorityCommentaryLineSampleCache.get(key);
+  }
+  const requestPath = sampleEntry?.path;
+  if (!requestPath) {
+    return sampleEntry || null;
+  }
+  if (!state.authorityCommentaryLineSamplePromises.has(key)) {
+    const request = fetchJson(requestPath)
+      .then((payload) => {
+        const merged = {
+          ...sampleEntry,
+          ...payload,
+          sample_name: sampleName || payload?.sample_name,
+        };
+        state.authorityCommentaryLineSampleCache.set(key, merged);
+        return merged;
+      })
+      .finally(() => {
+        state.authorityCommentaryLineSamplePromises.delete(key);
+      });
+    state.authorityCommentaryLineSamplePromises.set(key, request);
+  }
+  return state.authorityCommentaryLineSamplePromises.get(key);
+}
+
 async function ensureAuthorityWorksTreeLoaded(author) {
   const meta = getAuthorityWorksTreeMeta(author);
-  if (!meta?.available || !meta?.path || !author?.author_id) {
+  const requestPath = meta?.index_path || meta?.path;
+  if (!meta?.available || !requestPath || !author?.author_id) {
     return meta || null;
   }
   if (state.authorityWorksTreeCache.has(author.author_id)) {
     return state.authorityWorksTreeCache.get(author.author_id);
   }
   if (!state.authorityWorksTreePromises.has(author.author_id)) {
-    const request = fetchJson(meta.path)
+    const request = fetchJson(requestPath)
       .then((payload) => {
         state.authorityWorksTreeCache.set(author.author_id, payload);
         return payload;
@@ -2416,6 +2478,116 @@ async function ensureAuthorityWorksTreeLoaded(author) {
     state.authorityWorksTreePromises.set(author.author_id, request);
   }
   return state.authorityWorksTreePromises.get(author.author_id);
+}
+
+function getAuthorityWorkShardKey(author, work) {
+  const authorId = String(author?.author_id || "").trim();
+  const workId = String(work?.canonical_work || work?.display_label || "").trim();
+  return authorId && workId ? `${authorId}::${workId}` : "";
+}
+
+function getLoadedAuthorityWorkShard(author, work) {
+  const key = getAuthorityWorkShardKey(author, work);
+  return key ? state.authorityWorksTreeWorkCache.get(key) || null : null;
+}
+
+function normalizeAuthorityWorkShardPayload(payload) {
+  if (!payload) {
+    return null;
+  }
+  if (payload.work) {
+    return payload.work;
+  }
+  if (Array.isArray(payload.works) && payload.works.length) {
+    return payload.works[0];
+  }
+  return payload;
+}
+
+function mergeAuthorityWorkShell(author, work) {
+  if (!work) {
+    return null;
+  }
+  const loaded = getLoadedAuthorityWorkShard(author, work);
+  return loaded ? { ...work, ...loaded, path: work.path || loaded.path } : work;
+}
+
+function isAuthorityWorkShellOnly(work) {
+  return Boolean(work?.path)
+    && !Array.isArray(work?.structured_locator_tree)
+    && !Array.isArray(work?.prose_locator_tree)
+    && !Array.isArray(work?.work_only_occurrences)
+    && !Array.isArray(work?.pseudo_passage_occurrences);
+}
+
+async function ensureAuthorityWorkShardLoaded(author, work) {
+  const key = getAuthorityWorkShardKey(author, work);
+  if (!key) {
+    return work || null;
+  }
+  if (state.authorityWorksTreeWorkCache.has(key)) {
+    return state.authorityWorksTreeWorkCache.get(key);
+  }
+  const requestPath = work?.path;
+  if (!requestPath) {
+    return work || null;
+  }
+  if (!state.authorityWorksTreeWorkPromises.has(key)) {
+    const request = fetchJson(requestPath)
+      .then((payload) => {
+        const loadedWork = normalizeAuthorityWorkShardPayload(payload) || work;
+        state.authorityWorksTreeWorkCache.set(key, loadedWork);
+        return loadedWork;
+      })
+      .finally(() => {
+        state.authorityWorksTreeWorkPromises.delete(key);
+      });
+    state.authorityWorksTreeWorkPromises.set(key, request);
+  }
+  return state.authorityWorksTreeWorkPromises.get(key);
+}
+
+function getAuthorityNodeShardKey(author, work, nodeId) {
+  const authorId = String(author?.author_id || "").trim();
+  const workId = String(work?.canonical_work || work?.display_label || "").trim();
+  const nodeKey = String(nodeId || "").trim();
+  return authorId && workId && nodeKey ? `${authorId}::${workId}::${nodeKey}` : "";
+}
+
+function getLoadedAuthorityNodeShard(author, work, nodeId) {
+  const key = getAuthorityNodeShardKey(author, work, nodeId);
+  return key ? state.authorityWorksTreeNodeCache.get(key) || null : null;
+}
+
+function isAuthorityNodeSelectionShellOnly(selection) {
+  return Boolean(selection?.path) && !Array.isArray(selection?.occurrences);
+}
+
+async function ensureAuthorityNodeShardLoaded(author, work, selection) {
+  const nodeId = selection?.nodeId || selection?.node_id || "";
+  const key = getAuthorityNodeShardKey(author, work, nodeId);
+  if (!key) {
+    return selection || null;
+  }
+  if (state.authorityWorksTreeNodeCache.has(key)) {
+    return state.authorityWorksTreeNodeCache.get(key);
+  }
+  const requestPath = selection?.path;
+  if (!requestPath) {
+    return selection || null;
+  }
+  if (!state.authorityWorksTreeNodePromises.has(key)) {
+    const request = fetchJson(requestPath)
+      .then((payload) => {
+        state.authorityWorksTreeNodeCache.set(key, payload);
+        return payload;
+      })
+      .finally(() => {
+        state.authorityWorksTreeNodePromises.delete(key);
+      });
+    state.authorityWorksTreeNodePromises.set(key, request);
+  }
+  return state.authorityWorksTreeNodePromises.get(key);
 }
 
 function inferAuthorityOccurrenceSampleName(occurrence) {
@@ -2560,12 +2732,24 @@ const {
   mergeSearchIndexShards,
 });
 
-async function ensureDanteWordLociIndexLoaded() {
-  if (state.danteWordLociIndex) {
-    return state.danteWordLociIndex;
-  }
-  if (!state.danteWordLociIndexPromise) {
-    state.danteWordLociIndexPromise = fetchJson(`${DATA_BASE}/dante_word_loci/index.json`)
+function getStaticLetterShardKey(normalizedForm) {
+  const folded = String(normalizedForm || "")
+    .normalize("NFKD")
+    .toLocaleLowerCase("it")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+  const first = folded.slice(0, 1);
+  return /^[a-z]$/.test(first) ? first : "_";
+}
+
+function isDanteWordLociIndexShardSettled(normalizedForm) {
+  const shardKey = getStaticLetterShardKey(normalizedForm);
+  return state.danteWordLociIndexShardSettled.has(shardKey);
+}
+
+async function ensureDanteWordLociIndexLoaded(normalizedForm = "") {
+  if (!state.danteWordLociIndex && !state.danteWordLociIndexPromise) {
+    state.danteWordLociIndexPromise = fetchJson(`${DATA_BASE}/dante_word_loci/index_shards/index.json`)
       .then((payload) => {
         state.danteWordLociIndex = payload;
         return payload;
@@ -2574,7 +2758,75 @@ async function ensureDanteWordLociIndexLoaded() {
         state.danteWordLociIndexPromise = null;
       });
   }
-  return state.danteWordLociIndexPromise;
+  const index = state.danteWordLociIndex || await state.danteWordLociIndexPromise;
+  const normalized = String(normalizedForm || "").trim();
+  if (!normalized) {
+    return index;
+  }
+  const shardKey = getStaticLetterShardKey(normalized);
+  if (state.danteWordLociIndexShardSettled.has(shardKey)) {
+    return index;
+  }
+  if (!state.danteWordLociIndexShardPromises.has(shardKey)) {
+    const promise = fetchJson(`${DATA_BASE}/dante_word_loci/index_shards/${encodeURIComponent(shardKey)}.json`)
+      .then((payload) => {
+        Object.assign(index.profiles, payload?.profiles || {});
+        state.danteWordLociIndexShardSettled.add(shardKey);
+        return payload;
+      })
+      .finally(() => {
+        state.danteWordLociIndexShardPromises.delete(shardKey);
+      });
+    state.danteWordLociIndexShardPromises.set(shardKey, promise);
+  }
+  await state.danteWordLociIndexShardPromises.get(shardKey);
+  return index;
+}
+
+function getTreccaniDantescaWordLinkShardKey(normalizedForm) {
+  return getStaticLetterShardKey(normalizedForm);
+}
+
+function hasTreccaniDantescaWordLinkShardState(normalizedForm) {
+  const shardKey = getTreccaniDantescaWordLinkShardKey(normalizedForm);
+  return state.treccaniDantescaWordLinkShards.has(shardKey)
+    || state.treccaniDantescaWordLinkShardPromises.has(shardKey)
+    || state.treccaniDantescaWordLinkShardSettled.has(shardKey);
+}
+
+async function ensureTreccaniDantescaWordLinksLoaded(normalizedForm) {
+  const shardKey = getTreccaniDantescaWordLinkShardKey(normalizedForm);
+  if (state.treccaniDantescaWordLinkShards.has(shardKey)) {
+    return state.treccaniDantescaWordLinkShards.get(shardKey);
+  }
+  if (state.treccaniDantescaWordLinkShardSettled.has(shardKey)) {
+    return null;
+  }
+  if (!state.treccaniDantescaWordLinkShardPromises.has(shardKey)) {
+    const promise = fetchJson(`${DATA_BASE}/treccani_enciclopedia_dantesca_word_links/${encodeURIComponent(shardKey)}.json`)
+      .then((payload) => {
+        state.treccaniDantescaWordLinkShards.set(shardKey, payload);
+        state.treccaniDantescaWordLinkShardSettled.add(shardKey);
+        return payload;
+      })
+      .catch((error) => {
+        state.treccaniDantescaWordLinkShardSettled.add(shardKey);
+        console.warn(`Treccani Enciclopedia Dantesca word-link shard ${shardKey} is unavailable`, error);
+        return null;
+      })
+      .finally(() => {
+        state.treccaniDantescaWordLinkShardPromises.delete(shardKey);
+      });
+    state.treccaniDantescaWordLinkShardPromises.set(shardKey, promise);
+  }
+  return state.treccaniDantescaWordLinkShardPromises.get(shardKey);
+}
+
+function getTreccaniDantescaLink(normalizedForm) {
+  const key = String(normalizedForm || "").normalize("NFKC").toLocaleLowerCase("it").trim();
+  const shardKey = getTreccaniDantescaWordLinkShardKey(key);
+  const item = state.treccaniDantescaWordLinkShards.get(shardKey)?.links?.[key] || null;
+  return item?.status === "direct" && item?.confidence === "high" ? item : null;
 }
 
 async function ensureDanteWordProfileLoaded(normalizedForm) {
@@ -2586,7 +2838,7 @@ async function ensureDanteWordProfileLoaded(normalizedForm) {
     return state.danteWordProfileCache.get(key);
   }
 
-  const index = await ensureDanteWordLociIndexLoaded();
+  const index = await ensureDanteWordLociIndexLoaded(key);
   const descriptor = index?.profiles?.[key];
   if (!descriptor?.profile_path) {
     return null;
@@ -2605,6 +2857,41 @@ async function ensureDanteWordProfileLoaded(normalizedForm) {
   }
 
   return state.danteWordProfilePromises.get(key);
+}
+
+function warmSelectedLocusProfile(locus, lineNumber = state.selectedLine, options = {}) {
+  const normalizedForm = String(locus?.normalized_form || "").trim();
+  if (!normalizedForm) {
+    return Promise.resolve(null);
+  }
+  const { rerenderOnLoad = true } = options || {};
+  state.compareAuthorityIndexDeferredUntil = Date.now() + 8000;
+  return ensureDanteWordLociIndexLoaded(normalizedForm)
+    .then(() => ensureWordFamilyProfilesLoaded(normalizedForm))
+    .then(() => {
+      if (
+        rerenderOnLoad &&
+        state.selectedLocus?.normalized_form === normalizedForm
+        && Number.isFinite(lineNumber)
+        && state.selectedLine === lineNumber
+        && state.lineCache.has(lineNumber)
+      ) {
+        renderLineRecords(state.lineCache.get(lineNumber));
+      }
+      return getCachedDanteWordProfile(normalizedForm);
+    })
+    .catch((error) => {
+      console.warn("Background load failed for selected Dante word-locus profile", error);
+      return null;
+    });
+}
+
+function scheduleSelectedLocusResearchWarm() {
+  scheduleLineEnhancement(() => {
+    if (state.selectedLocus) {
+      ensureResearchLayerLoaded();
+    }
+  }, { timeoutMs: 3500, fallbackDelayMs: 1800 });
 }
 
 function renderHeader() {
@@ -2648,7 +2935,8 @@ async function handleCoverageLocusSelection(lineNumber, locusId) {
         locusNormalized: state.selectedLocus.normalized_form,
       });
       renderLineRecords(payload);
-      ensureResearchLayerLoaded();
+      void warmSelectedLocusProfile(locus, lineNumber);
+      scheduleSelectedLocusResearchWarm();
     }
   }
   scrollToRecordsSection();
@@ -2877,9 +3165,85 @@ function getLineAuthorityRecordPreview(record) {
     record?.record_text_preview ||
     record?.record_summary ||
     record?.one_line_summary ||
+    record?.preview ||
     "",
     260
   );
+}
+
+function getLineAuthorityRecordDisplayKey(record) {
+  const preview = getLineAuthorityRecordPreview(record)
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+  const meta = [
+    record?.commentary_name,
+    record?.date_label || record?.century_label,
+  ].filter(Boolean).join(" · ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+  if (preview) {
+    return `${meta || "commentary record"}::${preview}`;
+  }
+  const recordId = normalizeLineAuthorityRecordId(record);
+  return recordId ? `id::${recordId}` : meta || "unknown-record";
+}
+
+function dedupeLineAuthorityRecordsForDisplay(records = []) {
+  const seen = new Set();
+  return records.filter((record) => {
+    const key = getLineAuthorityRecordDisplayKey(record);
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+}
+
+function getAuthorityDisplayRecords(records = []) {
+  return dedupeLineAuthorityRecordsForDisplay(records);
+}
+
+function getAuthorityVisibleExcerptCount(records = []) {
+  return getAuthorityDisplayRecords(records).length;
+}
+
+function getAuthorityCommentaryKey(record) {
+  const commentary = String(record?.commentary_name || "").replace(/\s+/g, " ").trim().toLowerCase();
+  const date = String(record?.date_label || record?.century_label || "").replace(/\s+/g, " ").trim().toLowerCase();
+  const id = normalizeLineAuthorityRecordId(record);
+  return commentary ? `${commentary}::${date}` : (id ? `id::${id}` : "unknown-commentary");
+}
+
+function getAuthorityCommentaryCount(records = []) {
+  return new Set(records.map(getAuthorityCommentaryKey).filter(Boolean)).size;
+}
+
+function formatAuthorityCommentaryCount(count) {
+  const value = Number(count || 0);
+  return `${value} commentar${value === 1 ? "y" : "ies"}`;
+}
+
+function formatAuthorityExcerptCount(count) {
+  const value = Number(count || 0);
+  return `${value} excerpt${value === 1 ? "" : "s"}`;
+}
+
+function renderAuthorityEvidenceCounts({ commentaryCount = 0, excerptCount = 0, rawRecordCount = 0, signalCount = 0 } = {}) {
+  const rawBits = [
+    rawRecordCount ? `${rawRecordCount} record hit${rawRecordCount === 1 ? "" : "s"}` : "",
+    signalCount ? `${signalCount} signal${signalCount === 1 ? "" : "s"}` : "",
+  ].filter(Boolean).join(" · ");
+  const detail = [
+    formatAuthorityCommentaryCount(commentaryCount),
+    excerptCount && excerptCount !== commentaryCount ? formatAuthorityExcerptCount(excerptCount) : "",
+  ].filter(Boolean).join(" · ");
+  return `
+    <span title="${escapeHtml(rawBits || detail)}">${escapeHtml(formatAuthorityCommentaryCount(commentaryCount))}</span>
+    ${excerptCount && excerptCount !== commentaryCount ? `<span title="${escapeHtml(rawBits || detail)}">${escapeHtml(formatAuthorityExcerptCount(excerptCount))}</span>` : ""}
+  `;
 }
 
 function getLineAuthorityFullTextRecord(recordId) {
@@ -2945,10 +3309,15 @@ function renderAuthorityInlineRecordReading(record, fullText) {
 }
 
 function renderAuthorityInlineWorkReading(authority, work) {
-  const records = (work.records || []).slice().sort((left, right) =>
+  const rawRecords = (work.records || []).slice().sort((left, right) =>
     Number(left.year_start || 9999) - Number(right.year_start || 9999) ||
     String(left.commentary_name || "").localeCompare(String(right.commentary_name || ""))
   );
+  const records = dedupeLineAuthorityRecordsForDisplay(rawRecords);
+  const rawRecordCount = Number(work.recordIds?.size || rawRecords.length || records.length);
+  const commentaryCount = getAuthorityCommentaryCount(rawRecords);
+  const excerptCount = records.length;
+  const collapsedCount = Math.max(0, rawRecordCount - records.length);
   const surfaces = [...(work.surfaces || [])].slice(0, 8);
   const recordMarkup = records.map((record) => {
     const recordId = normalizeLineAuthorityRecordId(record);
@@ -2975,11 +3344,19 @@ function renderAuthorityInlineWorkReading(authority, work) {
         <button type="button" class="authority-inline-reader-close" data-authority-inline-close>Close</button>
       </div>
       <div class="authority-inline-work-reader-meta">
-        <strong>${escapeHtml(String(work.recordIds?.size || records.length))} records</strong>
+        <strong title="${escapeHtml(`${rawRecordCount} record hit${rawRecordCount === 1 ? "" : "s"}`)}">${escapeHtml(formatAuthorityCommentaryCount(commentaryCount))}</strong>
         <span>${escapeHtml(choose(
-          "touch this line through this work signal.",
+          `${commentaryCount === 1 ? "touches" : "touch"} this line through this work signal.`,
           "条注释通过这个作品信号触及这一行。"
         ))}</span>
+        ${excerptCount && excerptCount !== commentaryCount ? `<span>${escapeHtml(choose(
+          `${excerptCount} unique excerpts shown.`,
+          `显示 ${excerptCount} 条去重后的可见摘录。`
+        ))}</span>` : ""}
+        ${collapsedCount ? `<span title="${escapeHtml(`${rawRecordCount} record hit${rawRecordCount === 1 ? "" : "s"}`)}">${escapeHtml(choose(
+          "Record-span duplicates are collapsed here.",
+          "这里已折叠重复的 record-span 命中。"
+        ))}</span>` : ""}
       </div>
       ${surfaces.length ? `<div class="authority-inline-surfaces">${surfaces.map((surface) => `<span>${escapeHtml(surface)}</span>`).join("")}</div>` : ""}
       ${recordMarkup
@@ -2990,6 +3367,7 @@ function renderAuthorityInlineWorkReading(authority, work) {
 }
 
 function renderAuthorityInlineScopeControls(activeScope = "line") {
+  const chooseText = (en, zh) => (state.uiLanguage === "en" ? en : zh);
   const canOpenLine = state.selectedLine != null && state.lineCache.has(state.selectedLine);
   return `
     <div class="authority-inline-scope-row" aria-label="Authority reading scope">
@@ -3010,7 +3388,7 @@ function renderAuthorityInlineScopeControls(activeScope = "line") {
         type="button"
         class="authority-inline-scope-chip ${activeScope === "full" ? "is-active" : ""}"
         data-authority-inline-scope="full">
-        Full Authority Page
+        ${escapeHtml(chooseText("Full Authority Page", "Authority 总览"))}
       </button>
     </div>
   `;
@@ -3023,11 +3401,21 @@ function collectLineAuthorityItems(payload) {
   for (const record of payload?.records || []) {
     const recordId = normalizeLineAuthorityRecordId(record);
     const mentionRecord = getLineAuthorityMentionRecord(record);
-    const rawMentions = (
+    const rawWorkMentions = (
       Array.isArray(mentionRecord?.raw_work_mentions)
         ? mentionRecord.raw_work_mentions
         : getRawWorkMentionsForRecord(record)
     ).filter((row) => row && !isDanteCommediaWorkRow(row));
+    const rawAuthorMentions = (Array.isArray(mentionRecord?.raw_author_mentions)
+      ? mentionRecord.raw_author_mentions
+      : []
+    ).map((row) => ({
+      author_id: row?.author_id || "",
+      canonical_work: "",
+      work_bucket: "stable",
+      raw_surfaces: row?.raw_surfaces || [],
+    })).filter((row) => row.author_id);
+    const rawMentions = [...rawWorkMentions, ...rawAuthorMentions];
     if (!rawMentions.length) {
       continue;
     }
@@ -3116,16 +3504,33 @@ function collectLineAuthorityItems(payload) {
     });
   }
 
-  const authors = [...authorMap.values()].map((item) => ({
-    ...item,
-    records: [...item.records].sort((left, right) =>
+  const authors = [...authorMap.values()].map((item) => {
+    const records = [...item.records].sort((left, right) =>
       Number(left.year_start || 9999) - Number(right.year_start || 9999) ||
       String(left.commentary_name || "").localeCompare(String(right.commentary_name || ""))
-    ),
-    works: [...item.works.values()].sort((left, right) =>
-      right.recordIds.size - left.recordIds.size || left.label.localeCompare(right.label)
-    ),
-  })).sort((left, right) =>
+    );
+    const works = [...item.works.values()]
+      .map((work) => ({
+        ...work,
+        visibleExcerptCount: getAuthorityVisibleExcerptCount(work.records),
+        commentaryCount: getAuthorityCommentaryCount(work.records),
+      }))
+      .sort((left, right) =>
+        right.commentaryCount - left.commentaryCount ||
+        right.visibleExcerptCount - left.visibleExcerptCount ||
+        right.recordIds.size - left.recordIds.size ||
+        left.label.localeCompare(right.label)
+      );
+    return {
+      ...item,
+      records,
+      visibleExcerptCount: getAuthorityVisibleExcerptCount(records),
+      commentaryCount: getAuthorityCommentaryCount(records),
+      works,
+    };
+  }).sort((left, right) =>
+    right.commentaryCount - left.commentaryCount ||
+    right.visibleExcerptCount - left.visibleExcerptCount ||
     right.recordIds.size - left.recordIds.size ||
     right.mentionCount - left.mentionCount ||
     left.displayName.localeCompare(right.displayName)
@@ -3138,16 +3543,35 @@ function collectLineAuthorityItems(payload) {
 }
 
 function renderLineAuthorityCard(authority) {
-  const workMarkup = authority.works.slice(0, 6).map((work) => `
-    <button type="button" class="authority-inline-work ${work.bucket === "caveated" ? "is-caveated" : ""} ${state.authorityInlineOpenWorkKey === work.key ? "is-active" : ""}" data-line-authority-work-key="${escapeHtml(work.key)}" aria-expanded="${state.authorityInlineOpenWorkKey === work.key ? "true" : "false"}">
+  const displayRecords = getAuthorityDisplayRecords(authority.records || []);
+  const visibleExcerptCount = displayRecords.length;
+  const commentaryCount = Number(authority.commentaryCount || getAuthorityCommentaryCount(authority.records || []));
+  const rawRecordCount = Number(authority.recordIds?.size || authority.records?.length || visibleExcerptCount || 0);
+  const cardKey = `line:${authority.authorId || authority.displayName || "unknown"}`;
+  const isExpanded = state.authorityInlineExpandedRecordKeys.has(cardKey);
+  const baseRecordCount = 4;
+  const extraRecords = isExpanded ? displayRecords.slice(baseRecordCount) : [];
+  const recordColumnCount = Math.max(1, Math.min(4, extraRecords.length));
+  const workMarkup = authority.works.slice(0, 6).map((work) => {
+    const visibleWorkExcerptCount = Number(work.visibleExcerptCount || getAuthorityVisibleExcerptCount(work.records));
+    const workCommentaryCount = Number(work.commentaryCount || getAuthorityCommentaryCount(work.records));
+    const rawWorkRecordCount = Number(work.recordIds?.size || work.records?.length || visibleWorkExcerptCount || 0);
+    const workCountTitle = [
+      formatAuthorityCommentaryCount(workCommentaryCount),
+      visibleWorkExcerptCount !== workCommentaryCount ? formatAuthorityExcerptCount(visibleWorkExcerptCount) : "",
+      `${rawWorkRecordCount} record hit${rawWorkRecordCount === 1 ? "" : "s"}`,
+    ].filter(Boolean).join(" · ");
+    return `
+    <button type="button" class="authority-inline-work ${work.bucket === "caveated" ? "is-caveated" : ""} ${state.authorityInlineOpenWorkKey === work.key ? "is-active" : ""}" data-line-authority-work-key="${escapeHtml(work.key)}" aria-expanded="${state.authorityInlineOpenWorkKey === work.key ? "true" : "false"}" title="${escapeHtml(workCountTitle)}">
       <strong>${escapeHtml(work.label)}</strong>
-      <small>${escapeHtml(String(work.recordIds.size))}</small>
+      <small>${escapeHtml(String(workCommentaryCount))}</small>
     </button>
-  `).join("");
+  `;
+  }).join("");
   const surfaceMarkup = [...authority.surfaces].slice(0, 8).map((surface) =>
     `<span>${escapeHtml(surface)}</span>`
   ).join("");
-  const recordMarkup = authority.records.slice(0, 3).map((record) => {
+  const renderRecordButton = (record) => {
     const recordId = normalizeLineAuthorityRecordId(record);
     const isOpen = state.authorityInlineOpenRecordScope === "line" && state.authorityInlineOpenRecordId === recordId;
     const meta = [record.commentary_name, record.date_label || record.century_label]
@@ -3161,14 +3585,16 @@ function renderLineAuthorityCard(authority) {
         <span class="authority-inline-record-action">${isOpen ? "Close reader" : "Open in reader"}</span>
       </button>
     `;
-  }).join("");
-  const overflow = Math.max(0, authority.records.length - 3);
-  const pageLink = authority.publicSlug
-    ? `<a class="authority-inline-page-link" href="/autore/${escapeHtml(authority.publicSlug)}.html">Open authority room</a>`
+  };
+  const recordMarkup = displayRecords.slice(0, baseRecordCount).map(renderRecordButton).join("");
+  const expandedRecordMarkup = extraRecords.map(renderRecordButton).join("");
+  const overflow = Math.max(0, displayRecords.length - baseRecordCount);
+  const overflowControl = overflow
+    ? `<button type="button" class="authority-inline-more-toggle" data-authority-inline-more-key="${escapeHtml(cardKey)}" aria-expanded="${isExpanded ? "true" : "false"}">${escapeHtml(isExpanded ? "Hide" : `Show ${overflow} more`)}</button>`
     : "";
 
   return `
-    <article class="authority-inline-card">
+    <article class="authority-inline-card ${isExpanded ? "is-expanded" : ""}">
       <div class="authority-inline-card-head">
         <div>
           <h4>${escapeHtml(authority.displayName)}</h4>
@@ -3177,18 +3603,26 @@ function renderLineAuthorityCard(authority) {
             : ""}
         </div>
         <div class="authority-inline-counts">
-          <span>${escapeHtml(String(authority.recordIds.size))} records</span>
-          <span>${escapeHtml(String(authority.mentionCount))} signals</span>
+          ${renderAuthorityEvidenceCounts({
+            commentaryCount,
+            excerptCount: visibleExcerptCount,
+            rawRecordCount,
+            signalCount: Number(authority.mentionCount || 0),
+          })}
         </div>
       </div>
       ${workMarkup ? `<div class="authority-inline-work-row">${workMarkup}</div>` : ""}
       ${surfaceMarkup ? `<div class="authority-inline-surfaces">${surfaceMarkup}</div>` : ""}
       ${recordMarkup ? `<div class="authority-inline-records">${recordMarkup}</div>` : ""}
-      <div class="authority-inline-card-foot">
-        ${overflow ? `<span>${escapeHtml(String(overflow))} more commentary records</span>` : "<span>Local commentary evidence shown above</span>"}
-        ${pageLink}
-      </div>
+      ${overflowControl ? `<div class="authority-inline-card-foot">
+        ${overflowControl}
+      </div>` : ""}
     </article>
+    ${expandedRecordMarkup ? `
+      <div class="authority-inline-record-expansion authority-inline-record-cols-${recordColumnCount}">
+        ${expandedRecordMarkup}
+      </div>
+    ` : ""}
   `;
 }
 
@@ -3218,17 +3652,6 @@ function renderLineAuthorityPanel(payload) {
     bindAuthorityInlineScopeControls();
     bindLineAuthorityLocusButtons(payload);
     bindLineAuthorityRecordButtons(payload);
-    ensureSampleRecordWorkMentionStoreLoaded(sampleId)
-      .then(() => {
-        if (state.selectedLine === payload.line_number) {
-          renderFigurePanel();
-        }
-      })
-      .catch(() => {
-        if (state.selectedLine === payload.line_number) {
-          renderFigurePanel();
-        }
-      });
     return;
   }
 
@@ -3265,19 +3688,21 @@ function renderLineAuthorityPanel(payload) {
   bindAuthorityInlineScopeControls();
   bindLineAuthorityWorkButtons(payload);
   bindLineAuthorityRecordButtons(payload);
+  bindAuthorityInlineMoreToggles();
   bindAuthorityInlineReaderClose();
 }
 
 function bindLineAuthorityLocusButtons(payload) {
   elements.figurePanel?.querySelectorAll("[data-authority-line-locus-id]").forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       const locus = getPayloadLoci(payload).find((item) => item.id === button.dataset.authorityLineLocusId);
       state.selectedLocus = locus || null;
       state.activeInterpretiveTerm = null;
       renderLineRecords(payload);
       renderFigurePanel();
       if (state.selectedLocus) {
-        ensureResearchLayerLoaded();
+        void warmSelectedLocusProfile(state.selectedLocus, payload.line_number);
+        scheduleSelectedLocusResearchWarm();
       }
     });
   });
@@ -3467,6 +3892,15 @@ function renderCantoAuthorityLineIndex(indexPayload) {
 }
 
 function renderCantoAuthorityCard(authority, indexPayload) {
+  const cardKey = `canto:${authority.author_id || authority.public_slug_it || authority.display_name || "unknown"}`;
+  const isExpanded = state.authorityInlineExpandedRecordKeys.has(cardKey);
+  const displayRecords = getAuthorityDisplayRecords(authority.records || []);
+  const commentaryCount = Number(authority.commentaryCount || getAuthorityCommentaryCount(authority.records || []));
+  const visibleExcerptCount = Number(authority.visibleExcerptCount || displayRecords.length);
+  const rawRecordCount = Number(authority.record_count || authority.records?.length || visibleExcerptCount || 0);
+  const baseRecordCount = 4;
+  const extraRecords = isExpanded ? displayRecords.slice(baseRecordCount) : [];
+  const recordColumnCount = Math.max(1, Math.min(4, extraRecords.length));
   const workMarkup = (authority.works || []).slice(0, 5).map((work) => `
     <span class="authority-inline-work ${work.bucket === "caveated" ? "is-caveated" : ""}">
       <strong>${escapeHtml(work.label)}</strong>
@@ -3476,13 +3910,14 @@ function renderCantoAuthorityCard(authority, indexPayload) {
   const surfaceMarkup = (authority.surfaces || []).slice(0, 7).map((surface) =>
     `<span>${escapeHtml(surface.label)}</span>`
   ).join("");
-  const records = (authority.records || []).slice(0, 2).map(renderCantoAuthorityRecord).join("");
-  const overflow = Math.max(0, Number(authority.record_count || 0) - 2);
-  const pageLink = authority.public_slug_it
-    ? `<a class="authority-inline-page-link" href="/autore/${escapeHtml(authority.public_slug_it)}.html">Open authority room</a>`
+  const records = displayRecords.slice(0, baseRecordCount).map(renderCantoAuthorityRecord).join("");
+  const expandedRecords = extraRecords.map(renderCantoAuthorityRecord).join("");
+  const overflow = Math.max(0, displayRecords.length - baseRecordCount);
+  const overflowControl = overflow
+    ? `<button type="button" class="authority-inline-more-toggle" data-authority-inline-more-key="${escapeHtml(cardKey)}" aria-expanded="${isExpanded ? "true" : "false"}">${escapeHtml(isExpanded ? "Hide" : `Show ${overflow} more`)}</button>`
     : "";
   return `
-    <article class="canto-authority-card">
+    <article class="canto-authority-card ${isExpanded ? "is-expanded" : ""}">
       <div class="authority-inline-card-head">
         <div>
           <h4>${escapeHtml(authority.display_name)}</h4>
@@ -3491,9 +3926,13 @@ function renderCantoAuthorityCard(authority, indexPayload) {
             : ""}
         </div>
         <div class="authority-inline-counts">
-          <span>${escapeHtml(String(authority.record_count))} records</span>
+          ${renderAuthorityEvidenceCounts({
+            commentaryCount,
+            excerptCount: visibleExcerptCount,
+            rawRecordCount,
+            signalCount: Number(authority.signal_count || 0),
+          })}
           <span>${escapeHtml(String(authority.line_count))} lines</span>
-          <span>${escapeHtml(String(authority.signal_count))} signals</span>
         </div>
       </div>
       ${workMarkup ? `<div class="authority-inline-work-row">${workMarkup}</div>` : ""}
@@ -3502,11 +3941,15 @@ function renderCantoAuthorityCard(authority, indexPayload) {
       </div>
       ${surfaceMarkup ? `<div class="authority-inline-surfaces">${surfaceMarkup}</div>` : ""}
       ${records ? `<div class="authority-inline-records">${records}</div>` : ""}
-      <div class="authority-inline-card-foot">
-        ${overflow ? `<span>${escapeHtml(String(overflow))} more commentary records</span>` : "<span>Local commentary evidence shown above</span>"}
-        ${pageLink}
-      </div>
+      ${overflowControl ? `<div class="authority-inline-card-foot">
+        ${overflowControl}
+      </div>` : ""}
     </article>
+    ${expandedRecords ? `
+      <div class="authority-inline-record-expansion authority-inline-record-cols-${recordColumnCount}">
+        ${expandedRecords}
+      </div>
+    ` : ""}
   `;
 }
 
@@ -3551,9 +3994,20 @@ function renderCantoAuthorityPanel() {
   }
 
   const cantoLabel = [indexPayload.cantica, indexPayload.canto].filter(Boolean).join(" ");
-  const cardMarkup = (indexPayload.authors || []).map((authority) =>
-    renderCantoAuthorityCard(authority, indexPayload)
-  ).join("");
+  const sortedAuthorities = (indexPayload.authors || [])
+    .map((authority) => ({
+      ...authority,
+      commentaryCount: getAuthorityCommentaryCount(authority.records || []),
+      visibleExcerptCount: getAuthorityVisibleExcerptCount(authority.records || []),
+    }))
+    .sort((left, right) =>
+      right.commentaryCount - left.commentaryCount ||
+      right.visibleExcerptCount - left.visibleExcerptCount ||
+      Number(right.record_count || 0) - Number(left.record_count || 0) ||
+      Number(right.signal_count || 0) - Number(left.signal_count || 0) ||
+      String(left.display_name || "").localeCompare(String(right.display_name || ""))
+    );
+  const cardMarkup = sortedAuthorities.map((authority) => renderCantoAuthorityCard(authority, indexPayload)).join("");
   elements.figurePanel.innerHTML = `
     <section class="line-authority-panel canto-authority-panel">
       ${renderAuthorityInlineScopeControls("canto")}
@@ -3577,6 +4031,7 @@ function renderCantoAuthorityPanel() {
   bindAuthorityInlineScopeControls();
   bindCantoAuthorityLineButtons();
   bindCantoAuthorityRecordButtons(indexPayload);
+  bindAuthorityInlineMoreToggles();
   bindAuthorityInlineReaderClose();
 }
 
@@ -3605,6 +4060,7 @@ function bindAuthorityInlineScopeControls() {
       state.authorityInlineOpenRecordId = null;
       state.authorityInlineOpenRecordScope = null;
       state.authorityInlineOpenWorkKey = null;
+      state.authorityInlineExpandedRecordKeys.clear();
       renderFigurePanel();
     });
   });
@@ -3616,6 +4072,7 @@ function bindAuthorityInlineScopeControls() {
         ? "canto"
         : returnScope;
       state.authorityInlineReturnScope = null;
+      state.authorityInlineExpandedRecordKeys.clear();
       renderFigurePanel();
     });
   });
@@ -3660,6 +4117,23 @@ function bindCantoAuthorityRecordButtons(indexPayload) {
       state.authorityInlineOpenRecordScope = "canto";
       renderFigurePanel();
       scrollAuthorityInlineReaderIntoView();
+    });
+  });
+}
+
+function bindAuthorityInlineMoreToggles() {
+  elements.figurePanel?.querySelectorAll("[data-authority-inline-more-key]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.authorityInlineMoreKey;
+      if (!key) {
+        return;
+      }
+      if (state.authorityInlineExpandedRecordKeys.has(key)) {
+        state.authorityInlineExpandedRecordKeys.delete(key);
+      } else {
+        state.authorityInlineExpandedRecordKeys.add(key);
+      }
+      renderFigurePanel();
     });
   });
 }
@@ -3776,6 +4250,10 @@ wordLevelPanel = window.DDPWordLevelPanel.createWordLevelPanel({
   escapeHtml,
   renderHelpButton,
   ensureDanteWordLociIndexLoaded,
+  isDanteWordLociIndexShardSettled,
+  ensureTreccaniDantescaWordLinksLoaded,
+  hasTreccaniDantescaWordLinkShardState,
+  getTreccaniDantescaLink,
   ensureWordFamilyProfilesLoaded,
   getSelectedWordProfileBundle,
   canAttemptLocusProfileLoad,
@@ -3955,7 +4433,7 @@ function renderAuthorityLensMarkup() {
   const viewButtons = [
     { id: "text", label: chooseText("Text Layer", "正文层") },
     { id: "commentary", label: chooseText("Commentary Layer", "注释层") },
-    { id: "drilldown", label: chooseText("Work Layer", "Work Layer") },
+    { id: "drilldown", label: chooseText("Work Layer", "作品层") },
   ]
     .map(
       (view) => `
@@ -3977,8 +4455,8 @@ function renderAuthorityLensMarkup() {
 
   return `
     <div class="title-with-help section-title-with-help">
-      <h3>Authority Lens</h3>
-      ${renderHelpButton("authority-lens", "Authority Lens 说明")}
+      <h3>${escapeHtml(chooseText("Full Authority Page", "Full Authority Page / Authority 总览"))}</h3>
+      ${renderHelpButton("authority-lens", chooseText("Full Authority Page help", "Full Authority Page 说明"))}
     </div>
     <p class="semantic-intro">${escapeHtml(authorityIntro)}</p>
     <p class="semantic-intro">${escapeHtml(maturityClarifier)}</p>
@@ -3993,15 +4471,15 @@ function renderAuthorityLensMarkup() {
       <div class="locus-meta-row">
         <span class="pill coverage-pill">${escapeHtml(statusLabel)}</span>
         <span class="pill">${escapeHtml(workLayerLabel)}</span>
-        <span class="pill">${selectedAuthor?.total_mentions || 0} mentions</span>
-        <span class="pill">${selectedAuthor?.total_work_mentions || 0} work mentions</span>
-        <span class="pill">${selectedAuthor?.text_occurrence_total || 0} direct text hits</span>
+        <span class="pill">${escapeHtml(chooseText(`${selectedAuthor?.total_mentions || 0} mentions`, `${selectedAuthor?.total_mentions || 0} 次提及`))}</span>
+        <span class="pill">${escapeHtml(chooseText(`${selectedAuthor?.total_work_mentions || 0} work mentions`, `${selectedAuthor?.total_work_mentions || 0} 次作品提及`))}</span>
+        <span class="pill">${escapeHtml(chooseText(`${selectedAuthor?.text_occurrence_total || 0} direct text hits`, `${selectedAuthor?.text_occurrence_total || 0} 次正文命中`))}</span>
       </div>
       ${renderAuthorityReadingContractBanner(selectedAuthor)}
       ${getAuthorityFrontendIntro(selectedAuthor) ? `<p class="semantic-intro">${escapeHtml(getAuthorityFrontendIntro(selectedAuthor))}</p>` : ""}
       ${roleBreakdown ? `<div class="locus-meta-row">${roleBreakdown}</div>` : ""}
       <div class="authority-path-note">
-        <strong>${escapeHtml(chooseText("Reading order", "Reading order / 阅读顺序"))}</strong>
+        <strong>${escapeHtml(chooseText("Reading order", "阅读顺序"))}</strong>
         <span>${escapeHtml(chooseText("Step A: Text Layer", "Step A：正文层 / Text Layer"))}</span>
         <span>${escapeHtml(chooseText("Step B: Commentary Layer", "Step B：注释层 / Commentary Layer"))}</span>
         <span>${escapeHtml(chooseText("Step C: Work Layer / occurrences", "Step C：Work Layer / occurrences"))}</span>
@@ -4578,7 +5056,8 @@ function getSelectedAuthorityCommentarySample(author) {
     return null;
   }
   const requested = state.activeAuthorityCommentarySample;
-  return samples.find((sample) => sample.sample_name === requested) || samples[0];
+  const sample = samples.find((item) => item.sample_name === requested) || samples[0];
+  return mergeAuthorityCommentarySampleShell(author, sample);
 }
 
 function getSelectedAuthorityCommentaryLine(sampleEntry) {
@@ -4643,11 +5122,12 @@ function findAuthorityCommentaryLineGroupForOccurrence(author, occurrence) {
     return null;
   }
   const sampleEntry = payload.samples.find((sample) => sample.sample_name === sampleName) || null;
-  if (!sampleEntry?.line_groups?.length) {
+  const hydratedSampleEntry = mergeAuthorityCommentarySampleShell(author, sampleEntry);
+  if (!hydratedSampleEntry?.line_groups?.length) {
     return null;
   }
   const occurrenceKey = makeAuthorityOccurrenceKey(occurrence);
-  const directMatch = sampleEntry.line_groups.find((group) =>
+  const directMatch = hydratedSampleEntry.line_groups.find((group) =>
     (group.occurrences || []).some((item) => makeAuthorityOccurrenceKey(item) === occurrenceKey)
   );
   if (directMatch) {
@@ -4655,7 +5135,7 @@ function findAuthorityCommentaryLineGroupForOccurrence(author, occurrence) {
   }
   const lineNumber = getAuthorityCommentaryLineNumberFromOccurrence(occurrence);
   if (Number.isFinite(lineNumber)) {
-    return sampleEntry.line_groups.find((group) => {
+    return hydratedSampleEntry.line_groups.find((group) => {
       const groupLineNumber = Number(group.line_number || group.jump_target?.line_number || group.line_start);
       return Number.isFinite(groupLineNumber) && groupLineNumber === lineNumber;
     }) || null;
@@ -4773,6 +5253,16 @@ function renderAuthorityCommentaryStage(author) {
   if (selectedSample && state.activeAuthorityCommentarySample !== selectedSample.sample_name) {
     state.activeAuthorityCommentarySample = selectedSample.sample_name;
   }
+  const selectedSampleNeedsLoad = Boolean(
+    selectedSample
+    && isAuthorityCommentarySampleShellOnly(selectedSample)
+    && !getLoadedAuthorityCommentaryLineSample(author, selectedSample.sample_name)
+  );
+  if (selectedSampleNeedsLoad) {
+    ensureAuthorityCommentaryLineSampleLoaded(author, selectedSample)
+      .then(() => renderFigurePanel())
+      .catch(() => renderFigurePanel());
+  }
   const selectedLineGroup = getSelectedAuthorityCommentaryLine(selectedSample);
   if (selectedLineGroup && state.activeAuthorityCommentaryLineKey !== selectedLineGroup.line_key) {
     state.activeAuthorityCommentaryLineKey = selectedLineGroup.line_key;
@@ -4793,7 +5283,7 @@ function renderAuthorityCommentaryStage(author) {
         ${specialCase}
         <div class="vocabulary-section-grid">
           <div>
-            <h4>Commentary Occurrences by Canto</h4>
+            <h4>${escapeHtml(chooseText("Commentary Occurrences by Canto", "按 Canto 分布的注释记录"))}</h4>
             <div class="occurrence-list">
               <div class="empty-state">${escapeHtml(chooseText("No mounted commentary-by-canto overview is currently available for this author.", "这个 author 当前还没有挂出的 commentary canto overview。"))}</div>
             </div>
@@ -4805,7 +5295,7 @@ function renderAuthorityCommentaryStage(author) {
           </div>
         </div>
         <div class="authority-stage-block authority-stage-block-secondary">
-          <h4>${escapeHtml(chooseText("Current Work Layer", "当前 Work Layer"))}</h4>
+          <h4>${escapeHtml(chooseText("Current Work Layer", "当前作品层"))}</h4>
           <div class="locus-meta-row">${workChips || `<div class="empty-state">${escapeHtml(chooseText("Use the curated room path and static author room below: this figure does not expose a local work overview in the live panel yet.", "请先走 curated room path 和下面的静态 autore room；这个对象在当前 live panel 里还没有本地 work overview。"))}</div>`}</div>
         </div>
       </div>
@@ -4851,7 +5341,7 @@ function renderAuthorityCommentaryStage(author) {
             href="#authority-commentary-source"
             class="authority-occurrence-source-link"
             data-authority-commentary-chip-key="${escapeHtml(occurrenceKey)}">
-            ${escapeHtml(chooseText("Commentary Source", "跳到 Commentary Source"))}
+            ${escapeHtml(chooseText("Open source bridge", "打开 source bridge"))}
           </a>
         </div>
       `;
@@ -4905,14 +5395,18 @@ function renderAuthorityCommentaryStage(author) {
       ${specialCase}
       <div class="vocabulary-section-grid">
         <div>
-          <h4>Commentary Occurrences by Canto</h4>
+          <h4>${escapeHtml(chooseText("Commentary Occurrences by Canto", "按 Canto 分布的注释记录"))}</h4>
           <div class="occurrence-list">${densityRows || `<div class="empty-state">${escapeHtml(chooseText("No commentary canto overview is currently available.", "当前没有可展示的 commentary canto overview。"))}</div>`}</div>
         </div>
         <div>
-          <h4>${escapeHtml(selectedSample ? `${selectedSample.canto_label} · line index` : "Line index")}</h4>
+          <h4>${escapeHtml(selectedSample ? `${selectedSample.canto_label} · ${chooseText("line index", "行索引")}` : chooseText("Line index", "行索引"))}</h4>
           <div class="occurrence-list">${
             commentaryLineIndex
-              ? (lineRows || `<div class="empty-state">${escapeHtml(chooseText("This canto does not currently expose a line-level commentary index.", "当前这个 canto 暂时没有 line-level commentary index。"))}</div>`)
+              ? (lineRows || `<div class="empty-state">${escapeHtml(
+                selectedSampleNeedsLoad
+                  ? chooseText("Loading this canto's line-level commentary shard.", "正在加载这个 canto 的 line-level commentary 分片。")
+                  : chooseText("This canto does not currently expose a line-level commentary index.", "当前这个 canto 暂时没有 line-level commentary index。")
+              )}</div>`)
               : `<div class="empty-state">${escapeHtml(
                 author?.commentary_line_index?.available && ((author?.by_canto_density || []).length || selectedSample)
                   ? chooseText("Loading the line-level commentary index for this author.", "正在加载这个 author 的 line-level commentary index…")
@@ -4922,7 +5416,7 @@ function renderAuthorityCommentaryStage(author) {
         </div>
       </div>
       <div class="authority-stage-block authority-stage-block-secondary">
-        <h4>${escapeHtml(selectedLineGroup ? `${getAuthorityCommentaryLineDisplay(selectedLineGroup)} · commentary index` : "Selected line")}</h4>
+        <h4>${escapeHtml(selectedLineGroup ? `${getAuthorityCommentaryLineDisplay(selectedLineGroup)} · ${chooseText("commentary index", "注释索引")}` : chooseText("Selected line", "当前行"))}</h4>
         ${commentaryIndexButtons ? `<div class="locus-meta-row authority-commentary-name-row">${commentaryIndexButtons}</div>` : ""}
         <div class="occurrence-list">${occurrenceRows || `<div class="empty-state">${escapeHtml(chooseText("No line-level commentary occurrences are currently available.", "当前还没有可用的 line-level commentary occurrence。"))}</div>`}</div>
         ${selectedLineGroup?.mention_role_breakdown ? `<div class="locus-meta-row">${
@@ -4931,11 +5425,11 @@ function renderAuthorityCommentaryStage(author) {
       </div>
       <div class="authority-stage-block authority-stage-block-secondary">
         <div id="authority-commentary-source"></div>
-        <h4>Commentary Source</h4>
+        <h4>${escapeHtml(chooseText("Commentary Source", "注释原文 Source"))}</h4>
         ${renderAuthoritySourcePanel(author, selectedOccurrence)}
       </div>
       <div class="authority-stage-block authority-stage-block-secondary">
-        <h4>${escapeHtml(chooseText("Current Work Layer", "当前 Work Layer"))}</h4>
+        <h4>${escapeHtml(chooseText("Current Work Layer", "当前作品层"))}</h4>
         <div class="locus-meta-row">${workChips || `<div class="empty-state">${escapeHtml(chooseText("Use the curated room path and static author room below: this figure does not expose a local work overview in the live panel yet.", "请先走 curated room path 和下面的静态 autore room；这个对象在当前 live panel 里还没有本地 work overview。"))}</div>`}</div>
       </div>
     </div>
@@ -5218,7 +5712,7 @@ function getSelectedGenericWork(author, occurrencePool = null) {
 
   return {
     mode: "all",
-    heading: "Representative Commentary Occurrences",
+    heading: choose("Representative Commentary Occurrences", "代表性注释记录"),
     note: choose(
       "Start with the full set of sampled commentary occurrences currently readable for this author, then decide whether to filter by work.",
       "先看这个 author 当前可读的 sampled commentary occurrences 全貌，再决定是否按 work 继续过滤。"
@@ -5457,7 +5951,8 @@ function getSelectedAuthorityWork(author) {
   if (!works.length) {
     return null;
   }
-  return works.find((work) => work.canonical_work === state.activeAuthorityWork) || works[0];
+  const selectedWork = works.find((work) => work.canonical_work === state.activeAuthorityWork) || works[0];
+  return mergeAuthorityWorkShell(author, selectedWork);
 }
 
 function makeAuthorityNodeId(scope, parts = []) {
@@ -5647,10 +6142,10 @@ function getDefaultAuthorityNodeId(work) {
     const firstNode = work.prose_locator_tree[0];
     return makeAuthorityNodeId("prose_locator", [getAuthorityTreeNodeKey(firstNode)]);
   }
-  if ((work?.work_only_occurrences || []).length) {
+  if ((work?.work_only_occurrences || []).length || work?.work_only_path) {
     return makeAuthorityNodeId("work_only");
   }
-  if ((work?.pseudo_passage_occurrences || []).length) {
+  if ((work?.pseudo_passage_occurrences || []).length || work?.pseudo_passage_path) {
     return makeAuthorityNodeId("pseudo_passage");
   }
   return null;
@@ -5663,22 +6158,30 @@ function getAuthorityNodeSelection(author, work, nodeId) {
   const [scope, primary, childKey] = nodeId.split("|");
 
   if (scope === "work_only") {
+    const loadedNode = getLoadedAuthorityNodeShard(author, work, nodeId);
+    const occurrences = loadedNode?.occurrences || (Array.isArray(work.work_only_occurrences) ? work.work_only_occurrences : undefined);
     return {
       scope: "work_only",
+      nodeId,
       label: "Work-level citations",
       staticPageLabel: null,
       note: getAuthorityWorkOnlyBucketNote(author, work),
-      occurrences: work.work_only_occurrences || [],
+      path: work.work_only_path,
+      occurrences,
     };
   }
 
   if (scope === "pseudo_passage") {
+    const loadedNode = getLoadedAuthorityNodeShard(author, work, nodeId);
+    const occurrences = loadedNode?.occurrences || (Array.isArray(work.pseudo_passage_occurrences) ? work.pseudo_passage_occurrences : undefined);
     return {
       scope: "pseudo_passage",
+      nodeId,
       label: "Weak locator evidence",
       staticPageLabel: null,
       note: getAuthorityPseudoPassageBucketNote(author, work),
-      occurrences: work.pseudo_passage_occurrences || [],
+      path: work.pseudo_passage_path,
+      occurrences,
     };
   }
 
@@ -5692,16 +6195,19 @@ function getAuthorityNodeSelection(author, work, nodeId) {
   }
 
   if (!childKey) {
-    const nodeOccurrences = matchNode.occurrences || [];
+    const loadedNode = getLoadedAuthorityNodeShard(author, work, nodeId);
+    const nodeOccurrences = loadedNode?.occurrences || (Array.isArray(matchNode.occurrences) ? matchNode.occurrences : undefined);
     const childOccurrences = (matchNode.children || []).flatMap((child) => child?.occurrences || []);
     return {
       scope,
+      nodeId,
       label: matchNode.label,
       staticPageLabel: matchNode.label,
       note: scope === "structured_passage"
         ? getAuthorityStructuredBucketNote(author)
         : getAuthorityProseBucketNote(author, work),
-      occurrences: nodeOccurrences.length ? nodeOccurrences : childOccurrences,
+      path: matchNode.path,
+      occurrences: nodeOccurrences?.length ? nodeOccurrences : (childOccurrences.length ? childOccurrences : undefined),
     };
   }
 
@@ -5710,12 +6216,16 @@ function getAuthorityNodeSelection(author, work, nodeId) {
     return null;
   }
 
+  const loadedNode = getLoadedAuthorityNodeShard(author, work, nodeId);
+  const occurrences = loadedNode?.occurrences || (Array.isArray(child.occurrences) ? child.occurrences : undefined);
   return {
     scope,
+    nodeId,
     label: `${matchNode.label} -> ${child.label}`,
     staticPageLabel: child.label,
     note: getAuthorityChildNodeNote(author, scope),
-    occurrences: child.occurrences || [],
+    path: child.path,
+    occurrences,
   };
 }
 
@@ -5880,6 +6390,52 @@ function getAuthorityOccurrenceLocationLabel(occurrence) {
   return "location unavailable";
 }
 
+function getAuthoritySourceBridgeStatus(occurrence) {
+  const chooseText = (en, zh) => (state.uiLanguage === "en" ? en : zh);
+  const sampleName = inferAuthorityOccurrenceSampleName(occurrence);
+  const hasSourceKey = Boolean(occurrence?.result_url || occurrence?.commentary_record_id);
+  const sampleShard = sampleName ? state.authorityCommentarySourceCache.get(sampleName) : null;
+  const source = getAuthorityCommentarySource(occurrence);
+  if (source?.record_text) {
+    return {
+      key: "available",
+      label: chooseText("Source available", "原文已接通"),
+      note: chooseText(
+        "This occurrence is bridged to local commentary source text.",
+        "这条 occurrence 已经接到本地 commentary source 原文。"
+      ),
+    };
+  }
+  if (!hasSourceKey || !sampleName) {
+    return {
+      key: "missing_key",
+      label: chooseText("Source key missing", "缺少 source key"),
+      note: chooseText(
+        "This occurrence is tracked, but it does not carry enough local source-address information to open the source row.",
+        "这条 occurrence 已经被追踪，但还没有足够的本地 source-address 信息来打开原文行。"
+      ),
+    };
+  }
+  if (!sampleShard) {
+    return {
+      key: "loading",
+      label: chooseText("Checking source bridge", "正在检查 source bridge"),
+      note: chooseText(
+        "The occurrence has a source key; the local commentary-source shard is still loading.",
+        "这条 occurrence 有 source key；本地 commentary-source shard 正在加载。"
+      ),
+    };
+  }
+  return {
+    key: "not_bridged",
+    label: chooseText("Not bridged locally", "本地尚未接通"),
+    note: chooseText(
+      "This occurrence is part of the authority layer, but its full commentary source row is not yet present in the local source bridge.",
+      "这条 occurrence 已经进入 authority layer，但它的完整 commentary source row 还没有进入本地 source bridge。"
+    ),
+  };
+}
+
 function renderAuthoritySourcePanel(author, occurrence, options = {}) {
   const { inline = false } = options;
   const chooseText = (en, zh) => (state.uiLanguage === "en" ? en : zh);
@@ -5892,6 +6448,7 @@ function renderAuthoritySourcePanel(author, occurrence, options = {}) {
   }
 
   const source = getAuthorityCommentarySource(occurrence);
+  const bridgeStatus = getAuthoritySourceBridgeStatus(occurrence);
   const sampleName = occurrence.sample_name || `${String(occurrence.cantica || "").toLowerCase()}${occurrence.canto}`;
   const lineInfo = String(occurrence.line_info || "").trim();
   const firstLineMatch = lineInfo.match(/\d+/);
@@ -5919,12 +6476,13 @@ function renderAuthoritySourcePanel(author, occurrence, options = {}) {
       <div class="locus-meta-row">
         <span class="pill">${escapeHtml(getAuthorityDisplayName(author) || occurrence.author || "Authority")}</span>
         ${workLabel ? `<span class="pill">${escapeHtml(workLabel)}</span>` : ""}
+        <span class="pill authority-source-status-${escapeHtml(bridgeStatus.key)}">${escapeHtml(bridgeStatus.label)}</span>
       </div>
       <div class="authority-source-body">
         ${
           source?.record_text
             ? renderAuthorityHighlightedSourceText(source.record_text, occurrence)
-            : `<div class="empty-state">${escapeHtml(chooseText("The local commentary-source bridge does not currently expose source text for this occurrence.", "当前本地 commentary-source bridge 还没有找到这条 occurrence 的原文文本；这一层现在不再外跳 Dartmouth result，只保留本地原文口径。"))}</div>`
+            : `<div class="empty-state">${escapeHtml(bridgeStatus.note)}</div>`
         }
       </div>
     </div>
@@ -6015,12 +6573,25 @@ function renderAuthorityWorksLens(author) {
     state.activeAuthorityWork = selectedWork.canonical_work;
   }
 
+  const selectedWorkNeedsLoad = isAuthorityWorkShellOnly(selectedWork);
+  if (selectedWorkNeedsLoad) {
+    ensureAuthorityWorkShardLoaded(author, selectedWork)
+      .then(() => renderFigurePanel())
+      .catch(() => renderFigurePanel());
+  }
+
   const defaultNodeId = getDefaultAuthorityNodeId(selectedWork);
   const requestedNodeId = state.activeAuthorityNode || defaultNodeId;
   const resolvedNodeId = getAuthorityNodeSelection(author, selectedWork, requestedNodeId) ? requestedNodeId : defaultNodeId;
   const selectedNode = getAuthorityNodeSelection(author, selectedWork, resolvedNodeId);
   if (resolvedNodeId && state.activeAuthorityNode !== resolvedNodeId) {
     state.activeAuthorityNode = resolvedNodeId;
+  }
+  const selectedNodeNeedsLoad = isAuthorityNodeSelectionShellOnly(selectedNode);
+  if (selectedNodeNeedsLoad) {
+    ensureAuthorityNodeShardLoaded(author, selectedWork, selectedNode)
+      .then(() => renderFigurePanel())
+      .catch(() => renderFigurePanel());
   }
 
   const structuredDefaultNodeId = (selectedWork.structured_locator_tree || []).length
@@ -6083,7 +6654,7 @@ function renderAuthorityWorksLens(author) {
         (resolvedNodeId || "") === makeAuthorityNodeId("work_only"),
         makeAuthorityNodeId("work_only"),
         "is-neutral",
-        !(selectedWork.work_only_occurrences || []).length,
+        !((selectedWork.work_only_occurrences || []).length || selectedWork.work_only_path),
         getAuthorityWorkOnlyBucketNote(author, selectedWork),
       )
       : "",
@@ -6094,7 +6665,7 @@ function renderAuthorityWorksLens(author) {
         (resolvedNodeId || "") === makeAuthorityNodeId("pseudo_passage"),
         makeAuthorityNodeId("pseudo_passage"),
         "is-warning",
-        !(selectedWork.pseudo_passage_occurrences || []).length,
+        !((selectedWork.pseudo_passage_occurrences || []).length || selectedWork.pseudo_passage_path),
         getAuthorityPseudoPassageBucketNote(author, selectedWork),
       )
       : "",
@@ -6102,8 +6673,19 @@ function renderAuthorityWorksLens(author) {
 
   const structuredTree = renderAuthorityTreeNodes("structured_passage", selectedWork.structured_locator_tree || [], resolvedNodeId || "");
   const proseTree = renderAuthorityTreeNodes("prose_locator", selectedWork.prose_locator_tree || [], resolvedNodeId || "");
-  const occurrenceRows = renderAuthorityOccurrenceRows(selectedNode?.occurrences || []);
-  const selectedOccurrence = getAuthoritySelectedOccurrence(selectedNode?.occurrences || []);
+  const loadingWorkShard = selectedWorkNeedsLoad
+    ? `<div class="empty-state">${escapeHtml(choose("Loading this work branch shard.", "正在加载这个 work 的 branch shard。"))}</div>`
+    : "";
+  const loadingNodeShard = selectedNodeNeedsLoad
+    ? `<div class="empty-state">${escapeHtml(choose("Loading this node's commentary occurrences.", "正在加载这个 node 的 commentary occurrences。"))}</div>`
+    : "";
+  const selectedNodeOccurrences = selectedNode?.occurrences || [];
+  const occurrenceRows = selectedWorkNeedsLoad
+    ? loadingWorkShard
+    : selectedNodeNeedsLoad
+      ? loadingNodeShard
+      : renderAuthorityOccurrenceRows(selectedNodeOccurrences);
+  const selectedOccurrence = getAuthoritySelectedOccurrence(selectedNodeOccurrences);
   const selectedBranchHref = getAuthorityBranchPageHref(author, selectedWork, selectedNode);
 
   return `
@@ -6125,11 +6707,11 @@ function renderAuthorityWorksLens(author) {
           <div class="authority-tree-columns">
             <div class="authority-tree-panel">
               <h5>${escapeHtml(structuredHeading)}</h5>
-              <div class="authority-tree-list">${structuredTree || `<div class="empty-state">${escapeHtml(choose("This work does not currently expose a stable structured passage tree.", "当前这个 work 还没有稳定的 structured passage tree。"))}</div>`}</div>
+              <div class="authority-tree-list">${structuredTree || loadingWorkShard || `<div class="empty-state">${escapeHtml(choose("This work does not currently expose a stable structured passage tree.", "当前这个 work 还没有稳定的 structured passage tree。"))}</div>`}</div>
             </div>
             <div class="authority-tree-panel">
               <h5>${escapeHtml(proseHeading)}</h5>
-              <div class="authority-tree-list">${proseTree || `<div class="empty-state">${escapeHtml(choose("This work does not currently expose an expandable prose locator tree.", "当前这个 work 还没有可展开的 prose locator tree。"))}</div>`}</div>
+              <div class="authority-tree-list">${proseTree || loadingWorkShard || `<div class="empty-state">${escapeHtml(choose("This work does not currently expose an expandable prose locator tree.", "当前这个 work 还没有可展开的 prose locator tree。"))}</div>`}</div>
             </div>
           </div>
         </div>
@@ -6138,7 +6720,7 @@ function renderAuthorityWorksLens(author) {
         <div id="authority-selected-node"></div>
         <div class="semantic-kicker">Selected Node</div>
         <h4>${escapeHtml(selectedNode?.label || choose("Select a node", "选择一个 node"))}</h4>
-        <p class="semantic-intro">${escapeHtml(selectedNode?.note || choose("Choose a bucket or node to open the commentary occurrences gathered here.", "选择一个 bucket 或 node，这里就会展开对应的 commentary occurrences。"))}</p>
+        <p class="semantic-intro">${escapeHtml(selectedWorkNeedsLoad ? choose("The overview is live; the selected work's detailed branch and occurrence rows are loading now.", "overview 已经可读；当前选中 work 的 branch 与 occurrence rows 正在加载。") : selectedNodeNeedsLoad ? choose("The branch shell is live; this node's commentary rows are loading now.", "branch 壳已经可读；这个 node 的 commentary rows 正在加载。") : (selectedNode?.note || choose("Choose a bucket or node to open the commentary occurrences gathered here.", "选择一个 bucket 或 node，这里就会展开对应的 commentary occurrences。")))}</p>
         ${selectedBranchHref ? `<p class="semantic-intro"><a href="${escapeHtml(selectedBranchHref)}" target="_blank" rel="noreferrer">${escapeHtml(choose("Open static branch page", "打开静态 branch 页面"))}</a></p>` : ""}
         <div class="occurrence-list">${occurrenceRows || `<div class="empty-state">${escapeHtml(choose("No readable occurrences are available under this node yet.", "当前这个节点下还没有可读的 occurrences。"))}</div>`}</div>
       </div>
@@ -6163,7 +6745,8 @@ function findAuthorityOccurrenceByKey(author, occurrenceKey) {
   seen.push(...getCurrentAuthorityCommentaryStageOccurrences(author));
   seen.push(...(author?.occurrences || []));
   const worksTree = getLoadedAuthorityWorksTree(author);
-  for (const work of worksTree?.works || []) {
+  for (const workShell of worksTree?.works || []) {
+    const work = mergeAuthorityWorkShell(author, workShell);
     seen.push(...(work.work_only_occurrences || []));
     seen.push(...(work.pseudo_passage_occurrences || []));
     const walk = (nodes) => {
@@ -7006,9 +7589,15 @@ function updateQuickJumpResults() {
       request.entry,
       request.kind === "line" ? "Line Ready" : "Quick Jump Ready",
       request.kind === "line" ? request.label : null,
+      request.kind === "line" ? request.lineNumber : null,
     );
     elements.quickJumpResults.querySelectorAll("[data-sample-id]").forEach((button) => {
       button.addEventListener("click", async () => {
+        const lineNumber = parseSearchLineNumber(button.dataset.lineNumber);
+        if (Number.isFinite(lineNumber)) {
+          await jumpToSampleLine(button.dataset.sampleId, lineNumber);
+          return;
+        }
         await loadSample(button.dataset.sampleId);
       });
     });
@@ -7024,9 +7613,13 @@ function updateQuickJumpResults() {
   `;
 }
 
-function renderQuickJumpResultButton(sample, matchType, titleOverride = null) {
+function renderQuickJumpResultButton(sample, matchType, titleOverride = null, lineNumber = null) {
+  const parsedLineNumber = parseSearchLineNumber(lineNumber);
+  const lineAttribute = Number.isFinite(parsedLineNumber)
+    ? ` data-line-number="${parsedLineNumber}"`
+    : "";
   return `
-    <button type="button" class="quick-jump-result" data-sample-id="${sample.id}" data-sample-title="${escapeHtml(sample.title)}">
+    <button type="button" class="quick-jump-result" data-sample-id="${sample.id}"${lineAttribute} data-sample-title="${escapeHtml(sample.title)}">
       <div class="quick-jump-result-top">
         <strong>${escapeHtml(titleOverride || sample.title)}</strong>
       </div>
@@ -7400,7 +7993,7 @@ function registerSearchBridge() {
 
 function normalizeIncomingSearchResult(result = {}) {
   if (window.DDPSearchBridgeModule?.normalizeExternalResult) {
-    return window.DDPSearchBridgeModule.normalizeExternalResult(result);
+    return normalizeSearchResult(window.DDPSearchBridgeModule.normalizeExternalResult(result));
   }
   return normalizeSearchResult(result);
 }
@@ -7413,20 +8006,23 @@ async function runSearchQuery(query) {
   return runTokenSearch(query);
 }
 
+function parseSearchLineNumber(value) {
+  const numeric = Number(value);
+  return Number.isInteger(numeric) && numeric > 0 ? numeric : Number.NaN;
+}
+
 function normalizeSearchResult(result = {}) {
+  const lineNumber = parseSearchLineNumber(
+    result.lineNumber
+    ?? result.line_number
+    ?? result.jumpTarget?.lineNumber
+    ?? result.jump_target?.line_number
+  );
   return {
     id: result.id || `${result.sampleId || result.sample_id || result.sample || "sample"}:${result.lineNumber || result.line_number || "0"}`,
     title: result.title || result.label || result.line_text || "Search Result",
     sampleId: result.sampleId || result.sample_id || result.sample || result.sample_key || result.jumpTarget?.sampleId || result.jump_target?.sample_id || null,
-    lineNumber: Number.isFinite(result.lineNumber)
-      ? result.lineNumber
-      : Number.isFinite(result.line_number)
-        ? result.line_number
-        : Number.isFinite(result.jumpTarget?.lineNumber)
-          ? result.jumpTarget.lineNumber
-          : Number.isFinite(result.jump_target?.line_number)
-            ? result.jump_target.line_number
-          : null,
+    lineNumber: Number.isFinite(lineNumber) ? lineNumber : null,
     snippet: result.snippet || result.lineText || result.line_text || "",
     lineText: result.lineText || result.line_text || "",
     cantoLabel: result.cantoLabel || result.canto_label || (result.cantica && result.canto ? `${result.cantica} ${result.canto}` : ""),
@@ -7455,6 +8051,10 @@ function runTokenSearch(query) {
   const tokens = normalizeSearchTokens(query);
   if (!tokens.length) {
     return [];
+  }
+
+  if (tokens.length === 1 && tokens[0].length >= MIN_AUTO_PREFIX_SEARCH_LENGTH) {
+    return runPrefixTokenSearch(tokens[0], documents, tokenIndex);
   }
 
   if (tokens.length >= 2) {
@@ -7512,6 +8112,72 @@ function runSingleTokenSearch(token, documents, tokenIndex) {
       || (SEARCH_LAYER_PRIORITY[left.sourceLayer] ?? 99) - (SEARCH_LAYER_PRIORITY[right.sourceLayer] ?? 99)
       || compareSampleIdsByCommedia(left.sampleId, right.sampleId)
       || (left.lineNumber || 0) - (right.lineNumber || 0)
+    );
+}
+
+function getPrefixSearchTokens(prefix, tokenIndex) {
+  const normalizedPrefix = normalizeSearchTokenSurface(prefix);
+  if (normalizedPrefix.length < MIN_AUTO_PREFIX_SEARCH_LENGTH) {
+    return [];
+  }
+  return Object.keys(tokenIndex || {})
+    .filter((token) => token.startsWith(normalizedPrefix))
+    .sort((left, right) => left.length - right.length || left.localeCompare(right));
+}
+
+function runPrefixTokenSearch(prefix, documents, tokenIndex) {
+  const matchedTokens = getPrefixSearchTokens(prefix, tokenIndex);
+  if (!matchedTokens.length) {
+    return [];
+  }
+
+  const groupedHits = new Map();
+  for (const token of matchedTokens) {
+    for (const [sourceKey, hit] of groupHitsBySource(token, tokenIndex[token] || [])) {
+      const existing = groupedHits.get(sourceKey);
+      if (!existing || compareSearchHitPriority(hit, existing) < 0) {
+        groupedHits.set(sourceKey, hit);
+      }
+    }
+  }
+
+  const results = [];
+  for (const primaryHit of groupedHits.values()) {
+    const document = documents[primaryHit.documentId];
+    if (!document) {
+      continue;
+    }
+    const sourceText = getSearchSourceText(document, primaryHit.sourceLayer, primaryHit.sourceIndex);
+    const snippet = buildSearchSnippet(sourceText, primaryHit.matchedText || primaryHit.matchedToken);
+    results.push(
+      normalizeSearchResult({
+        id: `${primaryHit.documentId}:${prefix}:${primaryHit.matchedToken}:${primaryHit.sourceLayer}:${primaryHit.sourceIndex}`,
+        title: `${document.cantica} ${document.canto}`,
+        sample_id: document.sample_key,
+        line_number: document.line_number,
+        line_text: document.line_text,
+        snippet,
+        source_text: sourceText,
+        canto_label: `${document.cantica} ${document.canto}`,
+        source_layer: primaryHit.sourceLayer,
+        match_type: "prefix_token_normalized",
+        matched_text: primaryHit.matchedText,
+        matched_token: primaryHit.matchedToken,
+        source_index: primaryHit.sourceIndex,
+        jump_target: {
+          sample_id: document.jump_target?.sample_id || document.sample_key,
+          line_number: document.jump_target?.line_number || document.line_number,
+        },
+      })
+    );
+  }
+
+  return results
+    .sort((left, right) =>
+      (SEARCH_LAYER_PRIORITY[left.sourceLayer] ?? 99) - (SEARCH_LAYER_PRIORITY[right.sourceLayer] ?? 99)
+      || compareSampleIdsByCommedia(left.sampleId, right.sampleId)
+      || (left.lineNumber || 0) - (right.lineNumber || 0)
+      || String(left.matchedToken || "").localeCompare(String(right.matchedToken || ""))
     );
 }
 
@@ -7749,8 +8415,7 @@ function getSearchSourceText(document, sourceLayer, sourceIndex) {
 function normalizeSearchPhrase(value) {
   return normalizeQuickJumpQuery(value)
     .split(/\s+/)
-    .map((token) => token.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9']/g, ""))
-    .map((token) => token.replace(/^'+|'+$/g, ""))
+    .map(normalizeSearchTokenSurface)
     .filter(Boolean)
     .join(" ");
 }
@@ -7806,9 +8471,17 @@ function renderEmptySearchCopy(query) {
 function normalizeSearchTokens(query) {
   return normalizeQuickJumpQuery(query)
     .split(/\s+/)
-    .map((token) => token.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9']/g, ""))
-    .map((token) => token.replace(/^'+|'+$/g, ""))
+    .map(normalizeSearchTokenSurface)
     .filter(Boolean);
+}
+
+function normalizeSearchTokenSurface(value) {
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9']/g, "")
+    .replace(/^'+|'+$/g, "");
 }
 
 function setSearchStatusFromQuery(query, resultCount) {
@@ -7831,10 +8504,10 @@ function setSearchStatusFromQuery(query, resultCount) {
 function renderAuthorityStatusLabel(status) {
   const chooseText = (en, zh) => (state.uiLanguage === "en" ? en : zh);
   const labels = {
-    ready: chooseText("Ready", "Ready"),
-    ready_with_caveat: chooseText("Ready with caveat", "Ready with caveat"),
-    partial: chooseText("Partial", "Partial"),
-    review_first: chooseText("Review first", "Review first"),
+    ready: chooseText("Ready", "已接入"),
+    ready_with_caveat: chooseText("Ready with caveat", "已接入，有 caveat"),
+    partial: chooseText("Partial", "部分接入"),
+    review_first: chooseText("Review first", "先审读"),
   };
   return labels[status] || status || chooseText("Unknown", "Unknown");
 }
@@ -7843,12 +8516,12 @@ function getAuthorityWorkLayerLabel(author) {
   const chooseText = (en, zh) => (state.uiLanguage === "en" ? en : zh);
   const mode = String(author?.works_layer_mode || "").trim();
   const labels = {
-    works_tree: chooseText("Works Tree", "Works Tree"),
-    flat_work_overview: chooseText("Flat Work Overview", "Flat Work Overview"),
-    no_work_layer: chooseText("No Local Work Layer", "No Local Work Layer"),
-    no_works_tree: chooseText("Special-Case Work Layer", "Special-Case Work Layer"),
+    works_tree: chooseText("Works Tree", "作品树"),
+    flat_work_overview: chooseText("Flat Work Overview", "扁平作品总览"),
+    no_work_layer: chooseText("No Local Work Layer", "暂无本地作品层"),
+    no_works_tree: chooseText("Special-Case Work Layer", "特殊入口作品层"),
   };
-  return labels[mode] || chooseText("Work Layer", "Work Layer");
+  return labels[mode] || chooseText("Work Layer", "作品层");
 }
 
 function getAllAuthorityAuthors() {
@@ -7906,6 +8579,7 @@ async function selectLine(lineNumber) {
   state.authorityInlineOpenRecordId = null;
   state.authorityInlineOpenRecordScope = null;
   state.authorityInlineOpenWorkKey = null;
+  state.authorityInlineExpandedRecordKeys.clear();
   syncCompareHeadActions();
   state.activeSemanticField = null;
   syncCoverageSelection();
@@ -7913,6 +8587,7 @@ async function selectLine(lineNumber) {
 
   if (!state.lineCache.has(lineNumber)) {
     const sampleId = state.overview.sample;
+    renderLineLoadingState(lineNumber);
     try {
       const rawPayload = await fetchJson(getLinePayloadPath(sampleId, lineNumber));
       const payload = await hydrateLinePayload(sampleId, rawPayload);
@@ -7935,7 +8610,68 @@ async function selectLine(lineNumber) {
   }
   renderLineRecords(state.lineCache.get(lineNumber));
   renderFigurePanel();
+  queueLineEchoProfileLoad(state.currentSampleEntry?.id || state.overview.sample, lineNumber);
+  refreshLineAfterDeferredRecordDetails(
+    state.currentSampleEntry?.id || state.overview.sample,
+    lineNumber,
+    selectionToken
+  );
   maybeTriggerApprovedUiEasterEgg("line-open");
+}
+
+function queueLineEchoProfileLoad(sampleId, lineNumber) {
+  if (!sampleId || state.sampleLineEchoProfileCache.has(sampleId) || state.sampleLineEchoProfilePromises.has(sampleId)) {
+    return;
+  }
+  scheduleLineEnhancement(() => {
+    if (state.currentSampleEntry?.id !== sampleId || state.selectedLine !== lineNumber) {
+      return;
+    }
+    ensureSampleLineEchoProfilesLoaded(sampleId);
+  }, { timeoutMs: 7000, fallbackDelayMs: 4500 });
+}
+
+function refreshLineAfterDeferredRecordDetails(sampleId, lineNumber, selectionToken) {
+  if (!sampleId || !Number.isFinite(Number(lineNumber))) {
+    return;
+  }
+  scheduleLineEnhancement(() => {
+    if (selectionToken !== activeLineSelectionToken || state.selectedLine !== lineNumber) {
+      return;
+    }
+    const pendingLoads = [];
+    if (!state.sampleRecordSummaryStoreCache.has(sampleId)) {
+      pendingLoads.push(ensureSampleRecordSummaryStoreLoaded(sampleId));
+    }
+    if (!state.sampleRecordWorkMentionCache.has(sampleId)) {
+      pendingLoads.push(ensureSampleRecordWorkMentionStoreLoaded(sampleId));
+    }
+    if (!pendingLoads.length) {
+      return;
+    }
+
+    Promise.allSettled(pendingLoads).then(async () => {
+      if (selectionToken !== activeLineSelectionToken || state.selectedLine !== lineNumber) {
+        return;
+      }
+      const currentPayload = state.lineCache.get(lineNumber);
+      if (!currentPayload) {
+        return;
+      }
+      const refreshedPayload = await hydrateLinePayload(sampleId, {
+        ...currentPayload,
+        records: [],
+      });
+      if (selectionToken !== activeLineSelectionToken || state.selectedLine !== lineNumber) {
+        return;
+      }
+      state.lineCache.set(lineNumber, refreshedPayload);
+      renderLineRecords(refreshedPayload);
+      renderFigurePanel();
+    }).catch((error) => {
+      console.warn(`Deferred record details failed for ${sampleId} line ${lineNumber}`, error);
+    });
+  }, { timeoutMs: 5000, fallbackDelayMs: 3000 });
 }
 
 function syncCoverageSelection() {
@@ -7968,6 +8704,14 @@ function renderLineRecords(payload) {
   return recordsPanel.renderLineRecords(payload);
 }
 
+function scheduleLineEnhancement(callback, { timeoutMs = 4500, fallbackDelayMs = 2600 } = {}) {
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(callback, { timeout: timeoutMs });
+    return;
+  }
+  window.setTimeout(callback, fallbackDelayMs);
+}
+
 function renderLineContext(payload) {
   elements.lineContext.innerHTML = `
     ${choose(
@@ -7991,13 +8735,14 @@ function renderLineContext(payload) {
   }
 
   elements.lineTitle.querySelectorAll("[data-line-locus-id]").forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       const locus = getPayloadLoci(payload).find((item) => item.id === button.dataset.lineLocusId);
       state.selectedLocus = locus || null;
       state.activeInterpretiveTerm = null;
       renderLineRecords(payload);
       if (state.selectedLocus) {
-        ensureResearchLayerLoaded();
+        void warmSelectedLocusProfile(state.selectedLocus, payload.line_number);
+        scheduleSelectedLocusResearchWarm();
       }
     });
   });
@@ -8239,38 +8984,179 @@ function buildWordFamilyResearchProfile(family) {
   };
 }
 
+const LOW_SIGNAL_CONTRASTIVE_TERMS = new Set([
+  "canto",
+  "capitolo",
+  "comm",
+  "commentary",
+  "commedia",
+  "dimmi",
+  "inferno",
+  "line",
+  "lines",
+  "paradiso",
+  "passage",
+  "purgatorio",
+  "said",
+  "says",
+  "text",
+  "that",
+  "this",
+  "those",
+  "these",
+  "thing",
+  "things",
+  "verse",
+  "verses",
+  "vieni",
+  "word",
+  "words",
+]);
+
+const ROMAN_NUMERAL_PATTERN = /^[ivxlcdm]+$/;
+
+const CONTRASTIVE_TERM_CANONICALS = new Map([
+  ["psalm", "salmo"],
+  ["psalms", "salmo"],
+  ["versetti", "versetto"],
+]);
+
+const CONTRASTIVE_TRANSLATION_VARIANTS = new Set([
+  "psalm",
+  "psalms",
+]);
+
+function canonicalizeContrastiveTerm(term) {
+  const normalized = normalizeLocusForm(term);
+  if (!normalized) {
+    return "";
+  }
+  return CONTRASTIVE_TERM_CANONICALS.get(normalized) || normalized;
+}
+
+function formatContrastiveTermLabel(term, variants = []) {
+  const primary = canonicalizeContrastiveTerm(term);
+  const displayVariants = Array.from(new Set(
+    [primary, ...variants.map((variant) => normalizeLocusForm(variant))]
+      .filter(Boolean)
+      .filter((variant) => !CONTRASTIVE_TRANSLATION_VARIANTS.has(variant))
+  ));
+  const ordered = [
+    primary,
+    ...displayVariants.filter((variant) => variant !== primary).sort((left, right) => left.localeCompare(right)),
+  ];
+  return ordered.join(" / ");
+}
+
+function getSemanticFieldList(payload) {
+  if (Array.isArray(payload?.semantic_fields)) {
+    return payload.semantic_fields;
+  }
+  if (Array.isArray(payload?.semantic_fields?.fields)) {
+    return payload.semantic_fields.fields;
+  }
+  return [];
+}
+
+function getLineAnchoredInterpretiveTermSet(payload) {
+  const terms = new Set();
+  const locusForm = state.selectedLocus?.normalized_form || null;
+  const add = (rawTerm) => {
+    const term = canonicalizeContrastiveTerm(rawTerm);
+    if (!term || isLowSignalContrastiveTerm(term, locusForm)) {
+      return;
+    }
+    terms.add(term);
+  };
+  const lineProfile = state.lineProfileMap.get(`${state.currentSampleEntry?.id}:${payload?.line_number}`);
+  (payload?.signature_terms || []).forEach(add);
+  (lineProfile?.signature_terms || []).forEach(add);
+  getSemanticFieldList(payload)
+    .filter((field) => field?.field_kind === "line_semantic")
+    .filter((field) => field?.qa?.review_needed !== true)
+    .forEach((field) => {
+      add(field.display_label || field.label || field.internal_label);
+      add(field.seed_term);
+      (field.representative_terms || []).slice(0, 5).forEach(add);
+    });
+  return terms;
+}
+
+function isLowSignalContrastiveTerm(term, locusForm = null) {
+  const normalized = normalizeLocusForm(term);
+  if (!normalized || normalized.length <= 2) {
+    return true;
+  }
+  if (ROMAN_NUMERAL_PATTERN.test(normalized)) {
+    return true;
+  }
+  if (LOW_SIGNAL_CONTRASTIVE_TERMS.has(normalized)) {
+    return true;
+  }
+  return looksLikeBadWordProfileTerm(normalized, locusForm);
+}
+
+function renderContrastiveEvidencePills(item) {
+  const pills = [];
+  const localRecordCount = Number(item?.localRecordCount || 0);
+  const occurrenceLineCount = Number(item?.occurrenceLineCount || 0);
+  if (localRecordCount > 0) {
+    pills.push(`${localRecordCount} local ${localRecordCount === 1 ? "record" : "records"}`);
+  }
+  if (occurrenceLineCount > 1) {
+    pills.push(`${occurrenceLineCount} word ${occurrenceLineCount === 1 ? "locus" : "loci"}`);
+  }
+  return pills
+    .map((label) => `<span class="pill">${escapeHtml(label)}</span>`)
+    .join("");
+}
+
 function getLocalizedInterpretiveTerms(payload, profile) {
   const termMap = new Map();
   const locusForm = state.selectedLocus?.normalized_form;
+  const lineAnchoredTerms = getLineAnchoredInterpretiveTermSet(payload);
   const lineProfile = state.lineProfileMap.get(`${state.currentSampleEntry?.id}:${payload.line_number}`);
   const signatureTerms = ((payload.signature_terms && payload.signature_terms.length)
     ? payload.signature_terms
     : (lineProfile?.signature_terms || []))
-    .map((term) => normalizeLocusForm(term))
-    .filter((term) => term && !looksLikeBadWordProfileTerm(term, locusForm));
+    .map((term) => canonicalizeContrastiveTerm(term))
+    .filter((term) => term && !isLowSignalContrastiveTerm(term, locusForm));
 
   signatureTerms.forEach((term, index) => {
-    const existing = termMap.get(term) || { term, score: 0, line_count: 0 };
+    const existing = termMap.get(term) || { term, score: 0, line_count: 0, source_signals: [], variants: [] };
     existing.score += Math.max(1.2, 4 - index * 0.3);
     existing.line_count = Math.max(existing.line_count, 1);
+    if (!existing.source_signals.includes("line_signature")) {
+      existing.source_signals.push("line_signature");
+    }
     termMap.set(term, existing);
   });
 
   (profile?.interpretive_terms || []).forEach((item, index) => {
-    const term = normalizeLocusForm(item.term);
-    if (!term || looksLikeBadWordProfileTerm(term, locusForm)) {
+    const rawTerm = normalizeLocusForm(item.term);
+    const term = canonicalizeContrastiveTerm(rawTerm);
+    if (!term || isLowSignalContrastiveTerm(term, locusForm)) {
       return;
     }
-    const existing = termMap.get(term) || { term, score: 0, line_count: 0 };
+    const existing = termMap.get(term) || { term, score: 0, line_count: 0, source_signals: [], variants: [] };
     existing.score += Math.max(0.4, Number(item.count || 0)) * 0.45;
     existing.score += Math.max(0, 8 - index) * 0.12;
     existing.line_count = Math.max(existing.line_count, Number(item.line_count || 0));
+    if (rawTerm && rawTerm !== term && !existing.variants.includes(rawTerm)) {
+      existing.variants.push(rawTerm);
+    }
+    if (!existing.source_signals.includes("word_profile")) {
+      existing.source_signals.push("word_profile");
+    }
+    if (lineAnchoredTerms.has(term) && !existing.source_signals.includes("line_anchor")) {
+      existing.source_signals.push("line_anchor");
+    }
     termMap.set(term, existing);
   });
 
   return Array.from(termMap.values())
     .sort((left, right) => right.score - left.score || right.line_count - left.line_count || left.term.localeCompare(right.term))
-    .slice(0, 8);
+    .slice(0, 12);
 }
 
 function getCorpusTermDocFreq(term) {
@@ -8456,34 +9342,61 @@ function filterLineEchoSourceFields(items = []) {
 
 function buildContrastiveInterpretiveTerms(payload, profile, localizedTerms = getLocalizedInterpretiveTerms(payload, profile)) {
   const totalLines = Math.max(state.corpusInterpretiveStats?.totalLines || 0, 1);
-  const profileTermIndex = new Map(
-    (profile?.interpretive_terms || [])
-      .map((item) => [normalizeLocusForm(item.term), item])
-      .filter(([term]) => term)
-  );
+  const locusForm = state.selectedLocus?.normalized_form || null;
+  const lineAnchoredTerms = getLineAnchoredInterpretiveTermSet(payload);
+  const profileTermIndex = new Map();
+  (profile?.interpretive_terms || []).forEach((item) => {
+    const term = canonicalizeContrastiveTerm(item.term);
+    if (!term) {
+      return;
+    }
+    const existing = profileTermIndex.get(term) || { score: 0, count: 0, line_count: 0 };
+    existing.score += Number(item.score || 0);
+    existing.count += Number(item.count || 0);
+    existing.line_count += Number(item.line_count || 0);
+    profileTermIndex.set(term, existing);
+  });
 
   return localizedTerms
     .map((item) => {
-      const term = normalizeLocusForm(item.term);
-      if (!term || looksLikeBadWordProfileTerm(term, state.selectedLocus?.normalized_form)) {
+      const term = canonicalizeContrastiveTerm(item.term);
+      if (!term || isLowSignalContrastiveTerm(term, locusForm)) {
         return null;
       }
       const profileItem = profileTermIndex.get(term) || {};
+      const variantTerms = Array.from(new Set([term, ...(item.variants || []).map((variant) => normalizeLocusForm(variant))].filter(Boolean)));
       const corpusLineCount = getCorpusTermDocFreq(term);
       const corpusShare = corpusLineCount / totalLines;
       const rarityScore = Math.log((totalLines + 1) / ((corpusLineCount || 0) + 1));
-      const localRecordCount = countRecordsForTerm(payload.records || [], term);
+      const localRecordCount = countRecordsForAnyTerm(payload.records || [], variantTerms);
+      const lineAnchored = lineAnchoredTerms.has(term);
+      const profileSupported = Number(profileItem.line_count || 0) > 0 || (item.source_signals || []).includes("word_profile");
       const occurrenceLineCount = Math.max(
         Number(profileItem.line_count || 0),
         Number(item.line_count || 0),
         localRecordCount ? 1 : 0,
       );
+      if (!lineAnchored && !localRecordCount && occurrenceLineCount < 2) {
+        return null;
+      }
+      if (corpusShare > 0.03 && localRecordCount < 2 && !lineAnchored) {
+        return null;
+      }
+      const supportChannels = [
+        lineAnchored ? "line anchor" : null,
+        localRecordCount ? "local records" : null,
+        profileSupported ? "word profile" : null,
+      ].filter(Boolean);
       const contrastiveScore = Number(item.score || 0) * (1 + rarityScore)
         + Math.min(localRecordCount, 6) * 0.55
-        + Math.min(occurrenceLineCount, 6) * 0.28;
+        + Math.min(occurrenceLineCount, 6) * 0.28
+        + (lineAnchored ? 0.75 : 0)
+        + (supportChannels.length > 1 ? 0.35 : 0);
 
       return {
         term,
+        displayTerm: formatContrastiveTermLabel(term, variantTerms),
+        variants: variantTerms,
         localScore: Number(item.score || 0),
         contrastiveScore,
         corpusLineCount,
@@ -8491,6 +9404,9 @@ function buildContrastiveInterpretiveTerms(payload, profile, localizedTerms = ge
         rarityScore,
         localRecordCount,
         occurrenceLineCount,
+        lineAnchored,
+        supportChannels,
+        supportChannelCount: supportChannels.length,
       };
     })
     .filter(Boolean)
@@ -8549,6 +9465,20 @@ function buildDanteLociFromLineText(lineText, sampleId, lineNumber) {
 
 function countRecordsForTerm(records, term) {
   return records.filter((record) => recordMatchesInterpretiveTerm(record, term)).length;
+}
+
+function countRecordsForAnyTerm(records, terms = []) {
+  const normalizedTerms = Array.from(new Set(
+    terms
+      .map((term) => normalizeLocusForm(term))
+      .filter(Boolean)
+  ));
+  if (!normalizedTerms.length) {
+    return 0;
+  }
+  return records.filter((record) =>
+    normalizedTerms.some((term) => recordMatchesInterpretiveTerm(record, term))
+  ).length;
 }
 
 function looksLikeBadWordProfileTerm(term, locusForm = null) {
@@ -8812,7 +9742,8 @@ function buildLineEchoSourceTerms(payload, currentLineProfile = getCurrentLinePr
 }
 
 async function jumpToSampleLine(sampleId, lineNumber, locusNormalized = null, options = {}) {
-  if (!sampleId || !Number.isFinite(lineNumber)) {
+  const targetLineNumber = Number(lineNumber);
+  if (!sampleId || !Number.isInteger(targetLineNumber) || targetLineNumber < 1) {
     return;
   }
 
@@ -8820,17 +9751,18 @@ async function jumpToSampleLine(sampleId, lineNumber, locusNormalized = null, op
   const hasExplicitHashTarget = Boolean(String(window.location.hash || "").replace(/^#/, ""));
 
   if (state.currentSampleEntry?.id !== sampleId) {
+    updateSampleUrl(sampleId, targetLineNumber, { locusNormalized });
     await loadSample(sampleId);
   }
   if (!state.currentSampleEntry?.overview_available) {
     return;
   }
-  await selectLine(lineNumber);
+  await selectLine(targetLineNumber);
   if (locusNormalized) {
-    const payload = state.lineCache.get(lineNumber);
+    const payload = state.lineCache.get(targetLineNumber);
     if (!payload) {
       if (!suppressCoverageScroll) {
-        requestAnimationFrame(() => scrollToCoverageLine(lineNumber));
+        requestAnimationFrame(() => scrollToCoverageLine(targetLineNumber));
       }
       return;
     }
@@ -8838,13 +9770,14 @@ async function jumpToSampleLine(sampleId, lineNumber, locusNormalized = null, op
     state.selectedLocus = match || null;
     state.activeInterpretiveTerm = null;
     if (state.selectedLocus) {
-      updateSampleUrl(state.currentSampleEntry?.id || state.overview?.sample, lineNumber, {
+      updateSampleUrl(state.currentSampleEntry?.id || state.overview?.sample, targetLineNumber, {
         locusNormalized: state.selectedLocus.normalized_form,
       });
     }
     renderLineRecords(payload);
     if (state.selectedLocus) {
-      ensureResearchLayerLoaded();
+      void warmSelectedLocusProfile(state.selectedLocus, targetLineNumber);
+      scheduleSelectedLocusResearchWarm();
     }
   }
   if (hasExplicitHashTarget) {
@@ -8855,13 +9788,13 @@ async function jumpToSampleLine(sampleId, lineNumber, locusNormalized = null, op
   }
   if (pinCoverageRow) {
     requestAnimationFrame(() => {
-      settlePinnedCoverageRow(lineNumber);
+      settlePinnedCoverageRow(targetLineNumber);
     });
   }
   if (!suppressCoverageScroll) {
     requestAnimationFrame(() => {
-      if (Number.isFinite(lineNumber)) {
-        scrollToCoverageLine(lineNumber);
+      if (Number.isFinite(targetLineNumber)) {
+        scrollToCoverageLine(targetLineNumber);
       } else {
         scrollToCoverageSection();
       }
@@ -9246,7 +10179,9 @@ function renderConcurrenceWindowRow(window, concurrenceWord = "") {
   if (!windowContainsFocusTerm(window, targetTerms)) {
     return "";
   }
-  const concurrenceTerms = [concurrenceWord];
+  const concurrenceTerms = (Array.isArray(concurrenceWord) ? concurrenceWord : [concurrenceWord])
+    .map((term) => normalizeLocusForm(term))
+    .filter(Boolean);
   const weight = Number(window.weight || 0);
   const contextMarkup = renderConcurrenceContextMarkup(window, weight, targetTerms, concurrenceTerms);
   return `
@@ -9416,6 +10351,9 @@ function isLocusSelectableInWorkbench(locus) {
   if (!state.danteWordLociIndex) {
     return true;
   }
+  if (!isDanteWordLociIndexShardSettled(locus.normalized_form)) {
+    return true;
+  }
   const family = getWordFamilyConfig(locus.normalized_form);
   if (family) {
     return getWordFamilyIndexedOccurrenceCount(family) > 1;
@@ -9439,6 +10377,33 @@ function compareCanticaLocations(left = {}, right = {}) {
 
 function renderShellSample(entry) {
   return coveragePanel.renderShellSample(entry);
+}
+
+function renderLineIdleState() {
+  if (elements.lineTitle) {
+    elements.lineTitle.textContent = getUiText("records.title.idle");
+  }
+  if (elements.lineContext) {
+    elements.lineContext.textContent = getUiText("records.context.idle");
+  }
+  if (elements.commentarySummary) {
+    elements.commentarySummary.textContent = getUiText("commentary.summary.idle");
+  }
+  const idleCopy = escapeHtml(getUiText("records.context.idle"));
+  if (elements.recordsList) {
+    elements.recordsList.innerHTML = `<div class="empty-state">${idleCopy}</div>`;
+  }
+  if (elements.locusPanel) {
+    elements.locusPanel.innerHTML = `<div class="empty-state">${idleCopy}</div>`;
+  }
+  if (elements.vocabularyPanel) {
+    elements.vocabularyPanel.innerHTML = `<div class="empty-state">${idleCopy}</div>`;
+  }
+  if (elements.recurrencePanel) {
+    elements.recurrencePanel.innerHTML = `<div class="empty-state">${idleCopy}</div>`;
+  }
+  clearAnalysisSummary();
+  syncCompareHeadActions();
 }
 
 function renderLineLoadingState(lineNumber) {
@@ -9962,6 +10927,11 @@ const SEMANTIC_FIELD_RESIDUE_TERMS = new Set([
   "esclamazione",
   "dimostra",
   "posto",
+  "tien",
+  "tiene",
+  "tieni",
+  "tienti",
+  "tengono",
 ]);
 
 const SEMANTIC_TERM_NORMALIZATION_MAP = Object.freeze({
@@ -10114,17 +11084,44 @@ function getEchoSignalDisplayLabel(token) {
   return normalizeSemanticDisplayToken(token) || normalizeLocusForm(token) || "";
 }
 
+function expandEchoSignalDisplayValues(value) {
+  const rawValue = String(value || "").trim();
+  if (!rawValue) {
+    return [];
+  }
+  return rawValue
+    .split(/\s*\|\s*/)
+    .flatMap((part) => {
+      let segment = String(part || "").trim();
+      if (!segment) {
+        return [];
+      }
+      const hadEvidenceLabel = /^(?:dante\s+(?:wording|pair|phrase)|terzina\s+context|rhyme\s+support|shared\s+line\s+cues|line\s+cues)\s*:\s*/i.test(segment);
+      segment = segment.replace(
+        /^(?:dante\s+(?:wording|pair|phrase)|terzina\s+context|rhyme\s+support|shared\s+line\s+cues|line\s+cues)\s*:\s*/i,
+        "",
+      ).trim();
+      return segment
+        .split(/\s*,\s*/)
+        .flatMap((item) => (hadEvidenceLabel ? item.split(/\s+/) : [item]))
+        .map((item) => item.trim())
+        .filter(Boolean);
+    });
+}
+
 function normalizeEchoSignalList(values = []) {
   const seen = new Set();
   const normalized = [];
   for (const value of values || []) {
-    const key = normalizeEchoSignalKey(value);
-    const label = getEchoSignalDisplayLabel(value);
-    if (!key || !label || seen.has(key)) {
-      continue;
+    for (const item of expandEchoSignalDisplayValues(value)) {
+      const key = normalizeEchoSignalKey(item);
+      const label = getEchoSignalDisplayLabel(item);
+      if (!key || !label || seen.has(key)) {
+        continue;
+      }
+      seen.add(key);
+      normalized.push(label);
     }
-    seen.add(key);
-    normalized.push(label);
   }
   return normalized;
 }
@@ -10772,29 +11769,55 @@ function collectInheritedDanteCitationItems(source, start, shellKey) {
   }
   const items = [];
   const tail = String(source || "").slice(start, start + 180);
-  const segmentPattern = /\s*;\s*([IVXLCDM]+|\d{1,2})\s*[,.;:]?\s*(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?/giu;
+  const segmentPattern = /\s*;\s*([IVXLCDM]+|\d{1,2})\s*[,.;:]?\s*(?:(?:n\.?|v\.|vv\.?)\s*)?(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?(?:\s*(?:sgg|sqq)\.?)?/giu;
+  const sameCantoLinePattern = /\s*,\s*(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?(?:\s*(?:sgg|sqq)\.?)?/giu;
   let cursor = 0;
+  let currentCanto = null;
   while (true) {
     segmentPattern.lastIndex = cursor;
     const match = segmentPattern.exec(tail);
-    if (!match || match.index !== cursor) {
-      break;
+    if (match && match.index === cursor) {
+      const canto = parseNavigationNumber(match[1]);
+      const lineNumber = parseNavigationNumber(match[2]);
+      if (!Number.isInteger(canto) || canto < 1 || canto > shell.total || !Number.isInteger(lineNumber) || lineNumber < 1) {
+        break;
+      }
+      const termStart = match[0].indexOf(match[1]);
+      items.push({
+        term: String(match[0].slice(termStart)).trim(),
+        start: start + match.index + termStart,
+        end: start + match.index + match[0].length,
+        shell,
+        canto,
+        lineNumber,
+        sampleId: `${shell.key}${canto}`,
+      });
+      currentCanto = canto;
+      cursor = segmentPattern.lastIndex;
+      continue;
     }
-    const canto = parseNavigationNumber(match[1]);
-    const lineNumber = parseNavigationNumber(match[2]);
-    if (!Number.isInteger(canto) || canto < 1 || canto > shell.total || !Number.isInteger(lineNumber) || lineNumber < 1) {
-      break;
+
+    sameCantoLinePattern.lastIndex = cursor;
+    const sameCantoMatch = sameCantoLinePattern.exec(tail);
+    if (sameCantoMatch && sameCantoMatch.index === cursor && Number.isInteger(currentCanto)) {
+      const lineNumber = parseNavigationNumber(sameCantoMatch[1]);
+      if (!Number.isInteger(lineNumber) || lineNumber < 1) {
+        break;
+      }
+      const termStart = sameCantoMatch[0].indexOf(sameCantoMatch[1]);
+      items.push({
+        term: String(sameCantoMatch[0].slice(termStart)).trim(),
+        start: start + sameCantoMatch.index + termStart,
+        end: start + sameCantoMatch.index + sameCantoMatch[0].length,
+        shell,
+        canto: currentCanto,
+        lineNumber,
+        sampleId: `${shell.key}${currentCanto}`,
+      });
+      cursor = sameCantoLinePattern.lastIndex;
+      continue;
     }
-    items.push({
-      term: String(match[1] + ", " + match[2] + (match[3] ? `-${match[3]}` : "")).trim(),
-      start: start + match.index + match[0].indexOf(match[1]),
-      end: start + match.index + match[0].length,
-      shell,
-      canto,
-      lineNumber,
-      sampleId: `${shell.key}${canto}`,
-    });
-    cursor = segmentPattern.lastIndex;
+    break;
   }
   return items;
 }
@@ -10832,7 +11855,7 @@ function collectExplicitDanteCitationGroupForText(text) {
     }
   };
 
-  const linePattern = /\b(Inferno|Infer\.?|Inf\.?|Purgatorio|Purg\.?|Paradiso|Parad\.?|Par\.?)\s*(?:[,.;:)\]]\s*|\s+)+([IVXLCDM]+|\d{1,2})\s*(?:[,.;:)\]]\s*|\s+)+(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?\b/giu;
+  const linePattern = /\b(Inferno|Infer\.?|Inf\.?|Purgatorio|Purg\.?|Paradiso|Parad\.?|Par\.?)\s*(?:[,.;:)\]]\s*|\s+)+([IVXLCDM]+|\d{1,2})\s*(?:[,.;:)\]]\s*|\s+)+(?:n\.?|v\.|vv\.?)?\s*(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?(?:\s*(?:sgg|sqq)\.?)?\b/giu;
   for (const match of source.matchAll(linePattern)) {
     const shellKey = normalizeDanteCitationAlias(match[1]);
     const shell = CANTICA_SHELLS.find((candidate) => candidate.key === shellKey);

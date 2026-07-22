@@ -31,4 +31,4 @@ runs the packaging script and deploys the generated shell to Cloudflare Pages.
 The public domains currently presented in documentation are:
 
 - [anticafiamma.it](https://anticafiamma.it)
-- [ddpcommentary.com](https://ddpcommentary.com)
+- [anticafiamma.it](https://anticafiamma.it)

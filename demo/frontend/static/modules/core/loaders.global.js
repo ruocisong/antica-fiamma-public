@@ -130,6 +130,7 @@
         const request = fetchJson(meta.storePath)
           .then((payload) => {
             state.sampleRecordWorkMentionCache.set(sampleId, payload);
+            mergeWorkMentionsIntoCachedStores(sampleId, payload);
             return payload;
           })
           .catch(() => {
@@ -172,6 +173,24 @@
       };
     }
 
+    function mergeWorkMentionsIntoCachedStores(sampleId, mentionPayload) {
+      if (!sampleId || !mentionPayload) {
+        return;
+      }
+      if (state.sampleRecordStoreCache.has(sampleId)) {
+        state.sampleRecordStoreCache.set(
+          sampleId,
+          mergeWorkMentionsIntoRecordLikeStore(state.sampleRecordStoreCache.get(sampleId), mentionPayload)
+        );
+      }
+      if (state.sampleFullTextStoreCache.has(sampleId)) {
+        state.sampleFullTextStoreCache.set(
+          sampleId,
+          mergeWorkMentionsIntoRecordLikeStore(state.sampleFullTextStoreCache.get(sampleId), mentionPayload)
+        );
+      }
+    }
+
     async function ensureSampleRecordStoreLoaded(sampleId = state.currentSampleEntry?.id) {
       if (!sampleId) {
         return null;
@@ -187,13 +206,9 @@
       }
 
       if (!state.sampleRecordStorePromises.has(sampleId)) {
-        const request = fetchJson(meta.indexPath)
-          .catch(() => ({ path: meta.storePath }))
-          .then(async (indexPayload) => {
-            const [payload, mentionPayload] = await Promise.all([
-              fetchJson(indexPayload?.path || meta.storePath),
-              ensureSampleRecordWorkMentionStoreLoaded(sampleId),
-            ]);
+        const request = fetchJson(meta.storePath)
+          .then((payload) => {
+            const mentionPayload = state.sampleRecordWorkMentionCache.get(sampleId) || null;
             return mergeWorkMentionsIntoRecordLikeStore(payload, mentionPayload);
           })
           .then((payload) => {
@@ -201,8 +216,8 @@
             return payload;
           })
           .catch((error) => {
-            state.sampleRecordStoreCache.set(sampleId, null);
-            return null;
+            state.sampleRecordStoreCache.delete(sampleId);
+            throw error;
           })
           .finally(() => {
             state.sampleRecordStorePromises.delete(sampleId);
@@ -227,11 +242,11 @@
       }
 
       if (!state.sampleFullTextStorePromises.has(sampleId)) {
-        const request = Promise.all([
-            fetchJson(meta.storePath),
-            ensureSampleRecordWorkMentionStoreLoaded(sampleId),
-          ])
-          .then(([payload, mentionPayload]) => mergeWorkMentionsIntoRecordLikeStore(payload, mentionPayload))
+        const request = fetchJson(meta.storePath)
+          .then((payload) => {
+            const mentionPayload = state.sampleRecordWorkMentionCache.get(sampleId) || null;
+            return mergeWorkMentionsIntoRecordLikeStore(payload, mentionPayload);
+          })
           .then((payload) => {
             state.sampleFullTextStoreCache.set(sampleId, payload);
             return payload;
@@ -321,10 +336,8 @@
       if (!payload) {
         return payload;
       }
-      const [records, summaryPayload] = await Promise.all([
-        resolveLineRecords(sampleId, payload),
-        ensureSampleRecordSummaryStoreLoaded(sampleId),
-      ]);
+      const records = await resolveLineRecords(sampleId, payload);
+      const summaryPayload = state.sampleRecordSummaryStoreCache.get(sampleId) || null;
       const hydratedRecords = mergeRecordSummariesIntoRecords(records, summaryPayload);
       return {
         ...payload,
