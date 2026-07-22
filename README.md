@@ -26,7 +26,7 @@ The public build documented for version 1.0.0 mounts all 100 cantos and reports 
 
 ## GitHub And Zenodo Publication Boundaries
 
-This GitHub repository is the continuously maintained public code and deployment repository. It contains:
+This GitHub repository is the continuously maintained public code and documentation repository. Production deployment is operated from a separate private repository; this public repository does not auto-deploy the live site. It contains:
 
 - the public website shell under [`demo/frontend`](demo/frontend), without the full runtime data payload;
 - public static pages, styles, assets, client-side modules, the Authority shell, its page generator, and generated interface pages used by the authorised live website;

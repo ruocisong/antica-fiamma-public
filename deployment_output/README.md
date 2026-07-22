@@ -20,15 +20,8 @@ That folder is generated build output and should not be committed. It is ignored
 
 ## Deployment Shape
 
-The GitHub Actions workflow at:
+This public repository retains the packaging script so the static build method is inspectable. Production deployment is operated from the project's separate private repository. Nothing in this public repository automatically deploys the live site.
 
-```text
-.github/workflows/deploy-pages-shell.yml
-```
+The canonical public domain is:
 
-runs the packaging script and deploys the generated shell to Cloudflare Pages.
-
-The public domains currently presented in documentation are:
-
-- [anticafiamma.it](https://anticafiamma.it)
 - [anticafiamma.it](https://anticafiamma.it)

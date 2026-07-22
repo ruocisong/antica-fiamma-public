@@ -14,7 +14,7 @@ The repository is presented under the public-facing project identity **Antica Fi
 
 ## What This Repository Is For
 
-This repository is a public project shell. It is meant to make the live interface, public documentation, selected method-facing code, and deployment path inspectable.
+This repository is a public project shell. It is meant to make the live interface, public documentation, selected method-facing code, and static packaging method inspectable. Production deployment is operated from a separate private repository.
 
 It is scoped as the public project shell. Large runtime data payloads, local snapshots, thread-specific working notes, publication drafts, and private operating material remain in the internal working environment.
 
