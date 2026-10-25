@@ -1,17 +1,14 @@
 [project]
 name = "antica-fiamma-public"
 version = "1.0.0"
-description = "Public shell and selected preparation utilities for the Antica Fiamma static Dante reading interface"
+description = "Public shell and selected build utilities for the Antica Fiamma static Dante reading interface"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "beautifulsoup4>=4.12.0",
-    "requests>=2.31.0",
-]
+dependencies = []
 
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+packages = []

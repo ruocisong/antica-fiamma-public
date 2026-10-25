@@ -123,14 +123,6 @@ Only the packaging script belongs in Git. The generated `pages_shell_build/` fol
 
 See [`deployment_output/README.md`](../../deployment_output/README.md).
 
-### [`src/ddp_scraper`](../../src/ddp_scraper)
-
-Selected source-capture utilities.
-
-They remain here for lineage transparency. Runtime corpus distribution is handled outside this public repository.
-
-See [`src/ddp_scraper/README.md`](../../src/ddp_scraper/README.md).
-
 ## Maintained Outside This Repository
 
 This public repository excludes:

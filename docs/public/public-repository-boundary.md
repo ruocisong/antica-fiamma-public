@@ -41,7 +41,6 @@ A public update should copy or reconstruct only material that has been positivel
 - [`demo/build_demo_data.py`](../../demo/build_demo_data.py)
 - [`demo/runtime_checks`](../../demo/runtime_checks)
 - [`demo/server.py`](../../demo/server.py)
-- [`src/ddp_scraper`](../../src/ddp_scraper), as selected lineage and preparation utilities
 - [`deployment_output/PREPARE_PAGES_SHELL.py`](../../deployment_output/PREPARE_PAGES_SHELL.py)
 - [`pyproject.toml`](../../pyproject.toml)
 - [`docs/public`](../../docs/public)
@@ -105,8 +104,6 @@ demo/
   build_authority_static_pages.py
   runtime_checks/
   server.py
-src/
-  ddp_scraper/
 deployment_output/
 docs/
   public/
