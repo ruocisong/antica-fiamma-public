@@ -14,7 +14,6 @@ This repository includes:
 - smoke tests for the public shell
 - inspectable Cloudflare Pages packaging helpers
 - public documentation about interface structure, scope, data boundary, and source attribution
-- selected source-capture utilities under [`src/ddp_scraper`](../../src/ddp_scraper)
 - a rights-safe structural sample of runtime assets under [`sample_runtime`](../../sample_runtime)
 - citation and licensing metadata for repository-level reuse
 
